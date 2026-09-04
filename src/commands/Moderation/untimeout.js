@@ -4,18 +4,26 @@ import { logger } from '../../utils/logger.js';
 import { ModerationService } from '../../services/moderation/moderationService.js';
 import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t, localizeSlashCommand, localizeOption } from '../../utils/i18n/index.js';
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName("untimeout")
-        .setDescription("Remove timeout from a user")
-        .addUserOption((option) =>
-            option
-                .setName("target")
-                .setDescription("User to untimeout")
-                .setRequired(true),
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName("untimeout")
+            .setDescription("Remove timeout from a user")
+            .addUserOption((option) =>
+                localizeOption(
+                    option
+                        .setName("target")
+                        .setDescription("User to untimeout")
+                        .setRequired(true),
+                    'untimeout',
+                    'target',
+                ),
+            )
+            .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+        'untimeout',
+    ),
     category: "moderation",
 
     async execute(interaction, config, client) {
@@ -36,7 +44,7 @@ export default {
             throw new TitanBotError(
                 'Missing target user',
                 ErrorTypes.USER_INPUT,
-                'You must specify a user to untimeout.',
+                t('moderation.untimeout.missing_user', {}, interaction),
                 { subtype: 'invalid_user' },
             );
         }
@@ -45,7 +53,7 @@ export default {
             throw new TitanBotError(
                 "Target not found",
                 ErrorTypes.USER_INPUT,
-                "The target user is not currently in this server.",
+                t('moderation.errors.target_not_in_server', {}, interaction),
             );
         }
 
@@ -58,7 +66,7 @@ export default {
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [
                 successEmbed(
-                    `🔓 **Removed timeout** from ${targetUser.tag}`,
+                    t('moderation.untimeout.success_title', { user: targetUser.tag }, interaction),
                 ),
             ],
         });

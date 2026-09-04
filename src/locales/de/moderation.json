@@ -1,0 +1,185 @@
+{
+  "no_reason": "Kein Grund angegeben",
+  "errors": {
+    "user_not_found": "Benutzer konnte nicht gefunden werden.",
+    "target_not_in_server": "Der Zielbenutzer befindet sich derzeit nicht auf diesem Server.",
+    "missing_target_user": "Du musst einen Benutzer angeben.",
+    "cannot_moderate_self": "Du kannst dich nicht selbst moderieren.",
+    "cannot_moderate_bot": "Du kannst den Bot nicht moderieren.",
+    "cannot_ban_self": "Du kannst dich nicht selbst bannen.",
+    "cannot_ban_bot": "Du kannst den Bot nicht bannen.",
+    "cannot_kick_self": "Du kannst dich nicht selbst kicken.",
+    "cannot_kick_bot": "Du kannst den Bot nicht kicken.",
+    "cannot_timeout_self": "Du kannst dich nicht selbst stummschalten.",
+    "cannot_timeout_bot": "Du kannst den Bot nicht stummschalten."
+  },
+  "ban": {
+    "missing_user": "Du musst einen Benutzer zum Bannen angeben.",
+    "success_title": "🚫 **Gebannt** {user}",
+    "success_desc": "**Grund:** {reason}\n**Fall-ID:** #{caseId}"
+  },
+  "unban": {
+    "invalid_target": "Bitte gib eine gültige Benutzer-ID oder Erwähnung an.",
+    "user_not_found": "Es konnte kein Benutzer mit der ID `{targetId}` gefunden werden.",
+    "success_title": "✅ Benutzer entbannt",
+    "success_desc": "**{user}** wurde erfolgreich auf dem Server entbannt.\n\n**Grund:** {reason}\n**Fall-ID:** #{caseId}"
+  },
+  "kick": {
+    "missing_user": "Du musst einen Benutzer zum Kicken angeben.",
+    "success_title": "👢 **Gekickt** {user}",
+    "success_desc": "**Grund:** {reason}\n**Fall-ID:** #{caseId}"
+  },
+  "timeout": {
+    "missing_user": "Du musst einen Benutzer für das Timeout angeben.",
+    "success_title": "⏳ **Timeout** für {user} für {duration} verhängt.",
+    "success_desc": "**Grund:** {reason}\n**Fall-ID:** #{caseId}",
+    "durations": {
+      "5": "5 Minuten",
+      "10": "10 Minuten",
+      "30": "30 Minuten",
+      "60": "1 Stunde",
+      "360": "6 Stunden",
+      "1440": "1 Tag",
+      "10080": "1 Woche"
+    }
+  },
+  "untimeout": {
+    "missing_user": "Du musst einen Benutzer für die Timeout-Aufhebung angeben.",
+    "success_title": "🔓 **Timeout aufgehoben** für {user}"
+  },
+  "warn": {
+    "missing_user": "Du musst einen Benutzer zum Verwarnen angeben.",
+    "missing_reason": "Du musst einen Grund für die Verwarnung angeben.",
+    "success_title": "⚠️ **Verwarnt** {user}",
+    "success_desc": "**Grund:** {reason}\n**Gesamte Verwarnungen:** {totalCount}"
+  },
+  "warnings": {
+    "title": "Verwarnungen: {user}",
+    "no_warnings": "Dieser Benutzer hat keine erfassten Verwarnungen.",
+    "total": "Gesamte Verwarnungen: **{total}**",
+    "field_reason": "[#{index}] Grund: {reason}",
+    "field_details": "**Moderator:** <@{moderatorId}>\n**Datum:** <t:{timestamp}:F> (<t:{timestamp}:R>)",
+    "btn_delete_specific": "Spezifische Verwarnung löschen",
+    "btn_clear_all": "Alle Verwarnungen löschen"
+  },
+  "warning_handlers": {
+    "perm_only_mod_delete": "Nur der Moderator, der diese Verwarnungen eingesehen hat, kann sie löschen.",
+    "perm_only_mod_clear": "Nur der Moderator, der diese Verwarnungen eingesehen hat, kann sie löschen.",
+    "modal_delete_title": "Verwarnung löschen",
+    "modal_delete_number_label": "Verwarnungsnummer (#1, #2, usw.)",
+    "modal_delete_number_placeholder": "Gib die zu löschende Verwarnungsnummer ein",
+    "modal_clear_title": "Alle Verwarnungen löschen",
+    "modal_clear_label": "Tippe \"DELETE\", um alle Verwarnungen zu löschen",
+    "invalid_warning_number": "Bitte gib eine gültige Verwarnungsnummer ein (z. B. 1, 2, 3).",
+    "warning_not_found": "Verwarnung #{number} existiert nicht. Dieser Benutzer hat nur {total} Verwarnung(en).",
+    "deleted_title": "✅ Verwarnung gelöscht",
+    "deleted_desc": "Verwarnung #{number} für **{user}** wurde gelöscht.\n\n**Grund war:** {reason}",
+    "confirm_must_type_delete": "Du musst exakt \"DELETE\" eingeben, um das Löschen aller Verwarnungen zu bestätigen.",
+    "cleared_title": "✅ Verwarnungen gelöscht",
+    "cleared_desc": "Alle Verwarnungen für **{user}** wurden gelöscht. **{count}** Verwarnung(en) entfernt.",
+    "failed_open_modal": "Fehler beim Öffnen des Verwarnungs-Löschdialogs.",
+    "failed_open_confirm": "Fehler beim Öffnen des Bestätigungsdialogs.",
+    "failed_delete": "Fehler beim Löschen der Verwarnung.",
+    "failed_clear": "Fehler beim Löschen der Verwarnungen."
+  },
+  "lock": {
+    "already_locked": "{channel} ist bereits gesperrt.",
+    "success_title": "🔒 **Kanal gesperrt**",
+    "success_desc": "{channel} ist jetzt gesperrt. Niemand kann hier jetzt schreiben.",
+    "error_lock": "Beim Sperren des Kanals ist ein unerwarteter Fehler aufgetreten. Überprüfe meine Berechtigungen (ich benötige 'Kanäle verwalten')."
+  },
+  "unlock": {
+    "not_locked": "{channel} ist nicht ausdrücklich gesperrt (jeder kann bereits Nachrichten senden).",
+    "success_title": "🔓 **Kanal entsperrt**",
+    "success_desc": "{channel} ist jetzt entsperrt. Ihr könnt nun schreiben.",
+    "error_unlock": "Beim Entsperren des Kanals ist ein unerwarteter Fehler aufgetreten. Überprüfe meine Berechtigungen (ich benötige 'Kanäle verwalten')."
+  },
+  "purge": {
+    "invalid_amount": "Bitte gib eine Zahl zwischen 1 und 100 an.",
+    "success_title": "Nachrichten bereinigt",
+    "success_desc": "{count} Nachrichten in {channel} gelöscht.",
+    "error_purge": "Beim Löschen der Nachrichten ist ein unerwarteter Fehler aufgetreten. Hinweis: Nachrichten, die älter als 14 Tage sind, können nicht massenhaft gelöscht werden."
+  },
+  "say": {
+    "empty_message": "Die Nachricht darf nicht leer sein.",
+    "invalid_channel": "Wähle einen Textkanal oder führe diesen Befehl in einem aus.",
+    "user_no_perm": "Du hast keine Berechtigung, Nachrichten in {channel} zu senden.",
+    "bot_no_perm": "Ich habe keine Berechtigung, Nachrichten in {channel} zu senden.",
+    "success_title": "Nachricht gesendet",
+    "success_desc": "In {channel} gesendet. [Zur Nachricht springen]({url})"
+  },
+  "dm": {
+    "too_long": "Nachrichten müssen kürzer als 2000 Zeichen sein.",
+    "cannot_dm_bot": "Du kannst keine Direktnachrichten an Bots senden.",
+    "embed_staff": "Nachricht vom Server-Team",
+    "embed_user": "Nachricht von {user}",
+    "embed_footer": "Du kannst auf diese Nachricht nicht antworten. | Protokoll-ID: {id}",
+    "success_title": "DM gesendet",
+    "success_desc": "Nachricht erfolgreich an {user} gesendet",
+    "dms_disabled": "Konnte keine DM an {user} senden. Möglicherweise sind Direktnachrichten deaktiviert.",
+    "send_failed": "Fehler beim Senden der DM: {error}"
+  },
+  "cases": {
+    "title": "Moderationsfälle",
+    "desc": "Moderationsfälle für **{guild}** werden angezeigt\n\n**Seite {page} von {totalPages}**",
+    "no_cases_user": "Keine Moderationsfälle für {user} gefunden",
+    "no_cases_filter": "Keine {filter}-Fälle auf diesem Server gefunden.",
+    "case_field_name": "Fall #{caseId} - {action}",
+    "case_field_value": "**Ziel:** {target}\n**Moderator:** {executor}\n**Datum:** {date} um {time}\n**Grund:** {reason}",
+    "footer": "Fälle gesamt: {total} | Filter: {filter}{userText}",
+    "user_suffix": " | Benutzer: {user}",
+    "btn_prev": "⬅️ Zurück",
+    "btn_page": "Seite {page}/{total}",
+    "btn_next": "Weiter ➡️",
+    "btn_unauthorized": "Du kannst diese Buttons nicht verwenden. Führe `/cases` aus, um deine eigene Ansicht zu öffnen.",
+    "error_cases": "Beim Abrufen der Moderationsfälle ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+  },
+  "usernotes": {
+    "too_long": "Notizen dürfen höchstens 1000 Zeichen lang sein.",
+    "empty_note": "Die Notiz darf nicht leer sein.",
+    "added_title": "{emoji} Notiz hinzugefügt",
+    "added_desc": "Eine **{type}** Notiz für **{user}** wurde hinzugefügt:\n\n> {note}\n\n**Moderator:** {moderator}\n**Notizen gesamt:** {total}",
+    "no_notes_title": "📝 Keine Notizen",
+    "no_notes_desc": "Es gibt keine Notizen für **{user}**.",
+    "view_title": "📝 Benutzernotizen ({count})",
+    "view_header": "**Notizen für {user} ({userId}):**\n\n",
+    "view_item": "{emoji} **Note #{index}** ({type}) - {date}\n> {content}\n*Hinzugefügt von {author}*\n\n",
+    "view_truncated": "\n... *(gekürzt)*",
+    "invalid_index": "Bitte gib einen gültigen Notizindex an (1-{count}).",
+    "removed_title": "{emoji} Notiz entfernt",
+    "removed_desc": "Notiz #{index} von **{user}** entfernt:\n\n> {content}\n\n**Verbleibende Notizen:** {remaining}",
+    "clear_empty_title": "Keine Notizen zum Löschen",
+    "clear_empty_desc": "Es gibt keine Notizen für **{user}** zum Löschen.",
+    "cleared_title": "🗑️ Notizen gelöscht",
+    "cleared_desc": "**{count}** Notizen von **{user}** wurden gelöscht.",
+    "invalid_subcommand": "Bitte wähle einen gültigen Unterbefehl aus.",
+    "error_processing": "Beim Verarbeiten deiner Anfrage ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+  },
+  "massban": {
+    "default_reason": "Massenbann - Kein Grund angegeben",
+    "invalid_users": "Bitte gib gültige Benutzer-IDs oder Erwähnungen an. Maximal 20 Benutzer gleichzeitig.",
+    "cannot_include_self": "Du kannst dich nicht selbst in einen Massenbann einbeziehen.",
+    "cannot_include_bot": "Du kannst den Bot nicht in einen Massenbann einbeziehen.",
+    "completed_title": "🔨 Massenbann abgeschlossen",
+    "results_header": "**Massenbann-Ergebnisse:**\n\n",
+    "successful_section": "✅ **Erfolgreich gebannt ({count}):**\n",
+    "skipped_section": "⚠️ **Übersprungen ({count}):**\n",
+    "failed_section": "❌ **Fehlgeschlagen ({count}):**\n",
+    "user_not_found": "Benutzer nicht gefunden",
+    "error_massban": "Beim Verarbeiten des Massenbanns ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+  },
+  "masskick": {
+    "default_reason": "Massenkick - Kein Grund angegeben",
+    "invalid_users": "Bitte gib gültige Benutzer-IDs oder Erwähnungen an. Maximal 20 Benutzer gleichzeitig.",
+    "cannot_include_self": "Du kannst dich nicht selbst in einen Massenkick einbeziehen.",
+    "cannot_include_bot": "Du kannst den Bot nicht in einen Massenkick einbeziehen.",
+    "completed_title": "👢 Massenkick abgeschlossen",
+    "results_header": "**Massenkick-Ergebnisse:**\n\n",
+    "successful_section": "✅ **Erfolgreich gekickt ({count}):**\n",
+    "skipped_section": "⚠️ **Übersprungen ({count}):**\n",
+    "failed_section": "❌ **Fehlgeschlagen ({count}):**\n",
+    "not_in_server": "Benutzer nicht auf dem Server",
+    "kick_not_allowed": "Ziel hat Admin-Rechte, eine verwaltete Rolle oder dem Bot fehlen Rechte",
+    "error_masskick": "Beim Verarbeiten des Massenkicks ist ein Fehler aufgetreten. Bitte versuche es später erneut."
+  }
+}

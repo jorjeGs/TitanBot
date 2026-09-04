@@ -5,18 +5,26 @@ import { logEvent } from '../../utils/moderation.js';
 import { logger } from '../../utils/logger.js';
 import { WarningService } from '../../services/moderation/warningService.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t, localizeSlashCommand, localizeOption } from '../../utils/i18n/index.js';
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName("warnings")
-        .setDescription("View all warnings for a user")
-        .addUserOption((o) =>
-            o
-                .setName("target")
-                .setRequired(true)
-                .setDescription("User to check warnings for"),
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName("warnings")
+            .setDescription("View all warnings for a user")
+            .addUserOption((o) =>
+                localizeOption(
+                    o
+                        .setName("target")
+                        .setRequired(true)
+                        .setDescription("User to check warnings for"),
+                    'warnings',
+                    'target',
+                ),
+            )
+            .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+        'warnings',
+    ),
     category: "moderation",
 
     async execute(interaction, config, client) {
@@ -40,8 +48,8 @@ export default {
             await InteractionHelper.safeEditReply(interaction, {
                 embeds: [
                     createEmbed({
-                        title: `Warnings: ${target.tag}`,
-                        description: "This user has no recorded warnings.",
+                        title: t('moderation.warnings.title', { user: target.tag }, interaction),
+                        description: t('moderation.warnings.no_warnings', {}, interaction),
                     }).setColor(getColor('success')),
                 ],
             });
@@ -49,16 +57,16 @@ export default {
         }
 
         const embed = createEmbed({
-            title: `Warnings: ${target.tag}`,
-            description: `Total Warnings: **${totalWarns}**`,
+            title: t('moderation.warnings.title', { user: target.tag }, interaction),
+            description: t('moderation.warnings.total', { total: totalWarns }, interaction),
         }).setColor(getColor('warning'));
 
         const warningFields = validWarnings
             .map((w, i) => {
                 const discordTimestamp = Math.floor(w.timestamp / 1000);
                 return {
-                    name: `[#${i + 1}] Reason: ${w.reason.substring(0, 100)}`,
-                    value: `**Moderator:** <@${w.moderatorId}>\n**Date:** <t:${discordTimestamp}:F> (<t:${discordTimestamp}:R>)`,
+                    name: t('moderation.warnings.field_reason', { index: i + 1, reason: w.reason.substring(0, 100) }, interaction),
+                    value: t('moderation.warnings.field_details', { moderatorId: w.moderatorId, timestamp: discordTimestamp }, interaction),
                     inline: false,
                 };
             })
@@ -69,11 +77,11 @@ export default {
         const actionRow = new ActionRowBuilder().addComponents(
             new ButtonBuilder()
                 .setCustomId(`warning_delete_specific:${target.id}:${interaction.user.id}`)
-                .setLabel('Delete Specific Warning')
+                .setLabel(t('moderation.warnings.btn_delete_specific', {}, interaction))
                 .setStyle(ButtonStyle.Danger),
             new ButtonBuilder()
                 .setCustomId(`warning_clear_all:${target.id}:${interaction.user.id}`)
-                .setLabel('Clear All Warnings')
+                .setLabel(t('moderation.warnings.btn_clear_all', {}, interaction))
                 .setStyle(ButtonStyle.Danger),
         );
 

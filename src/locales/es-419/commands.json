@@ -76,5 +76,155 @@
         }
       }
     }
+  },
+  "ban": {
+    "name": "ban",
+    "description": "Banear a un usuario del servidor",
+    "options": {
+      "target": { "name": "usuario", "description": "El usuario a banear" },
+      "reason": { "name": "razon", "description": "Razón del baneo" }
+    }
+  },
+  "unban": {
+    "name": "desbanear",
+    "description": "Desbanear a un usuario del servidor",
+    "options": {
+      "target": { "name": "usuario", "description": "El ID o mención del usuario a desbanear" },
+      "reason": { "name": "razon", "description": "Razón del desbaneo" }
+    }
+  },
+  "kick": {
+    "name": "expulsar",
+    "description": "Expulsar a un usuario del servidor",
+    "options": {
+      "target": { "name": "usuario", "description": "El usuario a expulsar" },
+      "reason": { "name": "razon", "description": "Razón de la expulsión" }
+    }
+  },
+  "timeout": {
+    "name": "aislar",
+    "description": "Aislar temporalmente a un usuario por una duración específica",
+    "options": {
+      "target": { "name": "usuario", "description": "Usuario a aislar" },
+      "duration": { "name": "duracion", "description": "Duración del aislamiento" },
+      "reason": { "name": "razon", "description": "Razón del aislamiento" }
+    }
+  },
+  "untimeout": {
+    "name": "desaislar",
+    "description": "Quitar el aislamiento temporal a un usuario",
+    "options": {
+      "target": { "name": "usuario", "description": "Usuario al que quitar aislamiento" }
+    }
+  },
+  "warn": {
+    "name": "advertir",
+    "description": "Dar una advertencia a un usuario",
+    "options": {
+      "target": { "name": "usuario", "description": "Usuario a advertir" },
+      "reason": { "name": "razon", "description": "Razón de la advertencia" }
+    }
+  },
+  "warnings": {
+    "name": "advertencias",
+    "description": "Ver todas las advertencias de un usuario",
+    "options": {
+      "target": { "name": "usuario", "description": "Usuario a revisar" }
+    }
+  },
+  "lock": {
+    "name": "bloquear-canal",
+    "description": "Bloquea el canal actual"
+  },
+  "unlock": {
+    "name": "desbloquear-canal",
+    "description": "Desbloquea el canal actual"
+  },
+  "purge": {
+    "name": "purgar",
+    "description": "Elimina una cantidad específica de mensajes",
+    "options": {
+      "amount": { "name": "cantidad", "description": "Cantidad de mensajes (1-100)" }
+    }
+  },
+  "say": {
+    "name": "decir",
+    "description": "Enviar un mensaje como el bot",
+    "options": {
+      "message": { "name": "mensaje", "description": "El mensaje que el bot enviará" },
+      "channel": { "name": "canal", "description": "Canal donde enviar el mensaje" }
+    }
+  },
+  "dm": {
+    "name": "md",
+    "description": "Enviar un mensaje directo a un usuario (solo Staff)",
+    "options": {
+      "user": { "name": "usuario", "description": "El usuario al que enviar el MD" },
+      "message": { "name": "mensaje", "description": "El mensaje a enviar" },
+      "anonymous": { "name": "anonimo", "description": "Enviar de forma anónima (por defecto: false)" }
+    }
+  },
+  "cases": {
+    "name": "casos",
+    "description": "Ver casos de moderación y registros de auditoría",
+    "options": {
+      "filter": { "name": "filtro", "description": "Filtrar casos por tipo o usuario" },
+      "user": { "name": "usuario", "description": "Filtrar casos por usuario específico" },
+      "limit": { "name": "limite", "description": "Número de casos a mostrar (por defecto: 10)" }
+    }
+  },
+  "usernotes": {
+    "name": "notas",
+    "description": "Administrar notas de usuario para moderación",
+    "subcommands": {
+      "add": {
+        "name": "agregar",
+        "description": "Agregar una nota a un usuario",
+        "options": {
+          "target": { "name": "usuario", "description": "El usuario al que agregar la nota" },
+          "note": { "name": "nota", "description": "La nota a agregar" },
+          "type": { "name": "tipo", "description": "Tipo de nota" }
+        }
+      },
+      "view": {
+        "name": "ver",
+        "description": "Ver las notas de un usuario",
+        "options": {
+          "target": { "name": "usuario", "description": "El usuario a ver notas" }
+        }
+      },
+      "remove": {
+        "name": "eliminar",
+        "description": "Eliminar una nota específica de un usuario",
+        "options": {
+          "target": { "name": "usuario", "description": "El usuario al que quitar una nota" },
+          "index": { "name": "indice", "description": "El índice de la nota a eliminar" }
+        }
+      },
+      "clear": {
+        "name": "limpiar",
+        "description": "Borrar todas las notas de un usuario",
+        "options": {
+          "target": { "name": "usuario", "description": "El usuario al que borrar notas" }
+        }
+      }
+    }
+  },
+  "massban": {
+    "name": "baneo-masivo",
+    "description": "Banear a múltiples usuarios del servidor a la vez",
+    "options": {
+      "users": { "name": "usuarios", "description": "IDs o menciones de usuarios a banear" },
+      "reason": { "name": "razon", "description": "Razón del baneo masivo" },
+      "delete_days": { "name": "dias_eliminar", "description": "Días de mensajes a eliminar (0-7)" }
+    }
+  },
+  "masskick": {
+    "name": "expulsion-masiva",
+    "description": "Expulsar a múltiples usuarios del servidor a la vez",
+    "options": {
+      "users": { "name": "usuarios", "description": "IDs o menciones de usuarios a expulsar" },
+      "reason": { "name": "razon", "description": "Razón de la expulsión masiva" }
+    }
   }
 }

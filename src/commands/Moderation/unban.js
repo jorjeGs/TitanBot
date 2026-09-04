@@ -4,23 +4,36 @@ import { logger } from '../../utils/logger.js';
 import { ModerationService } from '../../services/moderation/moderationService.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t, localizeSlashCommand, localizeOption } from '../../utils/i18n/index.js';
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName("unban")
-        .setDescription("Unban a user from the server")
-        .addStringOption(option =>
-            option
-                .setName("target")
-                .setDescription("The ID (or mention) of the user to unban")
-                .setRequired(true),
-        )
-        .addStringOption(option =>
-            option.setName("reason")
-                .setDescription("Reason for the unban")
-                .setRequired(false),
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName("unban")
+            .setDescription("Unban a user from the server")
+            .addStringOption((option) =>
+                localizeOption(
+                    option
+                        .setName("target")
+                        .setDescription("The ID (or mention) of the user to unban")
+                        .setRequired(true),
+                    'unban',
+                    'target',
+                ),
+            )
+            .addStringOption((option) =>
+                localizeOption(
+                    option
+                        .setName("reason")
+                        .setDescription("Reason for the unban")
+                        .setRequired(false),
+                    'unban',
+                    'reason',
+                ),
+            )
+            .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+        'unban',
+    ),
     category: "moderation",
 
     async execute(interaction, config, client) {
@@ -40,7 +53,7 @@ export default {
         if (!/^\d{17,20}$/.test(targetId)) {
             return replyUserError(interaction, {
                 type: ErrorTypes.USER_INPUT,
-                message: 'Please provide a valid user ID or mention.',
+                message: t('moderation.unban.invalid_target', {}, interaction),
             });
         }
 
@@ -48,11 +61,11 @@ export default {
         if (!targetUser) {
             return replyUserError(interaction, {
                 type: ErrorTypes.USER_INPUT,
-                message: `Could not find a user with the ID \`${targetId}\`.`,
+                message: t('moderation.unban.user_not_found', { targetId }, interaction),
             });
         }
 
-        const reason = interaction.options.getString("reason") || "No reason provided";
+        const reason = interaction.options.getString("reason") || t('moderation.no_reason', {}, interaction);
 
         const result = await ModerationService.unbanUser({
             guild: interaction.guild,
@@ -64,8 +77,8 @@ export default {
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [
                 successEmbed(
-                    "✅ User Unbanned",
-                    `Successfully unbanned **${targetUser.tag}** from the server.\n\n**Reason:** ${reason}\n**Case ID:** #${result.caseId}`,
+                    t('moderation.unban.success_title', {}, interaction),
+                    t('moderation.unban.success_desc', { user: targetUser.tag, reason, caseId: result.caseId }, interaction),
                 ),
             ],
         });

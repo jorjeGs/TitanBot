@@ -3,33 +3,45 @@ import { successEmbed } from '../../utils/embeds.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { ModerationService } from '../../services/moderation/moderationService.js';
 import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
+import { t, localizeSlashCommand, localizeOption } from '../../utils/i18n/index.js';
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName("kick")
-        .setDescription("Kick a user from the server")
-        .addUserOption((option) =>
-            option
-                .setName("target")
-                .setDescription("The user to kick")
-                .setRequired(true),
-        )
-        .addStringOption((option) =>
-            option.setName("reason").setDescription("Reason for the kick"),
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName("kick")
+            .setDescription("Kick a user from the server")
+            .addUserOption((option) =>
+                localizeOption(
+                    option
+                        .setName("target")
+                        .setDescription("The user to kick")
+                        .setRequired(true),
+                    'kick',
+                    'target',
+                ),
+            )
+            .addStringOption((option) =>
+                localizeOption(
+                    option.setName("reason").setDescription("Reason for the kick"),
+                    'kick',
+                    'reason',
+                ),
+            )
+            .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
+        'kick',
+    ),
     category: "moderation",
 
     async execute(interaction, config, client) {
         const targetUser = interaction.options.getUser("target");
         const member = interaction.options.getMember("target");
-        const reason = interaction.options.getString("reason") || "No reason provided";
+        const reason = interaction.options.getString("reason") || t('moderation.no_reason', {}, interaction);
 
         if (!targetUser) {
             throw new TitanBotError(
                 'Missing target user',
                 ErrorTypes.USER_INPUT,
-                'You must specify a user to kick.',
+                t('moderation.kick.missing_user', {}, interaction),
                 { subtype: 'invalid_user' },
             );
         }
@@ -38,7 +50,7 @@ export default {
             throw new TitanBotError(
                 "Cannot kick self",
                 ErrorTypes.VALIDATION,
-                "You cannot kick yourself.",
+                t('moderation.errors.cannot_kick_self', {}, interaction),
             );
         }
 
@@ -46,7 +58,7 @@ export default {
             throw new TitanBotError(
                 "Cannot kick bot",
                 ErrorTypes.VALIDATION,
-                "You cannot kick the bot.",
+                t('moderation.errors.cannot_kick_bot', {}, interaction),
             );
         }
 
@@ -54,7 +66,7 @@ export default {
             throw new TitanBotError(
                 "Target not found",
                 ErrorTypes.USER_INPUT,
-                "The target user is not currently in this server.",
+                t('moderation.errors.target_not_in_server', {}, interaction),
                 { subtype: 'user_not_found' },
             );
         }
@@ -69,8 +81,8 @@ export default {
         await InteractionHelper.universalReply(interaction, {
             embeds: [
                 successEmbed(
-                    `👢 **Kicked** ${targetUser.tag}`,
-                    `**Reason:** ${reason}\n**Case ID:** #${result.caseId}`,
+                    t('moderation.kick.success_title', { user: targetUser.tag }, interaction),
+                    t('moderation.kick.success_desc', { reason, caseId: result.caseId }, interaction),
                 ),
             ],
         });

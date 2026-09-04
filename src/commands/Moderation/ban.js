@@ -3,32 +3,44 @@ import { successEmbed } from '../../utils/embeds.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { ModerationService } from '../../services/moderation/moderationService.js';
 import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
+import { t, localizeSlashCommand, localizeOption } from '../../utils/i18n/index.js';
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName("ban")
-        .setDescription("Ban a user from the server")
-        .addUserOption((option) =>
-            option
-                .setName("target")
-                .setDescription("The user to ban")
-                .setRequired(true),
-        )
-        .addStringOption((option) =>
-            option.setName("reason").setDescription("Reason for the ban"),
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName("ban")
+            .setDescription("Ban a user from the server")
+            .addUserOption((option) =>
+                localizeOption(
+                    option
+                        .setName("target")
+                        .setDescription("The user to ban")
+                        .setRequired(true),
+                    'ban',
+                    'target',
+                ),
+            )
+            .addStringOption((option) =>
+                localizeOption(
+                    option.setName("reason").setDescription("Reason for the ban"),
+                    'ban',
+                    'reason',
+                ),
+            )
+            .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+        'ban',
+    ),
     category: "moderation",
 
     async execute(interaction, config, client) {
         const user = interaction.options.getUser("target");
-        const reason = interaction.options.getString("reason") || "No reason provided";
+        const reason = interaction.options.getString("reason") || t('moderation.no_reason', {}, interaction);
 
         if (!user) {
             throw new TitanBotError(
                 'Missing target user',
                 ErrorTypes.USER_INPUT,
-                'You must specify a user to ban.',
+                t('moderation.ban.missing_user', {}, interaction),
                 { subtype: 'invalid_user' },
             );
         }
@@ -37,14 +49,14 @@ export default {
             throw new TitanBotError(
                 'Cannot ban self',
                 ErrorTypes.VALIDATION,
-                'You cannot ban yourself.',
+                t('moderation.errors.cannot_ban_self', {}, interaction),
             );
         }
         if (user.id === client.user.id) {
             throw new TitanBotError(
                 'Cannot ban bot',
                 ErrorTypes.VALIDATION,
-                'You cannot ban the bot.',
+                t('moderation.errors.cannot_ban_bot', {}, interaction),
             );
         }
 
@@ -58,8 +70,8 @@ export default {
         await InteractionHelper.universalReply(interaction, {
             embeds: [
                 successEmbed(
-                    `🚫 **Banned** ${user.tag}`,
-                    `**Reason:** ${reason}\n**Case ID:** #${result.caseId}`,
+                    t('moderation.ban.success_title', { user: user.tag }, interaction),
+                    t('moderation.ban.success_desc', { reason, caseId: result.caseId }, interaction),
                 ),
             ],
         });

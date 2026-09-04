@@ -10,6 +10,7 @@ import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
 import { sanitizeInput } from '../../utils/validation.js';
+import { t, localizeSlashCommand, localizeOption } from '../../utils/i18n/index.js';
 
 const TEXT_CHANNEL_TYPES = [
     ChannelType.GuildText,
@@ -30,25 +31,36 @@ function resolveTargetChannel(interaction) {
 }
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName('say')
-        .setDescription('Send a plain message as the bot')
-        .addStringOption((option) =>
-            option
-                .setName('message')
-                .setDescription('The message the bot should send')
-                .setRequired(true)
-                .setMaxLength(2000),
-        )
-        .addChannelOption((option) =>
-            option
-                .setName('channel')
-                .setDescription('Channel to send in (defaults to the current channel)')
-                .addChannelTypes(...TEXT_CHANNEL_TYPES)
-                .setRequired(false),
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
-        .setDMPermission(false),
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName('say')
+            .setDescription('Send a plain message as the bot')
+            .addStringOption((option) =>
+                localizeOption(
+                    option
+                        .setName('message')
+                        .setDescription('The message the bot should send')
+                        .setRequired(true)
+                        .setMaxLength(2000),
+                    'say',
+                    'message',
+                ),
+            )
+            .addChannelOption((option) =>
+                localizeOption(
+                    option
+                        .setName('channel')
+                        .setDescription('Channel to send in (defaults to the current channel)')
+                        .addChannelTypes(...TEXT_CHANNEL_TYPES)
+                        .setRequired(false),
+                    'say',
+                    'channel',
+                ),
+            )
+            .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
+            .setDMPermission(false),
+        'say',
+    ),
     category: 'moderation',
     abuseProtection: { maxAttempts: 8, windowMs: 60_000 },
 
@@ -71,7 +83,7 @@ export default {
         if (!message) {
             return replyUserError(interaction, {
                 type: ErrorTypes.VALIDATION,
-                message: 'Message cannot be empty.',
+                message: t('moderation.say.empty_message', {}, interaction),
             });
         }
 
@@ -79,7 +91,7 @@ export default {
         if (!channel) {
             return replyUserError(interaction, {
                 type: ErrorTypes.VALIDATION,
-                message: 'Choose a text channel or run this command in one.',
+                message: t('moderation.say.invalid_channel', {}, interaction),
             });
         }
 
@@ -89,14 +101,14 @@ export default {
         if (!memberPermissions?.has(PermissionFlagsBits.SendMessages)) {
             return replyUserError(interaction, {
                 type: ErrorTypes.PERMISSION,
-                message: `You do not have permission to send messages in ${channel}.`,
+                message: t('moderation.say.user_no_perm', { channel: channel.toString() }, interaction),
             });
         }
 
         if (!botPermissions?.has(PermissionFlagsBits.SendMessages)) {
             return replyUserError(interaction, {
                 type: ErrorTypes.PERMISSION,
-                message: `I do not have permission to send messages in ${channel}.`,
+                message: t('moderation.say.bot_no_perm', { channel: channel.toString() }, interaction),
             });
         }
 
@@ -124,8 +136,8 @@ export default {
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [
                 successEmbed(
-                    'Message Sent',
-                    `Posted in ${channel}. [Jump to message](${sentMessage.url})`,
+                    t('moderation.say.success_title', {}, interaction),
+                    t('moderation.say.success_desc', { channel: channel.toString(), url: sentMessage.url }, interaction),
                 ),
             ],
             flags: MessageFlags.Ephemeral,

@@ -76,5 +76,155 @@
         }
       }
     }
+  },
+  "ban": {
+    "name": "bannen",
+    "description": "Einen Benutzer vom Server bannen",
+    "options": {
+      "target": { "name": "benutzer", "description": "Der zu bannende Benutzer" },
+      "reason": { "name": "grund", "description": "Grund für den Bann" }
+    }
+  },
+  "unban": {
+    "name": "entbannen",
+    "description": "Einen Benutzer auf dem Server entbannen",
+    "options": {
+      "target": { "name": "benutzer", "description": "Die ID oder Erwähnung des zu entbannenden Benutzers" },
+      "reason": { "name": "grund", "description": "Grund für die Entbannung" }
+    }
+  },
+  "kick": {
+    "name": "kicken",
+    "description": "Einen Benutzer vom Server kicken",
+    "options": {
+      "target": { "name": "benutzer", "description": "Der zu kickende Benutzer" },
+      "reason": { "name": "grund", "description": "Grund für den Kick" }
+    }
+  },
+  "timeout": {
+    "name": "timeout",
+    "description": "Einen Benutzer für eine bestimmte Dauer stummschalten",
+    "options": {
+      "target": { "name": "benutzer", "description": "Stummzuschaltender Benutzer" },
+      "duration": { "name": "dauer", "description": "Dauer des Timeouts" },
+      "reason": { "name": "grund", "description": "Grund für das Timeout" }
+    }
+  },
+  "untimeout": {
+    "name": "untimeout",
+    "description": "Timeout eines Benutzers aufheben",
+    "options": {
+      "target": { "name": "benutzer", "description": "Benutzer für Timeout-Aufhebung" }
+    }
+  },
+  "warn": {
+    "name": "warnen",
+    "description": "Einen Benutzer verwarnen",
+    "options": {
+      "target": { "name": "benutzer", "description": "Zu verwarnender Benutzer" },
+      "reason": { "name": "grund", "description": "Grund für die Verwarnung" }
+    }
+  },
+  "warnings": {
+    "name": "warnungen",
+    "description": "Alle Verwarnungen eines Benutzers anzeigen",
+    "options": {
+      "target": { "name": "benutzer", "description": "Zu überprüfender Benutzer" }
+    }
+  },
+  "lock": {
+    "name": "sperren",
+    "description": "Sperrt den aktuellen Kanal"
+  },
+  "unlock": {
+    "name": "entsperren",
+    "description": "Entsperrt den aktuellen Kanal"
+  },
+  "purge": {
+    "name": "bereinigen",
+    "description": "Löscht eine bestimmte Anzahl von Nachrichten",
+    "options": {
+      "amount": { "name": "anzahl", "description": "Anzahl der Nachrichten (1-100)" }
+    }
+  },
+  "say": {
+    "name": "sagen",
+    "description": "Eine Nachricht als Bot senden",
+    "options": {
+      "message": { "name": "nachricht", "description": "Die Nachricht, die der Bot senden soll" },
+      "channel": { "name": "kanal", "description": "Kanal zum Senden der Nachricht" }
+    }
+  },
+  "dm": {
+    "name": "dm",
+    "description": "Direktnachricht an einen Benutzer senden (nur Team)",
+    "options": {
+      "user": { "name": "benutzer", "description": "Der Benutzer, an den die DM gesendet werden soll" },
+      "message": { "name": "nachricht", "description": "Die zu sendende Nachricht" },
+      "anonymous": { "name": "anonym", "description": "Nachricht anonym senden (Standard: false)" }
+    }
+  },
+  "cases": {
+    "name": "faelle",
+    "description": "Moderationsfälle und Audit-Logs anzeigen",
+    "options": {
+      "filter": { "name": "filter", "description": "Fälle nach Typ oder Benutzer filtern" },
+      "user": { "name": "benutzer", "description": "Fälle nach bestimmtem Benutzer filtern" },
+      "limit": { "name": "limit", "description": "Anzahl der anzuzeigenden Fälle (Standard: 10)" }
+    }
+  },
+  "usernotes": {
+    "name": "notizen",
+    "description": "Benutzernotizen für Moderationszwecke verwalten",
+    "subcommands": {
+      "add": {
+        "name": "hinzufuegen",
+        "description": "Eine Notiz zu einem Benutzer hinzufügen",
+        "options": {
+          "target": { "name": "benutzer", "description": "Der Benutzer, dem eine Notiz hinzugefügt wird" },
+          "note": { "name": "notiz", "description": "Die hinzuzufügende Notiz" },
+          "type": { "name": "typ", "description": "Typ der Notiz" }
+        }
+      },
+      "view": {
+        "name": "anzeigen",
+        "description": "Notizen für einen Benutzer anzeigen",
+        "options": {
+          "target": { "name": "benutzer", "description": "Der Benutzer, dessen Notizen angezeigt werden" }
+        }
+      },
+      "remove": {
+        "name": "entfernen",
+        "description": "Eine bestimmte Notiz eines Benutzers entfernen",
+        "options": {
+          "target": { "name": "benutzer", "description": "Der Benutzer, von dem eine Notiz entfernt wird" },
+          "index": { "name": "index", "description": "Der Index der zu entfernenden Notiz" }
+        }
+      },
+      "clear": {
+        "name": "loeschen",
+        "description": "Alle Notizen eines Benutzers löschen",
+        "options": {
+          "target": { "name": "benutzer", "description": "Der Benutzer, dessen Notizen gelöscht werden" }
+        }
+      }
+    }
+  },
+  "massban": {
+    "name": "massenban",
+    "description": "Mehrere Benutzer gleichzeitig vom Server bannen",
+    "options": {
+      "users": { "name": "benutzer", "description": "Zu bannende Benutzer-IDs oder Erwähnungen" },
+      "reason": { "name": "grund", "description": "Grund für den Massenbann" },
+      "delete_days": { "name": "tage_loeschen", "description": "Anzahl der Tage zu löschender Nachrichten (0-7)" }
+    }
+  },
+  "masskick": {
+    "name": "massenkick",
+    "description": "Mehrere Benutzer gleichzeitig vom Server kicken",
+    "options": {
+      "users": { "name": "benutzer", "description": "Zu kickende Benutzer-IDs oder Erwähnungen" },
+      "reason": { "name": "grund", "description": "Grund für den Massenkick" }
+    }
   }
 }

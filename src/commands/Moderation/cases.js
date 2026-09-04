@@ -4,34 +4,53 @@ import { getModerationCases } from '../../utils/moderation.js';
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
-export default {
-    data: new SlashCommandBuilder()
-        .setName('cases')
-        .setDescription('View moderation cases and audit logs')
-        .setDefaultMemberPermissions(PermissionFlagsBits.ViewAuditLog)
-        .setDMPermission(false)
-        .addStringOption(option =>
-            option.setName('filter')
-                .setDescription('Filter cases by type or user')
-                .addChoices(
-                    { name: 'All Cases', value: 'all' },
-                    { name: 'Bans', value: 'Member Banned' },
-                    { name: 'Kicks', value: 'Member Kicked' },
-                    { name: 'Timeouts', value: 'Member Timed Out' },
-                    { name: 'Warnings', value: 'User Warned' }
-                )
-        )
-        .addUserOption(option =>
-            option.setName('user')
-                .setDescription('Filter cases by specific user')
-        )
-        .addIntegerOption(option =>
-            option.setName('limit')
-                .setDescription('Number of cases to show (default: 10)')
-                .setMinValue(1)
-                .setMaxValue(50)
-        ),
+import { t, localizeSlashCommand, localizeOption } from '../../utils/i18n/index.js';
 
+export default {
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName('cases')
+            .setDescription('View moderation cases and audit logs')
+            .setDefaultMemberPermissions(PermissionFlagsBits.ViewAuditLog)
+            .setDMPermission(false)
+            .addStringOption((option) =>
+                localizeOption(
+                    option
+                        .setName('filter')
+                        .setDescription('Filter cases by type or user')
+                        .addChoices(
+                            { name: 'All Cases', name_localizations: { 'es-419': 'Todos los casos', 'de': 'Alle Fälle' }, value: 'all' },
+                            { name: 'Bans', name_localizations: { 'es-419': 'Baneos', 'de': 'Banns' }, value: 'Member Banned' },
+                            { name: 'Kicks', name_localizations: { 'es-419': 'Expulsiones', 'de': 'Kicks' }, value: 'Member Kicked' },
+                            { name: 'Timeouts', name_localizations: { 'es-419': 'Aislamientos', 'de': 'Timeouts' }, value: 'Member Timed Out' },
+                            { name: 'Warnings', name_localizations: { 'es-419': 'Advertencias', 'de': 'Verwarnungen' }, value: 'User Warned' },
+                        ),
+                    'cases',
+                    'filter',
+                ),
+            )
+            .addUserOption((option) =>
+                localizeOption(
+                    option
+                        .setName('user')
+                        .setDescription('Filter cases by specific user'),
+                    'cases',
+                    'user',
+                ),
+            )
+            .addIntegerOption((option) =>
+                localizeOption(
+                    option
+                        .setName('limit')
+                        .setDescription('Number of cases to show (default: 10)')
+                        .setMinValue(1)
+                        .setMaxValue(50),
+                    'cases',
+                    'limit',
+                ),
+            ),
+        'cases',
+    ),
     category: 'moderation',
 
     async execute(interaction, config, client) {
@@ -59,10 +78,13 @@ export default {
             const cases = await getModerationCases(interaction.guild.id, filters);
 
             if (cases.length === 0) {
-                throw new Error(targetUser 
-                    ? `No moderation cases found for ${targetUser.tag}`
-                    : `No ${filterType === 'all' ? '' : filterType} cases found in this server.`
-                );
+                const emptyMessage = targetUser
+                    ? t('moderation.cases.no_cases_user', { user: targetUser.tag }, interaction)
+                    : t('moderation.cases.no_cases_filter', { filter: filterType === 'all' ? '' : filterType }, interaction);
+                return await replyUserError(interaction, {
+                    type: ErrorTypes.USER_INPUT,
+                    message: emptyMessage,
+                });
             }
 
             const CASES_PER_PAGE = 5;
@@ -75,23 +97,41 @@ export default {
                 const pageCases = cases.slice(startIndex, endIndex);
 
                 const embed = createEmbed({
-                    title: 'Moderation Cases',
-                    description: `Showing moderation cases for **${interaction.guild.name}**\n\n**Page ${page} of ${totalPages}**`
+                    title: t('moderation.cases.title', {}, interaction),
+                    description: t('moderation.cases.desc', {
+                        guild: interaction.guild.name,
+                        page,
+                        totalPages
+                    }, interaction),
                 });
 
-                pageCases.forEach(case_ => {
+                pageCases.forEach((case_) => {
                     const date = new Date(case_.createdAt).toLocaleDateString();
                     const time = new Date(case_.createdAt).toLocaleTimeString();
                     
                     embed.addFields({
-                        name: `Case #${case_.caseId} - ${case_.action}`,
-                        value: `**Target:** ${case_.target}\n**Moderator:** ${case_.executor}\n**Date:** ${date} at ${time}\n**Reason:** ${case_.reason || 'No reason provided'}`,
+                        name: t('moderation.cases.case_field_name', { caseId: case_.caseId, action: case_.action }, interaction),
+                        value: t('moderation.cases.case_field_value', {
+                            target: case_.target,
+                            executor: case_.executor,
+                            date,
+                            time,
+                            reason: case_.reason || t('moderation.no_reason', {}, interaction)
+                        }, interaction),
                         inline: false
                     });
                 });
 
+                const userText = targetUser
+                    ? t('moderation.cases.user_suffix', { user: targetUser.tag }, interaction)
+                    : '';
+
                 embed.setFooter({
-                    text: `Total cases: ${cases.length} | Filter: ${filterType}${targetUser ?` | User: ${targetUser.tag}`: ''}`
+                    text: t('moderation.cases.footer', {
+                        total: cases.length,
+                        filter: filterType,
+                        userText
+                    }, interaction)
                 });
 
                 return embed;
@@ -102,19 +142,19 @@ export default {
                 
                 const prevButton = new ButtonBuilder()
                     .setCustomId('prev_page')
-                    .setLabel('⬅️ Previous')
+                    .setLabel(t('moderation.cases.btn_prev', {}, interaction))
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(page === 1);
 
                 const pageInfoButton = new ButtonBuilder()
                     .setCustomId('page_info')
-                    .setLabel(`Page ${page}/${totalPages}`)
+                    .setLabel(t('moderation.cases.btn_page', { page, total: totalPages }, interaction))
                     .setStyle(ButtonStyle.Primary)
                     .setDisabled(true);
 
                 const nextButton = new ButtonBuilder()
                     .setCustomId('next_page')
-                    .setLabel('Next ➡️')
+                    .setLabel(t('moderation.cases.btn_next', {}, interaction))
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(page === totalPages);
 
@@ -129,7 +169,7 @@ export default {
 
             const collector = message.createMessageComponentCollector({
                 componentType: ComponentType.Button,
-time: 120000
+                time: 120000
             });
 
             collector.on('collect', async (buttonInteraction) => {
@@ -137,7 +177,7 @@ time: 120000
 
                 if (buttonInteraction.user.id !== interaction.user.id) {
                     await buttonInteraction.followUp({
-                        content: 'You cannot use these buttons. Run `/cases` to get your own case view.',
+                        content: t('moderation.cases.btn_unauthorized', {}, buttonInteraction),
                         flags: MessageFlags.Ephemeral
                     });
                     return;
@@ -171,7 +211,10 @@ time: 120000
 
         } catch (error) {
             logger.error('Error in cases command:', error);
-            return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'An error occurred while retrieving moderation cases. Please try again later.' });
+            return await replyUserError(interaction, {
+                type: ErrorTypes.UNKNOWN,
+                message: t('moderation.cases.error_cases', {}, interaction),
+            });
         }
     }
 };

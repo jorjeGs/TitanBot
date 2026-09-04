@@ -212,5 +212,413 @@
         }
       }
     }
+  },
+  "ban": {
+    "name": "ban",
+    "name_localizations": { "es-419": "ban", "de": "bannen" },
+    "description": "Ban a user from the server",
+    "description_localizations": {
+      "es-419": "Banear a un usuario del servidor",
+      "de": "Einen Benutzer vom Server bannen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "description": "The user to ban",
+        "description_localizations": { "es-419": "El usuario a banear", "de": "Der zu bannende Benutzer" }
+      },
+      "reason": {
+        "name": "reason",
+        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "description": "Reason for the ban",
+        "description_localizations": { "es-419": "Razón del baneo", "de": "Grund für den Bann" }
+      }
+    }
+  },
+  "unban": {
+    "name": "unban",
+    "name_localizations": { "es-419": "desbanear", "de": "entbannen" },
+    "description": "Unban a user from the server",
+    "description_localizations": {
+      "es-419": "Desbanear a un usuario del servidor",
+      "de": "Einen Benutzer auf dem Server entbannen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "description": "The ID (or mention) of the user to unban",
+        "description_localizations": { "es-419": "El ID o mención del usuario a desbanear", "de": "Die ID oder Erwähnung des zu entbannenden Benutzers" }
+      },
+      "reason": {
+        "name": "reason",
+        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "description": "Reason for the unban",
+        "description_localizations": { "es-419": "Razón del desbaneo", "de": "Grund für die Entbannung" }
+      }
+    }
+  },
+  "kick": {
+    "name": "kick",
+    "name_localizations": { "es-419": "expulsar", "de": "kicken" },
+    "description": "Kick a user from the server",
+    "description_localizations": {
+      "es-419": "Expulsar a un usuario del servidor",
+      "de": "Einen Benutzer vom Server kicken"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "description": "The user to kick",
+        "description_localizations": { "es-419": "El usuario a expulsar", "de": "Der zu kickende Benutzer" }
+      },
+      "reason": {
+        "name": "reason",
+        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "description": "Reason for the kick",
+        "description_localizations": { "es-419": "Razón de la expulsión", "de": "Grund für den Kick" }
+      }
+    }
+  },
+  "timeout": {
+    "name": "timeout",
+    "name_localizations": { "es-419": "aislar", "de": "timeout" },
+    "description": "Timeout a user for a specific duration",
+    "description_localizations": {
+      "es-419": "Aislar temporalmente a un usuario por una duración específica",
+      "de": "Einen Benutzer für eine bestimmte Dauer stummschalten"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "description": "User to timeout",
+        "description_localizations": { "es-419": "Usuario a aislar", "de": "Stummzuschaltender Benutzer" }
+      },
+      "duration": {
+        "name": "duration",
+        "name_localizations": { "es-419": "duracion", "de": "dauer" },
+        "description": "Duration of the timeout",
+        "description_localizations": { "es-419": "Duración del aislamiento", "de": "Dauer des Timeouts" }
+      },
+      "reason": {
+        "name": "reason",
+        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "description": "Reason for the timeout",
+        "description_localizations": { "es-419": "Razón del aislamiento", "de": "Grund für das Timeout" }
+      }
+    }
+  },
+  "untimeout": {
+    "name": "untimeout",
+    "name_localizations": { "es-419": "desaislar", "de": "untimeout" },
+    "description": "Remove timeout from a user",
+    "description_localizations": {
+      "es-419": "Quitar el aislamiento temporal a un usuario",
+      "de": "Timeout eines Benutzers aufheben"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "description": "User to untimeout",
+        "description_localizations": { "es-419": "Usuario al que quitar aislamiento", "de": "Benutzer für Timeout-Aufhebung" }
+      }
+    }
+  },
+  "warn": {
+    "name": "warn",
+    "name_localizations": { "es-419": "advertir", "de": "warnen" },
+    "description": "Warn a user",
+    "description_localizations": {
+      "es-419": "Dar una advertencia a un usuario",
+      "de": "Einen Benutzer verwarnen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "description": "User to warn",
+        "description_localizations": { "es-419": "Usuario a advertir", "de": "Zu verwarnender Benutzer" }
+      },
+      "reason": {
+        "name": "reason",
+        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "description": "Reason for the warning",
+        "description_localizations": { "es-419": "Razón de la advertencia", "de": "Grund für die Verwarnung" }
+      }
+    }
+  },
+  "warnings": {
+    "name": "warnings",
+    "name_localizations": { "es-419": "advertencias", "de": "warnungen" },
+    "description": "View all warnings for a user",
+    "description_localizations": {
+      "es-419": "Ver todas las advertencias de un usuario",
+      "de": "Alle Verwarnungen eines Benutzers anzeigen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "description": "User to check warnings for",
+        "description_localizations": { "es-419": "Usuario a revisar", "de": "Zu überprüfender Benutzer" }
+      }
+    }
+  },
+  "lock": {
+    "name": "lock",
+    "name_localizations": { "es-419": "bloquear-canal", "de": "sperren" },
+    "description": "Locks the current channel",
+    "description_localizations": {
+      "es-419": "Bloquea el canal actual",
+      "de": "Sperrt den aktuellen Kanal"
+    }
+  },
+  "unlock": {
+    "name": "unlock",
+    "name_localizations": { "es-419": "desbloquear-canal", "de": "entsperren" },
+    "description": "Unlocks the current channel",
+    "description_localizations": {
+      "es-419": "Desbloquea el canal actual",
+      "de": "Entsperrt den aktuellen Kanal"
+    }
+  },
+  "purge": {
+    "name": "purge",
+    "name_localizations": { "es-419": "purgar", "de": "bereinigen" },
+    "description": "Delete a specific amount of messages",
+    "description_localizations": {
+      "es-419": "Elimina una cantidad específica de mensajes",
+      "de": "Löscht eine bestimmte Anzahl von Nachrichten"
+    },
+    "options": {
+      "amount": {
+        "name": "amount",
+        "name_localizations": { "es-419": "cantidad", "de": "anzahl" },
+        "description": "Number of messages (1-100)",
+        "description_localizations": { "es-419": "Cantidad de mensajes (1-100)", "de": "Anzahl der Nachrichten (1-100)" }
+      }
+    }
+  },
+  "say": {
+    "name": "say",
+    "name_localizations": { "es-419": "decir", "de": "sagen" },
+    "description": "Send a plain message as the bot",
+    "description_localizations": {
+      "es-419": "Enviar un mensaje como el bot",
+      "de": "Eine Nachricht als Bot senden"
+    },
+    "options": {
+      "message": {
+        "name": "message",
+        "name_localizations": { "es-419": "mensaje", "de": "nachricht" },
+        "description": "The message the bot should send",
+        "description_localizations": { "es-419": "El mensaje que el bot enviará", "de": "Die Nachricht, die der Bot senden soll" }
+      },
+      "channel": {
+        "name": "channel",
+        "name_localizations": { "es-419": "canal", "de": "kanal" },
+        "description": "Channel to send in (defaults to the current channel)",
+        "description_localizations": { "es-419": "Canal donde enviar el mensaje", "de": "Kanal zum Senden der Nachricht" }
+      }
+    }
+  },
+  "dm": {
+    "name": "dm",
+    "name_localizations": { "es-419": "md", "de": "dm" },
+    "description": "Send a direct message to a user (Staff only)",
+    "description_localizations": {
+      "es-419": "Enviar un mensaje directo a un usuario (solo Staff)",
+      "de": "Direktnachricht an einen Benutzer senden (nur Team)"
+    },
+    "options": {
+      "user": {
+        "name": "user",
+        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "description": "The user to send a DM to",
+        "description_localizations": { "es-419": "El usuario al que enviar el MD", "de": "Der Benutzer, an den die DM gesendet werden soll" }
+      },
+      "message": {
+        "name": "message",
+        "name_localizations": { "es-419": "mensaje", "de": "nachricht" },
+        "description": "The message to send",
+        "description_localizations": { "es-419": "El mensaje a enviar", "de": "Die zu sendende Nachricht" }
+      },
+      "anonymous": {
+        "name": "anonymous",
+        "name_localizations": { "es-419": "anonimo", "de": "anonym" },
+        "description": "Send the message anonymously (default: false)",
+        "description_localizations": { "es-419": "Enviar de forma anónima (por defecto: false)", "de": "Nachricht anonym senden (Standard: false)" }
+      }
+    }
+  },
+  "cases": {
+    "name": "cases",
+    "name_localizations": { "es-419": "casos", "de": "faelle" },
+    "description": "View moderation cases and audit logs",
+    "description_localizations": {
+      "es-419": "Ver casos de moderación y registros de auditoría",
+      "de": "Moderationsfälle und Audit-Logs anzeigen"
+    },
+    "options": {
+      "filter": {
+        "name": "filter",
+        "name_localizations": { "es-419": "filtro", "de": "filter" },
+        "description": "Filter cases by type or user",
+        "description_localizations": { "es-419": "Filtrar casos por tipo o usuario", "de": "Fälle nach Typ oder Benutzer filtern" }
+      },
+      "user": {
+        "name": "user",
+        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "description": "Filter cases by specific user",
+        "description_localizations": { "es-419": "Filtrar casos por usuario específico", "de": "Fälle nach bestimmtem Benutzer filtern" }
+      },
+      "limit": {
+        "name": "limit",
+        "name_localizations": { "es-419": "limite", "de": "limit" },
+        "description": "Number of cases to show (default: 10)",
+        "description_localizations": { "es-419": "Número de casos a mostrar (por defecto: 10)", "de": "Anzahl der anzuzeigenden Fälle (Standard: 10)" }
+      }
+    }
+  },
+  "usernotes": {
+    "name": "usernotes",
+    "name_localizations": { "es-419": "notas", "de": "notizen" },
+    "description": "Manage user notes for moderation purposes",
+    "description_localizations": {
+      "es-419": "Administrar notas de usuario para moderación",
+      "de": "Benutzernotizen für Moderationszwecke verwalten"
+    },
+    "subcommands": {
+      "add": {
+        "name": "add",
+        "name_localizations": { "es-419": "agregar", "de": "hinzufuegen" },
+        "description": "Add a note to a user",
+        "description_localizations": { "es-419": "Agregar una nota a un usuario", "de": "Eine Notiz zu einem Benutzer hinzufügen" },
+        "options": {
+          "target": {
+            "name": "target",
+            "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+            "description": "The user to add a note for",
+            "description_localizations": { "es-419": "El usuario al que agregar la nota", "de": "Der Benutzer, dem eine Notiz hinzugefügt wird" }
+          },
+          "note": {
+            "name": "note",
+            "name_localizations": { "es-419": "nota", "de": "notiz" },
+            "description": "The note to add",
+            "description_localizations": { "es-419": "La nota a agregar", "de": "Die hinzuzufügende Notiz" }
+          },
+          "type": {
+            "name": "type",
+            "name_localizations": { "es-419": "tipo", "de": "typ" },
+            "description": "Type of note",
+            "description_localizations": { "es-419": "Tipo de nota", "de": "Typ der Notiz" }
+          }
+        }
+      },
+      "view": {
+        "name": "view",
+        "name_localizations": { "es-419": "ver", "de": "anzeigen" },
+        "description": "View notes for a user",
+        "description_localizations": { "es-419": "Ver las notas de un usuario", "de": "Notizen für einen Benutzer anzeigen" },
+        "options": {
+          "target": {
+            "name": "target",
+            "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+            "description": "The user to view notes for",
+            "description_localizations": { "es-419": "El usuario a ver notas", "de": "Der Benutzer, dessen Notizen angezeigt werden" }
+          }
+        }
+      },
+      "remove": {
+        "name": "remove",
+        "name_localizations": { "es-419": "eliminar", "de": "entfernen" },
+        "description": "Remove a specific note from a user",
+        "description_localizations": { "es-419": "Eliminar una nota específica de un usuario", "de": "Eine bestimmte Notiz eines Benutzers entfernen" },
+        "options": {
+          "target": {
+            "name": "target",
+            "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+            "description": "The user to remove a note from",
+            "description_localizations": { "es-419": "El usuario al que quitar una nota", "de": "Der Benutzer, von dem eine Notiz entfernt wird" }
+          },
+          "index": {
+            "name": "index",
+            "name_localizations": { "es-419": "indice", "de": "index" },
+            "description": "The index of the note to remove",
+            "description_localizations": { "es-419": "El índice de la nota a eliminar", "de": "Der Index der zu entfernenden Notiz" }
+          }
+        }
+      },
+      "clear": {
+        "name": "clear",
+        "name_localizations": { "es-419": "limpiar", "de": "loeschen" },
+        "description": "Clear all notes for a user",
+        "description_localizations": { "es-419": "Borrar todas las notas de un usuario", "de": "Alle Notizen eines Benutzers löschen" },
+        "options": {
+          "target": {
+            "name": "target",
+            "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+            "description": "The user to clear notes for",
+            "description_localizations": { "es-419": "El usuario al que borrar notas", "de": "Der Benutzer, dessen Notizen gelöscht werden" }
+          }
+        }
+      }
+    }
+  },
+  "massban": {
+    "name": "massban",
+    "name_localizations": { "es-419": "baneo-masivo", "de": "massenban" },
+    "description": "Ban multiple users from the server at once",
+    "description_localizations": {
+      "es-419": "Banear a múltiples usuarios del servidor a la vez",
+      "de": "Mehrere Benutzer gleichzeitig vom Server bannen"
+    },
+    "options": {
+      "users": {
+        "name": "users",
+        "name_localizations": { "es-419": "usuarios", "de": "benutzer" },
+        "description": "User IDs or mentions to ban",
+        "description_localizations": { "es-419": "IDs o menciones de usuarios a banear", "de": "Zu bannende Benutzer-IDs oder Erwähnungen" }
+      },
+      "reason": {
+        "name": "reason",
+        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "description": "Reason for the mass ban",
+        "description_localizations": { "es-419": "Razón del baneo masivo", "de": "Grund für den Massenbann" }
+      },
+      "delete_days": {
+        "name": "delete_days",
+        "name_localizations": { "es-419": "dias_eliminar", "de": "tage_loeschen" },
+        "description": "Number of days of messages to delete (0-7)",
+        "description_localizations": { "es-419": "Días de mensajes a eliminar (0-7)", "de": "Anzahl der Tage zu löschender Nachrichten (0-7)" }
+      }
+    }
+  },
+  "masskick": {
+    "name": "masskick",
+    "name_localizations": { "es-419": "expulsion-masiva", "de": "massenkick" },
+    "description": "Kick multiple users from the server at once",
+    "description_localizations": {
+      "es-419": "Expulsar a múltiples usuarios del servidor a la vez",
+      "de": "Mehrere Benutzer gleichzeitig vom Server kicken"
+    },
+    "options": {
+      "users": {
+        "name": "users",
+        "name_localizations": { "es-419": "usuarios", "de": "benutzer" },
+        "description": "User IDs or mentions to kick",
+        "description_localizations": { "es-419": "IDs o menciones de usuarios a expulsar", "de": "Zu kickende Benutzer-IDs oder Erwähnungen" }
+      },
+      "reason": {
+        "name": "reason",
+        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "description": "Reason for the mass kick",
+        "description_localizations": { "es-419": "Razón de la expulsión masiva", "de": "Grund für den Massenkick" }
+      }
+    }
   }
 }

@@ -3,84 +3,138 @@ import { createEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/
 import { logger } from '../../utils/logger.js';
 import { getFromDb, setInDb, deleteFromDb, getUserNotesKey, getUserNotesListKey } from '../../utils/database.js';
 import { sanitizeInput } from '../../utils/validation.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
+import { t, localizeSlashCommand, localizeSubcommand, localizeOption } from '../../utils/i18n/index.js';
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName("usernotes")
-        .setDescription("Manage user notes for moderation purposes")
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName("add")
-                .setDescription("Add a note to a user")
-                .addUserOption(option =>
-                    option
-                        .setName("target")
-                        .setDescription("The user to add a note for")
-                        .setRequired(true)
-                )
-                .addStringOption(option =>
-                    option
-                        .setName("note")
-                        .setDescription("The note to add")
-                        .setRequired(true)
-                )
-                .addStringOption(option =>
-                    option
-                        .setName("type")
-                        .setDescription("Type of note")
-                        .addChoices(
-                            { name: "Warning", value: "warning" },
-                            { name: "Positive", value: "positive" },
-                            { name: "Neutral", value: "neutral" },
-                            { name: "Alert", value: "alert" }
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName("usernotes")
+            .setDescription("Manage user notes for moderation purposes")
+            .addSubcommand((subcommand) =>
+                localizeSubcommand(
+                    subcommand
+                        .setName("add")
+                        .setDescription("Add a note to a user")
+                        .addUserOption((option) =>
+                            localizeOption(
+                                option
+                                    .setName("target")
+                                    .setDescription("The user to add a note for")
+                                    .setRequired(true),
+                                'usernotes',
+                                'target',
+                                'add',
+                            ),
                         )
-                        .setRequired(false)
-                )
-        )
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName("view")
-                .setDescription("View notes for a user")
-                .addUserOption(option =>
-                    option
-                        .setName("target")
-                        .setDescription("The user to view notes for")
-                        .setRequired(true)
-                )
-        )
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName("remove")
-                .setDescription("Remove a specific note from a user")
-                .addUserOption(option =>
-                    option
-                        .setName("target")
-                        .setDescription("The user to remove a note from")
-                        .setRequired(true)
-                )
-                .addIntegerOption(option =>
-                    option
-                        .setName("index")
-                        .setDescription("The index of the note to remove")
-                        .setRequired(true)
-                        .setMinValue(1)
-                )
-        )
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName("clear")
-                .setDescription("Clear all notes for a user")
-                .addUserOption(option =>
-                    option
-                        .setName("target")
-                        .setDescription("The user to clear notes for")
-                        .setRequired(true)
-                )
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+                        .addStringOption((option) =>
+                            localizeOption(
+                                option
+                                    .setName("note")
+                                    .setDescription("The note to add")
+                                    .setRequired(true),
+                                'usernotes',
+                                'note',
+                                'add',
+                            ),
+                        )
+                        .addStringOption((option) =>
+                            localizeOption(
+                                option
+                                    .setName("type")
+                                    .setDescription("Type of note")
+                                    .addChoices(
+                                        { name: "Warning", name_localizations: { "es-419": "Advertencia", "de": "Warnung" }, value: "warning" },
+                                        { name: "Positive", name_localizations: { "es-419": "Positiva", "de": "Positiv" }, value: "positive" },
+                                        { name: "Neutral", name_localizations: { "es-419": "Neutral", "de": "Neutral" }, value: "neutral" },
+                                        { name: "Alert", name_localizations: { "es-419": "Alerta", "de": "Alarm" }, value: "alert" },
+                                    )
+                                    .setRequired(false),
+                                'usernotes',
+                                'type',
+                                'add',
+                            ),
+                        ),
+                    'usernotes',
+                    'add',
+                ),
+            )
+            .addSubcommand((subcommand) =>
+                localizeSubcommand(
+                    subcommand
+                        .setName("view")
+                        .setDescription("View notes for a user")
+                        .addUserOption((option) =>
+                            localizeOption(
+                                option
+                                    .setName("target")
+                                    .setDescription("The user to view notes for")
+                                    .setRequired(true),
+                                'usernotes',
+                                'target',
+                                'view',
+                            ),
+                        ),
+                    'usernotes',
+                    'view',
+                ),
+            )
+            .addSubcommand((subcommand) =>
+                localizeSubcommand(
+                    subcommand
+                        .setName("remove")
+                        .setDescription("Remove a specific note from a user")
+                        .addUserOption((option) =>
+                            localizeOption(
+                                option
+                                    .setName("target")
+                                    .setDescription("The user to remove a note from")
+                                    .setRequired(true),
+                                'usernotes',
+                                'target',
+                                'remove',
+                            ),
+                        )
+                        .addIntegerOption((option) =>
+                            localizeOption(
+                                option
+                                    .setName("index")
+                                    .setDescription("The index of the note to remove")
+                                    .setRequired(true)
+                                    .setMinValue(1),
+                                'usernotes',
+                                'index',
+                                'remove',
+                            ),
+                        ),
+                    'usernotes',
+                    'remove',
+                ),
+            )
+            .addSubcommand((subcommand) =>
+                localizeSubcommand(
+                    subcommand
+                        .setName("clear")
+                        .setDescription("Clear all notes for a user")
+                        .addUserOption((option) =>
+                            localizeOption(
+                                option
+                                    .setName("target")
+                                    .setDescription("The user to clear notes for")
+                                    .setRequired(true),
+                                'usernotes',
+                                'target',
+                                'clear',
+                            ),
+                        ),
+                    'usernotes',
+                    'clear',
+                ),
+            )
+            .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+        'usernotes',
+    ),
     category: "moderation",
 
     async execute(interaction, config, client) {
@@ -89,7 +143,10 @@ export default {
         const guildId = interaction.guild.id;
 
         if (subcommand !== "view" && subcommand !== "remove" && subcommand !== "clear" && subcommand !== "add") {
-            return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: 'Please select a valid subcommand.' });
+            return await replyUserError(interaction, {
+                type: ErrorTypes.VALIDATION,
+                message: t('moderation.usernotes.invalid_subcommand', {}, interaction),
+            });
         }
 
         let notes = [];
@@ -109,11 +166,17 @@ export default {
                 case "clear":
                     return await handleClearNotes(interaction, targetUser, notes, guildId);
                 default:
-                    return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: 'Please select a valid subcommand.' });
+                    return await replyUserError(interaction, {
+                        type: ErrorTypes.VALIDATION,
+                        message: t('moderation.usernotes.invalid_subcommand', {}, interaction),
+                    });
             }
         } catch (error) {
             logger.error(`Error in usernotes command (${subcommand}):`, error);
-            return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'An error occurred while processing your request. Please try again later.' });
+            return await replyUserError(interaction, {
+                type: ErrorTypes.UNKNOWN,
+                message: t('moderation.usernotes.error_processing', {}, interaction),
+            });
         }
     }
 };
@@ -123,11 +186,17 @@ async function handleAddNote(interaction, targetUser, notes, guildId) {
     const type = interaction.options.getString("type") || "neutral";
 
     if (note.length > 1000) {
-        return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'Notes must be 1000 characters or less.' });
+        return await replyUserError(interaction, {
+            type: ErrorTypes.UNKNOWN,
+            message: t('moderation.usernotes.too_long', {}, interaction),
+        });
     }
 
     if (note.length === 0) {
-        return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'Note cannot be empty.' });
+        return await replyUserError(interaction, {
+            type: ErrorTypes.UNKNOWN,
+            message: t('moderation.usernotes.empty_note', {}, interaction),
+        });
     }
 
     note = sanitizeInput(note);
@@ -151,11 +220,14 @@ async function handleAddNote(interaction, targetUser, notes, guildId) {
     return InteractionHelper.safeReply(interaction, {
         embeds: [
             successEmbed(
-                `${typeInfo.emoji} Note Added`,
-                `Added a **${type}** note for **${targetUser.tag}**:\n\n` +
-                `> ${note}\n\n` +
-                `**Moderator:** ${interaction.user.tag}\n` +
-                `**Total Notes:** ${notes.length}`
+                t('moderation.usernotes.added_title', { emoji: typeInfo.emoji }, interaction),
+                t('moderation.usernotes.added_desc', {
+                    type,
+                    user: targetUser.tag,
+                    note,
+                    moderator: interaction.user.tag,
+                    total: notes.length
+                }, interaction),
             )
         ]
     });
@@ -166,8 +238,8 @@ async function handleViewNotes(interaction, targetUser, notes) {
         return InteractionHelper.safeReply(interaction, {
             embeds: [
                 infoEmbed(
-                    "📝 No Notes",
-                    `There are no notes for **${targetUser.tag}**.`
+                    t('moderation.usernotes.no_notes_title', {}, interaction),
+                    t('moderation.usernotes.no_notes_desc', { user: targetUser.tag }, interaction),
                 ),
             ],
         });
@@ -175,24 +247,29 @@ async function handleViewNotes(interaction, targetUser, notes) {
 
     const sortedNotes = [...notes].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    let description = `**Notes for ${targetUser.tag} (${targetUser.id}):**\n\n`;
+    let description = t('moderation.usernotes.view_header', { user: targetUser.tag, userId: targetUser.id }, interaction);
     
     sortedNotes.forEach((note, index) => {
         const typeInfo = getNoteTypeInfo(note.type);
         const date = new Date(note.timestamp).toLocaleDateString();
-        description += `${typeInfo.emoji} **Note #${index + 1}** (${note.type}) - ${date}\n`;
-        description += `> ${note.content}\n`;
-        description += `*Added by ${note.author}*\n\n`;
+        description += t('moderation.usernotes.view_item', {
+            emoji: typeInfo.emoji,
+            index: index + 1,
+            type: note.type,
+            date,
+            content: note.content,
+            author: note.author
+        }, interaction);
     });
 
     if (description.length > 4000) {
-        description = description.substring(0, 3900) + "\n... *(truncated)*";
+        description = description.substring(0, 3900) + t('moderation.usernotes.view_truncated', {}, interaction);
     }
 
     return InteractionHelper.safeReply(interaction, {
         embeds: [
             infoEmbed(
-                `📝 User Notes (${notes.length})`,
+                t('moderation.usernotes.view_title', { count: notes.length }, interaction),
                 description
             )
         ]
@@ -203,11 +280,12 @@ async function handleRemoveNote(interaction, targetUser, notes, guildId) {
     const index = interaction.options.getInteger("index") - 1;
 
     if (index < 0 || index >= notes.length) {
-        return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: `Please provide a valid note index (1-${notes.length}).` });
+        return await replyUserError(interaction, {
+            type: ErrorTypes.VALIDATION,
+            message: t('moderation.usernotes.invalid_index', { count: notes.length }, interaction),
+        });
     }
 
-    // The view command displays notes sorted newest-first, so resolve the index
-    // against the same ordering to delete the note the user actually sees.
     const sortedNotes = [...notes].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     const removedNote = sortedNotes[index];
     const originalIndex = notes.indexOf(removedNote);
@@ -221,10 +299,13 @@ async function handleRemoveNote(interaction, targetUser, notes, guildId) {
     return InteractionHelper.safeReply(interaction, {
         embeds: [
             successEmbed(
-                `${typeInfo.emoji} Note Removed`,
-                `Removed note #${index + 1} from **${targetUser.tag}**:\n\n` +
-                `> ${removedNote.content}\n\n` +
-                `**Remaining Notes:** ${notes.length}`
+                t('moderation.usernotes.removed_title', { emoji: typeInfo.emoji }, interaction),
+                t('moderation.usernotes.removed_desc', {
+                    index: index + 1,
+                    user: targetUser.tag,
+                    content: removedNote.content,
+                    remaining: notes.length
+                }, interaction),
             )
         ]
     });
@@ -237,8 +318,8 @@ async function handleClearNotes(interaction, targetUser, notes, guildId) {
         return InteractionHelper.safeReply(interaction, {
             embeds: [
                 infoEmbed(
-                    "No Notes to Clear",
-                    `There are no notes for **${targetUser.tag}** to clear.`
+                    t('moderation.usernotes.clear_empty_title', {}, interaction),
+                    t('moderation.usernotes.clear_empty_desc', { user: targetUser.tag }, interaction),
                 ),
             ],
         });
@@ -252,8 +333,8 @@ async function handleClearNotes(interaction, targetUser, notes, guildId) {
     return InteractionHelper.safeReply(interaction, {
         embeds: [
             successEmbed(
-                "🗑️ Notes Cleared",
-                `Cleared **${noteCount}** notes from **${targetUser.tag}**.`
+                t('moderation.usernotes.cleared_title', {}, interaction),
+                t('moderation.usernotes.cleared_desc', { count: noteCount, user: targetUser.tag }, interaction),
             )
         ]
     });

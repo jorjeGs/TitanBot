@@ -1,0 +1,185 @@
+{
+  "no_reason": "No reason provided",
+  "errors": {
+    "user_not_found": "Could not find that user.",
+    "target_not_in_server": "The target user is not currently in this server.",
+    "missing_target_user": "You must specify a user.",
+    "cannot_moderate_self": "You cannot moderate yourself.",
+    "cannot_moderate_bot": "You cannot moderate the bot.",
+    "cannot_ban_self": "You cannot ban yourself.",
+    "cannot_ban_bot": "You cannot ban the bot.",
+    "cannot_kick_self": "You cannot kick yourself.",
+    "cannot_kick_bot": "You cannot kick the bot.",
+    "cannot_timeout_self": "You cannot timeout yourself.",
+    "cannot_timeout_bot": "You cannot timeout the bot."
+  },
+  "ban": {
+    "missing_user": "You must specify a user to ban.",
+    "success_title": "🚫 **Banned** {user}",
+    "success_desc": "**Reason:** {reason}\n**Case ID:** #{caseId}"
+  },
+  "unban": {
+    "invalid_target": "Please provide a valid user ID or mention.",
+    "user_not_found": "Could not find a user with the ID `{targetId}`.",
+    "success_title": "✅ User Unbanned",
+    "success_desc": "Successfully unbanned **{user}** from the server.\n\n**Reason:** {reason}\n**Case ID:** #{caseId}"
+  },
+  "kick": {
+    "missing_user": "You must specify a user to kick.",
+    "success_title": "👢 **Kicked** {user}",
+    "success_desc": "**Reason:** {reason}\n**Case ID:** #{caseId}"
+  },
+  "timeout": {
+    "missing_user": "You must specify a user to timeout.",
+    "success_title": "⏳ **Timed out** {user} for {duration}.",
+    "success_desc": "**Reason:** {reason}\n**Case ID:** #{caseId}",
+    "durations": {
+      "5": "5 minutes",
+      "10": "10 minutes",
+      "30": "30 minutes",
+      "60": "1 hour",
+      "360": "6 hours",
+      "1440": "1 day",
+      "10080": "1 week"
+    }
+  },
+  "untimeout": {
+    "missing_user": "You must specify a user to untimeout.",
+    "success_title": "🔓 **Removed timeout** from {user}"
+  },
+  "warn": {
+    "missing_user": "You must specify a user to warn.",
+    "missing_reason": "You must provide a reason for the warning.",
+    "success_title": "⚠️ **Warned** {user}",
+    "success_desc": "**Reason:** {reason}\n**Total Warns:** {totalCount}"
+  },
+  "warnings": {
+    "title": "Warnings: {user}",
+    "no_warnings": "This user has no recorded warnings.",
+    "total": "Total Warnings: **{total}**",
+    "field_reason": "[#{index}] Reason: {reason}",
+    "field_details": "**Moderator:** <@{moderatorId}>\n**Date:** <t:{timestamp}:F> (<t:{timestamp}:R>)",
+    "btn_delete_specific": "Delete Specific Warning",
+    "btn_clear_all": "Clear All Warnings"
+  },
+  "warning_handlers": {
+    "perm_only_mod_delete": "Only the moderator who viewed these warnings can delete them.",
+    "perm_only_mod_clear": "Only the moderator who viewed these warnings can clear them.",
+    "modal_delete_title": "Delete Warning",
+    "modal_delete_number_label": "Warning Number (#1, #2, etc.)",
+    "modal_delete_number_placeholder": "Enter the warning number to delete",
+    "modal_clear_title": "Clear All Warnings",
+    "modal_clear_label": "Type \"DELETE\" to clear all warnings",
+    "invalid_warning_number": "Please enter a valid warning number (e.g., 1, 2, 3).",
+    "warning_not_found": "Warning #{number} does not exist. This user only has {total} warning(s).",
+    "deleted_title": "✅ Warning Deleted",
+    "deleted_desc": "Warning #{number} for **{user}** has been deleted.\n\n**Reason was:** {reason}",
+    "confirm_must_type_delete": "You must type \"DELETE\" exactly to confirm clearing all warnings.",
+    "cleared_title": "✅ Warnings Cleared",
+    "cleared_desc": "All warnings for **{user}** have been cleared. **{count}** warning(s) removed.",
+    "failed_open_modal": "Failed to open delete warning modal.",
+    "failed_open_confirm": "Failed to open confirmation modal.",
+    "failed_delete": "Failed to delete warning.",
+    "failed_clear": "Failed to clear warnings."
+  },
+  "lock": {
+    "already_locked": "{channel} is already locked.",
+    "success_title": "🔒 **Channel Locked**",
+    "success_desc": "{channel} is now locked down. No one can speak here now.",
+    "error_lock": "An unexpected error occurred while trying to lock the channel. Check my permissions (I need 'Manage Channels')."
+  },
+  "unlock": {
+    "not_locked": "{channel} is not explicitly locked (everyone can already send messages).",
+    "success_title": "🔓 **Channel Unlocked**",
+    "success_desc": "{channel} is now unlocked. You may speak now.",
+    "error_unlock": "An unexpected error occurred while trying to unlock the channel. Check my permissions (I need 'Manage Channels')."
+  },
+  "purge": {
+    "invalid_amount": "Please specify a number between 1 and 100.",
+    "success_title": "Messages Purged",
+    "success_desc": "Deleted {count} messages in {channel}.",
+    "error_purge": "An unexpected error occurred during message deletion. Note: Messages older than 14 days cannot be bulk deleted."
+  },
+  "say": {
+    "empty_message": "Message cannot be empty.",
+    "invalid_channel": "Choose a text channel or run this command in one.",
+    "user_no_perm": "You do not have permission to send messages in {channel}.",
+    "bot_no_perm": "I do not have permission to send messages in {channel}.",
+    "success_title": "Message Sent",
+    "success_desc": "Posted in {channel}. [Jump to message]({url})"
+  },
+  "dm": {
+    "too_long": "Messages must be under 2000 characters.",
+    "cannot_dm_bot": "You cannot send DMs to bot accounts.",
+    "embed_staff": "Message from the Staff Team",
+    "embed_user": "Message from {user}",
+    "embed_footer": "You cannot reply to this message. | Logger ID: {id}",
+    "success_title": "DM Sent",
+    "success_desc": "Successfully sent a message to {user}",
+    "dms_disabled": "Could not send a DM to {user}. They may have DMs disabled.",
+    "send_failed": "Failed to send DM: {error}"
+  },
+  "cases": {
+    "title": "Moderation Cases",
+    "desc": "Showing moderation cases for **{guild}**\n\n**Page {page} of {totalPages}**",
+    "no_cases_user": "No moderation cases found for {user}",
+    "no_cases_filter": "No {filter} cases found in this server.",
+    "case_field_name": "Case #{caseId} - {action}",
+    "case_field_value": "**Target:** {target}\n**Moderator:** {executor}\n**Date:** {date} at {time}\n**Reason:** {reason}",
+    "footer": "Total cases: {total} | Filter: {filter}{userText}",
+    "user_suffix": " | User: {user}",
+    "btn_prev": "⬅️ Previous",
+    "btn_page": "Page {page}/{total}",
+    "btn_next": "Next ➡️",
+    "btn_unauthorized": "You cannot use these buttons. Run `/cases` to get your own case view.",
+    "error_cases": "An error occurred while retrieving moderation cases. Please try again later."
+  },
+  "usernotes": {
+    "too_long": "Notes must be 1000 characters or less.",
+    "empty_note": "Note cannot be empty.",
+    "added_title": "{emoji} Note Added",
+    "added_desc": "Added a **{type}** note for **{user}**:\n\n> {note}\n\n**Moderator:** {moderator}\n**Total Notes:** {total}",
+    "no_notes_title": "📝 No Notes",
+    "no_notes_desc": "There are no notes for **{user}**.",
+    "view_title": "📝 User Notes ({count})",
+    "view_header": "**Notes for {user} ({userId}):**\n\n",
+    "view_item": "{emoji} **Note #{index}** ({type}) - {date}\n> {content}\n*Added by {author}*\n\n",
+    "view_truncated": "\n... *(truncated)*",
+    "invalid_index": "Please provide a valid note index (1-{count}).",
+    "removed_title": "{emoji} Note Removed",
+    "removed_desc": "Removed note #{index} from **{user}**:\n\n> {content}\n\n**Remaining Notes:** {remaining}",
+    "clear_empty_title": "No Notes to Clear",
+    "clear_empty_desc": "There are no notes for **{user}** to clear.",
+    "cleared_title": "🗑️ Notes Cleared",
+    "cleared_desc": "Cleared **{count}** notes from **{user}**.",
+    "invalid_subcommand": "Please select a valid subcommand.",
+    "error_processing": "An error occurred while processing your request. Please try again later."
+  },
+  "massban": {
+    "default_reason": "Mass ban - No reason provided",
+    "invalid_users": "Please provide valid user IDs or mentions. Maximum 20 users at once.",
+    "cannot_include_self": "You cannot include yourself in a mass ban.",
+    "cannot_include_bot": "You cannot include the bot in a mass ban.",
+    "completed_title": "🔨 Mass Ban Completed",
+    "results_header": "**Mass Ban Results:**\n\n",
+    "successful_section": "✅ **Successfully Banned ({count}):**\n",
+    "skipped_section": "⚠️ **Skipped ({count}):**\n",
+    "failed_section": "❌ **Failed ({count}):**\n",
+    "user_not_found": "User not found",
+    "error_massban": "An error occurred while processing the mass ban. Please try again later."
+  },
+  "masskick": {
+    "default_reason": "Mass kick - No reason provided",
+    "invalid_users": "Please provide valid user IDs or mentions. Maximum 20 users at once.",
+    "cannot_include_self": "You cannot include yourself in a mass kick.",
+    "cannot_include_bot": "You cannot include the bot in a mass kick.",
+    "completed_title": "👢 Mass Kick Completed",
+    "results_header": "**Mass Kick Results:**\n\n",
+    "successful_section": "✅ **Successfully Kicked ({count}):**\n",
+    "skipped_section": "⚠️ **Skipped ({count}):**\n",
+    "failed_section": "❌ **Failed ({count}):**\n",
+    "not_in_server": "User not in server",
+    "kick_not_allowed": "Target has Admin or a managed role, or bot lacks Kick Members",
+    "error_masskick": "An error occurred while processing the mass kick. Please try again later."
+  }
+}

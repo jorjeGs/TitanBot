@@ -1,0 +1,185 @@
+{
+  "no_reason": "Sin razón especificada",
+  "errors": {
+    "user_not_found": "No se pudo encontrar a ese usuario.",
+    "target_not_in_server": "El usuario especificado no está actualmente en este servidor.",
+    "missing_target_user": "Debes especificar un usuario.",
+    "cannot_moderate_self": "No puedes moderarte a ti mismo.",
+    "cannot_moderate_bot": "No puedes moderar al bot.",
+    "cannot_ban_self": "No puedes banearte a ti mismo.",
+    "cannot_ban_bot": "No puedes banear al bot.",
+    "cannot_kick_self": "No puedes expulsarte a ti mismo.",
+    "cannot_kick_bot": "No puedes expulsar al bot.",
+    "cannot_timeout_self": "No puedes aislarte a ti mismo.",
+    "cannot_timeout_bot": "No puedes aislar al bot."
+  },
+  "ban": {
+    "missing_user": "Debes especificar un usuario para banear.",
+    "success_title": "🚫 **Baneado** {user}",
+    "success_desc": "**Razón:** {reason}\n**ID del caso:** #{caseId}"
+  },
+  "unban": {
+    "invalid_target": "Por favor proporciona un ID o mención de usuario válido.",
+    "user_not_found": "No se pudo encontrar a un usuario con el ID `{targetId}`.",
+    "success_title": "✅ Usuario desbaneado",
+    "success_desc": "Se desbaneó exitosamente a **{user}** del servidor.\n\n**Razón:** {reason}\n**ID del caso:** #{caseId}"
+  },
+  "kick": {
+    "missing_user": "Debes especificar un usuario para expulsar.",
+    "success_title": "👢 **Expulsado** {user}",
+    "success_desc": "**Razón:** {reason}\n**ID del caso:** #{caseId}"
+  },
+  "timeout": {
+    "missing_user": "Debes especificar un usuario para aislar.",
+    "success_title": "⏳ **Aislado** {user} por {duration}.",
+    "success_desc": "**Razón:** {reason}\n**ID del caso:** #{caseId}",
+    "durations": {
+      "5": "5 minutos",
+      "10": "10 minutos",
+      "30": "30 minutos",
+      "60": "1 hora",
+      "360": "6 horas",
+      "1440": "1 día",
+      "10080": "1 semana"
+    }
+  },
+  "untimeout": {
+    "missing_user": "Debes especificar un usuario al que quitar el aislamiento.",
+    "success_title": "🔓 **Aislamiento removido** de {user}"
+  },
+  "warn": {
+    "missing_user": "Debes especificar un usuario para advertir.",
+    "missing_reason": "Debes proporcionar una razón para la advertencia.",
+    "success_title": "⚠️ **Advertido** {user}",
+    "success_desc": "**Razón:** {reason}\n**Total de advertencias:** {totalCount}"
+  },
+  "warnings": {
+    "title": "Advertencias: {user}",
+    "no_warnings": "Este usuario no tiene advertencias registradas.",
+    "total": "Total de advertencias: **{total}**",
+    "field_reason": "[#{index}] Razón: {reason}",
+    "field_details": "**Moderador:** <@{moderatorId}>\n**Fecha:** <t:{timestamp}:F> (<t:{timestamp}:R>)",
+    "btn_delete_specific": "Eliminar advertencia específica",
+    "btn_clear_all": "Borrar todas las advertencias"
+  },
+  "warning_handlers": {
+    "perm_only_mod_delete": "Solo el moderador que vio estas advertencias puede eliminarlas.",
+    "perm_only_mod_clear": "Solo el moderador que vio estas advertencias puede borrarlas.",
+    "modal_delete_title": "Eliminar advertencia",
+    "modal_delete_number_label": "Número de advertencia (#1, #2, etc.)",
+    "modal_delete_number_placeholder": "Ingresa el número de advertencia a eliminar",
+    "modal_clear_title": "Borrar todas las advertencias",
+    "modal_clear_label": "Escribe \"DELETE\" para borrar advertencias",
+    "invalid_warning_number": "Por favor ingresa un número de advertencia válido (ej. 1, 2, 3).",
+    "warning_not_found": "La advertencia #{number} no existe. Este usuario solo tiene {total} advertencia(s).",
+    "deleted_title": "✅ Advertencia eliminada",
+    "deleted_desc": "La advertencia #{number} para **{user}** ha sido eliminada.\n\n**La razón era:** {reason}",
+    "confirm_must_type_delete": "Debes escribir \"DELETE\" exactamente para confirmar el borrado de advertencias.",
+    "cleared_title": "✅ Advertencias borradas",
+    "cleared_desc": "Todas las advertencias para **{user}** han sido borradas. Se eliminaron **{count}** advertencia(s).",
+    "failed_open_modal": "Error al abrir el modal de eliminación de advertencias.",
+    "failed_open_confirm": "Error al abrir el modal de confirmación.",
+    "failed_delete": "Error al eliminar la advertencia.",
+    "failed_clear": "Error al borrar las advertencias."
+  },
+  "lock": {
+    "already_locked": "{channel} ya está bloqueado.",
+    "success_title": "🔒 **Canal bloqueado**",
+    "success_desc": "{channel} está ahora bloqueado. Nadie puede hablar aquí.",
+    "error_lock": "Ocurrió un error inesperado al intentar bloquear el canal. Revisa mis permisos (necesito 'Administrar Canales')."
+  },
+  "unlock": {
+    "not_locked": "{channel} no está bloqueado (todos ya pueden enviar mensajes).",
+    "success_title": "🔓 **Canal desbloqueado**",
+    "success_desc": "{channel} está ahora desbloqueado. Ya pueden hablar.",
+    "error_unlock": "Ocurrió un error inesperado al intentar desbloquear el canal. Revisa mis permisos (necesito 'Administrar Canales')."
+  },
+  "purge": {
+    "invalid_amount": "Por favor especifica un número entre 1 y 100.",
+    "success_title": "Mensajes purgados",
+    "success_desc": "Se eliminaron {count} mensajes en {channel}.",
+    "error_purge": "Ocurrió un error inesperado durante la eliminación de mensajes. Nota: No se pueden eliminar masivamente mensajes de más de 14 días."
+  },
+  "say": {
+    "empty_message": "El mensaje no puede estar vacío.",
+    "invalid_channel": "Elige un canal de texto o ejecuta este comando en uno.",
+    "user_no_perm": "No tienes permiso para enviar mensajes en {channel}.",
+    "bot_no_perm": "No tengo permiso para enviar mensajes en {channel}.",
+    "success_title": "Mensaje enviado",
+    "success_desc": "Publicado en {channel}. [Ir al mensaje]({url})"
+  },
+  "dm": {
+    "too_long": "Los mensajes deben tener menos de 2000 caracteres.",
+    "cannot_dm_bot": "No puedes enviar mensajes directos a cuentas de bots.",
+    "embed_staff": "Mensaje del equipo de Staff",
+    "embed_user": "Mensaje de {user}",
+    "embed_footer": "No puedes responder a este mensaje. | Logger ID: {id}",
+    "success_title": "MD enviado",
+    "success_desc": "Mensaje enviado exitosamente a {user}",
+    "dms_disabled": "No se pudo enviar el MD a {user}. Es posible que tenga los MD desactivados.",
+    "send_failed": "Error al enviar el MD: {error}"
+  },
+  "cases": {
+    "title": "Casos de moderación",
+    "desc": "Mostrando casos de moderación para **{guild}**\n\n**Página {page} de {totalPages}**",
+    "no_cases_user": "No se encontraron casos de moderación para {user}",
+    "no_cases_filter": "No se encontraron casos de {filter} en este servidor.",
+    "case_field_name": "Caso #{caseId} - {action}",
+    "case_field_value": "**Objetivo:** {target}\n**Moderador:** {executor}\n**Fecha:** {date} a las {time}\n**Razón:** {reason}",
+    "footer": "Total de casos: {total} | Filtro: {filter}{userText}",
+    "user_suffix": " | Usuario: {user}",
+    "btn_prev": "⬅️ Anterior",
+    "btn_page": "Página {page}/{total}",
+    "btn_next": "Siguiente ➡️",
+    "btn_unauthorized": "No puedes usar estos botones. Ejecuta `/cases` para obtener tu propia vista de casos.",
+    "error_cases": "Ocurrió un error al obtener los casos de moderación. Inténtalo de nuevo más tarde."
+  },
+  "usernotes": {
+    "too_long": "Las notas deben tener 1000 caracteres o menos.",
+    "empty_note": "La nota no puede estar vacía.",
+    "added_title": "{emoji} Nota agregada",
+    "added_desc": "Se agregó una nota de tipo **{type}** para **{user}**:\n\n> {note}\n\n**Moderador:** {moderator}\n**Total de notas:** {total}",
+    "no_notes_title": "📝 Sin notas",
+    "no_notes_desc": "No hay notas para **{user}**.",
+    "view_title": "📝 Notas de usuario ({count})",
+    "view_header": "**Notas para {user} ({userId}):**\n\n",
+    "view_item": "{emoji} **Nota #{index}** ({type}) - {date}\n> {content}\n*Agregada por {author}*\n\n",
+    "view_truncated": "\n... *(truncado)*",
+    "invalid_index": "Por favor proporciona un índice de nota válido (1-{count}).",
+    "removed_title": "{emoji} Nota eliminada",
+    "removed_desc": "Se eliminó la nota #{index} de **{user}**:\n\n> {content}\n\n**Notas restantes:** {remaining}",
+    "clear_empty_title": "Sin notas para borrar",
+    "clear_empty_desc": "No hay notas de **{user}** para borrar.",
+    "cleared_title": "🗑️ Notas borradas",
+    "cleared_desc": "Se borraron **{count}** notas de **{user}**.",
+    "invalid_subcommand": "Por favor selecciona un subcomando válido.",
+    "error_processing": "Ocurrió un error al procesar tu solicitud. Inténtalo de nuevo más tarde."
+  },
+  "massban": {
+    "default_reason": "Baneo masivo - Sin razón especificada",
+    "invalid_users": "Por favor proporciona IDs o menciones de usuarios válidas. Máximo 20 usuarios a la vez.",
+    "cannot_include_self": "No puedes incluirte a ti mismo en un baneo masivo.",
+    "cannot_include_bot": "No puedes incluir al bot en un baneo masivo.",
+    "completed_title": "🔨 Baneo masivo completado",
+    "results_header": "**Resultados del baneo masivo:**\n\n",
+    "successful_section": "✅ **Baneados exitosamente ({count}):**\n",
+    "skipped_section": "⚠️ **Omitidos ({count}):**\n",
+    "failed_section": "❌ **Fallidos ({count}):**\n",
+    "user_not_found": "Usuario no encontrado",
+    "error_massban": "Ocurrió un error al procesar el baneo masivo. Inténtalo de nuevo más tarde."
+  },
+  "masskick": {
+    "default_reason": "Expulsión masiva - Sin razón especificada",
+    "invalid_users": "Por favor proporciona IDs o menciones de usuarios válidas. Máximo 20 usuarios a la vez.",
+    "cannot_include_self": "No puedes incluirte a ti mismo en una expulsión masiva.",
+    "cannot_include_bot": "No puedes incluir al bot en una expulsión masiva.",
+    "completed_title": "👢 Expulsión masiva completada",
+    "results_header": "**Resultados de la expulsión masiva:**\n\n",
+    "successful_section": "✅ **Expulsados exitosamente ({count}):**\n",
+    "skipped_section": "⚠️ **Omitidos ({count}):**\n",
+    "failed_section": "❌ **Fallidos ({count}):**\n",
+    "not_in_server": "El usuario no está en el servidor",
+    "kick_not_allowed": "El objetivo tiene Administrador, un rol gestionado, o el bot no tiene permisos",
+    "error_masskick": "Ocurrió un error al procesar la expulsión masiva. Inténtalo de nuevo más tarde."
+  }
+}

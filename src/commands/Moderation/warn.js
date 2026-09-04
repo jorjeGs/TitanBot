@@ -1,28 +1,41 @@
-import { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField, ChannelType, MessageFlags } from 'discord.js';
-import { createEmbed, errorEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/embeds.js';
+import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
+import { successEmbed } from '../../utils/embeds.js';
 import { logModerationAction } from '../../utils/moderation.js';
 import { logger } from '../../utils/logger.js';
 import { WarningService } from '../../services/moderation/warningService.js';
 import { ModerationService } from '../../services/moderation/moderationService.js';
 import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t, localizeSlashCommand, localizeOption } from '../../utils/i18n/index.js';
+
 export default {
-    data: new SlashCommandBuilder()
-        .setName("warn")
-        .setDescription("Warn a user")
-        .addUserOption((o) =>
-            o
-                .setName("target")
-                .setRequired(true)
-                .setDescription("User to warn"),
-        )
-        .addStringOption((o) =>
-            o
-                .setName("reason")
-                .setRequired(true)
-                .setDescription("Reason for the warning"),
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName("warn")
+            .setDescription("Warn a user")
+            .addUserOption((o) =>
+                localizeOption(
+                    o
+                        .setName("target")
+                        .setRequired(true)
+                        .setDescription("User to warn"),
+                    'warn',
+                    'target',
+                ),
+            )
+            .addStringOption((o) =>
+                localizeOption(
+                    o
+                        .setName("reason")
+                        .setRequired(true)
+                        .setDescription("Reason for the warning"),
+                    'warn',
+                    'reason',
+                ),
+            )
+            .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+        'warn',
+    ),
     category: "moderation",
 
     async execute(interaction, config, client) {
@@ -46,7 +59,7 @@ export default {
             throw new TitanBotError(
                 'Missing target user',
                 ErrorTypes.USER_INPUT,
-                'You must specify a user to warn.',
+                t('moderation.warn.missing_user', {}, interaction),
                 { subtype: 'invalid_user' },
             );
         }
@@ -55,7 +68,7 @@ export default {
             throw new TitanBotError(
                 'Missing warning reason',
                 ErrorTypes.VALIDATION,
-                'You must provide a reason for the warning.',
+                t('moderation.warn.missing_reason', {}, interaction),
                 { subtype: 'missing_required' },
             );
         }
@@ -64,7 +77,7 @@ export default {
             throw new TitanBotError(
                 "Target not found",
                 ErrorTypes.USER_INPUT,
-                "The target user is not currently in this server."
+                t('moderation.errors.target_not_in_server', {}, interaction),
             );
         }
 
@@ -99,8 +112,8 @@ export default {
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [
                 successEmbed(
-                    `⚠️ **Warned** ${target.tag}`,
-                    `**Reason:** ${reason}\n**Total Warns:** ${totalCount}`,
+                    t('moderation.warn.success_title', { user: target.tag }, interaction),
+                    t('moderation.warn.success_desc', { reason, totalCount }, interaction),
                 ),
             ],
         });

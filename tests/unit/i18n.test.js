@@ -97,6 +97,16 @@ test('i18n: Translation and Interpolation', async (tContext) => {
         assert.equal(t('core.stats.servers', {}, 'es-419'), 'Servidores');
         assert.equal(t('core.commands.category_disabled_title', {}, 'de'), 'Kategorie deaktiviert');
         assert.equal(t('core.commands_dashboard.title', {}, 'de'), '⚙️ Befehlszugriff');
+
+        // Moderation translations
+        assert.equal(t('moderation.ban.success_title', { user: 'BadUser#0001' }, 'es-419'), '🚫 **Baneado** BadUser#0001');
+        assert.equal(t('moderation.ban.success_title', { user: 'BadUser#0001' }, 'de'), '🚫 **Gebannt** BadUser#0001');
+        assert.equal(t('moderation.unban.success_title', {}, 'es-419'), '✅ Usuario desbaneado');
+        assert.equal(t('moderation.unban.success_title', {}, 'de'), '✅ Benutzer entbannt');
+        assert.equal(t('moderation.lock.success_title', {}, 'es-419'), '🔒 **Canal bloqueado**');
+        assert.equal(t('moderation.lock.success_title', {}, 'de'), '🔒 **Kanal gesperrt**');
+        assert.equal(t('moderation.warnings.btn_delete_specific', {}, 'es-419'), 'Eliminar advertencia específica');
+        assert.equal(t('moderation.warnings.btn_delete_specific', {}, 'de'), 'Spezifische Verwarnung löschen');
     });
 
     await tContext.test('falls back to en-US when key is missing in another language', () => {
@@ -116,6 +126,78 @@ test('i18n: Translation and Interpolation', async (tContext) => {
     await tContext.test('returns raw key if translation does not exist at all', () => {
         const unknownKey = 'non.existent.path.key';
         assert.equal(t(unknownKey, {}, 'es-419'), unknownKey);
+    });
+});
+
+test('i18n: Moderation Commands Localization', async (tContext) => {
+    const { default: banCommand } = await import('../../src/commands/Moderation/ban.js');
+    const { default: unbanCommand } = await import('../../src/commands/Moderation/unban.js');
+    const { default: kickCommand } = await import('../../src/commands/Moderation/kick.js');
+    const { default: timeoutCommand } = await import('../../src/commands/Moderation/timeout.js');
+    const { default: warnCommand } = await import('../../src/commands/Moderation/warn.js');
+    const { default: lockCommand } = await import('../../src/commands/Moderation/lock.js');
+    const { default: purgeCommand } = await import('../../src/commands/Moderation/purge.js');
+    const { default: usernotesCommand } = await import('../../src/commands/Moderation/usernotes.js');
+    const { default: massbanCommand } = await import('../../src/commands/Moderation/massban.js');
+    const { default: masskickCommand } = await import('../../src/commands/Moderation/masskick.js');
+
+    await tContext.test('/ban has name and option localizations', () => {
+        const json = banCommand.data.toJSON();
+        assert.equal(json.name, 'ban');
+        assert.deepEqual(json.name_localizations, { 'es-419': 'ban', 'de': 'bannen' });
+        const targetOpt = json.options.find(o => o.name === 'target');
+        assert.ok(targetOpt);
+        assert.deepEqual(targetOpt.name_localizations, { 'es-419': 'usuario', 'de': 'benutzer' });
+    });
+
+    await tContext.test('/unban has name and option localizations', () => {
+        const json = unbanCommand.data.toJSON();
+        assert.equal(json.name, 'unban');
+        assert.deepEqual(json.name_localizations, { 'es-419': 'desbanear', 'de': 'entbannen' });
+    });
+
+    await tContext.test('/kick and /timeout have localized names and options', () => {
+        const kickJson = kickCommand.data.toJSON();
+        assert.equal(kickJson.name, 'kick');
+        assert.deepEqual(kickJson.name_localizations, { 'es-419': 'expulsar', 'de': 'kicken' });
+
+        const timeoutJson = timeoutCommand.data.toJSON();
+        assert.equal(timeoutJson.name, 'timeout');
+        assert.deepEqual(timeoutJson.name_localizations, { 'es-419': 'aislar', 'de': 'timeout' });
+    });
+
+    await tContext.test('/lock and /purge have localized names', () => {
+        const lockJson = lockCommand.data.toJSON();
+        assert.equal(lockJson.name, 'lock');
+        assert.deepEqual(lockJson.name_localizations, { 'es-419': 'bloquear-canal', 'de': 'sperren' });
+
+        const purgeJson = purgeCommand.data.toJSON();
+        assert.equal(purgeJson.name, 'purge');
+        assert.deepEqual(purgeJson.name_localizations, { 'es-419': 'purgar', 'de': 'bereinigen' });
+    });
+
+    await tContext.test('/usernotes has subcommand and option localizations', () => {
+        const json = usernotesCommand.data.toJSON();
+        assert.equal(json.name, 'usernotes');
+        assert.deepEqual(json.name_localizations, { 'es-419': 'notas', 'de': 'notizen' });
+
+        const addSub = json.options.find(o => o.name === 'add');
+        assert.ok(addSub);
+        assert.deepEqual(addSub.name_localizations, { 'es-419': 'agregar', 'de': 'hinzufuegen' });
+
+        const targetOpt = addSub.options.find(o => o.name === 'target');
+        assert.ok(targetOpt);
+        assert.deepEqual(targetOpt.name_localizations, { 'es-419': 'usuario', 'de': 'benutzer' });
+    });
+
+    await tContext.test('/massban and /masskick have name and option localizations', () => {
+        const massbanJson = massbanCommand.data.toJSON();
+        assert.equal(massbanJson.name, 'massban');
+        assert.deepEqual(massbanJson.name_localizations, { 'es-419': 'baneo-masivo', 'de': 'massenban' });
+
+        const masskickJson = masskickCommand.data.toJSON();
+        assert.equal(masskickJson.name, 'masskick');
+        assert.deepEqual(masskickJson.name_localizations, { 'es-419': 'expulsion-masiva', 'de': 'massenkick' });
     });
 });
 

@@ -1,35 +1,51 @@
-import { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField, ChannelType, MessageFlags } from 'discord.js';
-import { createEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/embeds.js';
+import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
+import { successEmbed } from '../../utils/embeds.js';
 import { logEvent } from '../../utils/moderation.js';
 import { logger } from '../../utils/logger.js';
 import { sanitizeMarkdown } from '../../utils/validation.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
+import { t, localizeSlashCommand, localizeOption } from '../../utils/i18n/index.js';
+
 export default {
-    data: new SlashCommandBuilder()
-        .setName("dm")
-        .setDescription("Send a direct message to a user (Staff only)")
-        .addUserOption(option =>
-            option
-                .setName("user")
-                .setDescription("The user to send a DM to")
-                .setRequired(true)
-        )
-        .addStringOption(option =>
-            option
-                .setName("message")
-                .setDescription("The message to send")
-                .setRequired(true)
-        )
-        .addBooleanOption(option =>
-            option
-                .setName("anonymous")
-                .setDescription("Send the message anonymously (default: false)")
-                .setRequired(false)
-        )
-        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-        .setDMPermission(false),
+    data: localizeSlashCommand(
+        new SlashCommandBuilder()
+            .setName("dm")
+            .setDescription("Send a direct message to a user (Staff only)")
+            .addUserOption((option) =>
+                localizeOption(
+                    option
+                        .setName("user")
+                        .setDescription("The user to send a DM to")
+                        .setRequired(true),
+                    'dm',
+                    'user',
+                ),
+            )
+            .addStringOption((option) =>
+                localizeOption(
+                    option
+                        .setName("message")
+                        .setDescription("The message to send")
+                        .setRequired(true),
+                    'dm',
+                    'message',
+                ),
+            )
+            .addBooleanOption((option) =>
+                localizeOption(
+                    option
+                        .setName("anonymous")
+                        .setDescription("Send the message anonymously (default: false)")
+                        .setRequired(false),
+                    'dm',
+                    'anonymous',
+                ),
+            )
+            .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
+            .setDMPermission(false),
+        'dm',
+    ),
     category: "moderation",
 
     async execute(interaction, config, client) {
@@ -43,31 +59,36 @@ export default {
             return;
         }
 
-    const targetUser = interaction.options.getUser("user");
+        const targetUser = interaction.options.getUser("user");
         const message = interaction.options.getString("message");
         const anonymous = interaction.options.getBoolean("anonymous") || false;
 
         try {
-            
             if (message.length > 2000) {
-                return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'Messages must be under 2000 characters.' });
+                return await replyUserError(interaction, {
+                    type: ErrorTypes.UNKNOWN,
+                    message: t('moderation.dm.too_long', {}, interaction),
+                });
             }
 
             if (targetUser.bot) {
-                return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'You cannot send DMs to bot accounts.' });
+                return await replyUserError(interaction, {
+                    type: ErrorTypes.UNKNOWN,
+                    message: t('moderation.dm.cannot_dm_bot', {}, interaction),
+                });
             }
 
             const sanitized = sanitizeMarkdown(message);
-
             const dmChannel = await targetUser.createDM();
             
+            const staffTitle = anonymous
+                ? t('moderation.dm.embed_staff', {}, interaction)
+                : t('moderation.dm.embed_user', { user: interaction.user.tag }, interaction);
+
             await dmChannel.send({
                 embeds: [
-                    successEmbed(
-                        anonymous ? "Message from the Staff Team" : `Message from ${interaction.user.tag}`,
-                        sanitized
-                    ).setFooter({
-                        text: `You cannot reply to this message. | Logger ID: ${interaction.id}`
+                    successEmbed(staffTitle, sanitized).setFooter({
+                        text: t('moderation.dm.embed_footer', { id: interaction.id }, interaction),
                     })
                 ]
             });
@@ -92,19 +113,25 @@ export default {
             return await InteractionHelper.safeEditReply(interaction, {
                 embeds: [
                     successEmbed(
-                        "DM Sent",
-                        `Successfully sent a message to ${targetUser.tag}`
+                        t('moderation.dm.success_title', {}, interaction),
+                        t('moderation.dm.success_desc', { user: targetUser.tag }, interaction),
                     ),
                 ],
             });
         } catch (error) {
             logger.error('DM command error:', error);
             
-if (error.code === 50007) {
-                return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: `Could not send a DM to ${targetUser.tag}. They may have DMs disabled.` });
+            if (error.code === 50007) {
+                return await replyUserError(interaction, {
+                    type: ErrorTypes.UNKNOWN,
+                    message: t('moderation.dm.dms_disabled', { user: targetUser.tag }, interaction),
+                });
             }
             
-            return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: `Failed to send DM: ${error.message}` });
+            return await replyUserError(interaction, {
+                type: ErrorTypes.UNKNOWN,
+                message: t('moderation.dm.send_failed', { error: error.message }, interaction),
+            });
         }
     }
 };
