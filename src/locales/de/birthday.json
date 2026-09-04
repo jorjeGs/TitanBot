@@ -13,7 +13,9 @@
   "list": {
     "title": "Server-Geburtstage",
     "none": "In diesem Server wurden noch keine Geburtstage eingetragen.",
-    "none_current": "Keine Geburtstage von aktuellen Servermitgliedern eingetragen."
+    "none_current": "Keine Geburtstage von aktuellen Servermitgliedern eingetragen.",
+    "header": "**{count} Geburtstag(e) in {guild}**",
+    "total": "Gesamt: {count} Geburtstag(e)"
   },
   "remove": {
     "title": "Geburtstag entfernt",
@@ -22,13 +24,32 @@
   },
   "next": {
     "title": "Bevorstehende Geburtstage",
+    "header": "🎂 **Nächste 5 bevorstehende Geburtstage**\n\nHier sind die nächsten 5 Geburtstage in {guild}:\n\n",
     "none": "Keine bevorstehenden Geburtstage in diesem Server gefunden.",
+    "none_current": "Keine bevorstehenden Geburtstage für aktuelle Servermitglieder gefunden.",
     "today": "🎉 **Heute!**",
-    "tomorrow": "📅 **Morgen!**"
+    "tomorrow": "📅 **Morgen!**",
+    "in_days": "In {days} Tagen",
+    "time_until": "Verbleibend",
+    "footer_cta": "Nutze /birthday set, um deinen Geburtstag einzutragen!"
   },
   "setchannel": {
     "perm_denied": "Du benötigst die Berechtigung **Server verwalten**, um den Geburtstagskanal zu konfigurieren.",
     "enabled": "Geburtstagsankündigungen werden nun in {channel} gesendet.",
     "disabled": "Kein Kanal angegeben — Geburtstagsankündigungen wurden deaktiviert."
+  },
+  "months": {
+    "1": "Januar",
+    "2": "Februar",
+    "3": "Maerz",
+    "4": "April",
+    "5": "Mai",
+    "6": "Juni",
+    "7": "Juli",
+    "8": "August",
+    "9": "September",
+    "10": "Oktober",
+    "11": "November",
+    "12": "Dezember"
   }
 }

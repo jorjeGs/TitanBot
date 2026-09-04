@@ -22,7 +22,13 @@
     "menu_closed": {
       "title": "Menú de ayuda cerrado",
       "description": "El menú de ayuda ha sido cerrado, usa /ayuda de nuevo."
-    }
+    },
+    "category_title": "{icon} Comandos de {category}",
+    "click_to_use": "Haz clic en cualquier mención de comando abajo para usarlo.",
+    "no_commands": "No se encontraron comandos en la categoría **{category}**.",
+    "commands_field": "Comandos",
+    "commands_field_page": "Comandos (Página {page})",
+    "commands_field_cont": "Comandos (cont.)"
   },
   "language": {
     "view_title": "🌐 Configuración de Idioma del Servidor",
@@ -114,5 +120,30 @@
     "btn_back_overview": "Volver a Categorías",
     "btn_clear_overrides": "Restablecer Anulaciones",
     "btn_refresh": "Actualizar"
+  },
+  "categories": {
+    "Core": "Principal",
+    "Moderation": "Moderación",
+    "Economy": "Economía",
+    "Music": "Música",
+    "Fun": "Diversión",
+    "Leveling": "Niveles",
+    "Utility": "Utilidad",
+    "Ticket": "Tickets",
+    "Welcome": "Bienvenida",
+    "Giveaway": "Sorteos",
+    "Counter": "Contador",
+    "Tools": "Herramientas",
+    "Search": "Búsqueda",
+    "Reaction Roles": "Roles por Reacción",
+    "Reaction_roles": "Roles por Reacción",
+    "Community": "Comunidad",
+    "Birthday": "Cumpleaños",
+    "Join To Create": "Unir para Crear",
+    "JoinToCreate": "Unir para Crear",
+    "Verification": "Verificación",
+    "ServerStats": "Estadísticas del Servidor",
+    "Server Stats": "Estadísticas del Servidor",
+    "Logging": "Registros"
   }
 }

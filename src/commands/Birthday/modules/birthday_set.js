@@ -14,10 +14,12 @@ export default {
 
         const result = await setBirthday(client, guildId, userId, month, day);
 
+        const localizedMonth = t(`birthday.months.${result.data.month}`, {}, interaction);
+
         const embed = new EmbedBuilder()
             .setColor(0x00FF00)
             .setTitle(t('birthday.set.success_title', {}, interaction))
-            .setDescription(t('birthday.set.success_desc', { month: result.data.monthName, day: result.data.day }, interaction));
+            .setDescription(t('birthday.set.success_desc', { month: localizedMonth, day: result.data.day }, interaction));
 
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [embed]

@@ -77,7 +77,7 @@ function getPaginationInfo(components) {
         for (const component of row.components || []) {
             if (component.customId === `${PAGINATION_PREFIX}_page`) {
                 const label = component.label || '';
-                const match = label.match(/Page\s+(\d+)\s+of\s+(\d+)/i);
+                const match = label.match(/(\d+)[^\d]+(\d+)/);
                 if (match) {
                     return {
                         currentPage: Number(match[1]),
@@ -120,7 +120,7 @@ export const helpPaginationButton = {
                     break;
             }
 
-            const { embeds, components } = await createAllCommandsMenu(nextPage, client);
+            const { embeds, components } = await createAllCommandsMenu(nextPage, client, interaction);
             await interaction.editReply({ embeds, components });
         } catch (error) {
             if (error?.code === 40060 || error?.code === 10062) {

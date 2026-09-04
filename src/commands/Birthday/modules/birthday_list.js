@@ -36,7 +36,8 @@ export default {
                 continue;
             }
             displayIndex++;
-            birthdayList += `${displayIndex}. <@${birthday.userId}> - ${birthday.monthName} ${birthday.day}\n`;
+            const localizedMonth = t(`birthday.months.${birthday.month}`, {}, interaction);
+            birthdayList += `${displayIndex}. <@${birthday.userId}> - ${birthday.day} ${localizedMonth}\n`;
         }
 
         if (fetchedMembers && staleUserIds.length > 0) {
@@ -48,19 +49,21 @@ export default {
         if (displayIndex === 0) {
             const embed = new EmbedBuilder()
                 .setColor(0xFF0000)
-                .setTitle('No Birthdays')
-                .setDescription('No birthdays have been set by current server members.');
+                .setTitle(t('birthday.list.title', {}, interaction))
+                .setDescription(t('birthday.list.none_current', {}, interaction));
             return await InteractionHelper.safeEditReply(interaction, {
                 embeds: [embed]
             });
         }
 
-        birthdayList = `**${displayIndex} birthday${displayIndex !== 1 ? 's' : ''} in ${interaction.guild.name}**\n\n` + birthdayList;
+        const countHeader = t('birthday.list.header', { count: displayIndex, guild: interaction.guild.name }, interaction);
+        const totalFooter = t('birthday.list.total', { count: displayIndex }, interaction);
+        birthdayList = `${countHeader}\n\n` + birthdayList;
 
         const embed = new EmbedBuilder()
             .setColor(0x00FF00)
-            .setTitle('Server Birthdays')
-            .setDescription(`${birthdayList}\n\nTotal: ${displayIndex} birthday${displayIndex !== 1 ? 's' : ''}`);
+            .setTitle(t('birthday.list.title', {}, interaction))
+            .setDescription(`${birthdayList}\n\n${totalFooter}`);
 
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [embed]

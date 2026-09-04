@@ -44,14 +44,14 @@ export default {
         if (displayIndex === 0) {
             const embed = new EmbedBuilder()
                 .setColor(0xFF0000)
-                .setTitle('No Upcoming Birthdays')
-                .setDescription('No upcoming birthdays found for current server members.');
+                .setTitle(t('birthday.next.title', {}, interaction))
+                .setDescription(t('birthday.next.none_current', {}, interaction));
             return await InteractionHelper.safeEditReply(interaction, {
                 embeds: [embed]
             });
         }
 
-        let birthdayList = `🎂 **Next 5 Upcoming Birthdays**\n\nHere are the next 5 birthdays in ${interaction.guild.name}:\n\n`;
+        let birthdayList = t('birthday.next.header', { guild: interaction.guild.name }, interaction);
         displayIndex = 0;
         for (const birthday of next5) {
             const member = await interaction.guild.members.fetch(birthday.userId).catch(() => null);
@@ -62,21 +62,21 @@ export default {
 
             let timeUntil = '';
             if (birthday.daysUntil === 0) {
-                timeUntil = '🎉 **Today!**';
+                timeUntil = t('birthday.next.today', {}, interaction);
             } else if (birthday.daysUntil === 1) {
-                timeUntil = '📅 **Tomorrow!**';
+                timeUntil = t('birthday.next.tomorrow', {}, interaction);
             } else {
-                timeUntil = `In ${birthday.daysUntil} day${birthday.daysUntil > 1 ? 's' : ''}`;
+                timeUntil = t('birthday.next.in_days', { days: birthday.daysUntil }, interaction);
             }
-
-            birthdayList += `${displayIndex}. **${member.displayName}**\n<@${birthday.userId}>\n📅 **Date:** ${birthday.monthName} ${birthday.day}\n⏰ **Time:** ${timeUntil}\n\n`;
+            const localizedMonth = t(`birthday.months.${birthday.month}`, {}, interaction);
+            birthdayList += `${displayIndex}. **${member.displayName}**\n<@${birthday.userId}>\n📅 **${t('birthday.info.date', {}, interaction)}:** ${birthday.day} ${localizedMonth}\n⏰ **${t('birthday.next.time_until', {}, interaction)}:** ${timeUntil}\n\n`;
         }
 
-        birthdayList += `Use /birthday set to add your birthday!`;
+        birthdayList += t('birthday.next.footer_cta', {}, interaction);
 
         const embed = new EmbedBuilder()
             .setColor(0x00FF00)
-            .setTitle('Next 5 Upcoming Birthdays')
+            .setTitle(t('birthday.next.title', {}, interaction))
             .setDescription(birthdayList);
 
         await InteractionHelper.safeEditReply(interaction, {

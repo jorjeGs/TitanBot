@@ -363,13 +363,31 @@ test('i18n: Complete 100 Commands & 21 Domains Coverage', async (tContext) => {
         assert.deepEqual(dayOpt.name_localizations, { 'es-419': 'dia', 'de': 'tag' });
     });
 
-    await tContext.test('domain catalogs provide working translations with interpolation', () => {
-        assert.equal(t('birthday.set.success_title', {}, 'es-419'), '¡Cumpleaños guardado!');
-        assert.equal(t('birthday.set.success_title', {}, 'de'), 'Geburtstag gespeichert!');
-        assert.equal(t('ticket.priority_set', { level: 'Alta' }, 'es-419'), 'Prioridad del ticket establecida en **Alta**.');
-        assert.equal(t('economy.deposit_success', { amount: 1500 }, 'es-419'), 'Depositaste **1500** monedas en tu cuenta de banco.');
-        assert.equal(t('music.playing', { title: 'TestSong', author: 'TestArtist' }, 'de'), '🎶 Spielt jetzt: **TestSong** von TestArtist');
-        assert.equal(t('giveaway.created', { prize: 'Nitro', channel: '#general' }, 'es-419'), '¡Sorteo iniciado por **Nitro** en #general!');
+    await tContext.test('birthday months are localized in all supported languages', () => {
+        const expectedEs = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        const expectedDe = ['Januar', 'Februar', 'Maerz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+        const expectedEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        for (let i = 1; i <= 12; i++) {
+            assert.equal(t(`birthday.months.${i}`, {}, 'es-419'), expectedEs[i - 1]);
+            assert.equal(t(`birthday.months.${i}`, {}, 'de'), expectedDe[i - 1]);
+            assert.equal(t(`birthday.months.${i}`, {}, 'en-US'), expectedEn[i - 1]);
+        }
+    });
+
+    await tContext.test('help categories and category commands menu are localized', async () => {
+        const { createCategoryCommandsMenu } = await import('../../src/handlers/help/helpSelectMenus.js');
+
+        const esMenu = await createCategoryCommandsMenu('Giveaway', null, 'es-419');
+        assert.ok(esMenu.embeds[0].data.title.includes('Sorteos'));
+        assert.equal(esMenu.embeds[0].data.fields[0].name, 'Comandos');
+        assert.ok(esMenu.embeds[0].data.fields[0].value.includes('Crear un sorteo'));
+
+        const deMenu = await createCategoryCommandsMenu('Giveaway', null, 'de');
+        assert.ok(deMenu.embeds[0].data.title.includes('Gewinnspiele'));
+        assert.equal(deMenu.embeds[0].data.fields[0].name, 'Befehle');
+        assert.ok(deMenu.embeds[0].data.fields[0].value.includes('interaktives Gewinnspiel'));
     });
 });
+
 

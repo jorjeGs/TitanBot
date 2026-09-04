@@ -26,10 +26,12 @@ export default {
             });
         }
 
+        const localizedMonth = t(`birthday.months.${birthdayData.month}`, {}, interaction);
+
         const embed = new EmbedBuilder()
             .setColor(0x00FF00)
             .setTitle(t('birthday.info.title', {}, interaction))
-            .setDescription(`**${t('birthday.info.date', {}, interaction)}:** ${birthdayData.monthName} ${birthdayData.day}\n**${t('birthday.info.user', {}, interaction)}:** ${targetUser.toString()}`);
+            .setDescription(`**${t('birthday.info.date', {}, interaction)}:** ${birthdayData.day} ${localizedMonth}\n**${t('birthday.info.user', {}, interaction)}:** ${targetUser.toString()}`);
 
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [embed]

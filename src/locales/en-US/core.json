@@ -22,7 +22,13 @@
     "menu_closed": {
       "title": "Help menu closed",
       "description": "Help menu has been closed, use /help again."
-    }
+    },
+    "category_title": "{icon} {category} Commands",
+    "click_to_use": "Click any command mention below to use it.",
+    "no_commands": "No commands found in the **{category}** category.",
+    "commands_field": "Commands",
+    "commands_field_page": "Commands (Page {page})",
+    "commands_field_cont": "Commands (cont.)"
   },
   "language": {
     "view_title": "🌐 Server Language Configuration",
@@ -114,5 +120,30 @@
     "btn_back_overview": "Back to Categories",
     "btn_clear_overrides": "Clear Overrides",
     "btn_refresh": "Refresh"
+  },
+  "categories": {
+    "Core": "Core",
+    "Moderation": "Moderation",
+    "Economy": "Economy",
+    "Music": "Music",
+    "Fun": "Fun",
+    "Leveling": "Leveling",
+    "Utility": "Utility",
+    "Ticket": "Ticket",
+    "Welcome": "Welcome",
+    "Giveaway": "Giveaway",
+    "Counter": "Counter",
+    "Tools": "Tools",
+    "Search": "Search",
+    "Reaction Roles": "Reaction Roles",
+    "Reaction_roles": "Reaction Roles",
+    "Community": "Community",
+    "Birthday": "Birthday",
+    "Join To Create": "Join To Create",
+    "JoinToCreate": "Join To Create",
+    "Verification": "Verification",
+    "ServerStats": "Server Stats",
+    "Server Stats": "Server Stats",
+    "Logging": "Logging"
   }
 }

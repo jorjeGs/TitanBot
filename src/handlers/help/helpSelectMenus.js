@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import { Collection, ActionRowBuilder, MessageFlags } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { handleInteractionError } from '../../utils/errorHandler.js';
-import { t } from '../../utils/i18n/index.js';
+import { t, resolveLocale, getCatalog } from '../../utils/i18n/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,7 +15,6 @@ const BACK_BUTTON_ID = "help-back-to-main";
 const ALL_COMMANDS_ID = "help-all-commands";
 const PAGINATION_PREFIX = "help-page";
 const CATEGORY_SELECT_ID = "help-category-select";
-const FOOTER_TEXT = "Made with ❤️";
 const SUBCOMMAND_TYPE = 1;
 const SUBCOMMAND_GROUP_TYPE = 2;
 
@@ -34,10 +33,15 @@ const CATEGORY_ICONS = {
     Tools: "🛠️",
     Search: "🔍",
     "Reaction Roles": "🎭",
+    Reaction_roles: "🎭",
     Community: "👥",
     Birthday: "🎂",
     "Join To Create": "🔌",
+    JoinToCreate: "🔌",
     Verification: "✅",
+    ServerStats: "📈",
+    "Server Stats": "📈",
+    Logging: "📜",
     Config: "⚙️",
 };
 
@@ -48,7 +52,19 @@ function formatCategoryName(rawCategory) {
         .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-function buildHelpEntries(command, category) {
+function getLocalizedCategoryName(category, target) {
+    const formatted = formatCategoryName(category);
+    let localized = t(`core.categories.${category}`, {}, target);
+    if (!localized || localized === `core.categories.${category}`) {
+        localized = t(`core.categories.${formatted}`, {}, target);
+    }
+    if (!localized || localized === `core.categories.${formatted}`) {
+        return formatted;
+    }
+    return localized;
+}
+
+function buildHelpEntries(command, category, target = null) {
     const commandData = normalizeCommandData(command);
     if (!commandData?.name) {
         return [];
@@ -58,30 +74,45 @@ function buildHelpEntries(command, category) {
     const baseDescription = commandData.description || "No description";
     const options = commandData.options || [];
 
+    const effectiveLocale = resolveLocale(target);
+    const cmdCatalog = getCatalog(effectiveLocale, 'commands');
+    const cmdEntry = cmdCatalog?.[baseName];
+
+    const localizedBaseDesc = cmdEntry?.description || baseDescription;
+
     const entries = [];
 
     for (const option of options) {
         if (!option) continue;
 
         if (option.type === SUBCOMMAND_TYPE) {
+            const subName = option.name;
+            const subEntry = cmdEntry?.subcommands?.[subName];
+            const subDesc = subEntry?.description || option.description || localizedBaseDesc;
+
             entries.push({
                 baseName,
-                displayName: `${baseName} ${option.name}`,
-                description: option.description || baseDescription,
+                displayName: `${baseName} ${subName}`,
+                description: subDesc,
                 category,
             });
             continue;
         }
 
         if (option.type === SUBCOMMAND_GROUP_TYPE) {
+            const groupName = option.name;
             const nestedOptions = option.options || [];
             for (const nested of nestedOptions) {
                 if (nested?.type !== SUBCOMMAND_TYPE) continue;
 
+                const subName = nested.name;
+                const groupEntry = cmdEntry?.subcommandGroups?.[groupName]?.subcommands?.[subName] || cmdEntry?.subcommands?.[subName];
+                const subDesc = groupEntry?.description || nested.description || option.description || localizedBaseDesc;
+
                 entries.push({
                     baseName,
-                    displayName: `${baseName} ${option.name} ${nested.name}`,
-                    description: nested.description || option.description || baseDescription,
+                    displayName: `${baseName} ${groupName} ${subName}`,
+                    description: subDesc,
                     category,
                 });
             }
@@ -92,7 +123,7 @@ function buildHelpEntries(command, category) {
         entries.push({
             baseName,
             displayName: baseName,
-            description: baseDescription,
+            description: localizedBaseDesc,
             category,
         });
     }
@@ -121,9 +152,10 @@ function normalizeCommandData(command) {
     };
 }
 
-async function createCategoryCommandsMenu(category, client, target = null) {
-    const categoryName = formatCategoryName(category);
-    const icon = CATEGORY_ICONS[categoryName] || "🔍";
+export async function createCategoryCommandsMenu(category, client, target = null) {
+    const rawCategoryName = formatCategoryName(category);
+    const categoryName = getLocalizedCategoryName(category, target);
+    const icon = CATEGORY_ICONS[category] || CATEGORY_ICONS[rawCategoryName] || "🔍";
 
     const categoryCommands = [];
 
@@ -146,7 +178,7 @@ async function createCategoryCommandsMenu(category, client, target = null) {
                 )
                     continue;
 
-                categoryCommands.push(...buildHelpEntries(command, categoryName));
+                categoryCommands.push(...buildHelpEntries(command, categoryName, target));
             }
         }
     } catch (error) {
@@ -171,10 +203,10 @@ async function createCategoryCommandsMenu(category, client, target = null) {
     }
 
     const embed = createEmbed({
-        title: `${icon} ${categoryName} Commands`,
+        title: t('core.help.category_title', { icon, category: categoryName }, target),
         description: categoryCommands.length > 0
-            ? `Click any command mention below to use it.`
-            : `No commands found in the **${categoryName}** category.`
+            ? t('core.help.click_to_use', {}, target)
+            : t('core.help.no_commands', { category: categoryName }, target)
     });
 
     if (categoryCommands.length > 0) {
@@ -189,9 +221,10 @@ async function createCategoryCommandsMenu(category, client, target = null) {
             .join("\n");
 
         const maxLength = 1000;
+        const mainFieldName = t('core.help.commands_field', {}, target);
         if (commandMentions.length <= maxLength) {
             embed.addFields({
-                name: "Commands",
+                name: mainFieldName,
                 value: commandMentions,
                 inline: false,
             });
@@ -212,7 +245,7 @@ async function createCategoryCommandsMenu(category, client, target = null) {
 
             chunks.forEach((chunk, index) => {
                 embed.addFields({
-                    name: `Commands (Part ${index + 1})`,
+                    name: `${mainFieldName} (${index + 1})`,
                     value: chunk,
                     inline: false,
                 });
@@ -275,9 +308,10 @@ export async function createAllCommandsMenu(page = 1, client, target = null) {
                     )
                         continue;
 
-                    const categoryName = formatCategoryName(category);
+                    const rawCategoryName = formatCategoryName(category);
+                    const categoryName = getLocalizedCategoryName(category, target);
 
-                    allCommands.push(...buildHelpEntries(command, categoryName));
+                    allCommands.push(...buildHelpEntries(command, categoryName, target));
                 }
             }
         } catch (error) {
@@ -309,7 +343,7 @@ export async function createAllCommandsMenu(page = 1, client, target = null) {
 
     const embed = createEmbed({
         title: t('core.help.all_commands', {}, target),
-        description: `Browse every available command in one list. Use the page buttons below to move through the full set.`
+        description: t('core.help.all_commands_desc', {}, target)
     });
 
     embed.setFooter({ text: t('common.footer.made_with', {}, target) });
@@ -335,7 +369,7 @@ export async function createAllCommandsMenu(page = 1, client, target = null) {
             if (!chunk) continue;
 
             embed.addFields({
-                name: i === 0 ? `Commands (Page ${page})` : "Commands (cont.)",
+                name: i === 0 ? t('core.help.commands_field_page', { page }, target) : t('core.help.commands_field_cont', {}, target),
                 value: chunk,
                 inline: columnCount > 1,
             });

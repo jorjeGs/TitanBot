@@ -38,17 +38,35 @@ const CATEGORY_ICONS = {
     Tools: "🛠️",
     Search: "🔍",
     "Reaction Roles": "🎭",
+    Reaction_roles: "🎭",
     Community: "👥",
     Birthday: "🎂",
     "Join To Create": "🔌",
+    JoinToCreate: "🔌",
     Verification: "✅",
+    ServerStats: "📈",
+    "Server Stats": "📈",
+    Logging: "📜",
+    Config: "⚙️",
 };
 
 function formatCategoryName(rawCategory) {
     return rawCategory
-        .replace(/_/g, '')
+        .replace(/_/g, ' ')
         .replace(/([a-z])([A-Z])/g, '$1 $2')
         .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function getLocalizedCategoryName(category, target, guildConfig = null) {
+    const formatted = formatCategoryName(category);
+    let localized = t(`core.categories.${category}`, {}, target, guildConfig);
+    if (!localized || localized === `core.categories.${category}`) {
+        localized = t(`core.categories.${formatted}`, {}, target, guildConfig);
+    }
+    if (!localized || localized === `core.categories.${formatted}`) {
+        return formatted;
+    }
+    return localized;
 }
 
 export async function createInitialHelpMenu(client, target = null, guildConfig = null) {
@@ -67,8 +85,9 @@ export async function createInitialHelpMenu(client, target = null, guildConfig =
             value: ALL_COMMANDS_ID,
         },
         ...categoryDirs.map((category) => {
-            const categoryName = formatCategoryName(category);
-            const icon = CATEGORY_ICONS[categoryName] || "🔍";
+            const rawCategoryName = formatCategoryName(category);
+            const categoryName = getLocalizedCategoryName(category, target, guildConfig);
+            const icon = CATEGORY_ICONS[category] || CATEGORY_ICONS[rawCategoryName] || "🔍";
             return {
                 label: `${icon} ${categoryName}`,
                 description: t('core.help.category_desc', { category: categoryName }, target, guildConfig),
@@ -82,7 +101,7 @@ export async function createInitialHelpMenu(client, target = null, guildConfig =
         title: t('core.help.title', { botName }, target, guildConfig),
         description: t('core.help.description', {}, target, guildConfig),
         color: 'primary',
-        thumbnail: client.user?.displayAvatarURL?.({ size: 1024 }),
+        thumbnail: client?.user?.displayAvatarURL?.({ size: 1024 }),
         fields: [
             {
                 name: t('core.help.getting_started.title', {}, target, guildConfig),

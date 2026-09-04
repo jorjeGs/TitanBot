@@ -1,11 +1,12 @@
 // src/utils/i18n/index.js
-import { getRawTranslation, loadCatalogs, DEFAULT_LOCALE, SUPPORTED_LOCALES } from './loader.js';
+import { getRawTranslation, loadCatalogs, getCatalog, DEFAULT_LOCALE, SUPPORTED_LOCALES } from './loader.js';
 import { interpolate } from './interpolator.js';
 import { resolveLocale, normalizeLocale } from './resolver.js';
 import { localizeSlashCommand, localizeSubcommand, localizeOption, localizeFullCommand } from './commandLocalizer.js';
 
 export {
     loadCatalogs,
+    getCatalog,
     DEFAULT_LOCALE,
     SUPPORTED_LOCALES,
     resolveLocale,

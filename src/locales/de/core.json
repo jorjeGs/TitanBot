@@ -22,7 +22,13 @@
     "menu_closed": {
       "title": "Hilfemenü geschlossen",
       "description": "Das Hilfemenü wurde geschlossen, verwende /hilfe erneut."
-    }
+    },
+    "category_title": "{icon} {category} Befehle",
+    "click_to_use": "Klicke unten auf eine Befehlserwaehnung, um ihn zu verwenden.",
+    "no_commands": "Keine Befehle in der Kategorie **{category}** gefunden.",
+    "commands_field": "Befehle",
+    "commands_field_page": "Befehle (Seite {page})",
+    "commands_field_cont": "Befehle (Forts.)"
   },
   "language": {
     "view_title": "🌐 Serversprachkonfiguration",
@@ -114,5 +120,30 @@
     "btn_back_overview": "Zurück zu Kategorien",
     "btn_clear_overrides": "Überschreibungen löschen",
     "btn_refresh": "Aktualisieren"
+  },
+  "categories": {
+    "Core": "Kern",
+    "Moderation": "Moderation",
+    "Economy": "Wirtschaft",
+    "Music": "Musik",
+    "Fun": "Spass",
+    "Leveling": "Levelsystem",
+    "Utility": "Dienstprogramme",
+    "Ticket": "Tickets",
+    "Welcome": "Willkommen",
+    "Giveaway": "Gewinnspiele",
+    "Counter": "Zaehler",
+    "Tools": "Werkzeuge",
+    "Search": "Suche",
+    "Reaction Roles": "Reaktionsrollen",
+    "Reaction_roles": "Reaktionsrollen",
+    "Community": "Community",
+    "Birthday": "Geburtstag",
+    "Join To Create": "Beitreten zum Erstellen",
+    "JoinToCreate": "Beitreten zum Erstellen",
+    "Verification": "Verifizierung",
+    "ServerStats": "Server-Statistiken",
+    "Server Stats": "Server-Statistiken",
+    "Logging": "Protokollierung"
   }
 }

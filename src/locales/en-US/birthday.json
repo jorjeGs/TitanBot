@@ -13,7 +13,9 @@
   "list": {
     "title": "Server Birthdays",
     "none": "No birthdays have been set in this server yet.",
-    "none_current": "No birthdays have been set by current server members."
+    "none_current": "No birthdays have been set by current server members.",
+    "header": "**{count} birthday(s) in {guild}**",
+    "total": "Total: {count} birthday(s)"
   },
   "remove": {
     "title": "Birthday Removed",
@@ -22,13 +24,32 @@
   },
   "next": {
     "title": "Upcoming Birthdays",
+    "header": "🎂 **Next 5 Upcoming Birthdays**\n\nHere are the next 5 birthdays in {guild}:\n\n",
     "none": "No upcoming birthdays found in this server.",
+    "none_current": "No upcoming birthdays found for current server members.",
     "today": "🎉 **Today!**",
-    "tomorrow": "📅 **Tomorrow!**"
+    "tomorrow": "📅 **Tomorrow!**",
+    "in_days": "In {days} days",
+    "time_until": "Time Until",
+    "footer_cta": "Use /birthday set to add your birthday!"
   },
   "setchannel": {
     "perm_denied": "You need **Manage Server** permissions to configure the birthday channel.",
     "enabled": "Birthday announcements will now be posted in {channel}.",
     "disabled": "No channel provided — birthday announcements have been disabled."
+  },
+  "months": {
+    "1": "January",
+    "2": "February",
+    "3": "March",
+    "4": "April",
+    "5": "May",
+    "6": "June",
+    "7": "July",
+    "8": "August",
+    "9": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
   }
 }

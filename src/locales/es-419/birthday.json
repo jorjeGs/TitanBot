@@ -13,7 +13,9 @@
   "list": {
     "title": "Cumpleaños del Servidor",
     "none": "Aún no hay cumpleaños registrados en este servidor.",
-    "none_current": "Ningún miembro actual del servidor tiene cumpleaños registrado."
+    "none_current": "Ningún miembro actual del servidor tiene cumpleaños registrado.",
+    "header": "**{count} cumpleaños en {guild}**",
+    "total": "Total: {count} cumpleaños"
   },
   "remove": {
     "title": "Cumpleaños Eliminado",
@@ -22,13 +24,32 @@
   },
   "next": {
     "title": "Próximos Cumpleaños",
+    "header": "🎂 **Próximos 5 Cumpleaños**\n\nAquí están los próximos 5 cumpleaños en {guild}:\n\n",
     "none": "No hay próximos cumpleaños registrados en este servidor.",
+    "none_current": "No se encontraron próximos cumpleaños para miembros actuales del servidor.",
     "today": "🎉 **¡Hoy!**",
-    "tomorrow": "📅 **¡Mañana!**"
+    "tomorrow": "📅 **¡Mañana!**",
+    "in_days": "En {days} días",
+    "time_until": "Falta",
+    "footer_cta": "¡Usa /birthday set para agregar tu cumpleaños!"
   },
   "setchannel": {
     "perm_denied": "Necesitas permisos de **Gestionar Servidor** para configurar el canal de cumpleaños.",
     "enabled": "Los anuncios de cumpleaños ahora se publicarán en {channel}.",
     "disabled": "No se proporcionó canal — los anuncios de cumpleaños han sido desactivados."
+  },
+  "months": {
+    "1": "enero",
+    "2": "febrero",
+    "3": "marzo",
+    "4": "abril",
+    "5": "mayo",
+    "6": "junio",
+    "7": "julio",
+    "8": "agosto",
+    "9": "septiembre",
+    "10": "octubre",
+    "11": "noviembre",
+    "12": "diciembre"
   }
 }
