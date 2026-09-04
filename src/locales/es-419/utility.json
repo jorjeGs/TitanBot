@@ -1,0 +1,6 @@
+{
+  "serverinfo_title": "Información del Servidor — {name}",
+  "userinfo_title": "Información del Usuario — {user}",
+  "weather_title": "Clima en {location}",
+  "report_submitted": "Tu reporte ha sido enviado a los moderadores. ¡Gracias!"
+}

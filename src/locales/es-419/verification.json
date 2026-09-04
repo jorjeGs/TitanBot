@@ -1,0 +1,5 @@
+{
+  "verified": "¡Te has verificado con éxito! Bienvenido al servidor.",
+  "already_verified": "Ya estás verificado en este servidor.",
+  "setup_success": "Panel de verificación creado en {channel}."
+}

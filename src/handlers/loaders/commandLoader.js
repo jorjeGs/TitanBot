@@ -4,6 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { Collection } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import botConfig from '../../config/bot.js';
+import { localizeFullCommand } from '../../utils/i18n/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -80,6 +81,7 @@ export async function loadCommands(client) {
             command.filePath = normalizedPath;
             
             const primaryCommandName = command.data.name;
+            localizeFullCommand(command.data, primaryCommandName);
             
             if (!uniqueCommandNames.has(primaryCommandName)) {
                 uniqueCommandNames.add(primaryCommandName);
@@ -140,6 +142,7 @@ function collectCommandPayloads(client) {
         }
 
         registeredNames.add(commandName);
+        localizeFullCommand(command.data, commandName);
         const commandJson = command.data.toJSON();
         commands.push(commandJson);
         totalSubcommands += getSubcommandInfo(commandJson).length;

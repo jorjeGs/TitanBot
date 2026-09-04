@@ -1,0 +1,5 @@
+{
+  "verified": "You have been successfully verified! Welcome to the server.",
+  "already_verified": "You are already verified in this server.",
+  "setup_success": "Verification panel created in {channel}."
+}

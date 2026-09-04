@@ -1,0 +1,5 @@
+{
+  "setup_success": "'Beitreten zum Erstellen'-Kanal erfolgreich erstellt: {channel}",
+  "dashboard_title": "'Beitreten zum Erstellen'-Dashboard",
+  "perm_denied": "Du benötigst die Berechtigung 'Server verwalten', um dies zu konfigurieren."
+}

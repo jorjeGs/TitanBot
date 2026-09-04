@@ -1,0 +1,6 @@
+{
+  "calc_result": "Calculation: `{expression}` = **{result}**",
+  "baseconvert_result": "`{number}` in base {from} is **`{result}`** in base {to}.",
+  "password_generated": "Your secure password has been generated (sent via DM/ephemeral).",
+  "poll_created": "📊 Community Poll: **{question}**"
+}

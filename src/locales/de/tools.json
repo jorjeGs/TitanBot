@@ -1,0 +1,6 @@
+{
+  "calc_result": "Berechnung: `{expression}` = **{result}**",
+  "baseconvert_result": "`{number}` in Basis {from} ist **`{result}`** in Basis {to}.",
+  "password_generated": "Dein sicheres Passwort wurde generiert (flüchtig angezeigt).",
+  "poll_created": "📊 Community-Umfrage: **{question}**"
+}

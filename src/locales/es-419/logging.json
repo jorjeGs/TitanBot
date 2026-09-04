@@ -1,0 +1,5 @@
+{
+  "dashboard_title": "Panel de Registros del Servidor",
+  "channel_updated": "Canal de registros para `{destination}` establecido en {channel}.",
+  "channel_disabled": "Canal de registros para `{destination}` desactivado."
+}

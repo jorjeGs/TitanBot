@@ -1,0 +1,5 @@
+{
+  "setup_success": "Canal 'Unir para Crear' creado correctamente: {channel}",
+  "dashboard_title": "Panel de Unir para Crear",
+  "perm_denied": "Necesitas permisos de Gestionar Servidor para configurar esto."
+}

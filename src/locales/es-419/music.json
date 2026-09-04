@@ -1,0 +1,9 @@
+{
+  "joined": "Conectado al canal de voz: {channel}",
+  "playing": "🎶 Reproduciendo ahora: **{title}** de {author}",
+  "paused": "⏸️ Reproducción pausada.",
+  "resumed": "▶️ Reproducción reanudada.",
+  "skipped": "⏭️ Canción saltada.",
+  "stopped": "⏹️ Música detenida y cola vaciada.",
+  "queue_empty": "La cola de música está vacía actualmente."
+}

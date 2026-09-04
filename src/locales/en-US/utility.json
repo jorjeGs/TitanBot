@@ -1,0 +1,6 @@
+{
+  "serverinfo_title": "Server Information — {name}",
+  "userinfo_title": "User Information — {user}",
+  "weather_title": "Weather in {location}",
+  "report_submitted": "Your report has been submitted to moderators. Thank you!"
+}

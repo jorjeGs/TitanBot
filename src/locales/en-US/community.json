@@ -1,0 +1,15 @@
+{
+  "not_in_guild": "This command can only be used in a server.",
+  "apply": {
+    "no_apps": "There are no applications available to apply for at this time.",
+    "submitted": "Application submitted successfully! ID: `{id}`",
+    "status_title": "Application Status",
+    "list_title": "Available Applications"
+  },
+  "admin": {
+    "review_approved": "Application `{id}` has been approved.",
+    "review_denied": "Application `{id}` has been denied.",
+    "list_title": "Submitted Applications",
+    "dashboard_title": "Applications Dashboard"
+  }
+}

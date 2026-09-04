@@ -125,3 +125,45 @@ export function localizeOption(optionBuilder, parentCommandKey, optionKey, subco
 
     return optionBuilder;
 }
+
+/**
+ * Recursively applies localizations to a SlashCommandBuilder and all its subcommands/options.
+ * @param {object} builder - SlashCommandBuilder
+ * @param {string} [commandKey] - Optional key in commands.json (defaults to builder.name)
+ * @returns {object} The localized builder
+ */
+export function localizeFullCommand(builder, commandKey = null) {
+    if (!builder || typeof builder.setNameLocalizations !== 'function') {
+        return builder;
+    }
+
+    const key = commandKey || builder.name;
+    if (!key) return builder;
+
+    localizeSlashCommand(builder, key);
+
+    if (Array.isArray(builder.options)) {
+        for (const opt of builder.options) {
+            if (Array.isArray(opt.options)) {
+                // Subcommand or SubcommandGroup
+                localizeSubcommand(opt, key, opt.name);
+                for (const subOpt of opt.options) {
+                    if (Array.isArray(subOpt.options)) {
+                        // Subcommand inside SubcommandGroup
+                        localizeSubcommand(subOpt, key, subOpt.name);
+                        for (const groupOpt of subOpt.options) {
+                            localizeOption(groupOpt, key, groupOpt.name, subOpt.name);
+                        }
+                    } else {
+                        localizeOption(subOpt, key, subOpt.name, opt.name);
+                    }
+                }
+            } else {
+                localizeOption(opt, key, opt.name);
+            }
+        }
+    }
+
+    return builder;
+}
+

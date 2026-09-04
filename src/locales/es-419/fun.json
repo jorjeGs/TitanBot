@@ -1,0 +1,6 @@
+{
+  "count_current": "El conteo actual es **{count}**. ¡El siguiente número es **{next}**!",
+  "flip_result": "¡La moneda cayó en **{result}**! {outcome}",
+  "roll_result": "🎲 ¡Sacaste un **{roll}** (1-{sides})!",
+  "fight_win": "⚔️ ¡**{winner}** derrotó a **{loser}**!"
+}

@@ -2,14 +2,15 @@ import { PermissionsBitField, EmbedBuilder, MessageFlags } from 'discord.js';
 import { getGuildConfig, setGuildConfig } from '../../../services/config/guildConfig.js';
 import { InteractionHelper } from '../../../utils/interactionHelper.js';
 import { logger } from '../../../utils/logger.js';
+import { t } from '../../../utils/i18n/index.js';
 
 export default {
     async execute(interaction, config, client) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
             const embed = new EmbedBuilder()
                 .setColor(0xFF0000)
-                .setTitle('Permission Denied')
-                .setDescription('You need **Manage Server** permissions to configure the birthday channel.');
+                .setTitle(t('birthday.setchannel.perm_denied', {}, interaction))
+                .setDescription(t('birthday.setchannel.perm_denied', {}, interaction));
             return InteractionHelper.safeReply(interaction, {
                 embeds: [embed],
                 flags: MessageFlags.Ephemeral,
@@ -26,8 +27,8 @@ export default {
                 await setGuildConfig(client, guildId, guildConfig);
                 const embed = new EmbedBuilder()
                     .setColor(0x00FF00)
-                    .setTitle('Birthday Announcements Enabled')
-                    .setDescription(`Birthday announcements will now be posted in ${channel}.`);
+                    .setTitle(t('birthday.setchannel.enabled', { channel: channel.toString() }, interaction))
+                    .setDescription(t('birthday.setchannel.enabled', { channel: channel.toString() }, interaction));
                 return InteractionHelper.safeReply(interaction, {
                     embeds: [embed],
                     flags: MessageFlags.Ephemeral,
@@ -37,8 +38,8 @@ export default {
                 await setGuildConfig(client, guildId, guildConfig);
                 const embed = new EmbedBuilder()
                     .setColor(0xFFFF00)
-                    .setTitle('Birthday Announcements Disabled')
-                    .setDescription('No channel provided — birthday announcements have been disabled.');
+                    .setTitle(t('birthday.setchannel.disabled', {}, interaction))
+                    .setDescription(t('birthday.setchannel.disabled', {}, interaction));
                 return InteractionHelper.safeReply(interaction, {
                     embeds: [embed],
                     flags: MessageFlags.Ephemeral,

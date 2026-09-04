@@ -1,0 +1,34 @@
+{
+  "set": {
+    "success_title": "Birthday Set!",
+    "success_desc": "Your birthday has been set to **{month} {day}**!"
+  },
+  "info": {
+    "title": "Birthday Information",
+    "not_found_self": "You haven't set your birthday yet. Use `/birthday set` to add it!",
+    "not_found_other": "{username} hasn't set their birthday yet.",
+    "date": "Date",
+    "user": "User"
+  },
+  "list": {
+    "title": "Server Birthdays",
+    "none": "No birthdays have been set in this server yet.",
+    "none_current": "No birthdays have been set by current server members."
+  },
+  "remove": {
+    "title": "Birthday Removed",
+    "success": "Your birthday has been successfully removed from the server.",
+    "not_found": "You don't have a birthday set to remove."
+  },
+  "next": {
+    "title": "Upcoming Birthdays",
+    "none": "No upcoming birthdays found in this server.",
+    "today": "🎉 **Today!**",
+    "tomorrow": "📅 **Tomorrow!**"
+  },
+  "setchannel": {
+    "perm_denied": "You need **Manage Server** permissions to configure the birthday channel.",
+    "enabled": "Birthday announcements will now be posted in {channel}.",
+    "disabled": "No channel provided — birthday announcements have been disabled."
+  }
+}

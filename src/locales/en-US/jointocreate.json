@@ -1,0 +1,5 @@
+{
+  "setup_success": "Join to Create channel created successfully: {channel}",
+  "dashboard_title": "Join to Create Dashboard",
+  "perm_denied": "You need Manage Server permissions to configure this."
+}

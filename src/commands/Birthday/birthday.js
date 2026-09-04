@@ -10,10 +10,13 @@ import nextBirthdays from './modules/next_birthdays.js';
 import birthdaySetchannel from './modules/birthday_setchannel.js';
 
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { localizeFullCommand } from '../../utils/i18n/index.js';
+
 export default {
-    data: new SlashCommandBuilder()
-        .setName('birthday')
-        .setDescription('Birthday system commands')
+    data: localizeFullCommand(
+        new SlashCommandBuilder()
+            .setName('birthday')
+            .setDescription('Birthday system commands')
         .addSubcommand(subcommand =>
             subcommand
                 .setName('set')
@@ -73,6 +76,8 @@ export default {
                         .setRequired(false)
                 )
         ),
+        'birthday'
+    ),
 
     async execute(interaction, config, client) {
         const subcommand = interaction.options.getSubcommand();

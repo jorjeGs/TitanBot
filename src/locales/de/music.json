@@ -1,0 +1,9 @@
+{
+  "joined": "Sprachkanal beigetreten: {channel}",
+  "playing": "🎶 Spielt jetzt: **{title}** von {author}",
+  "paused": "⏸️ Wiedergabe pausiert.",
+  "resumed": "▶️ Wiedergabe fortgesetzt.",
+  "skipped": "⏭️ Titel übersprungen.",
+  "stopped": "⏹️ Musik gestoppt und Warteschlange geleert.",
+  "queue_empty": "Die Warteschlange ist derzeit leer."
+}

@@ -1,0 +1,34 @@
+{
+  "set": {
+    "success_title": "Geburtstag gespeichert!",
+    "success_desc": "Dein Geburtstag wurde auf den **{day}. {month}** festgelegt!"
+  },
+  "info": {
+    "title": "Geburtstagsinformationen",
+    "not_found_self": "Du hast deinen Geburtstag noch nicht eingetragen. Nutze `/birthday set`!",
+    "not_found_other": "{username} hat seinen Geburtstag noch nicht eingetragen.",
+    "date": "Datum",
+    "user": "Benutzer"
+  },
+  "list": {
+    "title": "Server-Geburtstage",
+    "none": "In diesem Server wurden noch keine Geburtstage eingetragen.",
+    "none_current": "Keine Geburtstage von aktuellen Servermitgliedern eingetragen."
+  },
+  "remove": {
+    "title": "Geburtstag entfernt",
+    "success": "Dein Geburtstag wurde erfolgreich vom Server entfernt.",
+    "not_found": "Du hast keinen Geburtstag eingetragen, der entfernt werden könnte."
+  },
+  "next": {
+    "title": "Bevorstehende Geburtstage",
+    "none": "Keine bevorstehenden Geburtstage in diesem Server gefunden.",
+    "today": "🎉 **Heute!**",
+    "tomorrow": "📅 **Morgen!**"
+  },
+  "setchannel": {
+    "perm_denied": "Du benötigst die Berechtigung **Server verwalten**, um den Geburtstagskanal zu konfigurieren.",
+    "enabled": "Geburtstagsankündigungen werden nun in {channel} gesendet.",
+    "disabled": "Kein Kanal angegeben — Geburtstagsankündigungen wurden deaktiviert."
+  }
+}

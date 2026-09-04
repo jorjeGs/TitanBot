@@ -1,0 +1,13 @@
+{
+  "balance_title": "Saldo de {user}",
+  "balance_wallet": "Cartera: **{wallet}** monedas",
+  "balance_bank": "Banco: **{bank}** / {max} monedas",
+  "daily_claimed": "¡Reclamaste tu recompensa diaria de **{amount}** monedas! Racha: {streak} días.",
+  "deposit_success": "Depositaste **{amount}** monedas en tu cuenta de banco.",
+  "withdraw_success": "Retiraste **{amount}** monedas de tu cuenta de banco.",
+  "pay_success": "Transferiste **{amount}** monedas a {target} con éxito.",
+  "work_success": "¡Trabajaste como **{job}** y ganaste **{amount}** monedas!",
+  "beg_success": "¡Un generoso extraño te dio **{amount}** monedas!",
+  "fish_success": "🎣 ¡Pescaste un **{fish}** con un valor de **{amount}** monedas!",
+  "mine_success": "⛏️ ¡Picaste **{mineral}** con un valor de **{amount}** monedas!"
+}

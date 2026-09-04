@@ -288,3 +288,88 @@ test('i18n: Guild Config Schema & Persistence', async (tContext) => {
         assert.equal(configAuto.locale, 'auto');
     });
 });
+
+test('i18n: Complete 100 Commands & 21 Domains Coverage', async (tContext) => {
+    const { loadCatalogs, getCatalog } = await import('../../src/utils/i18n/loader.js');
+    const { default: birthdayCommand } = await import('../../src/commands/Birthday/birthday.js');
+    const catalogs = loadCatalogs(true);
+
+    await tContext.test('all 3 locales have all 21 domain catalogs loaded', () => {
+        const expectedDomains = [
+            'birthday', 'commands', 'common', 'community', 'core', 'economy', 'fun',
+            'giveaway', 'jointocreate', 'leveling', 'logging', 'moderation', 'music',
+            'reactroles', 'search', 'serverstats', 'ticket', 'tools', 'utility',
+            'verification', 'welcome'
+        ];
+
+        for (const loc of ['en-US', 'es-419', 'de']) {
+            assert.ok(catalogs[loc], `Missing locale catalog for ${loc}`);
+            for (const domain of expectedDomains) {
+                assert.ok(catalogs[loc][domain], `Missing domain ${domain} in ${loc}`);
+            }
+        }
+    });
+
+    await tContext.test('commands.json has exactly 100 commands with valid Discord naming regex in all locales', () => {
+        const DISCORD_NAME_REGEX = /^[a-z0-9_-]{1,32}$/;
+
+        for (const loc of ['en-US', 'es-419', 'de']) {
+            const cat = getCatalog(loc, 'commands');
+            assert.ok(cat, `commands catalog missing for ${loc}`);
+            const commandKeys = Object.keys(cat);
+            assert.equal(commandKeys.length, 100, `Expected 100 commands in ${loc}, got ${commandKeys.length}`);
+
+            for (const [cKey, cmd] of Object.entries(cat)) {
+                assert.ok(DISCORD_NAME_REGEX.test(cmd.name), `Invalid name for command ${cKey} in ${loc}: ${cmd.name}`);
+                assert.ok(cmd.description.length <= 100, `Description too long for ${cKey} in ${loc}: ${cmd.description.length}`);
+
+                if (cmd.subcommands) {
+                    for (const [sKey, sub] of Object.entries(cmd.subcommands)) {
+                        assert.ok(DISCORD_NAME_REGEX.test(sub.name), `Invalid name for subcommand ${cKey}.${sKey} in ${loc}: ${sub.name}`);
+                        assert.ok(sub.description.length <= 100, `Description too long for subcommand ${cKey}.${sKey} in ${loc}`);
+
+                        if (sub.options) {
+                            for (const [oKey, opt] of Object.entries(sub.options)) {
+                                assert.ok(DISCORD_NAME_REGEX.test(opt.name), `Invalid name for option ${cKey}.${sKey}.${oKey} in ${loc}: ${opt.name}`);
+                            }
+                        }
+                    }
+                }
+
+                if (cmd.options) {
+                    for (const [oKey, opt] of Object.entries(cmd.options)) {
+                        assert.ok(DISCORD_NAME_REGEX.test(opt.name), `Invalid name for option ${cKey}.${oKey} in ${loc}: ${opt.name}`);
+                    }
+                }
+            }
+        }
+    });
+
+    await tContext.test('/birthday command schema is fully localized', () => {
+        const json = birthdayCommand.data.toJSON();
+        assert.equal(json.name, 'birthday');
+        assert.deepEqual(json.name_localizations, { 'es-419': 'cumpleanos', 'de': 'geburtstag' });
+
+        const setSub = json.options.find(o => o.name === 'set');
+        assert.ok(setSub);
+        assert.deepEqual(setSub.name_localizations, { 'es-419': 'establecer', 'de': 'einstellen' });
+
+        const monthOpt = setSub.options.find(o => o.name === 'month');
+        assert.ok(monthOpt);
+        assert.deepEqual(monthOpt.name_localizations, { 'es-419': 'mes', 'de': 'monat' });
+
+        const dayOpt = setSub.options.find(o => o.name === 'day');
+        assert.ok(dayOpt);
+        assert.deepEqual(dayOpt.name_localizations, { 'es-419': 'dia', 'de': 'tag' });
+    });
+
+    await tContext.test('domain catalogs provide working translations with interpolation', () => {
+        assert.equal(t('birthday.set.success_title', {}, 'es-419'), '¡Cumpleaños guardado!');
+        assert.equal(t('birthday.set.success_title', {}, 'de'), 'Geburtstag gespeichert!');
+        assert.equal(t('ticket.priority_set', { level: 'Alta' }, 'es-419'), 'Prioridad del ticket establecida en **Alta**.');
+        assert.equal(t('economy.deposit_success', { amount: 1500 }, 'es-419'), 'Depositaste **1500** monedas en tu cuenta de banco.');
+        assert.equal(t('music.playing', { title: 'TestSong', author: 'TestArtist' }, 'de'), '🎶 Spielt jetzt: **TestSong** von TestArtist');
+        assert.equal(t('giveaway.created', { prize: 'Nitro', channel: '#general' }, 'es-419'), '¡Sorteo iniciado por **Nitro** en #general!');
+    });
+});
+

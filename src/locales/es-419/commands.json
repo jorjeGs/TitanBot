@@ -81,55 +81,94 @@
     "name": "ban",
     "description": "Banear a un usuario del servidor",
     "options": {
-      "target": { "name": "usuario", "description": "El usuario a banear" },
-      "reason": { "name": "razon", "description": "Razón del baneo" }
+      "target": {
+        "name": "usuario",
+        "description": "El usuario a banear"
+      },
+      "reason": {
+        "name": "razon",
+        "description": "Razón del baneo"
+      }
     }
   },
   "unban": {
     "name": "desbanear",
     "description": "Desbanear a un usuario del servidor",
     "options": {
-      "target": { "name": "usuario", "description": "El ID o mención del usuario a desbanear" },
-      "reason": { "name": "razon", "description": "Razón del desbaneo" }
+      "target": {
+        "name": "usuario",
+        "description": "El ID o mención del usuario a desbanear"
+      },
+      "reason": {
+        "name": "razon",
+        "description": "Razón del desbaneo"
+      }
     }
   },
   "kick": {
     "name": "expulsar",
     "description": "Expulsar a un usuario del servidor",
     "options": {
-      "target": { "name": "usuario", "description": "El usuario a expulsar" },
-      "reason": { "name": "razon", "description": "Razón de la expulsión" }
+      "target": {
+        "name": "usuario",
+        "description": "El usuario a expulsar"
+      },
+      "reason": {
+        "name": "razon",
+        "description": "Razón de la expulsión"
+      }
     }
   },
   "timeout": {
     "name": "aislar",
     "description": "Aislar temporalmente a un usuario por una duración específica",
     "options": {
-      "target": { "name": "usuario", "description": "Usuario a aislar" },
-      "duration": { "name": "duracion", "description": "Duración del aislamiento" },
-      "reason": { "name": "razon", "description": "Razón del aislamiento" }
+      "target": {
+        "name": "usuario",
+        "description": "Usuario a aislar"
+      },
+      "duration": {
+        "name": "duracion",
+        "description": "Duración del aislamiento"
+      },
+      "reason": {
+        "name": "razon",
+        "description": "Razón del aislamiento"
+      }
     }
   },
   "untimeout": {
     "name": "desaislar",
     "description": "Quitar el aislamiento temporal a un usuario",
     "options": {
-      "target": { "name": "usuario", "description": "Usuario al que quitar aislamiento" }
+      "target": {
+        "name": "usuario",
+        "description": "Usuario al que quitar aislamiento"
+      }
     }
   },
   "warn": {
     "name": "advertir",
     "description": "Dar una advertencia a un usuario",
     "options": {
-      "target": { "name": "usuario", "description": "Usuario a advertir" },
-      "reason": { "name": "razon", "description": "Razón de la advertencia" }
+      "target": {
+        "name": "usuario",
+        "description": "Usuario a advertir"
+      },
+      "reason": {
+        "name": "razon",
+        "description": "Razón de la advertencia"
+      }
     }
   },
   "warnings": {
     "name": "advertencias",
     "description": "Ver todas las advertencias de un usuario",
     "options": {
-      "target": { "name": "usuario", "description": "Usuario a revisar" }
+      "target": {
+        "name": "usuario",
+        "description": "Usuario a revisar"
+      }
     }
   },
   "lock": {
@@ -144,33 +183,60 @@
     "name": "purgar",
     "description": "Elimina una cantidad específica de mensajes",
     "options": {
-      "amount": { "name": "cantidad", "description": "Cantidad de mensajes (1-100)" }
+      "amount": {
+        "name": "cantidad",
+        "description": "Cantidad de mensajes (1-100)"
+      }
     }
   },
   "say": {
     "name": "decir",
     "description": "Enviar un mensaje como el bot",
     "options": {
-      "message": { "name": "mensaje", "description": "El mensaje que el bot enviará" },
-      "channel": { "name": "canal", "description": "Canal donde enviar el mensaje" }
+      "message": {
+        "name": "mensaje",
+        "description": "El mensaje que el bot enviará"
+      },
+      "channel": {
+        "name": "canal",
+        "description": "Canal donde enviar el mensaje"
+      }
     }
   },
   "dm": {
     "name": "md",
     "description": "Enviar un mensaje directo a un usuario (solo Staff)",
     "options": {
-      "user": { "name": "usuario", "description": "El usuario al que enviar el MD" },
-      "message": { "name": "mensaje", "description": "El mensaje a enviar" },
-      "anonymous": { "name": "anonimo", "description": "Enviar de forma anónima (por defecto: false)" }
+      "user": {
+        "name": "usuario",
+        "description": "El usuario al que enviar el MD"
+      },
+      "message": {
+        "name": "mensaje",
+        "description": "El mensaje a enviar"
+      },
+      "anonymous": {
+        "name": "anonimo",
+        "description": "Enviar de forma anónima (por defecto: false)"
+      }
     }
   },
   "cases": {
     "name": "casos",
     "description": "Ver casos de moderación y registros de auditoría",
     "options": {
-      "filter": { "name": "filtro", "description": "Filtrar casos por tipo o usuario" },
-      "user": { "name": "usuario", "description": "Filtrar casos por usuario específico" },
-      "limit": { "name": "limite", "description": "Número de casos a mostrar (por defecto: 10)" }
+      "filter": {
+        "name": "filtro",
+        "description": "Filtrar casos por tipo o usuario"
+      },
+      "user": {
+        "name": "usuario",
+        "description": "Filtrar casos por usuario específico"
+      },
+      "limit": {
+        "name": "limite",
+        "description": "Número de casos a mostrar (por defecto: 10)"
+      }
     }
   },
   "usernotes": {
@@ -181,31 +247,52 @@
         "name": "agregar",
         "description": "Agregar una nota a un usuario",
         "options": {
-          "target": { "name": "usuario", "description": "El usuario al que agregar la nota" },
-          "note": { "name": "nota", "description": "La nota a agregar" },
-          "type": { "name": "tipo", "description": "Tipo de nota" }
+          "target": {
+            "name": "usuario",
+            "description": "El usuario al que agregar la nota"
+          },
+          "note": {
+            "name": "nota",
+            "description": "La nota a agregar"
+          },
+          "type": {
+            "name": "tipo",
+            "description": "Tipo de nota"
+          }
         }
       },
       "view": {
         "name": "ver",
         "description": "Ver las notas de un usuario",
         "options": {
-          "target": { "name": "usuario", "description": "El usuario a ver notas" }
+          "target": {
+            "name": "usuario",
+            "description": "El usuario a ver notas"
+          }
         }
       },
       "remove": {
         "name": "eliminar",
         "description": "Eliminar una nota específica de un usuario",
         "options": {
-          "target": { "name": "usuario", "description": "El usuario al que quitar una nota" },
-          "index": { "name": "indice", "description": "El índice de la nota a eliminar" }
+          "target": {
+            "name": "usuario",
+            "description": "El usuario al que quitar una nota"
+          },
+          "index": {
+            "name": "indice",
+            "description": "El índice de la nota a eliminar"
+          }
         }
       },
       "clear": {
         "name": "limpiar",
         "description": "Borrar todas las notas de un usuario",
         "options": {
-          "target": { "name": "usuario", "description": "El usuario al que borrar notas" }
+          "target": {
+            "name": "usuario",
+            "description": "El usuario al que borrar notas"
+          }
         }
       }
     }
@@ -214,17 +301,1238 @@
     "name": "baneo-masivo",
     "description": "Banear a múltiples usuarios del servidor a la vez",
     "options": {
-      "users": { "name": "usuarios", "description": "IDs o menciones de usuarios a banear" },
-      "reason": { "name": "razon", "description": "Razón del baneo masivo" },
-      "delete_days": { "name": "dias_eliminar", "description": "Días de mensajes a eliminar (0-7)" }
+      "users": {
+        "name": "usuarios",
+        "description": "IDs o menciones de usuarios a banear"
+      },
+      "reason": {
+        "name": "razon",
+        "description": "Razón del baneo masivo"
+      },
+      "delete_days": {
+        "name": "dias_eliminar",
+        "description": "Días de mensajes a eliminar (0-7)"
+      }
     }
   },
   "masskick": {
     "name": "expulsion-masiva",
     "description": "Expulsar a múltiples usuarios del servidor a la vez",
     "options": {
-      "users": { "name": "usuarios", "description": "IDs o menciones de usuarios a expulsar" },
-      "reason": { "name": "razon", "description": "Razón de la expulsión masiva" }
+      "users": {
+        "name": "usuarios",
+        "description": "IDs o menciones de usuarios a expulsar"
+      },
+      "reason": {
+        "name": "razon",
+        "description": "Razón de la expulsión masiva"
+      }
     }
+  },
+  "configwizard": {
+    "name": "asistente",
+    "description": "Asistente interactivo para configurar los ajustes básicos del servidor"
+  },
+  "birthday": {
+    "name": "cumpleanos",
+    "description": "Comandos del sistema de cumpleaños",
+    "subcommands": {
+      "set": {
+        "name": "establecer",
+        "description": "Establece tu fecha de cumpleaños",
+        "options": {
+          "month": {
+            "name": "mes",
+            "description": "Mes de nacimiento (1-12)"
+          },
+          "day": {
+            "name": "dia",
+            "description": "Día de nacimiento (1-31)"
+          }
+        }
+      },
+      "info": {
+        "name": "info",
+        "description": "Ver información de cumpleaños de un usuario",
+        "options": {
+          "user": {
+            "name": "usuario",
+            "description": "Usuario cuyo cumpleaños deseas consultar"
+          }
+        }
+      },
+      "list": {
+        "name": "lista",
+        "description": "Listar todos los cumpleaños registrados en el servidor"
+      },
+      "remove": {
+        "name": "eliminar",
+        "description": "Eliminar tu cumpleaños del registro"
+      },
+      "next": {
+        "name": "proximos",
+        "description": "Mostrar los próximos cumpleaños en el servidor"
+      },
+      "setchannel": {
+        "name": "canal",
+        "description": "Establecer o desactivar el canal de anuncios de cumpleaños",
+        "options": {
+          "channel": {
+            "name": "canal",
+            "description": "Canal de texto para anuncios. Dejar vacío para desactivar."
+          }
+        }
+      }
+    }
+  },
+  "app-admin": {
+    "name": "app-admin",
+    "description": "Administrar solicitudes y postulaciones del servidor",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Configurar un nuevo formulario de postulación"
+      },
+      "review": {
+        "name": "revisar",
+        "description": "Aprobar o rechazar una postulación",
+        "options": {
+          "id": {
+            "name": "id",
+            "description": "El ID de la postulación a revisar"
+          }
+        }
+      },
+      "list": {
+        "name": "listar",
+        "description": "Listar todas las postulaciones",
+        "options": {
+          "status": {
+            "name": "estado",
+            "description": "Filtrar postulaciones por estado"
+          },
+          "role": {
+            "name": "rol",
+            "description": "Filtrar por rol solicitado"
+          },
+          "user": {
+            "name": "usuario",
+            "description": "Filtrar por usuario postulante"
+          },
+          "limit": {
+            "name": "limite",
+            "description": "Cantidad máxima de postulaciones a mostrar"
+          }
+        }
+      },
+      "dashboard": {
+        "name": "panel",
+        "description": "Abrir el panel de configuración de postulaciones",
+        "options": {
+          "application": {
+            "name": "solicitud",
+            "description": "Selecciona una postulación para configurar"
+          }
+        }
+      }
+    }
+  },
+  "apply": {
+    "name": "postular",
+    "description": "Enviar y gestionar tus postulaciones de rol",
+    "subcommands": {
+      "submit": {
+        "name": "enviar",
+        "description": "Completar y enviar una postulación para un rol",
+        "options": {
+          "application": {
+            "name": "solicitud",
+            "description": "Tipo de postulación a presentar"
+          }
+        }
+      },
+      "status": {
+        "name": "estado",
+        "description": "Consultar el estado de tu postulación",
+        "options": {
+          "id": {
+            "name": "id",
+            "description": "ID de la postulación (vacío para ver todas)"
+          }
+        }
+      },
+      "list": {
+        "name": "lista",
+        "description": "Ver postulaciones disponibles en el servidor"
+      }
+    }
+  },
+  "jointocreate": {
+    "name": "unir-para-crear",
+    "description": "Gestionar canales de voz temporales dinámicos",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Crear un nuevo canal activador de voz temporal",
+        "options": {
+          "category": {
+            "name": "categoria",
+            "description": "Categoría donde se crearán los canales"
+          },
+          "channel_name": {
+            "name": "nombre_canal",
+            "description": "Plantilla para el nombre de los canales de voz"
+          },
+          "user_limit": {
+            "name": "limite_usuarios",
+            "description": "Límite de usuarios por canal (0 = ilimitado)"
+          },
+          "bitrate": {
+            "name": "tasa_bits",
+            "description": "Calidad de audio en kbps (8-96)"
+          }
+        }
+      },
+      "dashboard": {
+        "name": "panel",
+        "description": "Configurar un canal activador existente",
+        "options": {
+          "trigger_channel": {
+            "name": "canal_activador",
+            "description": "Canal de voz activador a modificar"
+          }
+        }
+      }
+    }
+  },
+  "logging": {
+    "name": "registros",
+    "description": "Gestionar canales de registro y eventos del servidor",
+    "subcommands": {
+      "dashboard": {
+        "name": "panel",
+        "description": "Abrir panel interactivo de registros y eventos"
+      },
+      "channel": {
+        "name": "canal",
+        "description": "Asignar rápidamente un canal de registro directo",
+        "options": {
+          "destination": {
+            "name": "destino",
+            "description": "Destino del registro a configurar"
+          },
+          "channel": {
+            "name": "canal",
+            "description": "Canal de texto para enviar los registros"
+          },
+          "disable": {
+            "name": "desactivar",
+            "description": "Marcar True para desactivar este registro"
+          }
+        }
+      }
+    }
+  },
+  "reactroles": {
+    "name": "roles-reaccion",
+    "description": "Gestionar paneles de autorroles por reacción",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Crear un nuevo panel de roles por reacción",
+        "options": {
+          "channel": {
+            "name": "canal",
+            "description": "Canal donde enviar el panel de roles"
+          },
+          "title": {
+            "name": "titulo",
+            "description": "Título del panel de roles"
+          },
+          "description": {
+            "name": "descripcion",
+            "description": "Descripción del panel de roles"
+          },
+          "role1": {
+            "name": "rol1",
+            "description": "Primer rol a agregar al panel"
+          },
+          "role2": {
+            "name": "rol2",
+            "description": "Segundo rol a agregar"
+          },
+          "role3": {
+            "name": "rol3",
+            "description": "Tercer rol a agregar"
+          },
+          "role4": {
+            "name": "rol4",
+            "description": "Cuarto rol a agregar"
+          },
+          "role5": {
+            "name": "rol5",
+            "description": "Quinto rol a agregar"
+          }
+        }
+      },
+      "dashboard": {
+        "name": "panel",
+        "description": "Gestionar y editar paneles existentes",
+        "options": {
+          "panel": {
+            "name": "panel",
+            "description": "Seleccionar panel a gestionar"
+          }
+        }
+      }
+    }
+  },
+  "search": {
+    "name": "buscar",
+    "description": "Buscar información en la web y diccionarios",
+    "subcommands": {
+      "define": {
+        "name": "definir",
+        "description": "Buscar la definición de una palabra",
+        "options": {
+          "word": {
+            "name": "palabra",
+            "description": "Palabra a buscar"
+          }
+        }
+      },
+      "google": {
+        "name": "google",
+        "description": "Buscar contenido en Google",
+        "options": {
+          "query": {
+            "name": "consulta",
+            "description": "¿Qué deseas buscar en Google?"
+          }
+        }
+      },
+      "urban": {
+        "name": "urban",
+        "description": "Buscar términos de jerga en Urban Dictionary",
+        "options": {
+          "term": {
+            "name": "termino",
+            "description": "Término a buscar"
+          }
+        }
+      }
+    }
+  },
+  "serverstats": {
+    "name": "estadisticas-servidor",
+    "description": "Contadores dinámicos de miembros y canales del servidor",
+    "subcommands": {
+      "create": {
+        "name": "crear",
+        "description": "Crear un canal contador de estadísticas",
+        "options": {
+          "type": {
+            "name": "tipo",
+            "description": "Tipo de estadísticas a contabilizar"
+          },
+          "channel_type": {
+            "name": "tipo_canal",
+            "description": "Tipo de canal (voz o texto)"
+          },
+          "category": {
+            "name": "categoria",
+            "description": "Categoría donde se ubicará el contador"
+          }
+        }
+      },
+      "list": {
+        "name": "lista",
+        "description": "Listar todos los contadores activos"
+      },
+      "update": {
+        "name": "actualizar",
+        "description": "Actualizar la configuración de un contador",
+        "options": {
+          "counter-id": {
+            "name": "id_contador",
+            "description": "ID del contador a modificar"
+          },
+          "type": {
+            "name": "tipo",
+            "description": "Nuevo tipo de estadísticas a medir"
+          }
+        }
+      },
+      "delete": {
+        "name": "eliminar",
+        "description": "Eliminar un canal contador de estadísticas",
+        "options": {
+          "counter-id": {
+            "name": "id_contador",
+            "description": "ID del contador a eliminar"
+          }
+        }
+      }
+    }
+  },
+  "autorole": {
+    "name": "autorol",
+    "description": "Asignar roles automáticos a los nuevos miembros al unirse",
+    "subcommands": {
+      "add": {
+        "name": "anadir",
+        "description": "Añadir un rol automático para nuevos miembros",
+        "options": {
+          "role": {
+            "name": "rol",
+            "description": "El rol que se asignará automáticamente"
+          }
+        }
+      },
+      "remove": {
+        "name": "eliminar",
+        "description": "Eliminar un rol automático",
+        "options": {
+          "role": {
+            "name": "rol",
+            "description": "El rol a quitar de la lista automática"
+          }
+        }
+      },
+      "list": {
+        "name": "lista",
+        "description": "Ver roles automáticos configurados"
+      }
+    }
+  },
+  "goodbye": {
+    "name": "despedida",
+    "description": "Configurar mensajes de despedida cuando alguien se va",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Configurar canal y mensaje de despedida"
+      }
+    }
+  },
+  "greet": {
+    "name": "saludo",
+    "description": "Configurar saludo por mensaje directo a nuevos miembros",
+    "subcommands": {
+      "dashboard": {
+        "name": "panel",
+        "description": "Abrir panel de saludos por mensaje directo"
+      }
+    }
+  },
+  "welcome": {
+    "name": "bienvenida",
+    "description": "Configurar mensajes y tarjetas de bienvenida en canales",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Configurar canal y tarjeta de bienvenida"
+      }
+    }
+  },
+  "autoverify": {
+    "name": "autoverificar",
+    "description": "Configurar verificación automática de miembros",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Configurar reglas de autoverificación"
+      },
+      "dashboard": {
+        "name": "panel",
+        "description": "Abrir panel de autoverificación"
+      }
+    }
+  },
+  "verification": {
+    "name": "verificacion",
+    "description": "Gestionar paneles interactivos de verificación",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Crear panel de verificación con botón o captcha"
+      },
+      "remove": {
+        "name": "eliminar",
+        "description": "Eliminar el panel de verificación"
+      },
+      "dashboard": {
+        "name": "panel",
+        "description": "Abrir panel de control de verificación"
+      }
+    }
+  },
+  "verify": {
+    "name": "verificar",
+    "description": "Verifícate en el servidor para obtener acceso completo"
+  },
+  "claim": {
+    "name": "reclamar",
+    "description": "Asignarte la atención de este ticket de soporte"
+  },
+  "close": {
+    "name": "cerrar",
+    "description": "Cerrar el ticket de soporte actual",
+    "options": {
+      "reason": {
+        "name": "razon",
+        "description": "Motivo del cierre del ticket"
+      }
+    }
+  },
+  "priority": {
+    "name": "prioridad",
+    "description": "Ajustar el nivel de prioridad del ticket",
+    "options": {
+      "level": {
+        "name": "nivel",
+        "description": "Nivel de prioridad (Baja, Media, Alta, Urgente)"
+      }
+    }
+  },
+  "ticket": {
+    "name": "ticket",
+    "description": "Gestionar el sistema de tickets de soporte",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Crear un nuevo panel de tickets"
+      },
+      "dashboard": {
+        "name": "panel",
+        "description": "Abrir panel de control de tickets"
+      }
+    }
+  },
+  "gcreate": {
+    "name": "sorteo-crear",
+    "description": "Crear un sorteo interactivo para el servidor",
+    "options": {
+      "duration": {
+        "name": "duracion",
+        "description": "Duración del sorteo (ej. 10m, 1h, 1d)"
+      },
+      "winners": {
+        "name": "ganadores",
+        "description": "Cantidad de ganadores a elegir"
+      },
+      "prize": {
+        "name": "premio",
+        "description": "Premio que recibirán los ganadores"
+      },
+      "channel": {
+        "name": "canal",
+        "description": "Canal donde se publicará el sorteo"
+      }
+    }
+  },
+  "gdelete": {
+    "name": "sorteo-eliminar",
+    "description": "Eliminar un sorteo activo o finalizado",
+    "options": {
+      "message_id": {
+        "name": "id_mensaje",
+        "description": "ID del mensaje del sorteo"
+      }
+    }
+  },
+  "gend": {
+    "name": "sorteo-terminar",
+    "description": "Finalizar de inmediato un sorteo activo",
+    "options": {
+      "message_id": {
+        "name": "id_mensaje",
+        "description": "ID del mensaje del sorteo a finalizar"
+      }
+    }
+  },
+  "greroll": {
+    "name": "sorteo-resortear",
+    "description": "Elegir nuevos ganadores para un sorteo terminado",
+    "options": {
+      "message_id": {
+        "name": "id_mensaje",
+        "description": "ID del mensaje del sorteo"
+      }
+    }
+  },
+  "leaderboard": {
+    "name": "tabla-niveles",
+    "description": "Ver tabla de clasificación de experiencia y niveles",
+    "options": {
+      "page": {
+        "name": "pagina",
+        "description": "Número de página de la tabla"
+      }
+    }
+  },
+  "level": {
+    "name": "nivel-admin",
+    "description": "Configurar el sistema de niveles del servidor",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Configurar recompensas de rol y canal de anuncios"
+      },
+      "dashboard": {
+        "name": "panel",
+        "description": "Abrir panel de configuración de niveles"
+      }
+    }
+  },
+  "leveladd": {
+    "name": "nivel-anadir",
+    "description": "Añadir niveles de experiencia a un usuario",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario que recibirá los niveles"
+      },
+      "levels": {
+        "name": "niveles",
+        "description": "Cantidad de niveles a añadir"
+      }
+    }
+  },
+  "levelremove": {
+    "name": "nivel-quitar",
+    "description": "Quitar niveles a un usuario",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario al que se le quitarán niveles"
+      },
+      "levels": {
+        "name": "niveles",
+        "description": "Cantidad de niveles a quitar"
+      }
+    }
+  },
+  "levelset": {
+    "name": "nivel-establecer",
+    "description": "Fijar el nivel exacto de un usuario",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario cuyo nivel deseas fijar"
+      },
+      "level": {
+        "name": "nivel",
+        "description": "Nivel que se le asignará"
+      }
+    }
+  },
+  "rank": {
+    "name": "rango",
+    "description": "Ver tu tarjeta de rango, nivel y experiencia",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario cuyo rango deseas consultar"
+      }
+    }
+  },
+  "count": {
+    "name": "conteo",
+    "description": "Gestión del juego de conteo en el servidor",
+    "subcommands": {
+      "setup": {
+        "name": "configurar",
+        "description": "Establecer canal para el juego de conteo",
+        "options": {
+          "channel": {
+            "name": "canal",
+            "description": "Canal donde se jugará"
+          }
+        }
+      },
+      "disable": {
+        "name": "desactivar",
+        "description": "Desactivar el juego de conteo"
+      },
+      "status": {
+        "name": "estado",
+        "description": "Ver el número y récord actual"
+      },
+      "reset": {
+        "name": "reiniciar",
+        "description": "Reiniciar las estadísticas del juego de conteo"
+      },
+      "leaderboard": {
+        "name": "tabla",
+        "description": "Ver mejores contadores del servidor"
+      }
+    }
+  },
+  "fight": {
+    "name": "pelear",
+    "description": "Desafía a otro miembro en una batalla por turnos",
+    "options": {
+      "opponent": {
+        "name": "oponente",
+        "description": "El miembro al que deseas retar"
+      }
+    }
+  },
+  "flip": {
+    "name": "moneda",
+    "description": "Lanza una moneda al aire (Cara o Cruz)",
+    "options": {
+      "prediction": {
+        "name": "prediccion",
+        "description": "Apostar por cara o cruz"
+      }
+    }
+  },
+  "roll": {
+    "name": "dado",
+    "description": "Tira un dado con cantidad personalizada de caras",
+    "options": {
+      "sides": {
+        "name": "caras",
+        "description": "Cantidad de caras del dado (por defecto: 6)"
+      }
+    }
+  },
+  "join": {
+    "name": "unirse",
+    "description": "Invita al bot a tu canal de voz actual"
+  },
+  "music": {
+    "name": "musica",
+    "description": "Comandos de control del reproductor de música",
+    "subcommands": {
+      "247": {
+        "name": "247",
+        "description": "Activar o desactivar modo 24/7 en el canal de voz"
+      },
+      "pause": {
+        "name": "pausar",
+        "description": "Pausar la pista en reproducción"
+      },
+      "resume": {
+        "name": "reanudar",
+        "description": "Reanudar la música pausada"
+      },
+      "skip": {
+        "name": "saltar",
+        "description": "Saltar a la siguiente canción"
+      },
+      "stop": {
+        "name": "detener",
+        "description": "Detener la música y vaciar la cola"
+      },
+      "shuffle": {
+        "name": "aleatorio",
+        "description": "Mezclar aleatoriamente la cola"
+      },
+      "loop": {
+        "name": "repetir",
+        "description": "Ajustar modo de repetición",
+        "options": {
+          "mode": {
+            "name": "modo",
+            "description": "Modo: desactivado, canción o cola"
+          }
+        }
+      },
+      "volume": {
+        "name": "volumen",
+        "description": "Ajustar el volumen de audio (1-100)",
+        "options": {
+          "percent": {
+            "name": "porcentaje",
+            "description": "Porcentaje de volumen (1-100)"
+          }
+        }
+      },
+      "seek": {
+        "name": "adelantar",
+        "description": "Avanzar a un segundo específico de la canción",
+        "options": {
+          "seconds": {
+            "name": "segundos",
+            "description": "Tiempo en segundos"
+          }
+        }
+      },
+      "remove": {
+        "name": "eliminar",
+        "description": "Eliminar una pista de la cola por su posición",
+        "options": {
+          "position": {
+            "name": "posicion",
+            "description": "Posición del tema en la lista"
+          }
+        }
+      },
+      "move": {
+        "name": "mover",
+        "description": "Mover una pista a otra posición de la cola",
+        "options": {
+          "from": {
+            "name": "desde",
+            "description": "Posición actual del tema"
+          },
+          "to": {
+            "name": "hacia",
+            "description": "Nueva posición deseada"
+          }
+        }
+      },
+      "clear": {
+        "name": "limpiar",
+        "description": "Vaciar todas las canciones de la cola"
+      },
+      "leave": {
+        "name": "salir",
+        "description": "Desconectar al bot del canal de voz"
+      }
+    }
+  },
+  "nowplaying": {
+    "name": "reproduciendo",
+    "description": "Mostrar detalles de la canción en reproducción"
+  },
+  "play": {
+    "name": "reproducir",
+    "description": "Reproducir música desde YouTube, Spotify o SoundCloud",
+    "options": {
+      "query": {
+        "name": "busqueda",
+        "description": "Nombre de la canción o enlace"
+      }
+    }
+  },
+  "queue": {
+    "name": "cola",
+    "description": "Ver la lista de canciones en espera",
+    "options": {
+      "page": {
+        "name": "pagina",
+        "description": "Número de página de la lista"
+      }
+    }
+  },
+  "baseconvert": {
+    "name": "convertir-base",
+    "description": "Convertir números entre distintas bases numéricas (2-36)",
+    "options": {
+      "number": {
+        "name": "numero",
+        "description": "Cadena o valor numérico a convertir"
+      },
+      "from_base": {
+        "name": "base_origen",
+        "description": "Base de origen del número (2-36)"
+      },
+      "to_base": {
+        "name": "base_destino",
+        "description": "Base de destino (2-36)"
+      }
+    }
+  },
+  "calculate": {
+    "name": "calcular",
+    "description": "Calcular el resultado de una expresión matemática",
+    "options": {
+      "expression": {
+        "name": "expresion",
+        "description": "Operación matemática a evaluar"
+      }
+    }
+  },
+  "countdown": {
+    "name": "cuenta-regresiva",
+    "description": "Crear un temporizador de cuenta regresiva en vivo",
+    "options": {
+      "duration": {
+        "name": "duracion",
+        "description": "Duración (ej. 5m, 1h)"
+      },
+      "title": {
+        "name": "titulo",
+        "description": "Motivo o título del conteo"
+      }
+    }
+  },
+  "embedbuilder": {
+    "name": "crear-embed",
+    "description": "Creador interactivo de mensajes enriquecidos (embeds)"
+  },
+  "generatepassword": {
+    "name": "generar-contrasena",
+    "description": "Generar una contraseña aleatoria de alta seguridad",
+    "options": {
+      "length": {
+        "name": "longitud",
+        "description": "Longitud en caracteres (8-64)"
+      },
+      "include_numbers": {
+        "name": "incluir_numeros",
+        "description": "Incluir números (0-9)"
+      },
+      "include_symbols": {
+        "name": "incluir_simbolos",
+        "description": "Incluir símbolos especiales"
+      }
+    }
+  },
+  "hexcolor": {
+    "name": "color-hex",
+    "description": "Visualizar un código de color hexadecimal con RGB y HSL",
+    "options": {
+      "hex": {
+        "name": "hex",
+        "description": "Código hexadecimal (ej. #FF5733)"
+      }
+    }
+  },
+  "poll": {
+    "name": "encuesta",
+    "description": "Crear una encuesta interactiva para la comunidad",
+    "options": {
+      "question": {
+        "name": "pregunta",
+        "description": "La pregunta de la encuesta"
+      },
+      "option1": {
+        "name": "opcion1",
+        "description": "Primera opción"
+      },
+      "option2": {
+        "name": "opcion2",
+        "description": "Segunda opción"
+      },
+      "option3": {
+        "name": "opcion3",
+        "description": "Tercera opción"
+      },
+      "option4": {
+        "name": "opcion4",
+        "description": "Cuarta opción"
+      },
+      "option5": {
+        "name": "opcion5",
+        "description": "Quinta opción"
+      }
+    }
+  },
+  "randomuser": {
+    "name": "usuario-aleatorio",
+    "description": "Elegir un miembro aleatorio del servidor"
+  },
+  "shorten": {
+    "name": "acortar-enlace",
+    "description": "Acortar un enlace largo a uno compacto",
+    "options": {
+      "url": {
+        "name": "url",
+        "description": "El enlace que deseas acortar"
+      }
+    }
+  },
+  "time": {
+    "name": "hora",
+    "description": "Mostrar la hora actual en una zona horaria",
+    "options": {
+      "timezone": {
+        "name": "zona_horaria",
+        "description": "Zona horaria (ej. UTC, America/Mexico_City, Europe/Madrid)"
+      }
+    }
+  },
+  "unixtime": {
+    "name": "tiempo-unix",
+    "description": "Convertir fechas a marcas de tiempo Unix para Discord",
+    "options": {
+      "time": {
+        "name": "tiempo",
+        "description": "Expresión de tiempo o fecha"
+      }
+    }
+  },
+  "avatar": {
+    "name": "avatar",
+    "description": "Ver el avatar en alta resolución de un usuario",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario cuyo avatar deseas ver"
+      }
+    }
+  },
+  "firstmsg": {
+    "name": "primer-mensaje",
+    "description": "Obtener enlace al primer mensaje de este canal",
+    "options": {
+      "channel": {
+        "name": "canal",
+        "description": "Canal a consultar"
+      }
+    }
+  },
+  "report": {
+    "name": "reportar",
+    "description": "Enviar reportes de usuarios a los moderadores",
+    "subcommands": {
+      "file": {
+        "name": "enviar",
+        "description": "Presentar un reporte contra un usuario",
+        "options": {
+          "target": {
+            "name": "usuario",
+            "description": "Usuario que deseas reportar"
+          },
+          "reason": {
+            "name": "razon",
+            "description": "Motivo detallado del reporte"
+          }
+        }
+      },
+      "setchannel": {
+        "name": "canal",
+        "description": "Establecer canal donde se recibirán los reportes",
+        "options": {
+          "channel": {
+            "name": "canal",
+            "description": "Canal de texto para reportes"
+          }
+        }
+      }
+    }
+  },
+  "serverinfo": {
+    "name": "info-servidor",
+    "description": "Información detallada, miembros y configuración del servidor"
+  },
+  "todo": {
+    "name": "tareas",
+    "description": "Gestor de listas de tareas personales y compartidas",
+    "subcommands": {
+      "add": {
+        "name": "anadir",
+        "description": "Añadir una nueva tarea a tu lista",
+        "options": {
+          "task": {
+            "name": "tarea",
+            "description": "Descripción de la tarea"
+          }
+        }
+      },
+      "list": {
+        "name": "lista",
+        "description": "Ver tus tareas pendientes"
+      },
+      "complete": {
+        "name": "completar",
+        "description": "Marcar una tarea como terminada",
+        "options": {
+          "id": {
+            "name": "id",
+            "description": "ID de la tarea a completar"
+          }
+        }
+      },
+      "remove": {
+        "name": "eliminar",
+        "description": "Eliminar una tarea de tu lista",
+        "options": {
+          "id": {
+            "name": "id",
+            "description": "ID de la tarea a borrar"
+          }
+        }
+      }
+    }
+  },
+  "userinfo": {
+    "name": "info-usuario",
+    "description": "Ver perfil detallado, roles y fechas de un usuario",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario que deseas consultar"
+      }
+    }
+  },
+  "weather": {
+    "name": "clima",
+    "description": "Pronóstico del tiempo en tiempo real para cualquier ciudad",
+    "options": {
+      "location": {
+        "name": "ubicacion",
+        "description": "Ciudad o región a consultar"
+      }
+    }
+  },
+  "wipedata": {
+    "name": "borrar-datos",
+    "description": "Solicitar el borrado de tus datos personales almacenados"
+  },
+  "balance": {
+    "name": "saldo",
+    "description": "Consultar saldo en efectivo y en banco",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario cuyo saldo deseas consultar"
+      }
+    }
+  },
+  "beg": {
+    "name": "mendigar",
+    "description": "Pedir algunas monedas para tu bolsillo"
+  },
+  "buy": {
+    "name": "comprar",
+    "description": "Comprar un objeto de la tienda del servidor",
+    "options": {
+      "item": {
+        "name": "objeto",
+        "description": "Nombre o ID del artículo"
+      },
+      "quantity": {
+        "name": "cantidad",
+        "description": "Cantidad a comprar"
+      }
+    }
+  },
+  "crime": {
+    "name": "crimen",
+    "description": "Cometer un crimen con alto riesgo de multa"
+  },
+  "daily": {
+    "name": "diario",
+    "description": "Reclamar tu recompensa diaria de monedas"
+  },
+  "deposit": {
+    "name": "depositar",
+    "description": "Depositar monedas de tu cartera al banco",
+    "options": {
+      "amount": {
+        "name": "cantidad",
+        "description": "Cantidad o 'all' para todo"
+      }
+    }
+  },
+  "economy": {
+    "name": "economia",
+    "description": "Administrar el sistema de economía del servidor",
+    "subcommands": {
+      "dashboard": {
+        "name": "panel",
+        "description": "Abrir panel de configuración de economía"
+      }
+    }
+  },
+  "eleaderboard": {
+    "name": "tabla-economia",
+    "description": "Ver los miembros más ricos del servidor",
+    "options": {
+      "type": {
+        "name": "tipo",
+        "description": "Tipo de tabla: cartera, banco o total"
+      }
+    }
+  },
+  "fish": {
+    "name": "pescar",
+    "description": "Ir a pescar para conseguir peces y monedas"
+  },
+  "gamble": {
+    "name": "apostar",
+    "description": "Apostar monedas en un juego de azar",
+    "options": {
+      "amount": {
+        "name": "cantidad",
+        "description": "Cantidad de monedas a apostar"
+      }
+    }
+  },
+  "inventory": {
+    "name": "inventario",
+    "description": "Ver tus objetos, consumibles y herramientas",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario cuyo inventario deseas ver"
+      }
+    }
+  },
+  "mine": {
+    "name": "minar",
+    "description": "Picar en la mina para extraer minerales y gemas"
+  },
+  "pay": {
+    "name": "pagar",
+    "description": "Transferir monedas a otro usuario",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario que recibirá las monedas"
+      },
+      "amount": {
+        "name": "cantidad",
+        "description": "Cantidad a transferir"
+      }
+    }
+  },
+  "rob": {
+    "name": "robar",
+    "description": "Intentar robar monedas de la cartera de otro usuario",
+    "options": {
+      "target": {
+        "name": "usuario",
+        "description": "Usuario al que deseas robar"
+      }
+    }
+  },
+  "shop-config": {
+    "name": "tienda-config",
+    "description": "Configurar la tienda y roles asignados a objetos",
+    "subcommands": {
+      "setrole": {
+        "name": "rol",
+        "description": "Vincular una recompensa de rol a un artículo",
+        "options": {
+          "item": {
+            "name": "objeto",
+            "description": "Objeto a vincular"
+          },
+          "role": {
+            "name": "rol",
+            "description": "Rol que se otorgará al comprarlo"
+          }
+        }
+      }
+    }
+  },
+  "shop": {
+    "name": "tienda",
+    "description": "Explorar artículos disponibles para comprar en la tienda"
+  },
+  "slut": {
+    "name": "prostituirse",
+    "description": "Hacer trabajos cuestionables por dinero rápido"
+  },
+  "withdraw": {
+    "name": "retirar",
+    "description": "Retirar monedas de tu banco a tu cartera",
+    "options": {
+      "amount": {
+        "name": "cantidad",
+        "description": "Cantidad a retirar o 'all' para todo"
+      }
+    }
+  },
+  "work": {
+    "name": "trabajar",
+    "description": "Trabajar para recibir un salario honrado"
   }
 }

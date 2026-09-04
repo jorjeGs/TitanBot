@@ -1,0 +1,5 @@
+{
+  "claimed": "Ticket claimed by {user}.",
+  "closed": "Ticket closed by {user}. Reason: {reason}",
+  "priority_set": "Ticket priority set to **{level}**."
+}

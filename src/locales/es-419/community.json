@@ -1,0 +1,15 @@
+{
+  "not_in_guild": "Este comando solo se puede usar en un servidor.",
+  "apply": {
+    "no_apps": "No hay formularios de postulación disponibles en este momento.",
+    "submitted": "¡Postulación enviada con éxito! ID: `{id}`",
+    "status_title": "Estado de la Postulación",
+    "list_title": "Postulaciones Disponibles"
+  },
+  "admin": {
+    "review_approved": "La postulación `{id}` ha sido aprobada.",
+    "review_denied": "La postulación `{id}` ha sido rechazada.",
+    "list_title": "Postulaciones Presentadas",
+    "dashboard_title": "Panel de Postulaciones"
+  }
+}

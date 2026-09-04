@@ -4,6 +4,7 @@ import { deleteBirthday } from '../../../utils/database.js';
 import { logger } from '../../../utils/logger.js';
 
 import { InteractionHelper } from '../../../utils/interactionHelper.js';
+import { t } from '../../../utils/i18n/index.js';
 export default {
     async execute(interaction, config, client) {
         await InteractionHelper.safeDefer(interaction);
@@ -15,8 +16,8 @@ export default {
         if (sortedBirthdays.length === 0) {
             const embed = new EmbedBuilder()
                 .setColor(0xFF0000)
-                .setTitle('No Birthdays')
-                .setDescription('No birthdays have been set in this server yet.');
+                .setTitle(t('birthday.list.title', {}, interaction))
+                .setDescription(t('birthday.list.none', {}, interaction));
             return await InteractionHelper.safeEditReply(interaction, {
                 embeds: [embed]
             });

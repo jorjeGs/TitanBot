@@ -1,0 +1,34 @@
+{
+  "set": {
+    "success_title": "¡Cumpleaños guardado!",
+    "success_desc": "¡Tu cumpleaños ha sido establecido para el **{day} de {month}**!"
+  },
+  "info": {
+    "title": "Información de Cumpleaños",
+    "not_found_self": "Aún no has configurado tu cumpleaños. ¡Usa `/birthday set` para agregarlo!",
+    "not_found_other": "{username} aún no ha configurado su cumpleaños.",
+    "date": "Fecha",
+    "user": "Usuario"
+  },
+  "list": {
+    "title": "Cumpleaños del Servidor",
+    "none": "Aún no hay cumpleaños registrados en este servidor.",
+    "none_current": "Ningún miembro actual del servidor tiene cumpleaños registrado."
+  },
+  "remove": {
+    "title": "Cumpleaños Eliminado",
+    "success": "Tu cumpleaños ha sido eliminado del servidor correctamente.",
+    "not_found": "No tienes ningún cumpleaños configurado para eliminar."
+  },
+  "next": {
+    "title": "Próximos Cumpleaños",
+    "none": "No hay próximos cumpleaños registrados en este servidor.",
+    "today": "🎉 **¡Hoy!**",
+    "tomorrow": "📅 **¡Mañana!**"
+  },
+  "setchannel": {
+    "perm_denied": "Necesitas permisos de **Gestionar Servidor** para configurar el canal de cumpleaños.",
+    "enabled": "Los anuncios de cumpleaños ahora se publicarán en {channel}.",
+    "disabled": "No se proporcionó canal — los anuncios de cumpleaños han sido desactivados."
+  }
+}

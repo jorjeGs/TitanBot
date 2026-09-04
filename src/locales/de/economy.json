@@ -1,0 +1,13 @@
+{
+  "balance_title": "Kontostand von {user}",
+  "balance_wallet": "Geldbeutel: **{wallet}** Münzen",
+  "balance_bank": "Bank: **{bank}** / {max} Münzen",
+  "daily_claimed": "Du hast deine tägliche Belohnung von **{amount}** Münzen erhalten! Serie: {streak} Tage.",
+  "deposit_success": "**{amount}** Münzen auf dein Bankkonto eingezahlt.",
+  "withdraw_success": "**{amount}** Münzen von deinem Bankkonto abgehoben.",
+  "pay_success": "**{amount}** Münzen erfolgreich an {target} überwiesen.",
+  "work_success": "Du hast als **{job}** gearbeitet und **{amount}** Münzen verdient!",
+  "beg_success": "Ein großzügiger Fremder hat dir **{amount}** Münzen gegeben!",
+  "fish_success": "🎣 Du hast einen **{fish}** im Wert von **{amount}** Münzen gefangen!",
+  "mine_success": "⛏️ Du hast **{mineral}** im Wert von **{amount}** Münzen abgebaut!"
+}

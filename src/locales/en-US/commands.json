@@ -215,7 +215,10 @@
   },
   "ban": {
     "name": "ban",
-    "name_localizations": { "es-419": "ban", "de": "bannen" },
+    "name_localizations": {
+      "es-419": "ban",
+      "de": "bannen"
+    },
     "description": "Ban a user from the server",
     "description_localizations": {
       "es-419": "Banear a un usuario del servidor",
@@ -224,21 +227,36 @@
     "options": {
       "target": {
         "name": "target",
-        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
         "description": "The user to ban",
-        "description_localizations": { "es-419": "El usuario a banear", "de": "Der zu bannende Benutzer" }
+        "description_localizations": {
+          "es-419": "El usuario a banear",
+          "de": "Der zu bannende Benutzer"
+        }
       },
       "reason": {
         "name": "reason",
-        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "name_localizations": {
+          "es-419": "razon",
+          "de": "grund"
+        },
         "description": "Reason for the ban",
-        "description_localizations": { "es-419": "Razón del baneo", "de": "Grund für den Bann" }
+        "description_localizations": {
+          "es-419": "Razón del baneo",
+          "de": "Grund für den Bann"
+        }
       }
     }
   },
   "unban": {
     "name": "unban",
-    "name_localizations": { "es-419": "desbanear", "de": "entbannen" },
+    "name_localizations": {
+      "es-419": "desbanear",
+      "de": "entbannen"
+    },
     "description": "Unban a user from the server",
     "description_localizations": {
       "es-419": "Desbanear a un usuario del servidor",
@@ -247,21 +265,36 @@
     "options": {
       "target": {
         "name": "target",
-        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
         "description": "The ID (or mention) of the user to unban",
-        "description_localizations": { "es-419": "El ID o mención del usuario a desbanear", "de": "Die ID oder Erwähnung des zu entbannenden Benutzers" }
+        "description_localizations": {
+          "es-419": "El ID o mención del usuario a desbanear",
+          "de": "Die ID oder Erwähnung des zu entbannenden Benutzers"
+        }
       },
       "reason": {
         "name": "reason",
-        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "name_localizations": {
+          "es-419": "razon",
+          "de": "grund"
+        },
         "description": "Reason for the unban",
-        "description_localizations": { "es-419": "Razón del desbaneo", "de": "Grund für die Entbannung" }
+        "description_localizations": {
+          "es-419": "Razón del desbaneo",
+          "de": "Grund für die Entbannung"
+        }
       }
     }
   },
   "kick": {
     "name": "kick",
-    "name_localizations": { "es-419": "expulsar", "de": "kicken" },
+    "name_localizations": {
+      "es-419": "expulsar",
+      "de": "kicken"
+    },
     "description": "Kick a user from the server",
     "description_localizations": {
       "es-419": "Expulsar a un usuario del servidor",
@@ -270,21 +303,36 @@
     "options": {
       "target": {
         "name": "target",
-        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
         "description": "The user to kick",
-        "description_localizations": { "es-419": "El usuario a expulsar", "de": "Der zu kickende Benutzer" }
+        "description_localizations": {
+          "es-419": "El usuario a expulsar",
+          "de": "Der zu kickende Benutzer"
+        }
       },
       "reason": {
         "name": "reason",
-        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "name_localizations": {
+          "es-419": "razon",
+          "de": "grund"
+        },
         "description": "Reason for the kick",
-        "description_localizations": { "es-419": "Razón de la expulsión", "de": "Grund für den Kick" }
+        "description_localizations": {
+          "es-419": "Razón de la expulsión",
+          "de": "Grund für den Kick"
+        }
       }
     }
   },
   "timeout": {
     "name": "timeout",
-    "name_localizations": { "es-419": "aislar", "de": "timeout" },
+    "name_localizations": {
+      "es-419": "aislar",
+      "de": "timeout"
+    },
     "description": "Timeout a user for a specific duration",
     "description_localizations": {
       "es-419": "Aislar temporalmente a un usuario por una duración específica",
@@ -293,27 +341,48 @@
     "options": {
       "target": {
         "name": "target",
-        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
         "description": "User to timeout",
-        "description_localizations": { "es-419": "Usuario a aislar", "de": "Stummzuschaltender Benutzer" }
+        "description_localizations": {
+          "es-419": "Usuario a aislar",
+          "de": "Stummzuschaltender Benutzer"
+        }
       },
       "duration": {
         "name": "duration",
-        "name_localizations": { "es-419": "duracion", "de": "dauer" },
+        "name_localizations": {
+          "es-419": "duracion",
+          "de": "dauer"
+        },
         "description": "Duration of the timeout",
-        "description_localizations": { "es-419": "Duración del aislamiento", "de": "Dauer des Timeouts" }
+        "description_localizations": {
+          "es-419": "Duración del aislamiento",
+          "de": "Dauer des Timeouts"
+        }
       },
       "reason": {
         "name": "reason",
-        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "name_localizations": {
+          "es-419": "razon",
+          "de": "grund"
+        },
         "description": "Reason for the timeout",
-        "description_localizations": { "es-419": "Razón del aislamiento", "de": "Grund für das Timeout" }
+        "description_localizations": {
+          "es-419": "Razón del aislamiento",
+          "de": "Grund für das Timeout"
+        }
       }
     }
   },
   "untimeout": {
     "name": "untimeout",
-    "name_localizations": { "es-419": "desaislar", "de": "untimeout" },
+    "name_localizations": {
+      "es-419": "desaislar",
+      "de": "untimeout"
+    },
     "description": "Remove timeout from a user",
     "description_localizations": {
       "es-419": "Quitar el aislamiento temporal a un usuario",
@@ -322,15 +391,24 @@
     "options": {
       "target": {
         "name": "target",
-        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
         "description": "User to untimeout",
-        "description_localizations": { "es-419": "Usuario al que quitar aislamiento", "de": "Benutzer für Timeout-Aufhebung" }
+        "description_localizations": {
+          "es-419": "Usuario al que quitar aislamiento",
+          "de": "Benutzer für Timeout-Aufhebung"
+        }
       }
     }
   },
   "warn": {
     "name": "warn",
-    "name_localizations": { "es-419": "advertir", "de": "warnen" },
+    "name_localizations": {
+      "es-419": "advertir",
+      "de": "warnen"
+    },
     "description": "Warn a user",
     "description_localizations": {
       "es-419": "Dar una advertencia a un usuario",
@@ -339,21 +417,36 @@
     "options": {
       "target": {
         "name": "target",
-        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
         "description": "User to warn",
-        "description_localizations": { "es-419": "Usuario a advertir", "de": "Zu verwarnender Benutzer" }
+        "description_localizations": {
+          "es-419": "Usuario a advertir",
+          "de": "Zu verwarnender Benutzer"
+        }
       },
       "reason": {
         "name": "reason",
-        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "name_localizations": {
+          "es-419": "razon",
+          "de": "grund"
+        },
         "description": "Reason for the warning",
-        "description_localizations": { "es-419": "Razón de la advertencia", "de": "Grund für die Verwarnung" }
+        "description_localizations": {
+          "es-419": "Razón de la advertencia",
+          "de": "Grund für die Verwarnung"
+        }
       }
     }
   },
   "warnings": {
     "name": "warnings",
-    "name_localizations": { "es-419": "advertencias", "de": "warnungen" },
+    "name_localizations": {
+      "es-419": "advertencias",
+      "de": "warnungen"
+    },
     "description": "View all warnings for a user",
     "description_localizations": {
       "es-419": "Ver todas las advertencias de un usuario",
@@ -362,15 +455,24 @@
     "options": {
       "target": {
         "name": "target",
-        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
         "description": "User to check warnings for",
-        "description_localizations": { "es-419": "Usuario a revisar", "de": "Zu überprüfender Benutzer" }
+        "description_localizations": {
+          "es-419": "Usuario a revisar",
+          "de": "Zu überprüfender Benutzer"
+        }
       }
     }
   },
   "lock": {
     "name": "lock",
-    "name_localizations": { "es-419": "bloquear-canal", "de": "sperren" },
+    "name_localizations": {
+      "es-419": "bloquear-canal",
+      "de": "sperren"
+    },
     "description": "Locks the current channel",
     "description_localizations": {
       "es-419": "Bloquea el canal actual",
@@ -379,7 +481,10 @@
   },
   "unlock": {
     "name": "unlock",
-    "name_localizations": { "es-419": "desbloquear-canal", "de": "entsperren" },
+    "name_localizations": {
+      "es-419": "desbloquear-canal",
+      "de": "entsperren"
+    },
     "description": "Unlocks the current channel",
     "description_localizations": {
       "es-419": "Desbloquea el canal actual",
@@ -388,7 +493,10 @@
   },
   "purge": {
     "name": "purge",
-    "name_localizations": { "es-419": "purgar", "de": "bereinigen" },
+    "name_localizations": {
+      "es-419": "purgar",
+      "de": "bereinigen"
+    },
     "description": "Delete a specific amount of messages",
     "description_localizations": {
       "es-419": "Elimina una cantidad específica de mensajes",
@@ -397,15 +505,24 @@
     "options": {
       "amount": {
         "name": "amount",
-        "name_localizations": { "es-419": "cantidad", "de": "anzahl" },
+        "name_localizations": {
+          "es-419": "cantidad",
+          "de": "anzahl"
+        },
         "description": "Number of messages (1-100)",
-        "description_localizations": { "es-419": "Cantidad de mensajes (1-100)", "de": "Anzahl der Nachrichten (1-100)" }
+        "description_localizations": {
+          "es-419": "Cantidad de mensajes (1-100)",
+          "de": "Anzahl der Nachrichten (1-100)"
+        }
       }
     }
   },
   "say": {
     "name": "say",
-    "name_localizations": { "es-419": "decir", "de": "sagen" },
+    "name_localizations": {
+      "es-419": "decir",
+      "de": "sagen"
+    },
     "description": "Send a plain message as the bot",
     "description_localizations": {
       "es-419": "Enviar un mensaje como el bot",
@@ -414,21 +531,36 @@
     "options": {
       "message": {
         "name": "message",
-        "name_localizations": { "es-419": "mensaje", "de": "nachricht" },
+        "name_localizations": {
+          "es-419": "mensaje",
+          "de": "nachricht"
+        },
         "description": "The message the bot should send",
-        "description_localizations": { "es-419": "El mensaje que el bot enviará", "de": "Die Nachricht, die der Bot senden soll" }
+        "description_localizations": {
+          "es-419": "El mensaje que el bot enviará",
+          "de": "Die Nachricht, die der Bot senden soll"
+        }
       },
       "channel": {
         "name": "channel",
-        "name_localizations": { "es-419": "canal", "de": "kanal" },
+        "name_localizations": {
+          "es-419": "canal",
+          "de": "kanal"
+        },
         "description": "Channel to send in (defaults to the current channel)",
-        "description_localizations": { "es-419": "Canal donde enviar el mensaje", "de": "Kanal zum Senden der Nachricht" }
+        "description_localizations": {
+          "es-419": "Canal donde enviar el mensaje",
+          "de": "Kanal zum Senden der Nachricht"
+        }
       }
     }
   },
   "dm": {
     "name": "dm",
-    "name_localizations": { "es-419": "md", "de": "dm" },
+    "name_localizations": {
+      "es-419": "md",
+      "de": "dm"
+    },
     "description": "Send a direct message to a user (Staff only)",
     "description_localizations": {
       "es-419": "Enviar un mensaje directo a un usuario (solo Staff)",
@@ -437,27 +569,48 @@
     "options": {
       "user": {
         "name": "user",
-        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
         "description": "The user to send a DM to",
-        "description_localizations": { "es-419": "El usuario al que enviar el MD", "de": "Der Benutzer, an den die DM gesendet werden soll" }
+        "description_localizations": {
+          "es-419": "El usuario al que enviar el MD",
+          "de": "Der Benutzer, an den die DM gesendet werden soll"
+        }
       },
       "message": {
         "name": "message",
-        "name_localizations": { "es-419": "mensaje", "de": "nachricht" },
+        "name_localizations": {
+          "es-419": "mensaje",
+          "de": "nachricht"
+        },
         "description": "The message to send",
-        "description_localizations": { "es-419": "El mensaje a enviar", "de": "Die zu sendende Nachricht" }
+        "description_localizations": {
+          "es-419": "El mensaje a enviar",
+          "de": "Die zu sendende Nachricht"
+        }
       },
       "anonymous": {
         "name": "anonymous",
-        "name_localizations": { "es-419": "anonimo", "de": "anonym" },
+        "name_localizations": {
+          "es-419": "anonimo",
+          "de": "anonym"
+        },
         "description": "Send the message anonymously (default: false)",
-        "description_localizations": { "es-419": "Enviar de forma anónima (por defecto: false)", "de": "Nachricht anonym senden (Standard: false)" }
+        "description_localizations": {
+          "es-419": "Enviar de forma anónima (por defecto: false)",
+          "de": "Nachricht anonym senden (Standard: false)"
+        }
       }
     }
   },
   "cases": {
     "name": "cases",
-    "name_localizations": { "es-419": "casos", "de": "faelle" },
+    "name_localizations": {
+      "es-419": "casos",
+      "de": "faelle"
+    },
     "description": "View moderation cases and audit logs",
     "description_localizations": {
       "es-419": "Ver casos de moderación y registros de auditoría",
@@ -466,27 +619,48 @@
     "options": {
       "filter": {
         "name": "filter",
-        "name_localizations": { "es-419": "filtro", "de": "filter" },
+        "name_localizations": {
+          "es-419": "filtro",
+          "de": "filter"
+        },
         "description": "Filter cases by type or user",
-        "description_localizations": { "es-419": "Filtrar casos por tipo o usuario", "de": "Fälle nach Typ oder Benutzer filtern" }
+        "description_localizations": {
+          "es-419": "Filtrar casos por tipo o usuario",
+          "de": "Fälle nach Typ oder Benutzer filtern"
+        }
       },
       "user": {
         "name": "user",
-        "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
         "description": "Filter cases by specific user",
-        "description_localizations": { "es-419": "Filtrar casos por usuario específico", "de": "Fälle nach bestimmtem Benutzer filtern" }
+        "description_localizations": {
+          "es-419": "Filtrar casos por usuario específico",
+          "de": "Fälle nach bestimmtem Benutzer filtern"
+        }
       },
       "limit": {
         "name": "limit",
-        "name_localizations": { "es-419": "limite", "de": "limit" },
+        "name_localizations": {
+          "es-419": "limite",
+          "de": "limit"
+        },
         "description": "Number of cases to show (default: 10)",
-        "description_localizations": { "es-419": "Número de casos a mostrar (por defecto: 10)", "de": "Anzahl der anzuzeigenden Fälle (Standard: 10)" }
+        "description_localizations": {
+          "es-419": "Número de casos a mostrar (por defecto: 10)",
+          "de": "Anzahl der anzuzeigenden Fälle (Standard: 10)"
+        }
       }
     }
   },
   "usernotes": {
     "name": "usernotes",
-    "name_localizations": { "es-419": "notas", "de": "notizen" },
+    "name_localizations": {
+      "es-419": "notas",
+      "de": "notizen"
+    },
     "description": "Manage user notes for moderation purposes",
     "description_localizations": {
       "es-419": "Administrar notas de usuario para moderación",
@@ -495,75 +669,141 @@
     "subcommands": {
       "add": {
         "name": "add",
-        "name_localizations": { "es-419": "agregar", "de": "hinzufuegen" },
+        "name_localizations": {
+          "es-419": "agregar",
+          "de": "hinzufuegen"
+        },
         "description": "Add a note to a user",
-        "description_localizations": { "es-419": "Agregar una nota a un usuario", "de": "Eine Notiz zu einem Benutzer hinzufügen" },
+        "description_localizations": {
+          "es-419": "Agregar una nota a un usuario",
+          "de": "Eine Notiz zu einem Benutzer hinzufügen"
+        },
         "options": {
           "target": {
             "name": "target",
-            "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+            "name_localizations": {
+              "es-419": "usuario",
+              "de": "benutzer"
+            },
             "description": "The user to add a note for",
-            "description_localizations": { "es-419": "El usuario al que agregar la nota", "de": "Der Benutzer, dem eine Notiz hinzugefügt wird" }
+            "description_localizations": {
+              "es-419": "El usuario al que agregar la nota",
+              "de": "Der Benutzer, dem eine Notiz hinzugefügt wird"
+            }
           },
           "note": {
             "name": "note",
-            "name_localizations": { "es-419": "nota", "de": "notiz" },
+            "name_localizations": {
+              "es-419": "nota",
+              "de": "notiz"
+            },
             "description": "The note to add",
-            "description_localizations": { "es-419": "La nota a agregar", "de": "Die hinzuzufügende Notiz" }
+            "description_localizations": {
+              "es-419": "La nota a agregar",
+              "de": "Die hinzuzufügende Notiz"
+            }
           },
           "type": {
             "name": "type",
-            "name_localizations": { "es-419": "tipo", "de": "typ" },
+            "name_localizations": {
+              "es-419": "tipo",
+              "de": "typ"
+            },
             "description": "Type of note",
-            "description_localizations": { "es-419": "Tipo de nota", "de": "Typ der Notiz" }
+            "description_localizations": {
+              "es-419": "Tipo de nota",
+              "de": "Typ der Notiz"
+            }
           }
         }
       },
       "view": {
         "name": "view",
-        "name_localizations": { "es-419": "ver", "de": "anzeigen" },
+        "name_localizations": {
+          "es-419": "ver",
+          "de": "anzeigen"
+        },
         "description": "View notes for a user",
-        "description_localizations": { "es-419": "Ver las notas de un usuario", "de": "Notizen für einen Benutzer anzeigen" },
+        "description_localizations": {
+          "es-419": "Ver las notas de un usuario",
+          "de": "Notizen für einen Benutzer anzeigen"
+        },
         "options": {
           "target": {
             "name": "target",
-            "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+            "name_localizations": {
+              "es-419": "usuario",
+              "de": "benutzer"
+            },
             "description": "The user to view notes for",
-            "description_localizations": { "es-419": "El usuario a ver notas", "de": "Der Benutzer, dessen Notizen angezeigt werden" }
+            "description_localizations": {
+              "es-419": "El usuario a ver notas",
+              "de": "Der Benutzer, dessen Notizen angezeigt werden"
+            }
           }
         }
       },
       "remove": {
         "name": "remove",
-        "name_localizations": { "es-419": "eliminar", "de": "entfernen" },
+        "name_localizations": {
+          "es-419": "eliminar",
+          "de": "entfernen"
+        },
         "description": "Remove a specific note from a user",
-        "description_localizations": { "es-419": "Eliminar una nota específica de un usuario", "de": "Eine bestimmte Notiz eines Benutzers entfernen" },
+        "description_localizations": {
+          "es-419": "Eliminar una nota específica de un usuario",
+          "de": "Eine bestimmte Notiz eines Benutzers entfernen"
+        },
         "options": {
           "target": {
             "name": "target",
-            "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+            "name_localizations": {
+              "es-419": "usuario",
+              "de": "benutzer"
+            },
             "description": "The user to remove a note from",
-            "description_localizations": { "es-419": "El usuario al que quitar una nota", "de": "Der Benutzer, von dem eine Notiz entfernt wird" }
+            "description_localizations": {
+              "es-419": "El usuario al que quitar una nota",
+              "de": "Der Benutzer, von dem eine Notiz entfernt wird"
+            }
           },
           "index": {
             "name": "index",
-            "name_localizations": { "es-419": "indice", "de": "index" },
+            "name_localizations": {
+              "es-419": "indice",
+              "de": "index"
+            },
             "description": "The index of the note to remove",
-            "description_localizations": { "es-419": "El índice de la nota a eliminar", "de": "Der Index der zu entfernenden Notiz" }
+            "description_localizations": {
+              "es-419": "El índice de la nota a eliminar",
+              "de": "Der Index der zu entfernenden Notiz"
+            }
           }
         }
       },
       "clear": {
         "name": "clear",
-        "name_localizations": { "es-419": "limpiar", "de": "loeschen" },
+        "name_localizations": {
+          "es-419": "limpiar",
+          "de": "loeschen"
+        },
         "description": "Clear all notes for a user",
-        "description_localizations": { "es-419": "Borrar todas las notas de un usuario", "de": "Alle Notizen eines Benutzers löschen" },
+        "description_localizations": {
+          "es-419": "Borrar todas las notas de un usuario",
+          "de": "Alle Notizen eines Benutzers löschen"
+        },
         "options": {
           "target": {
             "name": "target",
-            "name_localizations": { "es-419": "usuario", "de": "benutzer" },
+            "name_localizations": {
+              "es-419": "usuario",
+              "de": "benutzer"
+            },
             "description": "The user to clear notes for",
-            "description_localizations": { "es-419": "El usuario al que borrar notas", "de": "Der Benutzer, dessen Notizen gelöscht werden" }
+            "description_localizations": {
+              "es-419": "El usuario al que borrar notas",
+              "de": "Der Benutzer, dessen Notizen gelöscht werden"
+            }
           }
         }
       }
@@ -571,7 +811,10 @@
   },
   "massban": {
     "name": "massban",
-    "name_localizations": { "es-419": "baneo-masivo", "de": "massenban" },
+    "name_localizations": {
+      "es-419": "baneo-masivo",
+      "de": "massenban"
+    },
     "description": "Ban multiple users from the server at once",
     "description_localizations": {
       "es-419": "Banear a múltiples usuarios del servidor a la vez",
@@ -580,27 +823,48 @@
     "options": {
       "users": {
         "name": "users",
-        "name_localizations": { "es-419": "usuarios", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuarios",
+          "de": "benutzer"
+        },
         "description": "User IDs or mentions to ban",
-        "description_localizations": { "es-419": "IDs o menciones de usuarios a banear", "de": "Zu bannende Benutzer-IDs oder Erwähnungen" }
+        "description_localizations": {
+          "es-419": "IDs o menciones de usuarios a banear",
+          "de": "Zu bannende Benutzer-IDs oder Erwähnungen"
+        }
       },
       "reason": {
         "name": "reason",
-        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "name_localizations": {
+          "es-419": "razon",
+          "de": "grund"
+        },
         "description": "Reason for the mass ban",
-        "description_localizations": { "es-419": "Razón del baneo masivo", "de": "Grund für den Massenbann" }
+        "description_localizations": {
+          "es-419": "Razón del baneo masivo",
+          "de": "Grund für den Massenbann"
+        }
       },
       "delete_days": {
         "name": "delete_days",
-        "name_localizations": { "es-419": "dias_eliminar", "de": "tage_loeschen" },
+        "name_localizations": {
+          "es-419": "dias_eliminar",
+          "de": "tage_loeschen"
+        },
         "description": "Number of days of messages to delete (0-7)",
-        "description_localizations": { "es-419": "Días de mensajes a eliminar (0-7)", "de": "Anzahl der Tage zu löschender Nachrichten (0-7)" }
+        "description_localizations": {
+          "es-419": "Días de mensajes a eliminar (0-7)",
+          "de": "Anzahl der Tage zu löschender Nachrichten (0-7)"
+        }
       }
     }
   },
   "masskick": {
     "name": "masskick",
-    "name_localizations": { "es-419": "expulsion-masiva", "de": "massenkick" },
+    "name_localizations": {
+      "es-419": "expulsion-masiva",
+      "de": "massenkick"
+    },
     "description": "Kick multiple users from the server at once",
     "description_localizations": {
       "es-419": "Expulsar a múltiples usuarios del servidor a la vez",
@@ -609,16 +873,3274 @@
     "options": {
       "users": {
         "name": "users",
-        "name_localizations": { "es-419": "usuarios", "de": "benutzer" },
+        "name_localizations": {
+          "es-419": "usuarios",
+          "de": "benutzer"
+        },
         "description": "User IDs or mentions to kick",
-        "description_localizations": { "es-419": "IDs o menciones de usuarios a expulsar", "de": "Zu kickende Benutzer-IDs oder Erwähnungen" }
+        "description_localizations": {
+          "es-419": "IDs o menciones de usuarios a expulsar",
+          "de": "Zu kickende Benutzer-IDs oder Erwähnungen"
+        }
       },
       "reason": {
         "name": "reason",
-        "name_localizations": { "es-419": "razon", "de": "grund" },
+        "name_localizations": {
+          "es-419": "razon",
+          "de": "grund"
+        },
         "description": "Reason for the mass kick",
-        "description_localizations": { "es-419": "Razón de la expulsión masiva", "de": "Grund für den Massenkick" }
+        "description_localizations": {
+          "es-419": "Razón de la expulsión masiva",
+          "de": "Grund für den Massenkick"
+        }
       }
+    }
+  },
+  "configwizard": {
+    "name": "configwizard",
+    "name_localizations": {
+      "es-419": "asistente",
+      "de": "assistent"
+    },
+    "description": "Interactive wizard to configure basic server settings",
+    "description_localizations": {
+      "es-419": "Asistente interactivo para configurar los ajustes básicos del servidor",
+      "de": "Interaktiver Assistent zum Konfigurieren der Server-Grundeinstellungen"
+    }
+  },
+  "birthday": {
+    "name": "birthday",
+    "name_localizations": {
+      "es-419": "cumpleanos",
+      "de": "geburtstag"
+    },
+    "description": "Birthday system commands",
+    "description_localizations": {
+      "es-419": "Comandos del sistema de cumpleaños",
+      "de": "Befehle für das Geburtstagssystem"
+    },
+    "subcommands": {
+      "set": {
+        "name": "set",
+        "name_localizations": {
+          "es-419": "establecer",
+          "de": "einstellen"
+        },
+        "description": "Set your birthday",
+        "description_localizations": {
+          "es-419": "Establece tu fecha de cumpleaños",
+          "de": "Deinen Geburtstag festlegen"
+        },
+        "options": {
+          "month": {
+            "name": "month",
+            "name_localizations": {
+              "es-419": "mes",
+              "de": "monat"
+            },
+            "description": "Birth month (1-12)",
+            "description_localizations": {
+              "es-419": "Mes de nacimiento (1-12)",
+              "de": "Geburtsmonat (1-12)"
+            }
+          },
+          "day": {
+            "name": "day",
+            "name_localizations": {
+              "es-419": "dia",
+              "de": "tag"
+            },
+            "description": "Birth day (1-31)",
+            "description_localizations": {
+              "es-419": "Día de nacimiento (1-31)",
+              "de": "Geburtstag (1-31)"
+            }
+          }
+        }
+      },
+      "info": {
+        "name": "info",
+        "name_localizations": {
+          "es-419": "info",
+          "de": "info"
+        },
+        "description": "View birthday information",
+        "description_localizations": {
+          "es-419": "Ver información de cumpleaños de un usuario",
+          "de": "Geburtstagsinformationen anzeigen"
+        },
+        "options": {
+          "user": {
+            "name": "user",
+            "name_localizations": {
+              "es-419": "usuario",
+              "de": "benutzer"
+            },
+            "description": "User to check birthday for",
+            "description_localizations": {
+              "es-419": "Usuario cuyo cumpleaños deseas consultar",
+              "de": "Benutzer, dessen Geburtstag geprüft werden soll"
+            }
+          }
+        }
+      },
+      "list": {
+        "name": "list",
+        "name_localizations": {
+          "es-419": "lista",
+          "de": "liste"
+        },
+        "description": "List all birthdays in the server",
+        "description_localizations": {
+          "es-419": "Listar todos los cumpleaños registrados en el servidor",
+          "de": "Alle im Server eingetragenen Geburtstage auflisten"
+        }
+      },
+      "remove": {
+        "name": "remove",
+        "name_localizations": {
+          "es-419": "eliminar",
+          "de": "entfernen"
+        },
+        "description": "Remove your birthday",
+        "description_localizations": {
+          "es-419": "Eliminar tu cumpleaños del registro",
+          "de": "Deinen Geburtstag aus dem Verzeichnis entfernen"
+        }
+      },
+      "next": {
+        "name": "next",
+        "name_localizations": {
+          "es-419": "proximos",
+          "de": "naechste"
+        },
+        "description": "Show upcoming birthdays",
+        "description_localizations": {
+          "es-419": "Mostrar los próximos cumpleaños en el servidor",
+          "de": "Bevorstehende Geburtstage im Server anzeigen"
+        }
+      },
+      "setchannel": {
+        "name": "setchannel",
+        "name_localizations": {
+          "es-419": "canal",
+          "de": "kanal"
+        },
+        "description": "Set or disable the channel for birthday announcements. (Manage Server required)",
+        "description_localizations": {
+          "es-419": "Establecer o desactivar el canal de anuncios de cumpleaños",
+          "de": "Kanal für Geburtstagsankuendigungen festlegen oder deaktivieren"
+        },
+        "options": {
+          "channel": {
+            "name": "channel",
+            "name_localizations": {
+              "es-419": "canal",
+              "de": "kanal"
+            },
+            "description": "The text channel for announcements. Leave empty to disable.",
+            "description_localizations": {
+              "es-419": "Canal de texto para anuncios. Dejar vacío para desactivar.",
+              "de": "Textkanal für Ankuendigungen. Leer lassen zum Deaktivieren."
+            }
+          }
+        }
+      }
+    }
+  },
+  "app-admin": {
+    "name": "app-admin",
+    "name_localizations": {
+      "es-419": "app-admin",
+      "de": "app-admin"
+    },
+    "description": "Manage staff applications",
+    "description_localizations": {
+      "es-419": "Administrar solicitudes y postulaciones del servidor",
+      "de": "Bewerbungen und Antraege des Servers verwalten"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Set up a new application",
+        "description_localizations": {
+          "es-419": "Configurar un nuevo formulario de postulación",
+          "de": "Ein neues Bewerbungsformular einrichten"
+        }
+      },
+      "review": {
+        "name": "review",
+        "name_localizations": {
+          "es-419": "revisar",
+          "de": "pruefen"
+        },
+        "description": "Approve or deny an application",
+        "description_localizations": {
+          "es-419": "Aprobar o rechazar una postulación",
+          "de": "Eine Bewerbung genehmigen oder ablehnen"
+        },
+        "options": {
+          "id": {
+            "name": "id",
+            "name_localizations": {
+              "es-419": "id",
+              "de": "id"
+            },
+            "description": "The application ID",
+            "description_localizations": {
+              "es-419": "El ID de la postulación a revisar",
+              "de": "Die ID der zu pruefenden Bewerbung"
+            }
+          }
+        }
+      },
+      "list": {
+        "name": "list",
+        "name_localizations": {
+          "es-419": "listar",
+          "de": "auflisten"
+        },
+        "description": "List all applications",
+        "description_localizations": {
+          "es-419": "Listar todas las postulaciones",
+          "de": "Alle Bewerbungen auflisten"
+        },
+        "options": {
+          "status": {
+            "name": "status",
+            "name_localizations": {
+              "es-419": "estado",
+              "de": "status"
+            },
+            "description": "Filter by status",
+            "description_localizations": {
+              "es-419": "Filtrar postulaciones por estado",
+              "de": "Bewerbungen nach Status filtern"
+            }
+          },
+          "role": {
+            "name": "role",
+            "name_localizations": {
+              "es-419": "rol",
+              "de": "rolle"
+            },
+            "description": "Filter by role ID",
+            "description_localizations": {
+              "es-419": "Filtrar por rol solicitado",
+              "de": "Nach gewünschter Rolle filtern"
+            }
+          },
+          "user": {
+            "name": "user",
+            "name_localizations": {
+              "es-419": "usuario",
+              "de": "benutzer"
+            },
+            "description": "Filter by user",
+            "description_localizations": {
+              "es-419": "Filtrar por usuario postulante",
+              "de": "Nach antragstellendem Benutzer filtern"
+            }
+          },
+          "limit": {
+            "name": "limit",
+            "name_localizations": {
+              "es-419": "limite",
+              "de": "limit"
+            },
+            "description": "Maximum number of applications to show (default: 10)",
+            "description_localizations": {
+              "es-419": "Cantidad máxima de postulaciones a mostrar",
+              "de": "Maximale Anzahl anzuzeigender Bewerbungen"
+            }
+          }
+        }
+      },
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Open the applications configuration dashboard",
+        "description_localizations": {
+          "es-419": "Abrir el panel de configuración de postulaciones",
+          "de": "Das Bewerbungskonfigurations-Dashboard oeffnen"
+        },
+        "options": {
+          "application": {
+            "name": "application",
+            "name_localizations": {
+              "es-419": "solicitud",
+              "de": "bewerbung"
+            },
+            "description": "Select an application to configure",
+            "description_localizations": {
+              "es-419": "Selecciona una postulación para configurar",
+              "de": "Bewerbung zum Konfigurieren auswaehlen"
+            }
+          }
+        }
+      }
+    }
+  },
+  "apply": {
+    "name": "apply",
+    "name_localizations": {
+      "es-419": "postular",
+      "de": "bewerben"
+    },
+    "description": "Manage role applications",
+    "description_localizations": {
+      "es-419": "Enviar y gestionar tus postulaciones de rol",
+      "de": "Rollenbewerbungen einreichen und verwalten"
+    },
+    "subcommands": {
+      "submit": {
+        "name": "submit",
+        "name_localizations": {
+          "es-419": "enviar",
+          "de": "einreichen"
+        },
+        "description": "Submit an application for a role",
+        "description_localizations": {
+          "es-419": "Completar y enviar una postulación para un rol",
+          "de": "Bewerbung für eine Rolle ausfüllen und senden"
+        },
+        "options": {
+          "application": {
+            "name": "application",
+            "name_localizations": {
+              "es-419": "solicitud",
+              "de": "bewerbung"
+            },
+            "description": "The application you want to submit",
+            "description_localizations": {
+              "es-419": "Tipo de postulación a presentar",
+              "de": "Die einzureichende Bewerbung"
+            }
+          }
+        }
+      },
+      "status": {
+        "name": "status",
+        "name_localizations": {
+          "es-419": "estado",
+          "de": "status"
+        },
+        "description": "Check the status of your application",
+        "description_localizations": {
+          "es-419": "Consultar el estado de tu postulación",
+          "de": "Status deiner Bewerbung abfragen"
+        },
+        "options": {
+          "id": {
+            "name": "id",
+            "name_localizations": {
+              "es-419": "id",
+              "de": "id"
+            },
+            "description": "Application ID (leave empty to see all)",
+            "description_localizations": {
+              "es-419": "ID de la postulación (vacío para ver todas)",
+              "de": "Bewerbungs-ID (leer lassen für alle)"
+            }
+          }
+        }
+      },
+      "list": {
+        "name": "list",
+        "name_localizations": {
+          "es-419": "lista",
+          "de": "liste"
+        },
+        "description": "List available applications to apply for",
+        "description_localizations": {
+          "es-419": "Ver postulaciones disponibles en el servidor",
+          "de": "Verfügbare Bewerbungen im Server auflisten"
+        }
+      }
+    }
+  },
+  "jointocreate": {
+    "name": "jointocreate",
+    "name_localizations": {
+      "es-419": "unir-para-crear",
+      "de": "beitreten-erstellen"
+    },
+    "description": "Manage Join to Create voice channels system.",
+    "description_localizations": {
+      "es-419": "Gestionar canales de voz temporales dinámicos",
+      "de": "Temporaere dynamische Sprachkanaele verwalten"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Set up a new Join to Create voice channel.",
+        "description_localizations": {
+          "es-419": "Crear un nuevo canal activador de voz temporal",
+          "de": "Einen neuen temporaeren Sprachkanal-Ausloeser erstellen"
+        },
+        "options": {
+          "category": {
+            "name": "category",
+            "name_localizations": {
+              "es-419": "categoria",
+              "de": "kategorie"
+            },
+            "description": "Category to create the channel in.",
+            "description_localizations": {
+              "es-419": "Categoría donde se crearán los canales",
+              "de": "Kategorie, in der Kanaele erstellt werden"
+            }
+          },
+          "channel_name": {
+            "name": "channel_name",
+            "name_localizations": {
+              "es-419": "nombre_canal",
+              "de": "kanalname"
+            },
+            "description": "Select a template for naming temporary voice channels.",
+            "description_localizations": {
+              "es-419": "Plantilla para el nombre de los canales de voz",
+              "de": "Vorlage für den Namen temporaerer Kanaele"
+            }
+          },
+          "user_limit": {
+            "name": "user_limit",
+            "name_localizations": {
+              "es-419": "limite_usuarios",
+              "de": "benutzerlimit"
+            },
+            "description": "Maximum number of users in temporary channels. (0 = unlimited)",
+            "description_localizations": {
+              "es-419": "Límite de usuarios por canal (0 = ilimitado)",
+              "de": "Benutzerlimit pro Kanal (0 = unbegrenzt)"
+            }
+          },
+          "bitrate": {
+            "name": "bitrate",
+            "name_localizations": {
+              "es-419": "tasa_bits",
+              "de": "bitrate"
+            },
+            "description": "Bitrate for temporary channels in kbps (8-96).",
+            "description_localizations": {
+              "es-419": "Calidad de audio en kbps (8-96)",
+              "de": "Audio-Bitrate in kbps (8-96)"
+            }
+          }
+        }
+      },
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Configure an existing Join to Create system.",
+        "description_localizations": {
+          "es-419": "Configurar un canal activador existente",
+          "de": "Einen bestehenden Ausloeserkanal konfigurieren"
+        },
+        "options": {
+          "trigger_channel": {
+            "name": "trigger_channel",
+            "name_localizations": {
+              "es-419": "canal_activador",
+              "de": "trigger_kanal"
+            },
+            "description": "The Join to Create trigger channel to configure.",
+            "description_localizations": {
+              "es-419": "Canal de voz activador a modificar",
+              "de": "Zu bearbeitender Ausloeser-Sprachkanal"
+            }
+          }
+        }
+      }
+    }
+  },
+  "logging": {
+    "name": "logging",
+    "name_localizations": {
+      "es-419": "registros",
+      "de": "protokoll"
+    },
+    "description": "Manage server logging — channels, filters, and event categories.",
+    "description_localizations": {
+      "es-419": "Gestionar canales de registro y eventos del servidor",
+      "de": "Protokollkanaele und Serverereignisse verwalten"
+    },
+    "subcommands": {
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Open the logging dashboard — set channels, filters, and toggle categories.",
+        "description_localizations": {
+          "es-419": "Abrir panel interactivo de registros y eventos",
+          "de": "Interaktives Protokoll- und Ereignis-Dashboard oeffnen"
+        }
+      },
+      "channel": {
+        "name": "channel",
+        "name_localizations": {
+          "es-419": "canal",
+          "de": "kanal"
+        },
+        "description": "Quick-set a log channel without opening the dashboard.",
+        "description_localizations": {
+          "es-419": "Asignar rápidamente un canal de registro directo",
+          "de": "Einen Protokollkanal schnell direkt zuweisen"
+        },
+        "options": {
+          "destination": {
+            "name": "destination",
+            "name_localizations": {
+              "es-419": "destino",
+              "de": "ziel"
+            },
+            "description": "Which log destination to configure.",
+            "description_localizations": {
+              "es-419": "Destino del registro a configurar",
+              "de": "Zu konfigurierendes Protokollziel"
+            }
+          },
+          "channel": {
+            "name": "channel",
+            "name_localizations": {
+              "es-419": "canal",
+              "de": "kanal"
+            },
+            "description": "The text channel for logs.",
+            "description_localizations": {
+              "es-419": "Canal de texto para enviar los registros",
+              "de": "Textkanal für Protokolleintraege"
+            }
+          },
+          "disable": {
+            "name": "disable",
+            "name_localizations": {
+              "es-419": "desactivar",
+              "de": "deaktivieren"
+            },
+            "description": "Set to True to clear this log channel.",
+            "description_localizations": {
+              "es-419": "Marcar True para desactivar este registro",
+              "de": "Auf True setzen, um dieses Protokoll zu deaktivieren"
+            }
+          }
+        }
+      }
+    }
+  },
+  "reactroles": {
+    "name": "reactroles",
+    "name_localizations": {
+      "es-419": "roles-reaccion",
+      "de": "reaktionsrollen"
+    },
+    "description": "Manage reaction role assignments",
+    "description_localizations": {
+      "es-419": "Gestionar paneles de autorroles por reacción",
+      "de": "Reaktionsrollen-Panels und Zuweisungen verwalten"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Set up a new reaction role panel",
+        "description_localizations": {
+          "es-419": "Crear un nuevo panel de roles por reacción",
+          "de": "Ein neues Reaktionsrollen-Panel einrichten"
+        },
+        "options": {
+          "channel": {
+            "name": "channel",
+            "name_localizations": {
+              "es-419": "canal",
+              "de": "kanal"
+            },
+            "description": "The channel to send the reaction role message to",
+            "description_localizations": {
+              "es-419": "Canal donde enviar el panel de roles",
+              "de": "Kanal, an den das Rollenpanel gesendet wird"
+            }
+          },
+          "title": {
+            "name": "title",
+            "name_localizations": {
+              "es-419": "titulo",
+              "de": "titel"
+            },
+            "description": "Title for the reaction role panel",
+            "description_localizations": {
+              "es-419": "Título del panel de roles",
+              "de": "Titel des Reaktionsrollen-Panels"
+            }
+          },
+          "description": {
+            "name": "description",
+            "name_localizations": {
+              "es-419": "descripcion",
+              "de": "beschreibung"
+            },
+            "description": "Description for the reaction role panel",
+            "description_localizations": {
+              "es-419": "Descripción del panel de roles",
+              "de": "Beschreibung des Reaktionsrollen-Panels"
+            }
+          },
+          "role1": {
+            "name": "role1",
+            "name_localizations": {
+              "es-419": "rol1",
+              "de": "rolle1"
+            },
+            "description": "First role to add",
+            "description_localizations": {
+              "es-419": "Primer rol a agregar al panel",
+              "de": "Erste hinzuzufuegende Rolle"
+            }
+          },
+          "role2": {
+            "name": "role2",
+            "name_localizations": {
+              "es-419": "rol2",
+              "de": "rolle2"
+            },
+            "description": "Second role to add",
+            "description_localizations": {
+              "es-419": "Segundo rol a agregar",
+              "de": "Zweite hinzuzufuegende Rolle"
+            }
+          },
+          "role3": {
+            "name": "role3",
+            "name_localizations": {
+              "es-419": "rol3",
+              "de": "rolle3"
+            },
+            "description": "Third role to add",
+            "description_localizations": {
+              "es-419": "Tercer rol a agregar",
+              "de": "Dritte hinzuzufuegende Rolle"
+            }
+          },
+          "role4": {
+            "name": "role4",
+            "name_localizations": {
+              "es-419": "rol4",
+              "de": "rolle4"
+            },
+            "description": "Fourth role to add",
+            "description_localizations": {
+              "es-419": "Cuarto rol a agregar",
+              "de": "Vierte hinzuzufuegende Rolle"
+            }
+          },
+          "role5": {
+            "name": "role5",
+            "name_localizations": {
+              "es-419": "rol5",
+              "de": "rolle5"
+            },
+            "description": "Fifth role to add",
+            "description_localizations": {
+              "es-419": "Quinto rol a agregar",
+              "de": "Fuenfte hinzuzufuegende Rolle"
+            }
+          }
+        }
+      },
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Manage and configure your reaction role panels",
+        "description_localizations": {
+          "es-419": "Gestionar y editar paneles existentes",
+          "de": "Bestehende Reaktionsrollen-Panels verwalten"
+        },
+        "options": {
+          "panel": {
+            "name": "panel",
+            "name_localizations": {
+              "es-419": "panel",
+              "de": "panel"
+            },
+            "description": "Select a reaction role panel to manage",
+            "description_localizations": {
+              "es-419": "Seleccionar panel a gestionar",
+              "de": "Zu verwaltendes Panel auswaehlen"
+            }
+          }
+        }
+      }
+    }
+  },
+  "search": {
+    "name": "search",
+    "name_localizations": {
+      "es-419": "buscar",
+      "de": "suchen"
+    },
+    "description": "Search the web and dictionaries",
+    "description_localizations": {
+      "es-419": "Buscar información en la web y diccionarios",
+      "de": "Im Web und in Woerterbuechern suchen"
+    },
+    "subcommands": {
+      "define": {
+        "name": "define",
+        "name_localizations": {
+          "es-419": "definir",
+          "de": "definieren"
+        },
+        "description": "Look up a word definition",
+        "description_localizations": {
+          "es-419": "Buscar la definición de una palabra",
+          "de": "Die Definition eines Wortes nachschlagen"
+        },
+        "options": {
+          "word": {
+            "name": "word",
+            "name_localizations": {
+              "es-419": "palabra",
+              "de": "wort"
+            },
+            "description": "The word to look up",
+            "description_localizations": {
+              "es-419": "Palabra a buscar",
+              "de": "Nachzuschlagendes Wort"
+            }
+          }
+        }
+      },
+      "google": {
+        "name": "google",
+        "name_localizations": {
+          "es-419": "google",
+          "de": "google"
+        },
+        "description": "Search Google",
+        "description_localizations": {
+          "es-419": "Buscar contenido en Google",
+          "de": "Auf Google suchen"
+        },
+        "options": {
+          "query": {
+            "name": "query",
+            "name_localizations": {
+              "es-419": "consulta",
+              "de": "suchbegriff"
+            },
+            "description": "What would you like to search for?",
+            "description_localizations": {
+              "es-419": "¿Qué deseas buscar en Google?",
+              "de": "Wonach moechtest du suchen?"
+            }
+          }
+        }
+      },
+      "urban": {
+        "name": "urban",
+        "name_localizations": {
+          "es-419": "urban",
+          "de": "urban"
+        },
+        "description": "Search Urban Dictionary for definitions",
+        "description_localizations": {
+          "es-419": "Buscar términos de jerga en Urban Dictionary",
+          "de": "Begriffe im Urban Dictionary suchen"
+        },
+        "options": {
+          "term": {
+            "name": "term",
+            "name_localizations": {
+              "es-419": "termino",
+              "de": "begriff"
+            },
+            "description": "The term to look up on Urban Dictionary",
+            "description_localizations": {
+              "es-419": "Término a buscar",
+              "de": "Zu suchender Begriff"
+            }
+          }
+        }
+      }
+    }
+  },
+  "serverstats": {
+    "name": "serverstats",
+    "name_localizations": {
+      "es-419": "estadisticas-servidor",
+      "de": "serverstatistiken"
+    },
+    "description": "Manage server statistics that track member counts and channel data",
+    "description_localizations": {
+      "es-419": "Contadores dinámicos de miembros y canales del servidor",
+      "de": "Dynamische Zaehler für Mitglieder und Kanaele im Server"
+    },
+    "subcommands": {
+      "create": {
+        "name": "create",
+        "name_localizations": {
+          "es-419": "crear",
+          "de": "erstellen"
+        },
+        "description": "Create a new statistics tracker channel in a category",
+        "description_localizations": {
+          "es-419": "Crear un canal contador de estadísticas",
+          "de": "Einen Statistik-Zaehlerkanal erstellen"
+        },
+        "options": {
+          "type": {
+            "name": "type",
+            "name_localizations": {
+              "es-419": "tipo",
+              "de": "typ"
+            },
+            "description": "The type of statistics to track",
+            "description_localizations": {
+              "es-419": "Tipo de estadísticas a contabilizar",
+              "de": "Art der zu zaehlenden Statistik"
+            }
+          },
+          "channel_type": {
+            "name": "channel_type",
+            "name_localizations": {
+              "es-419": "tipo_canal",
+              "de": "kanaltyp"
+            },
+            "description": "The channel type to create for this tracker",
+            "description_localizations": {
+              "es-419": "Tipo de canal (voz o texto)",
+              "de": "Kanaltyp (Sprachkanal oder Textkanal)"
+            }
+          },
+          "category": {
+            "name": "category",
+            "name_localizations": {
+              "es-419": "categoria",
+              "de": "kategorie"
+            },
+            "description": "The category where the statistics tracker channel will be created",
+            "description_localizations": {
+              "es-419": "Categoría donde se ubicará el contador",
+              "de": "Kategorie für den Zaehlerkanal"
+            }
+          }
+        }
+      },
+      "list": {
+        "name": "list",
+        "name_localizations": {
+          "es-419": "lista",
+          "de": "liste"
+        },
+        "description": "List all statistics trackers for this server",
+        "description_localizations": {
+          "es-419": "Listar todos los contadores activos",
+          "de": "Alle aktiven Zaehlerkanaele auflisten"
+        }
+      },
+      "update": {
+        "name": "update",
+        "name_localizations": {
+          "es-419": "actualizar",
+          "de": "aktualisieren"
+        },
+        "description": "Update an existing statistics tracker",
+        "description_localizations": {
+          "es-419": "Actualizar la configuración de un contador",
+          "de": "Konfiguration eines Zaehlerkanals anpassen"
+        },
+        "options": {
+          "counter-id": {
+            "name": "counter-id",
+            "name_localizations": {
+              "es-419": "id_contador",
+              "de": "zaehler_id"
+            },
+            "description": "The ID of the tracker to update",
+            "description_localizations": {
+              "es-419": "ID del contador a modificar",
+              "de": "ID des zu aendernden Zaehlers"
+            }
+          },
+          "type": {
+            "name": "type",
+            "name_localizations": {
+              "es-419": "tipo",
+              "de": "typ"
+            },
+            "description": "The new tracker type",
+            "description_localizations": {
+              "es-419": "Nuevo tipo de estadísticas a medir",
+              "de": "Neuer Typ der Statistik"
+            }
+          }
+        }
+      },
+      "delete": {
+        "name": "delete",
+        "name_localizations": {
+          "es-419": "eliminar",
+          "de": "loeschen"
+        },
+        "description": "Delete an existing statistics tracker",
+        "description_localizations": {
+          "es-419": "Eliminar un canal contador de estadísticas",
+          "de": "Einen Statistik-Zaehlerkanal loeschen"
+        },
+        "options": {
+          "counter-id": {
+            "name": "counter-id",
+            "name_localizations": {
+              "es-419": "id_contador",
+              "de": "zaehler_id"
+            },
+            "description": "The ID of the tracker to delete",
+            "description_localizations": {
+              "es-419": "ID del contador a eliminar",
+              "de": "ID des zu loeschenden Zaehlers"
+            }
+          }
+        }
+      }
+    }
+  },
+  "autorole": {
+    "name": "autorole",
+    "name_localizations": {
+      "es-419": "autorol",
+      "de": "autorolle"
+    },
+    "description": "Configure automatic role assignment for new members",
+    "description_localizations": {
+      "es-419": "Asignar roles automáticos a los nuevos miembros al unirse",
+      "de": "Automatische Rollenvergabe für neue Mitglieder konfigurieren"
+    },
+    "subcommands": {
+      "add": {
+        "name": "add",
+        "name_localizations": {
+          "es-419": "anadir",
+          "de": "hinzufuegen"
+        },
+        "description": "Add an auto-role",
+        "description_localizations": {
+          "es-419": "Añadir un rol automático para nuevos miembros",
+          "de": "Eine Autorolle für neue Mitglieder hinzufuegen"
+        },
+        "options": {
+          "role": {
+            "name": "role",
+            "name_localizations": {
+              "es-419": "rol",
+              "de": "rolle"
+            },
+            "description": "The role to automatically assign",
+            "description_localizations": {
+              "es-419": "El rol que se asignará automáticamente",
+              "de": "Die automatisch zuzuweisende Rolle"
+            }
+          }
+        }
+      },
+      "remove": {
+        "name": "remove",
+        "name_localizations": {
+          "es-419": "eliminar",
+          "de": "entfernen"
+        },
+        "description": "Remove an auto-role",
+        "description_localizations": {
+          "es-419": "Eliminar un rol automático",
+          "de": "Eine Autorolle entfernen"
+        },
+        "options": {
+          "role": {
+            "name": "role",
+            "name_localizations": {
+              "es-419": "rol",
+              "de": "rolle"
+            },
+            "description": "The auto-role to remove",
+            "description_localizations": {
+              "es-419": "El rol a quitar de la lista automática",
+              "de": "Die zu entfernende Autorolle"
+            }
+          }
+        }
+      },
+      "list": {
+        "name": "list",
+        "name_localizations": {
+          "es-419": "lista",
+          "de": "liste"
+        },
+        "description": "List configured auto-roles",
+        "description_localizations": {
+          "es-419": "Ver roles automáticos configurados",
+          "de": "Konfigurierte Autorollen auflisten"
+        }
+      }
+    }
+  },
+  "goodbye": {
+    "name": "goodbye",
+    "name_localizations": {
+      "es-419": "despedida",
+      "de": "abschied"
+    },
+    "description": "Configure leave messages when members depart",
+    "description_localizations": {
+      "es-419": "Configurar mensajes de despedida cuando alguien se va",
+      "de": "Abschiedsnachrichten beim Verlassen von Mitgliedern konfigurieren"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Set up goodbye messages",
+        "description_localizations": {
+          "es-419": "Configurar canal y mensaje de despedida",
+          "de": "Kanal und Abschiedsnachricht einrichten"
+        }
+      }
+    }
+  },
+  "greet": {
+    "name": "greet",
+    "name_localizations": {
+      "es-419": "saludo",
+      "de": "begruessung"
+    },
+    "description": "Configure DM greetings for new server members",
+    "description_localizations": {
+      "es-419": "Configurar saludo por mensaje directo a nuevos miembros",
+      "de": "Private Begruessungsnachrichten für neue Mitglieder konfigurieren"
+    },
+    "subcommands": {
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Open greeting configuration dashboard",
+        "description_localizations": {
+          "es-419": "Abrir panel de saludos por mensaje directo",
+          "de": "Dashboard für Begruessungsnachrichten oeffnen"
+        }
+      }
+    }
+  },
+  "welcome": {
+    "name": "welcome",
+    "name_localizations": {
+      "es-419": "bienvenida",
+      "de": "willkommen"
+    },
+    "description": "Configure server welcome messages and cards",
+    "description_localizations": {
+      "es-419": "Configurar mensajes y tarjetas de bienvenida en canales",
+      "de": "Willkommensnachrichten und -karten in Kanaelen konfigurieren"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Set up welcome messages",
+        "description_localizations": {
+          "es-419": "Configurar canal y tarjeta de bienvenida",
+          "de": "Kanal und Willkommenskarte einrichten"
+        }
+      }
+    }
+  },
+  "autoverify": {
+    "name": "autoverify",
+    "name_localizations": {
+      "es-419": "autoverificar",
+      "de": "autoverifizieren"
+    },
+    "description": "Configure automatic member verification on join",
+    "description_localizations": {
+      "es-419": "Configurar verificación automática de miembros",
+      "de": "Automatische Verifizierung für neue Mitglieder konfigurieren"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Set up automatic verification",
+        "description_localizations": {
+          "es-419": "Configurar reglas de autoverificación",
+          "de": "Regeln für automatische Verifizierung einrichten"
+        }
+      },
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Open autoverify dashboard",
+        "description_localizations": {
+          "es-419": "Abrir panel de autoverificación",
+          "de": "Autoverifizierungs-Dashboard oeffnen"
+        }
+      }
+    }
+  },
+  "verification": {
+    "name": "verification",
+    "name_localizations": {
+      "es-419": "verificacion",
+      "de": "verifizierung"
+    },
+    "description": "Manage interactive server verification panels",
+    "description_localizations": {
+      "es-419": "Gestionar paneles interactivos de verificación",
+      "de": "Interaktive Verifizierungs-Panels verwalten"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Set up verification system",
+        "description_localizations": {
+          "es-419": "Crear panel de verificación con botón o captcha",
+          "de": "Verifizierungs-Panel mit Button oder Captcha erstellen"
+        }
+      },
+      "remove": {
+        "name": "remove",
+        "name_localizations": {
+          "es-419": "eliminar",
+          "de": "entfernen"
+        },
+        "description": "Remove verification panel",
+        "description_localizations": {
+          "es-419": "Eliminar el panel de verificación",
+          "de": "Verifizierungs-Panel entfernen"
+        }
+      },
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Open verification dashboard",
+        "description_localizations": {
+          "es-419": "Abrir panel de control de verificación",
+          "de": "Verifizierungs-Dashboard oeffnen"
+        }
+      }
+    }
+  },
+  "verify": {
+    "name": "verify",
+    "name_localizations": {
+      "es-419": "verificar",
+      "de": "verifizieren"
+    },
+    "description": "Verify yourself in the server",
+    "description_localizations": {
+      "es-419": "Verifícate en el servidor para obtener acceso completo",
+      "de": "Dich im Server verifizieren, um vollen Zugriff zu erhalten"
+    }
+  },
+  "claim": {
+    "name": "claim",
+    "name_localizations": {
+      "es-419": "reclamar",
+      "de": "uebernehmen"
+    },
+    "description": "Claim responsibility for handling this support ticket",
+    "description_localizations": {
+      "es-419": "Asignarte la atención de este ticket de soporte",
+      "de": "Die Bearbeitung dieses Support-Tickets uebernehmen"
+    }
+  },
+  "close": {
+    "name": "close",
+    "name_localizations": {
+      "es-419": "cerrar",
+      "de": "schliessen"
+    },
+    "description": "Close the current support ticket",
+    "description_localizations": {
+      "es-419": "Cerrar el ticket de soporte actual",
+      "de": "Das aktuelle Support-Ticket schliessen"
+    },
+    "options": {
+      "reason": {
+        "name": "reason",
+        "name_localizations": {
+          "es-419": "razon",
+          "de": "grund"
+        },
+        "description": "Reason for closing the ticket",
+        "description_localizations": {
+          "es-419": "Motivo del cierre del ticket",
+          "de": "Grund für das Schliessen des Tickets"
+        }
+      }
+    }
+  },
+  "priority": {
+    "name": "priority",
+    "name_localizations": {
+      "es-419": "prioridad",
+      "de": "prioritaet"
+    },
+    "description": "Set ticket priority level",
+    "description_localizations": {
+      "es-419": "Ajustar el nivel de prioridad del ticket",
+      "de": "Prioritaetsstufe des Tickets anpassen"
+    },
+    "options": {
+      "level": {
+        "name": "level",
+        "name_localizations": {
+          "es-419": "nivel",
+          "de": "stufe"
+        },
+        "description": "Priority level (Low, Medium, High, Urgent)",
+        "description_localizations": {
+          "es-419": "Nivel de prioridad (Baja, Media, Alta, Urgente)",
+          "de": "Prioritaetsstufe (Niedrig, Mittel, Hoch, Dringend)"
+        }
+      }
+    }
+  },
+  "ticket": {
+    "name": "ticket",
+    "name_localizations": {
+      "es-419": "ticket",
+      "de": "ticket"
+    },
+    "description": "Manage server ticket system",
+    "description_localizations": {
+      "es-419": "Gestionar el sistema de tickets de soporte",
+      "de": "Support-Ticket-System des Servers verwalten"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Set up a new ticket panel",
+        "description_localizations": {
+          "es-419": "Crear un nuevo panel de tickets",
+          "de": "Ein neues Ticket-Panel einrichten"
+        }
+      },
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Open tickets dashboard",
+        "description_localizations": {
+          "es-419": "Abrir panel de control de tickets",
+          "de": "Ticket-Dashboard oeffnen"
+        }
+      }
+    }
+  },
+  "gcreate": {
+    "name": "gcreate",
+    "name_localizations": {
+      "es-419": "sorteo-crear",
+      "de": "gewinnspiel-erstellen"
+    },
+    "description": "Create an interactive giveaway",
+    "description_localizations": {
+      "es-419": "Crear un sorteo interactivo para el servidor",
+      "de": "Ein interaktives Gewinnspiel für den Server erstellen"
+    },
+    "options": {
+      "duration": {
+        "name": "duration",
+        "name_localizations": {
+          "es-419": "duracion",
+          "de": "dauer"
+        },
+        "description": "Giveaway duration (e.g., 10m, 1h, 1d)",
+        "description_localizations": {
+          "es-419": "Duración del sorteo (ej. 10m, 1h, 1d)",
+          "de": "Dauer des Gewinnspiels (z.B. 10m, 1h, 1d)"
+        }
+      },
+      "winners": {
+        "name": "winners",
+        "name_localizations": {
+          "es-419": "ganadores",
+          "de": "gewinner"
+        },
+        "description": "Number of winners",
+        "description_localizations": {
+          "es-419": "Cantidad de ganadores a elegir",
+          "de": "Anzahl der auszulsenden Gewinner"
+        }
+      },
+      "prize": {
+        "name": "prize",
+        "name_localizations": {
+          "es-419": "premio",
+          "de": "preis"
+        },
+        "description": "Prize for the giveaway",
+        "description_localizations": {
+          "es-419": "Premio que recibirán los ganadores",
+          "de": "Preis, den die Gewinner erhalten"
+        }
+      },
+      "channel": {
+        "name": "channel",
+        "name_localizations": {
+          "es-419": "canal",
+          "de": "kanal"
+        },
+        "description": "Channel to host the giveaway in",
+        "description_localizations": {
+          "es-419": "Canal donde se publicará el sorteo",
+          "de": "Kanal, in dem das Gewinnspiel stattfindet"
+        }
+      }
+    }
+  },
+  "gdelete": {
+    "name": "gdelete",
+    "name_localizations": {
+      "es-419": "sorteo-eliminar",
+      "de": "gewinnspiel-loeschen"
+    },
+    "description": "Delete an active or ended giveaway",
+    "description_localizations": {
+      "es-419": "Eliminar un sorteo activo o finalizado",
+      "de": "Ein aktives oder beendetes Gewinnspiel loeschen"
+    },
+    "options": {
+      "message_id": {
+        "name": "message_id",
+        "name_localizations": {
+          "es-419": "id_mensaje",
+          "de": "nachrichten_id"
+        },
+        "description": "The ID of the giveaway message",
+        "description_localizations": {
+          "es-419": "ID del mensaje del sorteo",
+          "de": "Nachrichten-ID des Gewinnspiels"
+        }
+      }
+    }
+  },
+  "gend": {
+    "name": "gend",
+    "name_localizations": {
+      "es-419": "sorteo-terminar",
+      "de": "gewinnspiel-beenden"
+    },
+    "description": "Immediately end an active giveaway",
+    "description_localizations": {
+      "es-419": "Finalizar de inmediato un sorteo activo",
+      "de": "Ein aktives Gewinnspiel sofort beenden"
+    },
+    "options": {
+      "message_id": {
+        "name": "message_id",
+        "name_localizations": {
+          "es-419": "id_mensaje",
+          "de": "nachrichten_id"
+        },
+        "description": "The ID of the giveaway message",
+        "description_localizations": {
+          "es-419": "ID del mensaje del sorteo a finalizar",
+          "de": "Nachrichten-ID des zu beendenden Gewinnspiels"
+        }
+      }
+    }
+  },
+  "greroll": {
+    "name": "greroll",
+    "name_localizations": {
+      "es-419": "sorteo-resortear",
+      "de": "gewinnspiel-auslosen"
+    },
+    "description": "Reroll winners for an ended giveaway",
+    "description_localizations": {
+      "es-419": "Elegir nuevos ganadores para un sorteo terminado",
+      "de": "Neue Gewinner für ein beendetes Gewinnspiel ziehen"
+    },
+    "options": {
+      "message_id": {
+        "name": "message_id",
+        "name_localizations": {
+          "es-419": "id_mensaje",
+          "de": "nachrichten_id"
+        },
+        "description": "The ID of the giveaway message",
+        "description_localizations": {
+          "es-419": "ID del mensaje del sorteo",
+          "de": "Nachrichten-ID des Gewinnspiels"
+        }
+      }
+    }
+  },
+  "leaderboard": {
+    "name": "leaderboard",
+    "name_localizations": {
+      "es-419": "tabla-niveles",
+      "de": "rangliste"
+    },
+    "description": "Display top users by XP and Level",
+    "description_localizations": {
+      "es-419": "Ver tabla de clasificación de experiencia y niveles",
+      "de": "Rangliste der besten Benutzer nach XP und Level anzeigen"
+    },
+    "options": {
+      "page": {
+        "name": "page",
+        "name_localizations": {
+          "es-419": "pagina",
+          "de": "seite"
+        },
+        "description": "Leaderboard page number",
+        "description_localizations": {
+          "es-419": "Número de página de la tabla",
+          "de": "Seitennummer der Rangliste"
+        }
+      }
+    }
+  },
+  "level": {
+    "name": "level",
+    "name_localizations": {
+      "es-419": "nivel-admin",
+      "de": "level-admin"
+    },
+    "description": "Configure server leveling system",
+    "description_localizations": {
+      "es-419": "Configurar el sistema de niveles del servidor",
+      "de": "Levelsystem des Servers konfigurieren"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Set up level rewards and channels",
+        "description_localizations": {
+          "es-419": "Configurar recompensas de rol y canal de anuncios",
+          "de": "Rollenbelohnungen und Ankuendigungskanal einrichten"
+        }
+      },
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Open leveling dashboard",
+        "description_localizations": {
+          "es-419": "Abrir panel de configuración de niveles",
+          "de": "Level-Dashboard oeffnen"
+        }
+      }
+    }
+  },
+  "leveladd": {
+    "name": "leveladd",
+    "name_localizations": {
+      "es-419": "nivel-anadir",
+      "de": "level-hinzufuegen"
+    },
+    "description": "Add levels to a user",
+    "description_localizations": {
+      "es-419": "Añadir niveles de experiencia a un usuario",
+      "de": "Einem Benutzer Level hinzufuegen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "The user to receive levels",
+        "description_localizations": {
+          "es-419": "Usuario que recibirá los niveles",
+          "de": "Benutzer, der Level erhalten soll"
+        }
+      },
+      "levels": {
+        "name": "levels",
+        "name_localizations": {
+          "es-419": "niveles",
+          "de": "level"
+        },
+        "description": "Number of levels to add",
+        "description_localizations": {
+          "es-419": "Cantidad de niveles a añadir",
+          "de": "Anzahl der hinzuzufuegenden Level"
+        }
+      }
+    }
+  },
+  "levelremove": {
+    "name": "levelremove",
+    "name_localizations": {
+      "es-419": "nivel-quitar",
+      "de": "level-entfernen"
+    },
+    "description": "Remove levels from a user",
+    "description_localizations": {
+      "es-419": "Quitar niveles a un usuario",
+      "de": "Einem Benutzer Level abziehen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "The user to remove levels from",
+        "description_localizations": {
+          "es-419": "Usuario al que se le quitarán niveles",
+          "de": "Benutzer, dem Level abgezogen werden"
+        }
+      },
+      "levels": {
+        "name": "levels",
+        "name_localizations": {
+          "es-419": "niveles",
+          "de": "level"
+        },
+        "description": "Number of levels to remove",
+        "description_localizations": {
+          "es-419": "Cantidad de niveles a quitar",
+          "de": "Anzahl der abzuziehenden Level"
+        }
+      }
+    }
+  },
+  "levelset": {
+    "name": "levelset",
+    "name_localizations": {
+      "es-419": "nivel-establecer",
+      "de": "level-setzen"
+    },
+    "description": "Set a user's exact level",
+    "description_localizations": {
+      "es-419": "Fijar el nivel exacto de un usuario",
+      "de": "Das genaue Level eines Benutzers festlegen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "The user to set level for",
+        "description_localizations": {
+          "es-419": "Usuario cuyo nivel deseas fijar",
+          "de": "Benutzer, dessen Level gesetzt wird"
+        }
+      },
+      "level": {
+        "name": "level",
+        "name_localizations": {
+          "es-419": "nivel",
+          "de": "level"
+        },
+        "description": "The level to assign",
+        "description_localizations": {
+          "es-419": "Nivel que se le asignará",
+          "de": "Zuzuweisendes Level"
+        }
+      }
+    }
+  },
+  "rank": {
+    "name": "rank",
+    "name_localizations": {
+      "es-419": "rango",
+      "de": "rang"
+    },
+    "description": "View your or another user's rank card",
+    "description_localizations": {
+      "es-419": "Ver tu tarjeta de rango, nivel y experiencia",
+      "de": "Deine Rangkarte mit Level und XP anzeigen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "The user to check rank for",
+        "description_localizations": {
+          "es-419": "Usuario cuyo rango deseas consultar",
+          "de": "Benutzer, dessen Rang geprüft werden soll"
+        }
+      }
+    }
+  },
+  "count": {
+    "name": "count",
+    "name_localizations": {
+      "es-419": "conteo",
+      "de": "zaehlen"
+    },
+    "description": "Counting game management",
+    "description_localizations": {
+      "es-419": "Gestión del juego de conteo en el servidor",
+      "de": "Verwaltung des Zaehlspiels im Server"
+    },
+    "subcommands": {
+      "setup": {
+        "name": "setup",
+        "name_localizations": {
+          "es-419": "configurar",
+          "de": "einrichten"
+        },
+        "description": "Configure counting channel",
+        "description_localizations": {
+          "es-419": "Establecer canal para el juego de conteo",
+          "de": "Kanal für das Zaehlspiel festlegen"
+        },
+        "options": {
+          "channel": {
+            "name": "channel",
+            "name_localizations": {
+              "es-419": "canal",
+              "de": "kanal"
+            },
+            "description": "Channel for the game",
+            "description_localizations": {
+              "es-419": "Canal donde se jugará",
+              "de": "Kanal für das Spiel"
+            }
+          }
+        }
+      },
+      "disable": {
+        "name": "disable",
+        "name_localizations": {
+          "es-419": "desactivar",
+          "de": "deaktivieren"
+        },
+        "description": "Disable counting game",
+        "description_localizations": {
+          "es-419": "Desactivar el juego de conteo",
+          "de": "Das Zaehlspiel deaktivieren"
+        }
+      },
+      "status": {
+        "name": "status",
+        "name_localizations": {
+          "es-419": "estado",
+          "de": "status"
+        },
+        "description": "Check current count status",
+        "description_localizations": {
+          "es-419": "Ver el número y récord actual",
+          "de": "Aktuellen Zaehlerstand und Rekord pruefen"
+        }
+      },
+      "reset": {
+        "name": "reset",
+        "name_localizations": {
+          "es-419": "reiniciar",
+          "de": "zuruecksetzen"
+        },
+        "description": "Reset counting stats",
+        "description_localizations": {
+          "es-419": "Reiniciar las estadísticas del juego de conteo",
+          "de": "Zaehlspiel-Statistiken zuruecksetzen"
+        }
+      },
+      "leaderboard": {
+        "name": "leaderboard",
+        "name_localizations": {
+          "es-419": "tabla",
+          "de": "rangliste"
+        },
+        "description": "View top counters",
+        "description_localizations": {
+          "es-419": "Ver mejores contadores del servidor",
+          "de": "Beste Zaehler des Servers anzeigen"
+        }
+      }
+    }
+  },
+  "fight": {
+    "name": "fight",
+    "name_localizations": {
+      "es-419": "pelear",
+      "de": "kaempfen"
+    },
+    "description": "Fight against another member in an interactive battle",
+    "description_localizations": {
+      "es-419": "Desafía a otro miembro en una batalla por turnos",
+      "de": "Kaempfe gegen ein anderes Mitglied in einer rundenbasierten Schlacht"
+    },
+    "options": {
+      "opponent": {
+        "name": "opponent",
+        "name_localizations": {
+          "es-419": "oponente",
+          "de": "gegner"
+        },
+        "description": "The member you want to fight",
+        "description_localizations": {
+          "es-419": "El miembro al que deseas retar",
+          "de": "Das Mitglied, das du herausfordern moechtest"
+        }
+      }
+    }
+  },
+  "flip": {
+    "name": "flip",
+    "name_localizations": {
+      "es-419": "moneda",
+      "de": "muenze"
+    },
+    "description": "Flip a coin (Heads or Tails)",
+    "description_localizations": {
+      "es-419": "Lanza una moneda al aire (Cara o Cruz)",
+      "de": "Wirf eine Muenze (Kopf oder Zahl)"
+    },
+    "options": {
+      "prediction": {
+        "name": "prediction",
+        "name_localizations": {
+          "es-419": "prediccion",
+          "de": "vorhersage"
+        },
+        "description": "Predict heads or tails",
+        "description_localizations": {
+          "es-419": "Apostar por cara o cruz",
+          "de": "Kopf oder Zahl vorhersagen"
+        }
+      }
+    }
+  },
+  "roll": {
+    "name": "roll",
+    "name_localizations": {
+      "es-419": "dado",
+      "de": "wuerfeln"
+    },
+    "description": "Roll dice with custom sides",
+    "description_localizations": {
+      "es-419": "Tira un dado con cantidad personalizada de caras",
+      "de": "Würfle mit benutzerdefinierter Seitenanzahl"
+    },
+    "options": {
+      "sides": {
+        "name": "sides",
+        "name_localizations": {
+          "es-419": "caras",
+          "de": "seiten"
+        },
+        "description": "Number of sides on the dice (default: 6)",
+        "description_localizations": {
+          "es-419": "Cantidad de caras del dado (por defecto: 6)",
+          "de": "Anzahl der Wuerfelseiten (Standard: 6)"
+        }
+      }
+    }
+  },
+  "join": {
+    "name": "join",
+    "name_localizations": {
+      "es-419": "unirse",
+      "de": "beitreten"
+    },
+    "description": "Summon the bot to your current voice channel",
+    "description_localizations": {
+      "es-419": "Invita al bot a tu canal de voz actual",
+      "de": "Den Bot in deinen aktuellen Sprachkanal rufen"
+    }
+  },
+  "music": {
+    "name": "music",
+    "name_localizations": {
+      "es-419": "musica",
+      "de": "musik"
+    },
+    "description": "Music player control commands",
+    "description_localizations": {
+      "es-419": "Comandos de control del reproductor de música",
+      "de": "Befehle zur Musikwiedergabe-Steuerung"
+    },
+    "subcommands": {
+      "247": {
+        "name": "247",
+        "name_localizations": {
+          "es-419": "247",
+          "de": "247"
+        },
+        "description": "Toggle 24/7 staying in voice channel",
+        "description_localizations": {
+          "es-419": "Activar o desactivar modo 24/7 en el canal de voz",
+          "de": "24/7-Modus im Sprachkanal umschalten"
+        }
+      },
+      "pause": {
+        "name": "pause",
+        "name_localizations": {
+          "es-419": "pausar",
+          "de": "pausieren"
+        },
+        "description": "Pause current playback",
+        "description_localizations": {
+          "es-419": "Pausar la pista en reproducción",
+          "de": "Aktuelle Wiedergabe anhalten"
+        }
+      },
+      "resume": {
+        "name": "resume",
+        "name_localizations": {
+          "es-419": "reanudar",
+          "de": "fortsetzen"
+        },
+        "description": "Resume paused playback",
+        "description_localizations": {
+          "es-419": "Reanudar la música pausada",
+          "de": "Pausierte Musik fortsetzen"
+        }
+      },
+      "skip": {
+        "name": "skip",
+        "name_localizations": {
+          "es-419": "saltar",
+          "de": "ueberspringen"
+        },
+        "description": "Skip current song",
+        "description_localizations": {
+          "es-419": "Saltar a la siguiente canción",
+          "de": "Aktuellen Titel ueberspringen"
+        }
+      },
+      "stop": {
+        "name": "stop",
+        "name_localizations": {
+          "es-419": "detener",
+          "de": "stoppen"
+        },
+        "description": "Stop music and clear the queue",
+        "description_localizations": {
+          "es-419": "Detener la música y vaciar la cola",
+          "de": "Musik anhalten und Warteschlange leeren"
+        }
+      },
+      "shuffle": {
+        "name": "shuffle",
+        "name_localizations": {
+          "es-419": "aleatorio",
+          "de": "mischen"
+        },
+        "description": "Shuffle the music queue",
+        "description_localizations": {
+          "es-419": "Mezclar aleatoriamente la cola",
+          "de": "Die Warteschlange zufaellig mischen"
+        }
+      },
+      "loop": {
+        "name": "loop",
+        "name_localizations": {
+          "es-419": "repetir",
+          "de": "wiederholen"
+        },
+        "description": "Set repeat mode (off, track, queue)",
+        "description_localizations": {
+          "es-419": "Ajustar modo de repetición",
+          "de": "Wiederholungsmodus festlegen"
+        },
+        "options": {
+          "mode": {
+            "name": "mode",
+            "name_localizations": {
+              "es-419": "modo",
+              "de": "modus"
+            },
+            "description": "Repeat mode",
+            "description_localizations": {
+              "es-419": "Modo: desactivado, canción o cola",
+              "de": "Modus: aus, Titel oder Warteschlange"
+            }
+          }
+        }
+      },
+      "volume": {
+        "name": "volume",
+        "name_localizations": {
+          "es-419": "volumen",
+          "de": "lautstaerke"
+        },
+        "description": "Adjust playback volume (1-100)",
+        "description_localizations": {
+          "es-419": "Ajustar el volumen de audio (1-100)",
+          "de": "Wiedergabelautstaerke einstellen (1-100)"
+        },
+        "options": {
+          "percent": {
+            "name": "percent",
+            "name_localizations": {
+              "es-419": "porcentaje",
+              "de": "prozent"
+            },
+            "description": "Volume percentage",
+            "description_localizations": {
+              "es-419": "Porcentaje de volumen (1-100)",
+              "de": "Lautstaerke in Prozent (1-100)"
+            }
+          }
+        }
+      },
+      "seek": {
+        "name": "seek",
+        "name_localizations": {
+          "es-419": "adelantar",
+          "de": "vorspulen"
+        },
+        "description": "Jump to a specific timestamp in seconds",
+        "description_localizations": {
+          "es-419": "Avanzar a un segundo específico de la canción",
+          "de": "Zu einem bestimmten Zeitpunkt in Sekunden springen"
+        },
+        "options": {
+          "seconds": {
+            "name": "seconds",
+            "name_localizations": {
+              "es-419": "segundos",
+              "de": "sekunden"
+            },
+            "description": "Timestamp in seconds",
+            "description_localizations": {
+              "es-419": "Tiempo en segundos",
+              "de": "Zeitangabe in Sekunden"
+            }
+          }
+        }
+      },
+      "remove": {
+        "name": "remove",
+        "name_localizations": {
+          "es-419": "eliminar",
+          "de": "entfernen"
+        },
+        "description": "Remove a specific track from the queue",
+        "description_localizations": {
+          "es-419": "Eliminar una pista de la cola por su posición",
+          "de": "Einen Titel anhand seiner Position entfernen"
+        },
+        "options": {
+          "position": {
+            "name": "position",
+            "name_localizations": {
+              "es-419": "posicion",
+              "de": "position"
+            },
+            "description": "Track position in queue",
+            "description_localizations": {
+              "es-419": "Posición del tema en la lista",
+              "de": "Titelposition in der Warteschlange"
+            }
+          }
+        }
+      },
+      "move": {
+        "name": "move",
+        "name_localizations": {
+          "es-419": "mover",
+          "de": "verschieben"
+        },
+        "description": "Move a track within the queue",
+        "description_localizations": {
+          "es-419": "Mover una pista a otra posición de la cola",
+          "de": "Einen Titel in der Warteschlange verschieben"
+        },
+        "options": {
+          "from": {
+            "name": "from",
+            "name_localizations": {
+              "es-419": "desde",
+              "de": "von"
+            },
+            "description": "Track current position",
+            "description_localizations": {
+              "es-419": "Posición actual del tema",
+              "de": "Aktuelle Position des Titels"
+            }
+          },
+          "to": {
+            "name": "to",
+            "name_localizations": {
+              "es-419": "hacia",
+              "de": "nach"
+            },
+            "description": "New target position",
+            "description_localizations": {
+              "es-419": "Nueva posición deseada",
+              "de": "Neue Zielposition"
+            }
+          }
+        }
+      },
+      "clear": {
+        "name": "clear",
+        "name_localizations": {
+          "es-419": "limpiar",
+          "de": "leeren"
+        },
+        "description": "Clear all queued tracks",
+        "description_localizations": {
+          "es-419": "Vaciar todas las canciones de la cola",
+          "de": "Alle Titel aus der Warteschlange entfernen"
+        }
+      },
+      "leave": {
+        "name": "leave",
+        "name_localizations": {
+          "es-419": "salir",
+          "de": "verlassen"
+        },
+        "description": "Disconnect bot from voice channel",
+        "description_localizations": {
+          "es-419": "Desconectar al bot del canal de voz",
+          "de": "Den Bot vom Sprachkanal trennen"
+        }
+      }
+    }
+  },
+  "nowplaying": {
+    "name": "nowplaying",
+    "name_localizations": {
+      "es-419": "reproduciendo",
+      "de": "aktuell-gespielt"
+    },
+    "description": "Display details about current playing song",
+    "description_localizations": {
+      "es-419": "Mostrar detalles de la canción en reproducción",
+      "de": "Details zum aktuellen Titel anzeigen"
+    }
+  },
+  "play": {
+    "name": "play",
+    "name_localizations": {
+      "es-419": "reproducir",
+      "de": "abspielen"
+    },
+    "description": "Play music from YouTube, Spotify, or SoundCloud",
+    "description_localizations": {
+      "es-419": "Reproducir música desde YouTube, Spotify o SoundCloud",
+      "de": "Musik von YouTube, Spotify oder SoundCloud abspielen"
+    },
+    "options": {
+      "query": {
+        "name": "query",
+        "name_localizations": {
+          "es-419": "busqueda",
+          "de": "suchbegriff"
+        },
+        "description": "Song name, search query, or URL",
+        "description_localizations": {
+          "es-419": "Nombre de la canción o enlace",
+          "de": "Titel, Suchbegriff oder URL"
+        }
+      }
+    }
+  },
+  "queue": {
+    "name": "queue",
+    "name_localizations": {
+      "es-419": "cola",
+      "de": "warteschlange"
+    },
+    "description": "View the upcoming music tracks queue",
+    "description_localizations": {
+      "es-419": "Ver la lista de canciones en espera",
+      "de": "Die anstehende Musik-Warteschlange ansehen"
+    },
+    "options": {
+      "page": {
+        "name": "page",
+        "name_localizations": {
+          "es-419": "pagina",
+          "de": "seite"
+        },
+        "description": "Queue page number",
+        "description_localizations": {
+          "es-419": "Número de página de la lista",
+          "de": "Seitennummer der Warteschlange"
+        }
+      }
+    }
+  },
+  "baseconvert": {
+    "name": "baseconvert",
+    "name_localizations": {
+      "es-419": "convertir-base",
+      "de": "basis-umrechnen"
+    },
+    "description": "Convert numbers between different bases (2-36)",
+    "description_localizations": {
+      "es-419": "Convertir números entre distintas bases numéricas (2-36)",
+      "de": "Zahlen zwischen verschiedenen Basen umrechnen (2-36)"
+    },
+    "options": {
+      "number": {
+        "name": "number",
+        "name_localizations": {
+          "es-419": "numero",
+          "de": "zahl"
+        },
+        "description": "The number string to convert",
+        "description_localizations": {
+          "es-419": "Cadena o valor numérico a convertir",
+          "de": "Umzurechnende Zahl"
+        }
+      },
+      "from_base": {
+        "name": "from_base",
+        "name_localizations": {
+          "es-419": "base_origen",
+          "de": "von_basis"
+        },
+        "description": "Base of input number (2-36)",
+        "description_localizations": {
+          "es-419": "Base de origen del número (2-36)",
+          "de": "Ursprungsbasis (2-36)"
+        }
+      },
+      "to_base": {
+        "name": "to_base",
+        "name_localizations": {
+          "es-419": "base_destino",
+          "de": "zu_basis"
+        },
+        "description": "Base to convert into (2-36)",
+        "description_localizations": {
+          "es-419": "Base de destino (2-36)",
+          "de": "Zielbasis (2-36)"
+        }
+      }
+    }
+  },
+  "calculate": {
+    "name": "calculate",
+    "name_localizations": {
+      "es-419": "calcular",
+      "de": "berechnen"
+    },
+    "description": "Solve a mathematical expression",
+    "description_localizations": {
+      "es-419": "Calcular el resultado de una expresión matemática",
+      "de": "Einen mathematischen Ausdruck berechnen"
+    },
+    "options": {
+      "expression": {
+        "name": "expression",
+        "name_localizations": {
+          "es-419": "expresion",
+          "de": "ausdruck"
+        },
+        "description": "Math expression to evaluate",
+        "description_localizations": {
+          "es-419": "Operación matemática a evaluar",
+          "de": "Zu berechnender mathematischer Ausdruck"
+        }
+      }
+    }
+  },
+  "countdown": {
+    "name": "countdown",
+    "name_localizations": {
+      "es-419": "cuenta-regresiva",
+      "de": "countdown"
+    },
+    "description": "Create a live countdown timer",
+    "description_localizations": {
+      "es-419": "Crear un temporizador de cuenta regresiva en vivo",
+      "de": "Einen Live-Countdown-Timer erstellen"
+    },
+    "options": {
+      "duration": {
+        "name": "duration",
+        "name_localizations": {
+          "es-419": "duracion",
+          "de": "dauer"
+        },
+        "description": "Duration (e.g. 5m, 1h)",
+        "description_localizations": {
+          "es-419": "Duración (ej. 5m, 1h)",
+          "de": "Dauer (z.B. 5m, 1h)"
+        }
+      },
+      "title": {
+        "name": "title",
+        "name_localizations": {
+          "es-419": "titulo",
+          "de": "titel"
+        },
+        "description": "Title or event for the countdown",
+        "description_localizations": {
+          "es-419": "Motivo o título del conteo",
+          "de": "Titel oder Anlass des Countdowns"
+        }
+      }
+    }
+  },
+  "embedbuilder": {
+    "name": "embedbuilder",
+    "name_localizations": {
+      "es-419": "crear-embed",
+      "de": "embed-erstellen"
+    },
+    "description": "Interactive builder to create and send custom Discord embeds",
+    "description_localizations": {
+      "es-419": "Creador interactivo de mensajes enriquecidos (embeds)",
+      "de": "Interaktiver Editor für benutzerdefinierte Embeds"
+    }
+  },
+  "generatepassword": {
+    "name": "generatepassword",
+    "name_localizations": {
+      "es-419": "generar-contrasena",
+      "de": "passwort-generieren"
+    },
+    "description": "Generate a cryptographically secure random password",
+    "description_localizations": {
+      "es-419": "Generar una contraseña aleatoria de alta seguridad",
+      "de": "Ein kryptografisch sicheres Zufallspasswort generieren"
+    },
+    "options": {
+      "length": {
+        "name": "length",
+        "name_localizations": {
+          "es-419": "longitud",
+          "de": "laenge"
+        },
+        "description": "Password length (8-64)",
+        "description_localizations": {
+          "es-419": "Longitud en caracteres (8-64)",
+          "de": "Passwortlaenge in Zeichen (8-64)"
+        }
+      },
+      "include_numbers": {
+        "name": "include_numbers",
+        "name_localizations": {
+          "es-419": "incluir_numeros",
+          "de": "zahlen_einschliessen"
+        },
+        "description": "Include digits (0-9)",
+        "description_localizations": {
+          "es-419": "Incluir números (0-9)",
+          "de": "Zahlen einschliessen (0-9)"
+        }
+      },
+      "include_symbols": {
+        "name": "include_symbols",
+        "name_localizations": {
+          "es-419": "incluir_simbolos",
+          "de": "symbole_einschliessen"
+        },
+        "description": "Include special characters",
+        "description_localizations": {
+          "es-419": "Incluir símbolos especiales",
+          "de": "Sonderzeichen einschliessen"
+        }
+      }
+    }
+  },
+  "hexcolor": {
+    "name": "hexcolor",
+    "name_localizations": {
+      "es-419": "color-hex",
+      "de": "hex-farbe"
+    },
+    "description": "Preview a hex color code with RGB and HSL data",
+    "description_localizations": {
+      "es-419": "Visualizar un código de color hexadecimal con RGB y HSL",
+      "de": "Eine Hex-Farbe mit RGB- und HSL-Werten in der Vorschau anzeigen"
+    },
+    "options": {
+      "hex": {
+        "name": "hex",
+        "name_localizations": {
+          "es-419": "hex",
+          "de": "hex"
+        },
+        "description": "Hex color code (e.g. #FF5733)",
+        "description_localizations": {
+          "es-419": "Código hexadecimal (ej. #FF5733)",
+          "de": "Hex-Farbcode (z.B. #FF5733)"
+        }
+      }
+    }
+  },
+  "poll": {
+    "name": "poll",
+    "name_localizations": {
+      "es-419": "encuesta",
+      "de": "umfrage"
+    },
+    "description": "Create an interactive community poll",
+    "description_localizations": {
+      "es-419": "Crear una encuesta interactiva para la comunidad",
+      "de": "Eine interaktive Umfrage für die Community erstellen"
+    },
+    "options": {
+      "question": {
+        "name": "question",
+        "name_localizations": {
+          "es-419": "pregunta",
+          "de": "frage"
+        },
+        "description": "The poll question",
+        "description_localizations": {
+          "es-419": "La pregunta de la encuesta",
+          "de": "Die Frage der Umfrage"
+        }
+      },
+      "option1": {
+        "name": "option1",
+        "name_localizations": {
+          "es-419": "opcion1",
+          "de": "option1"
+        },
+        "description": "First option",
+        "description_localizations": {
+          "es-419": "Primera opción",
+          "de": "Erste Option"
+        }
+      },
+      "option2": {
+        "name": "option2",
+        "name_localizations": {
+          "es-419": "opcion2",
+          "de": "option2"
+        },
+        "description": "Second option",
+        "description_localizations": {
+          "es-419": "Segunda opción",
+          "de": "Zweite Option"
+        }
+      },
+      "option3": {
+        "name": "option3",
+        "name_localizations": {
+          "es-419": "opcion3",
+          "de": "option3"
+        },
+        "description": "Third option",
+        "description_localizations": {
+          "es-419": "Tercera opción",
+          "de": "Dritte Option"
+        }
+      },
+      "option4": {
+        "name": "option4",
+        "name_localizations": {
+          "es-419": "opcion4",
+          "de": "option4"
+        },
+        "description": "Fourth option",
+        "description_localizations": {
+          "es-419": "Cuarta opción",
+          "de": "Vierte Option"
+        }
+      },
+      "option5": {
+        "name": "option5",
+        "name_localizations": {
+          "es-419": "opcion5",
+          "de": "option5"
+        },
+        "description": "Fifth option",
+        "description_localizations": {
+          "es-419": "Quinta opción",
+          "de": "Fuenfte Option"
+        }
+      }
+    }
+  },
+  "randomuser": {
+    "name": "randomuser",
+    "name_localizations": {
+      "es-419": "usuario-aleatorio",
+      "de": "zufaelliger-benutzer"
+    },
+    "description": "Pick a random member from the server",
+    "description_localizations": {
+      "es-419": "Elegir un miembro aleatorio del servidor",
+      "de": "Ein zufaelliges Mitglied aus dem Server auswaehlen"
+    }
+  },
+  "shorten": {
+    "name": "shorten",
+    "name_localizations": {
+      "es-419": "acortar-enlace",
+      "de": "link-kuerzen"
+    },
+    "description": "Shorten a long URL into a compact link",
+    "description_localizations": {
+      "es-419": "Acortar un enlace largo a uno compacto",
+      "de": "Eine lange URL in einen kompakten Link umwandeln"
+    },
+    "options": {
+      "url": {
+        "name": "url",
+        "name_localizations": {
+          "es-419": "url",
+          "de": "url"
+        },
+        "description": "The URL to shorten",
+        "description_localizations": {
+          "es-419": "El enlace que deseas acortar",
+          "de": "Die zu kuerzende URL"
+        }
+      }
+    }
+  },
+  "time": {
+    "name": "time",
+    "name_localizations": {
+      "es-419": "hora",
+      "de": "uhrzeit"
+    },
+    "description": "Display current time in a given timezone",
+    "description_localizations": {
+      "es-419": "Mostrar la hora actual en una zona horaria",
+      "de": "Aktuelle Uhrzeit in einer bestimmten Zeitzone anzeigen"
+    },
+    "options": {
+      "timezone": {
+        "name": "timezone",
+        "name_localizations": {
+          "es-419": "zona_horaria",
+          "de": "zeitzone"
+        },
+        "description": "Timezone name (e.g. UTC, America/New_York, Europe/Madrid)",
+        "description_localizations": {
+          "es-419": "Zona horaria (ej. UTC, America/Mexico_City, Europe/Madrid)",
+          "de": "Zeitzone (z.B. UTC, Europe/Berlin, America/New_York)"
+        }
+      }
+    }
+  },
+  "unixtime": {
+    "name": "unixtime",
+    "name_localizations": {
+      "es-419": "tiempo-unix",
+      "de": "unix-zeit"
+    },
+    "description": "Convert date/time to Discord unix timestamps",
+    "description_localizations": {
+      "es-419": "Convertir fechas a marcas de tiempo Unix para Discord",
+      "de": "Datum/Uhrzeit in Discord-Unix-Zeitstempel umrechnen"
+    },
+    "options": {
+      "time": {
+        "name": "time",
+        "name_localizations": {
+          "es-419": "tiempo",
+          "de": "zeit"
+        },
+        "description": "Natural time expression or timestamp",
+        "description_localizations": {
+          "es-419": "Expresión de tiempo o fecha",
+          "de": "Zeitangabe oder Datum"
+        }
+      }
+    }
+  },
+  "avatar": {
+    "name": "avatar",
+    "name_localizations": {
+      "es-419": "avatar",
+      "de": "avatar"
+    },
+    "description": "Display full resolution avatar of a user",
+    "description_localizations": {
+      "es-419": "Ver el avatar en alta resolución de un usuario",
+      "de": "Das hochaufloesende Profilbild eines Benutzers anzeigen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "User to get avatar for",
+        "description_localizations": {
+          "es-419": "Usuario cuyo avatar deseas ver",
+          "de": "Benutzer, dessen Avatar angezeigt werden soll"
+        }
+      }
+    }
+  },
+  "firstmsg": {
+    "name": "firstmsg",
+    "name_localizations": {
+      "es-419": "primer-mensaje",
+      "de": "erste-nachricht"
+    },
+    "description": "Get link to the first message in this channel",
+    "description_localizations": {
+      "es-419": "Obtener enlace al primer mensaje de este canal",
+      "de": "Link zur allerersten Nachricht in diesem Kanal abrufen"
+    },
+    "options": {
+      "channel": {
+        "name": "channel",
+        "name_localizations": {
+          "es-419": "canal",
+          "de": "kanal"
+        },
+        "description": "Channel to find first message in",
+        "description_localizations": {
+          "es-419": "Canal a consultar",
+          "de": "Zu pruefender Kanal"
+        }
+      }
+    }
+  },
+  "report": {
+    "name": "report",
+    "name_localizations": {
+      "es-419": "reportar",
+      "de": "melden"
+    },
+    "description": "Submit user reports to server moderators",
+    "description_localizations": {
+      "es-419": "Enviar reportes de usuarios a los moderadores",
+      "de": "Benutzerberichte an Servermoderatoren senden"
+    },
+    "subcommands": {
+      "file": {
+        "name": "file",
+        "name_localizations": {
+          "es-419": "enviar",
+          "de": "einreichen"
+        },
+        "description": "File a user report",
+        "description_localizations": {
+          "es-419": "Presentar un reporte contra un usuario",
+          "de": "Einen Bericht über einen Benutzer einreichen"
+        },
+        "options": {
+          "target": {
+            "name": "target",
+            "name_localizations": {
+              "es-419": "usuario",
+              "de": "benutzer"
+            },
+            "description": "The user to report",
+            "description_localizations": {
+              "es-419": "Usuario que deseas reportar",
+              "de": "Zu meldender Benutzer"
+            }
+          },
+          "reason": {
+            "name": "reason",
+            "name_localizations": {
+              "es-419": "razon",
+              "de": "grund"
+            },
+            "description": "Reason for the report",
+            "description_localizations": {
+              "es-419": "Motivo detallado del reporte",
+              "de": "Ausfuehrliche Begruendung der Meldung"
+            }
+          }
+        }
+      },
+      "setchannel": {
+        "name": "setchannel",
+        "name_localizations": {
+          "es-419": "canal",
+          "de": "kanal"
+        },
+        "description": "Configure channel where reports are sent",
+        "description_localizations": {
+          "es-419": "Establecer canal donde se recibirán los reportes",
+          "de": "Kanal für eingehende Benutzerberichte festlegen"
+        },
+        "options": {
+          "channel": {
+            "name": "channel",
+            "name_localizations": {
+              "es-419": "canal",
+              "de": "kanal"
+            },
+            "description": "Reports channel",
+            "description_localizations": {
+              "es-419": "Canal de texto para reportes",
+              "de": "Textkanal für Berichte"
+            }
+          }
+        }
+      }
+    }
+  },
+  "serverinfo": {
+    "name": "serverinfo",
+    "name_localizations": {
+      "es-419": "info-servidor",
+      "de": "server-info"
+    },
+    "description": "Display comprehensive statistics and details about the server",
+    "description_localizations": {
+      "es-419": "Información detallada, miembros y configuración del servidor",
+      "de": "Ausfuehrliche Statistiken und Informationen über den Server"
+    }
+  },
+  "todo": {
+    "name": "todo",
+    "name_localizations": {
+      "es-419": "tareas",
+      "de": "aufgaben"
+    },
+    "description": "Personal and shared todo list manager",
+    "description_localizations": {
+      "es-419": "Gestor de listas de tareas personales y compartidas",
+      "de": "Persoenliche und geteilte Aufgabenlisten verwalten"
+    },
+    "subcommands": {
+      "add": {
+        "name": "add",
+        "name_localizations": {
+          "es-419": "anadir",
+          "de": "hinzufuegen"
+        },
+        "description": "Add a task to your todo list",
+        "description_localizations": {
+          "es-419": "Añadir una nueva tarea a tu lista",
+          "de": "Eine neue Aufgabe zur Liste hinzufuegen"
+        },
+        "options": {
+          "task": {
+            "name": "task",
+            "name_localizations": {
+              "es-419": "tarea",
+              "de": "aufgabe"
+            },
+            "description": "The task description",
+            "description_localizations": {
+              "es-419": "Descripción de la tarea",
+              "de": "Beschreibung der Aufgabe"
+            }
+          }
+        }
+      },
+      "list": {
+        "name": "list",
+        "name_localizations": {
+          "es-419": "lista",
+          "de": "liste"
+        },
+        "description": "List your pending tasks",
+        "description_localizations": {
+          "es-419": "Ver tus tareas pendientes",
+          "de": "Deine ausstehenden Aufgaben auflisten"
+        }
+      },
+      "complete": {
+        "name": "complete",
+        "name_localizations": {
+          "es-419": "completar",
+          "de": "abschliessen"
+        },
+        "description": "Mark a task as finished",
+        "description_localizations": {
+          "es-419": "Marcar una tarea como terminada",
+          "de": "Eine Aufgabe als erledigt markieren"
+        },
+        "options": {
+          "id": {
+            "name": "id",
+            "name_localizations": {
+              "es-419": "id",
+              "de": "id"
+            },
+            "description": "Task ID",
+            "description_localizations": {
+              "es-419": "ID de la tarea a completar",
+              "de": "ID der zu erledigenden Aufgabe"
+            }
+          }
+        }
+      },
+      "remove": {
+        "name": "remove",
+        "name_localizations": {
+          "es-419": "eliminar",
+          "de": "entfernen"
+        },
+        "description": "Delete a task from your list",
+        "description_localizations": {
+          "es-419": "Eliminar una tarea de tu lista",
+          "de": "Eine Aufgabe aus deiner Liste loeschen"
+        },
+        "options": {
+          "id": {
+            "name": "id",
+            "name_localizations": {
+              "es-419": "id",
+              "de": "id"
+            },
+            "description": "Task ID",
+            "description_localizations": {
+              "es-419": "ID de la tarea a borrar",
+              "de": "ID der zu loeschenden Aufgabe"
+            }
+          }
+        }
+      }
+    }
+  },
+  "userinfo": {
+    "name": "userinfo",
+    "name_localizations": {
+      "es-419": "info-usuario",
+      "de": "benutzer-info"
+    },
+    "description": "Display detailed profile, roles, and dates for a user",
+    "description_localizations": {
+      "es-419": "Ver perfil detallado, roles y fechas de un usuario",
+      "de": "Ausfuehrliche Profildetails, Rollen und Daten eines Benutzers anzeigen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "The user to inspect",
+        "description_localizations": {
+          "es-419": "Usuario que deseas consultar",
+          "de": "Zu pruefender Benutzer"
+        }
+      }
+    }
+  },
+  "weather": {
+    "name": "weather",
+    "name_localizations": {
+      "es-419": "clima",
+      "de": "wetter"
+    },
+    "description": "Get real-time weather and forecast for any city",
+    "description_localizations": {
+      "es-419": "Pronóstico del tiempo en tiempo real para cualquier ciudad",
+      "de": "Echtzeit-Wetter und Vorhersage für jeden Ort"
+    },
+    "options": {
+      "location": {
+        "name": "location",
+        "name_localizations": {
+          "es-419": "ubicacion",
+          "de": "ort"
+        },
+        "description": "City or region name",
+        "description_localizations": {
+          "es-419": "Ciudad o región a consultar",
+          "de": "Stadt oder Region"
+        }
+      }
+    }
+  },
+  "wipedata": {
+    "name": "wipedata",
+    "name_localizations": {
+      "es-419": "borrar-datos",
+      "de": "daten-loeschen"
+    },
+    "description": "Request deletion of your personal stored user data",
+    "description_localizations": {
+      "es-419": "Solicitar el borrado de tus datos personales almacenados",
+      "de": "Loeschung deiner persoenlichen gespeicherten Daten anfordern"
+    }
+  },
+  "balance": {
+    "name": "balance",
+    "name_localizations": {
+      "es-419": "saldo",
+      "de": "kontostand"
+    },
+    "description": "Check wallet and bank balances",
+    "description_localizations": {
+      "es-419": "Consultar saldo en efectivo y en banco",
+      "de": "Bargeld und Bankguthaben abfragen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "The user to check balance for",
+        "description_localizations": {
+          "es-419": "Usuario cuyo saldo deseas consultar",
+          "de": "Benutzer, dessen Guthaben geprueft werden soll"
+        }
+      }
+    }
+  },
+  "beg": {
+    "name": "beg",
+    "name_localizations": {
+      "es-419": "mendigar",
+      "de": "betteln"
+    },
+    "description": "Beg for some spare coins",
+    "description_localizations": {
+      "es-419": "Pedir algunas monedas para tu bolsillo",
+      "de": "Um ein paar Muenzen betteln"
+    }
+  },
+  "buy": {
+    "name": "buy",
+    "name_localizations": {
+      "es-419": "comprar",
+      "de": "kaufen"
+    },
+    "description": "Purchase an item from the server shop",
+    "description_localizations": {
+      "es-419": "Comprar un objeto de la tienda del servidor",
+      "de": "Einen Gegenstand aus dem Server-Shop kaufen"
+    },
+    "options": {
+      "item": {
+        "name": "item",
+        "name_localizations": {
+          "es-419": "objeto",
+          "de": "gegenstand"
+        },
+        "description": "Item name or ID to purchase",
+        "description_localizations": {
+          "es-419": "Nombre o ID del artículo",
+          "de": "Name oder ID des Gegenstands"
+        }
+      },
+      "quantity": {
+        "name": "quantity",
+        "name_localizations": {
+          "es-419": "cantidad",
+          "de": "menge"
+        },
+        "description": "Amount to purchase",
+        "description_localizations": {
+          "es-419": "Cantidad a comprar",
+          "de": "Zu kaufende Menge"
+        }
+      }
+    }
+  },
+  "crime": {
+    "name": "crime",
+    "name_localizations": {
+      "es-419": "crimen",
+      "de": "verbrechen"
+    },
+    "description": "Commit a crime for risky high reward",
+    "description_localizations": {
+      "es-419": "Cometer un crimen con alto riesgo de multa",
+      "de": "Ein riskantes Verbrechen mit hoher Beute begehen"
+    }
+  },
+  "daily": {
+    "name": "daily",
+    "name_localizations": {
+      "es-419": "diario",
+      "de": "taeglich"
+    },
+    "description": "Claim your daily coin reward",
+    "description_localizations": {
+      "es-419": "Reclamar tu recompensa diaria de monedas",
+      "de": "Deine taegliche Muenzen-Belohnung abholen"
+    }
+  },
+  "deposit": {
+    "name": "deposit",
+    "name_localizations": {
+      "es-419": "depositar",
+      "de": "einzahlen"
+    },
+    "description": "Deposit coins into the bank",
+    "description_localizations": {
+      "es-419": "Depositar monedas de tu cartera al banco",
+      "de": "Muenzen von der Geldboerse auf die Bank einzahlen"
+    },
+    "options": {
+      "amount": {
+        "name": "amount",
+        "name_localizations": {
+          "es-419": "cantidad",
+          "de": "betrag"
+        },
+        "description": "Amount or 'all'",
+        "description_localizations": {
+          "es-419": "Cantidad o 'all' para todo",
+          "de": "Betrag oder 'all' für alles"
+        }
+      }
+    }
+  },
+  "economy": {
+    "name": "economy",
+    "name_localizations": {
+      "es-419": "economia",
+      "de": "wirtschaft"
+    },
+    "description": "Manage server economy system",
+    "description_localizations": {
+      "es-419": "Administrar el sistema de economía del servidor",
+      "de": "Wirtschaftssystem des Servers verwalten"
+    },
+    "subcommands": {
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Open economy configuration dashboard",
+        "description_localizations": {
+          "es-419": "Abrir panel de configuración de economía",
+          "de": "Wirtschafts-Dashboard oeffnen"
+        }
+      }
+    }
+  },
+  "eleaderboard": {
+    "name": "eleaderboard",
+    "name_localizations": {
+      "es-419": "tabla-economia",
+      "de": "wirtschaft-rangliste"
+    },
+    "description": "Top richest members in the server",
+    "description_localizations": {
+      "es-419": "Ver los miembros más ricos del servidor",
+      "de": "Die reichsten Mitglieder des Servers anzeigen"
+    },
+    "options": {
+      "type": {
+        "name": "type",
+        "name_localizations": {
+          "es-419": "tipo",
+          "de": "typ"
+        },
+        "description": "Leaderboard type (wallet, bank, total)",
+        "description_localizations": {
+          "es-419": "Tipo de tabla: cartera, banco o total",
+          "de": "Ranglisten-Typ: Geldboerse, Bank oder Gesamt"
+        }
+      }
+    }
+  },
+  "fish": {
+    "name": "fish",
+    "name_localizations": {
+      "es-419": "pescar",
+      "de": "angeln"
+    },
+    "description": "Go fishing to catch fish and earn coins",
+    "description_localizations": {
+      "es-419": "Ir a pescar para conseguir peces y monedas",
+      "de": "Angeln gehen, um Fische und Muenzen zu fangen"
+    }
+  },
+  "gamble": {
+    "name": "gamble",
+    "name_localizations": {
+      "es-419": "apostar",
+      "de": "gluecksspiel"
+    },
+    "description": "Gamble your coins in a roll",
+    "description_localizations": {
+      "es-419": "Apostar monedas en un juego de azar",
+      "de": "Setze deine Muenzen bei einem Wuerfelspiel ein"
+    },
+    "options": {
+      "amount": {
+        "name": "amount",
+        "name_localizations": {
+          "es-419": "cantidad",
+          "de": "betrag"
+        },
+        "description": "Amount of coins to gamble",
+        "description_localizations": {
+          "es-419": "Cantidad de monedas a apostar",
+          "de": "Einsatz an Muenzen"
+        }
+      }
+    }
+  },
+  "inventory": {
+    "name": "inventory",
+    "name_localizations": {
+      "es-419": "inventario",
+      "de": "inventar"
+    },
+    "description": "View owned items and tools",
+    "description_localizations": {
+      "es-419": "Ver tus objetos, consumibles y herramientas",
+      "de": "Eigene Gegenstaende und Werkzeuge anzeigen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "User to check inventory for",
+        "description_localizations": {
+          "es-419": "Usuario cuyo inventario deseas ver",
+          "de": "Benutzer, dessen Inventar geprueft werden soll"
+        }
+      }
+    }
+  },
+  "mine": {
+    "name": "mine",
+    "name_localizations": {
+      "es-419": "minar",
+      "de": "bergbau"
+    },
+    "description": "Go mining for minerals and gems",
+    "description_localizations": {
+      "es-419": "Picar en la mina para extraer minerales y gemas",
+      "de": "In der Mine nach Mineralien und Edelsteinen schuerfen"
+    }
+  },
+  "pay": {
+    "name": "pay",
+    "name_localizations": {
+      "es-419": "pagar",
+      "de": "bezahlen"
+    },
+    "description": "Transfer coins to another user",
+    "description_localizations": {
+      "es-419": "Transferir monedas a otro usuario",
+      "de": "Muenzen an einen anderen Benutzer ueberweisen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "Recipient user",
+        "description_localizations": {
+          "es-419": "Usuario que recibirá las monedas",
+          "de": "Empfaenger der Muenzen"
+        }
+      },
+      "amount": {
+        "name": "amount",
+        "name_localizations": {
+          "es-419": "cantidad",
+          "de": "betrag"
+        },
+        "description": "Amount to transfer",
+        "description_localizations": {
+          "es-419": "Cantidad a transferir",
+          "de": "Zu ueberweisender Betrag"
+        }
+      }
+    }
+  },
+  "rob": {
+    "name": "rob",
+    "name_localizations": {
+      "es-419": "robar",
+      "de": "ausrauben"
+    },
+    "description": "Attempt to steal coins from another member's wallet",
+    "description_localizations": {
+      "es-419": "Intentar robar monedas de la cartera de otro usuario",
+      "de": "Versuchen, Muenzen aus der Geldboerse eines Mitglieds zu stehlen"
+    },
+    "options": {
+      "target": {
+        "name": "target",
+        "name_localizations": {
+          "es-419": "usuario",
+          "de": "benutzer"
+        },
+        "description": "Member to rob",
+        "description_localizations": {
+          "es-419": "Usuario al que deseas robar",
+          "de": "Zu beraubendes Mitglied"
+        }
+      }
+    }
+  },
+  "shop-config": {
+    "name": "shop-config",
+    "name_localizations": {
+      "es-419": "tienda-config",
+      "de": "shop-konfig"
+    },
+    "description": "Configure server shop and item roles",
+    "description_localizations": {
+      "es-419": "Configurar la tienda y roles asignados a objetos",
+      "de": "Server-Shop und Rollenzuweisungen für Items konfigurieren"
+    },
+    "subcommands": {
+      "setrole": {
+        "name": "setrole",
+        "name_localizations": {
+          "es-419": "rol",
+          "de": "rolle"
+        },
+        "description": "Link a role reward to an item",
+        "description_localizations": {
+          "es-419": "Vincular una recompensa de rol a un artículo",
+          "de": "Eine Rollenbelohnung mit einem Item verknuepfen"
+        },
+        "options": {
+          "item": {
+            "name": "item",
+            "name_localizations": {
+              "es-419": "objeto",
+              "de": "gegenstand"
+            },
+            "description": "The item to link",
+            "description_localizations": {
+              "es-419": "Objeto a vincular",
+              "de": "Zu verknuepfendes Item"
+            }
+          },
+          "role": {
+            "name": "role",
+            "name_localizations": {
+              "es-419": "rol",
+              "de": "rolle"
+            },
+            "description": "The role to grant upon purchase",
+            "description_localizations": {
+              "es-419": "Rol que se otorgará al comprarlo",
+              "de": "Rolle, die beim Kauf verliehen wird"
+            }
+          }
+        }
+      }
+    }
+  },
+  "shop": {
+    "name": "shop",
+    "name_localizations": {
+      "es-419": "tienda",
+      "de": "shop"
+    },
+    "description": "Browse items available in the server shop",
+    "description_localizations": {
+      "es-419": "Explorar artículos disponibles para comprar en la tienda",
+      "de": "Verfuegbare Gegenstaende im Server-Shop durchstoebern"
+    }
+  },
+  "slut": {
+    "name": "slut",
+    "name_localizations": {
+      "es-419": "prostituirse",
+      "de": "anschaffen"
+    },
+    "description": "Work shady gigs for quick cash",
+    "description_localizations": {
+      "es-419": "Hacer trabajos cuestionables por dinero rápido",
+      "de": "Zwielichtige Gelegenheitsjobs für schnelles Geld machen"
+    }
+  },
+  "withdraw": {
+    "name": "withdraw",
+    "name_localizations": {
+      "es-419": "retirar",
+      "de": "abheben"
+    },
+    "description": "Withdraw coins from your bank to your wallet",
+    "description_localizations": {
+      "es-419": "Retirar monedas de tu banco a tu cartera",
+      "de": "Muenzen von der Bank in deine Geldboerse abheben"
+    },
+    "options": {
+      "amount": {
+        "name": "amount",
+        "name_localizations": {
+          "es-419": "cantidad",
+          "de": "betrag"
+        },
+        "description": "Amount or 'all'",
+        "description_localizations": {
+          "es-419": "Cantidad a retirar o 'all' para todo",
+          "de": "Abzuhebender Betrag oder 'all'"
+        }
+      }
+    }
+  },
+  "work": {
+    "name": "work",
+    "name_localizations": {
+      "es-419": "trabajar",
+      "de": "arbeiten"
+    },
+    "description": "Work a regular job to earn an honest wage",
+    "description_localizations": {
+      "es-419": "Trabajar para recibir un salario honrado",
+      "de": "Eine regulaere Arbeit verrichten, um Muenzen zu verdienen"
     }
   }
 }

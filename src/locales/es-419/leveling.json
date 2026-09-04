@@ -1,0 +1,7 @@
+{
+  "rank_title": "Tarjeta de Rango — {user}",
+  "level_added": "Se añadieron {levels} nivel(es) a {user}. Nivel actual: {level}",
+  "level_removed": "Se quitaron {levels} nivel(es) a {user}. Nivel actual: {level}",
+  "level_set": "Nivel de {user} establecido en {level}.",
+  "leaderboard_title": "Tabla de Niveles del Servidor"
+}

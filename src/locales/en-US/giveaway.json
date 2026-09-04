@@ -1,0 +1,6 @@
+{
+  "created": "Giveaway started for **{prize}** in {channel}!",
+  "ended": "Giveaway ended for **{prize}**! Congratulations to: {winners}",
+  "rerolled": "New winner(s) drawn: {winners}",
+  "deleted": "Giveaway successfully deleted."
+}

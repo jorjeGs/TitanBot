@@ -1,0 +1,6 @@
+{
+  "created": "¡Sorteo iniciado por **{prize}** en {channel}!",
+  "ended": "¡Sorteo finalizado por **{prize}**! Felicitaciones a: {winners}",
+  "rerolled": "Nuevo(s) ganador(es) seleccionado(s): {winners}",
+  "deleted": "Sorteo eliminado correctamente."
+}

@@ -2,7 +2,7 @@
 import { getRawTranslation, loadCatalogs, DEFAULT_LOCALE, SUPPORTED_LOCALES } from './loader.js';
 import { interpolate } from './interpolator.js';
 import { resolveLocale, normalizeLocale } from './resolver.js';
-import { localizeSlashCommand, localizeSubcommand, localizeOption } from './commandLocalizer.js';
+import { localizeSlashCommand, localizeSubcommand, localizeOption, localizeFullCommand } from './commandLocalizer.js';
 
 export {
     loadCatalogs,
@@ -13,6 +13,7 @@ export {
     localizeSlashCommand,
     localizeSubcommand,
     localizeOption,
+    localizeFullCommand,
 };
 
 /**

@@ -1,0 +1,6 @@
+{
+  "created": "Gewinnspiel für **{prize}** in {channel} gestartet!",
+  "ended": "Gewinnspiel für **{prize}** beendet! Glückwunsch an: {winners}",
+  "rerolled": "Neue(r) Gewinner ermittelt: {winners}",
+  "deleted": "Gewinnspiel erfolgreich gelöscht."
+}

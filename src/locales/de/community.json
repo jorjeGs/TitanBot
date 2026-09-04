@@ -1,0 +1,15 @@
+{
+  "not_in_guild": "Dieser Befehl kann nur auf einem Server verwendet werden.",
+  "apply": {
+    "no_apps": "Derzeit sind keine Bewerbungen verfügbar.",
+    "submitted": "Bewerbung erfolgreich eingereicht! ID: `{id}`",
+    "status_title": "Bewerbungsstatus",
+    "list_title": "Verfügbare Bewerbungen"
+  },
+  "admin": {
+    "review_approved": "Die Bewerbung `{id}` wurde genehmigt.",
+    "review_denied": "Die Bewerbung `{id}` wurde abgelehnt.",
+    "list_title": "Eingereichte Bewerbungen",
+    "dashboard_title": "Bewerbungs-Dashboard"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "define_not_found": "Keine Definition für **{word}** gefunden.",
+  "google_title": "Suchergebnisse für: {query}",
+  "urban_not_found": "Keine Definition im Urban Dictionary für **{term}** gefunden."
+}

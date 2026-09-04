@@ -1,0 +1,7 @@
+{
+  "rank_title": "Rangkarte — {user}",
+  "level_added": "{levels} Level an {user} vergeben. Aktuelles Level: {level}",
+  "level_removed": "{levels} Level von {user} abgezogen. Aktuelles Level: {level}",
+  "level_set": "Level von {user} auf {level} gesetzt.",
+  "leaderboard_title": "Server-Level-Rangliste"
+}

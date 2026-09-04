@@ -1,0 +1,9 @@
+{
+  "joined": "Joined voice channel: {channel}",
+  "playing": "🎶 Now playing: **{title}** by {author}",
+  "paused": "⏸️ Playback paused.",
+  "resumed": "▶️ Playback resumed.",
+  "skipped": "⏭️ Skipped song.",
+  "stopped": "⏹️ Music stopped and queue cleared.",
+  "queue_empty": "The music queue is currently empty."
+}

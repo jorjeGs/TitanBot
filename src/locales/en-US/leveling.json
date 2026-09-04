@@ -1,0 +1,7 @@
+{
+  "rank_title": "Rank Card — {user}",
+  "level_added": "Added {levels} level(s) to {user}. Current Level: {level}",
+  "level_removed": "Removed {levels} level(s) from {user}. Current Level: {level}",
+  "level_set": "Level of {user} set to {level}.",
+  "leaderboard_title": "Server Level Leaderboard"
+}

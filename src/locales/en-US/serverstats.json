@@ -1,0 +1,5 @@
+{
+  "created": "Statistics tracker channel created: {channel}",
+  "deleted": "Statistics tracker `{id}` deleted.",
+  "list_title": "Server Statistics Trackers"
+}

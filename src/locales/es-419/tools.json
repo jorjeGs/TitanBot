@@ -1,0 +1,6 @@
+{
+  "calc_result": "Cálculo: `{expression}` = **{result}**",
+  "baseconvert_result": "`{number}` en base {from} es **`{result}`** en base {to}.",
+  "password_generated": "Tu contraseña segura ha sido generada (enviada de forma efímera).",
+  "poll_created": "📊 Encuesta de la Comunidad: **{question}**"
+}

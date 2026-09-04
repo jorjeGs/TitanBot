@@ -1,0 +1,7 @@
+{
+  "autorole_added": "Added role {role} to automatic join roles.",
+  "autorole_removed": "Removed role {role} from automatic join roles.",
+  "autorole_list": "Configured Auto-Roles",
+  "goodbye_configured": "Goodbye messages configured for {channel}.",
+  "welcome_configured": "Welcome messages configured for {channel}."
+}

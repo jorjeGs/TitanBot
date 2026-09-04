@@ -1,0 +1,5 @@
+{
+  "claimed": "Ticket reclamado por {user}.",
+  "closed": "Ticket cerrado por {user}. Motivo: {reason}",
+  "priority_set": "Prioridad del ticket establecida en **{level}**."
+}

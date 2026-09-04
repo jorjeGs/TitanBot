@@ -1,0 +1,13 @@
+{
+  "balance_title": "{user}'s Balance",
+  "balance_wallet": "Wallet: **{wallet}** coins",
+  "balance_bank": "Bank: **{bank}** / {max} coins",
+  "daily_claimed": "You claimed your daily reward of **{amount}** coins! Streak: {streak} days.",
+  "deposit_success": "Deposited **{amount}** coins into your bank account.",
+  "withdraw_success": "Withdrew **{amount}** coins from your bank account.",
+  "pay_success": "Successfully transferred **{amount}** coins to {target}.",
+  "work_success": "You worked as a **{job}** and earned **{amount}** coins!",
+  "beg_success": "A generous stranger gave you **{amount}** coins!",
+  "fish_success": "🎣 You caught a **{fish}** worth **{amount}** coins!",
+  "mine_success": "⛏️ You mined **{mineral}** worth **{amount}** coins!"
+}

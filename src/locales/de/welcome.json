@@ -1,0 +1,7 @@
+{
+  "autorole_added": "Rolle {role} zu den automatischen Beitrittsrollen hinzugefügt.",
+  "autorole_removed": "Rolle {role} aus den automatischen Beitrittsrollen entfernt.",
+  "autorole_list": "Konfigurierte Autorollen",
+  "goodbye_configured": "Abschiedsnachrichten für {channel} konfiguriert.",
+  "welcome_configured": "Willkommensnachrichten für {channel} konfiguriert."
+}

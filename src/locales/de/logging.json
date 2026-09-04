@@ -1,0 +1,5 @@
+{
+  "dashboard_title": "Server-Protokolldashboard",
+  "channel_updated": "Protokollkanal für `{destination}` auf {channel} gesetzt.",
+  "channel_disabled": "Protokollkanal für `{destination}` deaktiviert."
+}

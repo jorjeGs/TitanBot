@@ -1,0 +1,5 @@
+{
+  "created": "Canal contador de estadísticas creado: {channel}",
+  "deleted": "Contador de estadísticas `{id}` eliminado.",
+  "list_title": "Contadores de Estadísticas del Servidor"
+}
