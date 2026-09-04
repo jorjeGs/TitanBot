@@ -7,6 +7,7 @@ import { DEFAULT_GUILD_CONFIG } from '../../utils/constants.js';
  */
 export const GUILD_CONFIG_DEFAULTS = {
     ...DEFAULT_GUILD_CONFIG,
+    locale: 'auto',
     prefix: getCommandPrefix(),
     welcomeMessage: BotConfig.welcome?.defaultWelcomeMessage || 'Welcome {user} to {server}!',
     dmOnClose: true,

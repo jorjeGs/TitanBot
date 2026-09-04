@@ -59,6 +59,7 @@ const VerificationConfigSchema = z
 
 export const GuildConfigSchema = z
   .object({
+    locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
     prefix: z.string().optional(),
     modRole: z.string().nullable().optional(),
     adminRole: z.string().nullable().optional(),

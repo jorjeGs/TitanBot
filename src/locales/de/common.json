@@ -1,0 +1,16 @@
+{
+  "errors": {
+    "unknown": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
+    "permission": "Du hast keine Berechtigung, diesen Befehl zu verwenden.",
+    "manage_guild": "Du benötigst die Berechtigung **Server verwalten**, um diesen Befehl zu verwenden."
+  },
+  "buttons": {
+    "report_bug": "Fehler melden",
+    "support_server": "Support-Server",
+    "invite": "Bot einladen",
+    "back": "Zurück zum Hauptmenü"
+  },
+  "footer": {
+    "made_with": "Erstellt mit ❤️"
+  }
+}

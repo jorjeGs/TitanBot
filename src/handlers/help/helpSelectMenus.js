@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { Collection, ActionRowBuilder, MessageFlags } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { handleInteractionError } from '../../utils/errorHandler.js';
+import { t } from '../../utils/i18n/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -120,7 +121,7 @@ function normalizeCommandData(command) {
     };
 }
 
-async function createCategoryCommandsMenu(category, client) {
+async function createCategoryCommandsMenu(category, client, target = null) {
     const categoryName = formatCategoryName(category);
     const icon = CATEGORY_ICONS[categoryName] || "🔍";
 
@@ -219,12 +220,12 @@ async function createCategoryCommandsMenu(category, client) {
         }
     }
 
-    embed.setFooter({ text: FOOTER_TEXT });
+    embed.setFooter({ text: t('common.footer.made_with', {}, target) });
     embed.setTimestamp();
 
     const backButton = createButton(
         BACK_BUTTON_ID,
-        "Back",
+        t('common.buttons.back', {}, target),
         "primary",
         "⬅️",
         false,
@@ -238,7 +239,7 @@ async function createCategoryCommandsMenu(category, client) {
     };
 }
 
-export async function createAllCommandsMenu(page = 1, client) {
+export async function createAllCommandsMenu(page = 1, client, target = null) {
     const commandsPerPage = 45;
     const allCommands = [];
 
@@ -307,11 +308,11 @@ export async function createAllCommandsMenu(page = 1, client) {
     const pageCommands = allCommands.slice(startIndex, endIndex);
 
     const embed = createEmbed({
-        title: "📋 All Commands",
+        title: t('core.help.all_commands', {}, target),
         description: `Browse every available command in one list. Use the page buttons below to move through the full set.`
     });
 
-    embed.setFooter({ text: FOOTER_TEXT });
+    embed.setFooter({ text: t('common.footer.made_with', {}, target) });
     embed.setTimestamp();
 
     if (pageCommands.length > 0) {
@@ -354,7 +355,7 @@ export async function createAllCommandsMenu(page = 1, client) {
 
     const backButton = createButton(
         BACK_BUTTON_ID,
-        "Back",
+        t('common.buttons.back', {}, target),
         "primary",
         "⬅️",
         false,
@@ -382,13 +383,13 @@ export const helpCategorySelectMenu = {
             const selectedCategory = interaction.values[0];
 
             if (selectedCategory === ALL_COMMANDS_ID) {
-                const { embeds, components } = await createAllCommandsMenu(1, client);
+                const { embeds, components } = await createAllCommandsMenu(1, client, interaction);
                 await interaction.editReply({
                     embeds,
                     components,
                 });
             } else {
-                const { embeds, components } = await createCategoryCommandsMenu(selectedCategory, client);
+                const { embeds, components } = await createCategoryCommandsMenu(selectedCategory, client, interaction);
                 await interaction.editReply({
                     embeds,
                     components,

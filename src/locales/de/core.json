@@ -1,0 +1,42 @@
+{
+  "help": {
+    "title": "📖 {botName} Hilfe",
+    "description": "Richte deinen Server ein, wähle Funktionen aus und durchsuche die Befehle unten.",
+    "getting_started": {
+      "title": "🚀 Erste Schritte",
+      "step1": "**1. Einrichtung starten** — Führe `/configwizard` aus, um Präfix, Mod-Rolle und Logs zu konfigurieren.",
+      "step2": "**2. Systeme aktivieren** — Verwende `/commands dashboard`, um Kategorien ein- oder auszuschalten.",
+      "step3": "**3. Befehle durchsuchen** — Nutze das Menü unten, um Kategorien und Befehle anzuzeigen."
+    },
+    "how_it_works": {
+      "title": "ℹ️ Wie es funktioniert",
+      "point1": "• Dashboard-Befehle verwalten jede Funktion visuell",
+      "point2": "• Einstellungen werden pro Server gespeichert",
+      "point3": "• Slash-Befehle und Präfixe funktionieren beide nach Aktivierung"
+    },
+    "footer_opensource": "-# {botName} ist [Open Source]({url})",
+    "select_placeholder": "Wähle aus, um die Befehle anzuzeigen",
+    "all_commands": "📋 Alle Befehle",
+    "all_commands_desc": "Alle verfügbaren Befehle in einer einzigen Liste durchsuchen",
+    "category_desc": "Befehle in der Kategorie {category} anzeigen",
+    "menu_closed": {
+      "title": "Hilfemenü geschlossen",
+      "description": "Das Hilfemenü wurde geschlossen, verwende /hilfe erneut."
+    }
+  },
+  "language": {
+    "view_title": "🌐 Serversprachkonfiguration",
+    "view_desc": "Aktuelle Sprachkonfiguration für **{server}**:",
+    "configured_label": "Konfigurierte Sprache",
+    "effective_label": "Effektive Sprache für dich",
+    "auto_desc": "Automatisch (Passt sich an die Discord-Sprache des Benutzers an)",
+    "set_success": "✅ Serversprache erfolgreich auf **{locale}** gesetzt.",
+    "invalid_locale": "❌ Ungültige Sprache ausgewählt. Unterstützt: `auto`, `en-US`, `es-419`, `de`."
+  },
+  "config_wizard": {
+    "language_option_label": "Language / Idioma",
+    "language_option_desc": "Serversprache einstellen (Auto, English, Español, Deutsch)",
+    "modal_title": "Serversprache einstellen",
+    "modal_input_label": "Sprachcode (auto, en-US, es-419, de)"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "help": {
+    "name": "ayuda",
+    "description": "Muestra el menú de ayuda con todos los comandos disponibles"
+  },
+  "language": {
+    "name": "idioma",
+    "description": "Ver o configurar el idioma del bot en el servidor",
+    "subcommands": {
+      "view": {
+        "name": "ver",
+        "description": "Ver la configuración de idioma actual de este servidor"
+      },
+      "set": {
+        "name": "establecer",
+        "description": "Establecer el idioma del servidor",
+        "options": {
+          "locale": {
+            "name": "idioma",
+            "description": "Selecciona el idioma del servidor"
+          }
+        }
+      }
+    }
+  }
+}

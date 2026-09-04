@@ -16,7 +16,7 @@ export const helpBackButton = {
                 await interaction.deferUpdate();
             }
 
-            const { embeds, components } = await createInitialHelpMenu(client);
+            const { embeds, components } = await createInitialHelpMenu(client, interaction);
             await interaction.editReply({
                 embeds,
                 components,

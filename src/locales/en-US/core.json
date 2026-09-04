@@ -1,0 +1,42 @@
+{
+  "help": {
+    "title": "📖 {botName} Help",
+    "description": "Set up your server, pick what to enable, then browse commands below.",
+    "getting_started": {
+      "title": "🚀 Getting Started",
+      "step1": "**1. Launch setup** — Run `/configwizard` to configure prefix, mod role, and logs.",
+      "step2": "**2. Enable systems** — Use `/commands dashboard` to turn categories on or off.",
+      "step3": "**3. Browse commands** — Use the menu below to view categories and commands."
+    },
+    "how_it_works": {
+      "title": "ℹ️ How It Works",
+      "point1": "• Dashboard commands manage each feature visually",
+      "point2": "• Settings are saved per server",
+      "point3": "• Slash commands and prefixes both work once enabled"
+    },
+    "footer_opensource": "-# {botName} is [open source]({url})",
+    "select_placeholder": "Select to view the commands",
+    "all_commands": "📋 All Commands",
+    "all_commands_desc": "Browse every available command in a single list",
+    "category_desc": "View commands in the {category} category",
+    "menu_closed": {
+      "title": "Help menu closed",
+      "description": "Help menu has been closed, use /help again."
+    }
+  },
+  "language": {
+    "view_title": "🌐 Server Language Configuration",
+    "view_desc": "Current language configuration for **{server}**:",
+    "configured_label": "Configured Language",
+    "effective_label": "Effective Language for You",
+    "auto_desc": "Auto (Adapts to user Discord locale)",
+    "set_success": "✅ Server language successfully set to **{locale}**.",
+    "invalid_locale": "❌ Invalid language selected. Supported: `auto`, `en-US`, `es-419`, `de`."
+  },
+  "config_wizard": {
+    "language_option_label": "Language / Idioma",
+    "language_option_desc": "Set the server language (Auto, English, Español, Deutsch)",
+    "modal_title": "Set Server Language",
+    "modal_input_label": "Language code (auto, en-US, es-419, de)"
+  }
+}

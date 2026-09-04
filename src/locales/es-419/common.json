@@ -1,0 +1,16 @@
+{
+  "errors": {
+    "unknown": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
+    "permission": "No tienes permiso para usar este comando.",
+    "manage_guild": "Necesitas el permiso **Administrar Servidor** para usar este comando."
+  },
+  "buttons": {
+    "report_bug": "Reportar Error",
+    "support_server": "Servidor de Soporte",
+    "invite": "Invitar al Bot",
+    "back": "Volver al Menú Principal"
+  },
+  "footer": {
+    "made_with": "Hecho con ❤️"
+  }
+}

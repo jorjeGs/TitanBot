@@ -1,0 +1,66 @@
+{
+  "help": {
+    "name": "help",
+    "name_localizations": {
+      "es-419": "ayuda",
+      "de": "hilfe"
+    },
+    "description": "Displays the help menu with all available commands",
+    "description_localizations": {
+      "es-419": "Muestra el menú de ayuda con todos los comandos disponibles",
+      "de": "Zeigt das Hilfemenü mit allen verfügbaren Befehlen an"
+    }
+  },
+  "language": {
+    "name": "language",
+    "name_localizations": {
+      "es-419": "idioma",
+      "de": "sprache"
+    },
+    "description": "View or configure the bot server language",
+    "description_localizations": {
+      "es-419": "Ver o configurar el idioma del bot en el servidor",
+      "de": "Die Serversprache des Bots anzeigen oder konfigurieren"
+    },
+    "subcommands": {
+      "view": {
+        "name": "view",
+        "name_localizations": {
+          "es-419": "ver",
+          "de": "anzeigen"
+        },
+        "description": "View current language configuration for this server",
+        "description_localizations": {
+          "es-419": "Ver la configuración de idioma actual de este servidor",
+          "de": "Aktuelle Sprachkonfiguration für diesen Server anzeigen"
+        }
+      },
+      "set": {
+        "name": "set",
+        "name_localizations": {
+          "es-419": "establecer",
+          "de": "einstellen"
+        },
+        "description": "Set the server language",
+        "description_localizations": {
+          "es-419": "Establecer el idioma del servidor",
+          "de": "Serversprache festlegen"
+        },
+        "options": {
+          "locale": {
+            "name": "locale",
+            "name_localizations": {
+              "es-419": "idioma",
+              "de": "sprache"
+            },
+            "description": "Choose the server language",
+            "description_localizations": {
+              "es-419": "Selecciona el idioma del servidor",
+              "de": "Wähle die Serversprache aus"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "errors": {
+    "unknown": "An unexpected error occurred. Please try again.",
+    "permission": "You do not have permission to use this command.",
+    "manage_guild": "You need the **Manage Server** permission to use this command."
+  },
+  "buttons": {
+    "report_bug": "Report Bug",
+    "support_server": "Support Server",
+    "invite": "Invite Bot",
+    "back": "Back to Main Menu"
+  },
+  "footer": {
+    "made_with": "Made with ❤️"
+  }
+}

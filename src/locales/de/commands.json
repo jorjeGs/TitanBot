@@ -1,0 +1,26 @@
+{
+  "help": {
+    "name": "hilfe",
+    "description": "Zeigt das Hilfemenü mit allen verfügbaren Befehlen an"
+  },
+  "language": {
+    "name": "sprache",
+    "description": "Die Serversprache des Bots anzeigen oder konfigurieren",
+    "subcommands": {
+      "view": {
+        "name": "anzeigen",
+        "description": "Aktuelle Sprachkonfiguration für diesen Server anzeigen"
+      },
+      "set": {
+        "name": "einstellen",
+        "description": "Die Serversprache festlegen",
+        "options": {
+          "locale": {
+            "name": "sprache",
+            "description": "Wähle die Serversprache aus"
+          }
+        }
+      }
+    }
+  }
+}

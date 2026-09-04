@@ -103,3 +103,31 @@ function deepMergeGuildConfig(base, patch) {
 
     return result;
 }
+
+export const getGuildLocale = wrapServiceBoundary(async function getGuildLocale(client, guildId, context = {}) {
+    const config = await getGuildConfig(client, guildId, context);
+    return config?.locale || 'auto';
+}, {
+    service: 'guildConfigService',
+    operation: 'getGuildLocale',
+    message: 'Failed to get guild locale',
+    userMessage: 'Failed to load server language configuration.',
+});
+
+export const setGuildLocale = wrapServiceBoundary(async function setGuildLocale(client, guildId, locale, context = {}) {
+    const validLocales = ['auto', 'en-US', 'es-419', 'de'];
+    if (!validLocales.includes(locale)) {
+        throw createError(
+            `Invalid locale: ${locale}`,
+            ErrorTypes.VALIDATION,
+            `Invalid language. Supported options: ${validLocales.join(', ')}`,
+            { guildId, locale, ...context }
+        );
+    }
+    return await updateGuildConfig(client, guildId, { locale }, context);
+}, {
+    service: 'guildConfigService',
+    operation: 'setGuildLocale',
+    message: 'Failed to set guild locale',
+    userMessage: 'Failed to save server language configuration.',
+});

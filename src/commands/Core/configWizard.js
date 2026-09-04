@@ -114,6 +114,11 @@ function buildDashboardEmbed(config, guild) {
                 inline: true,
             },
             {
+                name: '🌐 Server Language',
+                value: `\`${config.locale || 'auto'}\``,
+                inline: true,
+            },
+            {
                 name: '💚 Bot Status',
                 value: getBotPresenceText(),
                 inline: false,
@@ -161,6 +166,11 @@ function buildSettingsSelect(guildId) {
                     .setDescription('Channel for system log messages')
                     .setValue('logChannelId')
                     .setEmoji('📋'),
+                new StringSelectMenuOptionBuilder()
+                    .setLabel('Server Language')
+                    .setDescription('Set server language (auto, en-US, es-419, de)')
+                    .setValue('locale')
+                    .setEmoji('🌐'),
             ),
     );
 }
@@ -512,6 +522,25 @@ async function showSettingModal(selectInteraction, guildId, setting) {
         return;
     }
 
+    if (setting === 'locale') {
+        const modal = new ModalBuilder()
+            .setCustomId(modalCustomId)
+            .setTitle('Update Server Language');
+
+        const textInput = new TextInputBuilder()
+            .setCustomId('value')
+            .setLabel('Language (auto, en-US, es-419, de)')
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true)
+            .setMinLength(2)
+            .setMaxLength(10)
+            .setPlaceholder('auto');
+
+        modal.addComponents(new ActionRowBuilder().addComponents(textInput));
+        await selectInteraction.showModal(modal);
+        return;
+    }
+
     const modal = new ModalBuilder()
         .setCustomId(modalCustomId)
         .setTitle('Update Server Prefix');
@@ -545,6 +574,15 @@ function resolveSettingModalValue(setting, submitted) {
         return roleId;
     }
 
+    if (setting === 'locale') {
+        const val = submitted.fields.getTextInputValue('value')?.trim();
+        const validLocales = ['auto', 'en-US', 'es-419', 'de'];
+        if (!validLocales.includes(val)) {
+            throw new Error('Language must be one of: auto, en-US, es-419, de');
+        }
+        return val;
+    }
+
     const prefix = submitted.fields.getTextInputValue('value')?.trim();
     if (!prefix || prefix.length < 1 || prefix.length > 10 || /\s/.test(prefix)) {
         throw new Error('Prefix must be 1-10 characters with no spaces.');
@@ -561,6 +599,10 @@ function buildSettingSuccessMessage(setting, value, guild) {
     if (setting === 'modRole') {
         const role = guild.roles.cache.get(value);
         return `Moderator role set to ${role ?? `<@&${value}>`}.`;
+    }
+
+    if (setting === 'locale') {
+        return `Server language set to \`${value}\`.`;
     }
 
     return `Server prefix set to \`${value}\`.`;

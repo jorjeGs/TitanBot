@@ -1,0 +1,42 @@
+{
+  "help": {
+    "title": "📖 Ayuda de {botName}",
+    "description": "Configura tu servidor, elige qué habilitar y explora los comandos abajo.",
+    "getting_started": {
+      "title": "🚀 Primeros Pasos",
+      "step1": "**1. Iniciar configuración** — Ejecuta `/configwizard` para configurar prefijo, rol de moderador y logs.",
+      "step2": "**2. Habilitar sistemas** — Usa `/commands dashboard` para activar o desactivar categorías.",
+      "step3": "**3. Explorar comandos** — Usa el menú inferior para ver categorías y comandos."
+    },
+    "how_it_works": {
+      "title": "ℹ️ Cómo Funciona",
+      "point1": "• Los comandos de panel gestionan cada función visualmente",
+      "point2": "• La configuración se guarda por servidor",
+      "point3": "• Tanto comandos slash como prefijos funcionan una vez activados"
+    },
+    "footer_opensource": "-# {botName} es de [código abierto]({url})",
+    "select_placeholder": "Selecciona para ver los comandos",
+    "all_commands": "📋 Todos los Comandos",
+    "all_commands_desc": "Explora todos los comandos disponibles en una sola lista",
+    "category_desc": "Ver comandos de la categoría {category}",
+    "menu_closed": {
+      "title": "Menú de ayuda cerrado",
+      "description": "El menú de ayuda ha sido cerrado, usa /ayuda de nuevo."
+    }
+  },
+  "language": {
+    "view_title": "🌐 Configuración de Idioma del Servidor",
+    "view_desc": "Configuración actual de idioma para **{server}**:",
+    "configured_label": "Idioma Configurado",
+    "effective_label": "Idioma Efectivo para Ti",
+    "auto_desc": "Automático (Se adapta al idioma de Discord del usuario)",
+    "set_success": "✅ Idioma del servidor establecido exitosamente a **{locale}**.",
+    "invalid_locale": "❌ Idioma seleccionado no válido. Soportados: `auto`, `en-US`, `es-419`, `de`."
+  },
+  "config_wizard": {
+    "language_option_label": "Language / Idioma",
+    "language_option_desc": "Configura el idioma del servidor (Auto, English, Español, Deutsch)",
+    "modal_title": "Configurar Idioma del Servidor",
+    "modal_input_label": "Código de idioma (auto, en-US, es-419, de)"
+  }
+}
