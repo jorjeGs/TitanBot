@@ -38,5 +38,81 @@
     "language_option_desc": "Set the server language (Auto, English, Español, Deutsch)",
     "modal_title": "Set Server Language",
     "modal_input_label": "Language code (auto, en-US, es-419, de)"
+  },
+  "ping": {
+    "pinging": "Pinging...",
+    "pong": "Pong!",
+    "bot_latency": "Bot Latency",
+    "api_latency": "API Latency",
+    "error_title": "System Error",
+    "error_desc": "Could not determine latency at this time."
+  },
+  "uptime": {
+    "title": "System Uptime",
+    "error_title": "System Error",
+    "error_desc": "Could not compute uptime."
+  },
+  "support": {
+    "title": "Need Help?",
+    "description": "Join our official support server for assistance, report bugs, or suggest features. If you are customizing this bot, remember to change the link in the code!",
+    "join_button": "Join Support Server",
+    "error_title": "System Error",
+    "error_desc": "Could not display support information."
+  },
+  "stats": {
+    "title": "System Statistics",
+    "description": "Real-time performance metrics.",
+    "servers": "Servers",
+    "users": "Users",
+    "nodejs": "Node.js",
+    "discordjs": "Discord.js",
+    "memory": "Memory Usage",
+    "error_title": "System Error",
+    "error_desc": "Could not fetch system statistics."
+  },
+  "commands": {
+    "permission_error": "You need the **Manage Server** permission to manage commands.",
+    "category_not_found": "No category matched `{target}`. Use `/commands dashboard` to browse categories.",
+    "category_disabled_title": "Category Disabled",
+    "category_disabled_desc": "All **{category}** commands are now disabled.\nProtected commands remain available.",
+    "category_enabled_title": "Category Enabled",
+    "category_enabled_desc": "**{category}** commands are now enabled (except individually disabled commands).",
+    "command_disabled_title": "Command Disabled",
+    "command_disabled_desc": "`/{command}` is now disabled in this server.",
+    "command_enabled_title": "Command Enabled",
+    "command_enabled_desc": "`/{command}` is now enabled in this server.",
+    "dashboard_failed": "Failed to update command access."
+  },
+  "commands_dashboard": {
+    "title": "⚙️ Command Access",
+    "description": "Manage slash and prefix commands for **{server}**. Subcommands (e.g. `birthday list`) are listed separately.",
+    "footer": "🔒 commands & configwizard always stay available",
+    "summary_title": "📊 Summary",
+    "summary_entries": "**{enabled}/{total}** entries enabled",
+    "summary_status": "{on} {fullyEnabled} fully on · {partial} {partial} partial · {off} {disabled} off",
+    "legend_title": "🔑 Legend",
+    "legend_text": "{on} All enabled · {partial} Some disabled · {off} Category off",
+    "categories_title": "📁 Categories",
+    "categories_cont": "📁 Categories (cont.)",
+    "how_to_use_title": "How to Use",
+    "how_to_use_overview": "• Select a category below to manage commands and subcommands\n• `/commands disable` — turn off a category or specific command\n• `/commands enable` — turn something back on",
+    "how_to_use_category": "• Use the dropdown to toggle individual commands or subcommands\n• **Disable All** turns off the whole category\n• **Clear Overrides** re-enables individually disabled entries",
+    "category_desc": "Command access for **{server}**.",
+    "category_footer": "🔒 Protected entries cannot be disabled",
+    "status_label": "Status",
+    "count_label": "Count",
+    "status_disabled": "Category disabled",
+    "status_all_enabled": "All entries enabled",
+    "status_partial": "{disabledCount} of {totalCount} disabled",
+    "count_enabled": "{enabledCount}/{totalCount} enabled",
+    "commands_field_title": "📋 Commands & Subcommands",
+    "commands_field_cont": "📋 (cont.)",
+    "select_category_placeholder": "📁 Select a category...",
+    "select_command_placeholder": "Toggle a command or subcommand...",
+    "btn_enable_all": "Enable All",
+    "btn_disable_all": "Disable All",
+    "btn_back_overview": "Back to Categories",
+    "btn_clear_overrides": "Clear Overrides",
+    "btn_refresh": "Refresh"
   }
 }

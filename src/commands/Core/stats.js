@@ -1,12 +1,16 @@
 import { SlashCommandBuilder, version, MessageFlags } from 'discord.js';
 import { createEmbed } from '../../utils/embeds.js';
 import { logger } from '../../utils/logger.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t, localizeSlashCommand } from '../../utils/i18n/index.js';
+
 export default {
-    data: new SlashCommandBuilder()
-    .setName("stats")
-    .setDescription("View bot statistics"),
+  data: localizeSlashCommand(
+    new SlashCommandBuilder()
+      .setName("stats")
+      .setDescription("View bot statistics"),
+    'stats',
+  ),
 
   async execute(interaction) {
     try {
@@ -19,13 +23,16 @@ export default {
       );
       const nodeVersion = process.version;
 
-      const embed = createEmbed({ title: "System Statistics", description: "Real-time performance metrics." }).addFields(
-        { name: "Servers", value: `${totalGuilds}`, inline: true },
-        { name: "Users", value: `${totalMembers}`, inline: true },
-        { name: "Node.js", value: `${nodeVersion}`, inline: true },
-        { name: "Discord.js", value: `v${version}`, inline: true },
+      const embed = createEmbed({
+        title: t('core.stats.title', {}, interaction),
+        description: t('core.stats.description', {}, interaction),
+      }).addFields(
+        { name: t('core.stats.servers', {}, interaction), value: `${totalGuilds}`, inline: true },
+        { name: t('core.stats.users', {}, interaction), value: `${totalMembers}`, inline: true },
+        { name: t('core.stats.nodejs', {}, interaction), value: `${nodeVersion}`, inline: true },
+        { name: t('core.stats.discordjs', {}, interaction), value: `v${version}`, inline: true },
         {
-          name: "Memory Usage",
+          name: t('core.stats.memory', {}, interaction),
           value: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
           inline: true,
         },
@@ -35,7 +42,7 @@ export default {
     } catch (error) {
       logger.error('Stats command error:', error);
       return InteractionHelper.safeEditReply(interaction, {
-        embeds: [createEmbed({ title: 'System Error', description: 'Could not fetch system statistics.', color: 'error' })],
+        embeds: [createEmbed({ title: t('core.stats.error_title', {}, interaction), description: t('core.stats.error_desc', {}, interaction), color: 'error' })],
         flags: MessageFlags.Ephemeral,
       });
     }

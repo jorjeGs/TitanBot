@@ -38,5 +38,81 @@
     "language_option_desc": "Configura el idioma del servidor (Auto, English, Español, Deutsch)",
     "modal_title": "Configurar Idioma del Servidor",
     "modal_input_label": "Código de idioma (auto, en-US, es-419, de)"
+  },
+  "ping": {
+    "pinging": "Haciendo ping...",
+    "pong": "¡Pong!",
+    "bot_latency": "Latencia del Bot",
+    "api_latency": "Latencia de la API",
+    "error_title": "Error del Sistema",
+    "error_desc": "No se pudo determinar la latencia en este momento."
+  },
+  "uptime": {
+    "title": "Tiempo de Actividad del Sistema",
+    "error_title": "Error del Sistema",
+    "error_desc": "No se pudo calcular el tiempo de actividad."
+  },
+  "support": {
+    "title": "¿Necesitas Ayuda?",
+    "description": "Únete a nuestro servidor de soporte oficial para recibir ayuda, reportar errores o sugerir funciones. Si estás personalizando este bot, recuerda cambiar el enlace en el código.",
+    "join_button": "Unirse al Servidor de Soporte",
+    "error_title": "Error del Sistema",
+    "error_desc": "No se pudo mostrar la información de soporte."
+  },
+  "stats": {
+    "title": "Estadísticas del Sistema",
+    "description": "Métricas de rendimiento en tiempo real.",
+    "servers": "Servidores",
+    "users": "Usuarios",
+    "nodejs": "Node.js",
+    "discordjs": "Discord.js",
+    "memory": "Uso de Memoria",
+    "error_title": "Error del Sistema",
+    "error_desc": "No se pudieron obtener las estadísticas del sistema."
+  },
+  "commands": {
+    "permission_error": "Necesitas el permiso de **Gestionar Servidor** para administrar comandos.",
+    "category_not_found": "Ninguna categoría coincide con `{target}`. Usa `/commands dashboard` para explorar categorías.",
+    "category_disabled_title": "Categoría Desactivada",
+    "category_disabled_desc": "Todos los comandos de **{category}** están ahora desactivados.\nLos comandos protegidos siguen disponibles.",
+    "category_enabled_title": "Categoría Activada",
+    "category_enabled_desc": "Los comandos de **{category}** están ahora activados (excepto los comandos desactivados individualmente).",
+    "command_disabled_title": "Comando Desactivado",
+    "command_disabled_desc": "`/{command}` está ahora desactivado en este servidor.",
+    "command_enabled_title": "Comando Activado",
+    "command_enabled_desc": "`/{command}` está ahora activado en este servidor.",
+    "dashboard_failed": "Error al actualizar el acceso a comandos."
+  },
+  "commands_dashboard": {
+    "title": "⚙️ Acceso a Comandos",
+    "description": "Administra comandos slash y de prefijo para **{server}**. Los subcomandos (ej. `birthday list`) se listan por separado.",
+    "footer": "🔒 commands y configwizard siempre permanecen disponibles",
+    "summary_title": "📊 Resumen",
+    "summary_entries": "**{enabled}/{total}** entradas activadas",
+    "summary_status": "{on} {fullyEnabled} activas · {partial} {partial} parciales · {off} {disabled} desactivadas",
+    "legend_title": "🔑 Leyenda",
+    "legend_text": "{on} Todo activado · {partial} Algunos desactivados · {off} Categoría apagada",
+    "categories_title": "📁 Categorías",
+    "categories_cont": "📁 Categorías (cont.)",
+    "how_to_use_title": "Cómo usar",
+    "how_to_use_overview": "• Selecciona una categoría abajo para administrar comandos y subcomandos\n• `/commands disable` — apaga una categoría o comando específico\n• `/commands enable` — vuelve a activar",
+    "how_to_use_category": "• Usa el menú desplegable para activar/desactivar comandos o subcomandos\n• **Desactivar Todos** apaga toda la categoría\n• **Restablecer Anulaciones** reactiva entradas desactivadas individualmente",
+    "category_desc": "Acceso a comandos para **{server}**.",
+    "category_footer": "🔒 Las entradas protegidas no se pueden desactivar",
+    "status_label": "Estado",
+    "count_label": "Total",
+    "status_disabled": "Categoría desactivada",
+    "status_all_enabled": "Todas las entradas activadas",
+    "status_partial": "{disabledCount} de {totalCount} desactivadas",
+    "count_enabled": "{enabledCount}/{totalCount} activadas",
+    "commands_field_title": "📋 Comandos y Subcomandos",
+    "commands_field_cont": "📋 (cont.)",
+    "select_category_placeholder": "📁 Selecciona una categoría...",
+    "select_command_placeholder": "Alternar un comando o subcomando...",
+    "btn_enable_all": "Activar Todos",
+    "btn_disable_all": "Desactivar Todos",
+    "btn_back_overview": "Volver a Categorías",
+    "btn_clear_overrides": "Restablecer Anulaciones",
+    "btn_refresh": "Actualizar"
   }
 }

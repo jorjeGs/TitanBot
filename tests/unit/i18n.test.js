@@ -14,6 +14,11 @@ import { GUILD_CONFIG_DEFAULTS } from '../../src/config/guild/guildConfigDefault
 import { normalizeGuildConfig } from '../../src/utils/schemas.js';
 import helpCommand from '../../src/commands/Core/help.js';
 import languageCommand from '../../src/commands/Core/language.js';
+import pingCommand from '../../src/commands/Core/ping.js';
+import uptimeCommand from '../../src/commands/Core/uptime.js';
+import supportCommand from '../../src/commands/Core/support.js';
+import statsCommand from '../../src/commands/Core/stats.js';
+import commandsCommand from '../../src/commands/Core/commands.js';
 
 test('i18n: Locale Normalization', async (tContext) => {
     await tContext.test('returns exact supported locales', () => {
@@ -84,6 +89,14 @@ test('i18n: Translation and Interpolation', async (tContext) => {
 
         const deTitle = t('core.help.title', { botName: 'TitanBot' }, 'de');
         assert.equal(deTitle, '📖 TitanBot Hilfe');
+
+        // Core ping, uptime, stats, commands translations
+        assert.equal(t('core.ping.pong', {}, 'es-419'), '¡Pong!');
+        assert.equal(t('core.uptime.title', {}, 'es-419'), 'Tiempo de Actividad del Sistema');
+        assert.equal(t('core.support.join_button', {}, 'es-419'), 'Unirse al Servidor de Soporte');
+        assert.equal(t('core.stats.servers', {}, 'es-419'), 'Servidores');
+        assert.equal(t('core.commands.category_disabled_title', {}, 'de'), 'Kategorie deaktiviert');
+        assert.equal(t('core.commands_dashboard.title', {}, 'de'), '⚙️ Befehlszugriff');
     });
 
     await tContext.test('falls back to en-US when key is missing in another language', () => {
@@ -140,6 +153,40 @@ test('i18n: Slash Command Localizations', async (tContext) => {
             'es-419': 'establecer',
             'de': 'einstellen',
         });
+    });
+
+    await tContext.test('Core commands (ping, uptime, support, stats, commands) are localized', () => {
+        const pingJson = pingCommand.data.toJSON();
+        assert.equal(pingJson.name, 'ping');
+        assert.deepEqual(pingJson.name_localizations, { 'es-419': 'ping', 'de': 'ping' });
+
+        const uptimeJson = uptimeCommand.data.toJSON();
+        assert.equal(uptimeJson.name, 'uptime');
+        assert.deepEqual(uptimeJson.name_localizations, { 'es-419': 'actividad', 'de': 'onlinezeit' });
+
+        const supportJson = supportCommand.data.toJSON();
+        assert.equal(supportJson.name, 'support');
+        assert.deepEqual(supportJson.name_localizations, { 'es-419': 'soporte', 'de': 'support' });
+
+        const statsJson = statsCommand.data.toJSON();
+        assert.equal(statsJson.name, 'stats');
+        assert.deepEqual(statsJson.name_localizations, { 'es-419': 'estadisticas', 'de': 'statistiken' });
+
+        const commandsJson = commandsCommand.data.toJSON();
+        assert.equal(commandsJson.name, 'commands');
+        assert.deepEqual(commandsJson.name_localizations, { 'es-419': 'comandos', 'de': 'befehle' });
+
+        const dashSub = commandsJson.options.find(opt => opt.name === 'dashboard');
+        assert.ok(dashSub);
+        assert.deepEqual(dashSub.name_localizations, { 'es-419': 'panel', 'de': 'dashboard' });
+
+        const disableSub = commandsJson.options.find(opt => opt.name === 'disable');
+        assert.ok(disableSub);
+        assert.deepEqual(disableSub.name_localizations, { 'es-419': 'desactivar', 'de': 'deaktivieren' });
+
+        const enableSub = commandsJson.options.find(opt => opt.name === 'enable');
+        assert.ok(enableSub);
+        assert.deepEqual(enableSub.name_localizations, { 'es-419': 'activar', 'de': 'aktivieren' });
     });
 });
 

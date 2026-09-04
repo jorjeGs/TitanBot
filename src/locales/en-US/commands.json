@@ -62,5 +62,155 @@
         }
       }
     }
+  },
+  "ping": {
+    "name": "ping",
+    "name_localizations": {
+      "es-419": "ping",
+      "de": "ping"
+    },
+    "description": "Checks the bot's latency and API speed",
+    "description_localizations": {
+      "es-419": "Comprueba la latencia del bot y la velocidad de la API",
+      "de": "Überprüft die Latenz des Bots und die API-Geschwindigkeit"
+    }
+  },
+  "uptime": {
+    "name": "uptime",
+    "name_localizations": {
+      "es-419": "actividad",
+      "de": "onlinezeit"
+    },
+    "description": "Check how long the bot has been online",
+    "description_localizations": {
+      "es-419": "Comprueba cuánto tiempo ha estado en línea el bot",
+      "de": "Prüfe, wie lange der Bot bereits online ist"
+    }
+  },
+  "support": {
+    "name": "support",
+    "name_localizations": {
+      "es-419": "soporte",
+      "de": "support"
+    },
+    "description": "Get link to the support server",
+    "description_localizations": {
+      "es-419": "Obtén el enlace al servidor de soporte",
+      "de": "Erhalte den Link zum Support-Server"
+    }
+  },
+  "stats": {
+    "name": "stats",
+    "name_localizations": {
+      "es-419": "estadisticas",
+      "de": "statistiken"
+    },
+    "description": "View bot statistics",
+    "description_localizations": {
+      "es-419": "Ver estadísticas del bot",
+      "de": "Bot-Statistiken anzeigen"
+    }
+  },
+  "commands": {
+    "name": "commands",
+    "name_localizations": {
+      "es-419": "comandos",
+      "de": "befehle"
+    },
+    "description": "Enable or disable bot commands and categories for this server",
+    "description_localizations": {
+      "es-419": "Activar o desactivar comandos y categorías del bot para este servidor",
+      "de": "Aktiviere oder deaktiviere Bot-Befehle und Kategorien für diesen Server"
+    },
+    "subcommands": {
+      "dashboard": {
+        "name": "dashboard",
+        "name_localizations": {
+          "es-419": "panel",
+          "de": "dashboard"
+        },
+        "description": "Open the interactive command access dashboard",
+        "description_localizations": {
+          "es-419": "Abrir el panel interactivo de acceso a comandos",
+          "de": "Öffne das interaktive Befehlszugriffs-Dashboard"
+        }
+      },
+      "disable": {
+        "name": "disable",
+        "name_localizations": {
+          "es-419": "desactivar",
+          "de": "deaktivieren"
+        },
+        "description": "Disable a command or entire category",
+        "description_localizations": {
+          "es-419": "Desactivar un comando o una categoría entera",
+          "de": "Deaktiviere einen Befehl oder eine gesamte Kategorie"
+        },
+        "options": {
+          "scope": {
+            "name": "scope",
+            "name_localizations": {
+              "es-419": "alcance",
+              "de": "bereich"
+            },
+            "description": "Disable a single command or a whole category",
+            "description_localizations": {
+              "es-419": "Desactivar un comando individual o una categoría entera",
+              "de": "Deaktiviere einen einzelnen Befehl oder eine ganze Kategorie"
+            }
+          },
+          "target": {
+            "name": "target",
+            "name_localizations": {
+              "es-419": "objetivo",
+              "de": "ziel"
+            },
+            "description": "Category or command name",
+            "description_localizations": {
+              "es-419": "Nombre de la categoría o comando",
+              "de": "Kategorie- oder Befehlsname"
+            }
+          }
+        }
+      },
+      "enable": {
+        "name": "enable",
+        "name_localizations": {
+          "es-419": "activar",
+          "de": "aktivieren"
+        },
+        "description": "Enable a command or entire category",
+        "description_localizations": {
+          "es-419": "Activar un comando o una categoría entera",
+          "de": "Aktiviere einen Befehl oder eine gesamte Kategorie"
+        },
+        "options": {
+          "scope": {
+            "name": "scope",
+            "name_localizations": {
+              "es-419": "alcance",
+              "de": "bereich"
+            },
+            "description": "Enable a single command or a whole category",
+            "description_localizations": {
+              "es-419": "Activar un comando individual o una categoría entera",
+              "de": "Aktiviere einen einzelnen Befehl oder eine ganze Kategorie"
+            }
+          },
+          "target": {
+            "name": "target",
+            "name_localizations": {
+              "es-419": "objetivo",
+              "de": "ziel"
+            },
+            "description": "Category or command name",
+            "description_localizations": {
+              "es-419": "Nombre de la categoría o comando",
+              "de": "Kategorie- oder Befehlsname"
+            }
+          }
+        }
+      }
+    }
   }
 }

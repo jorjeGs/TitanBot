@@ -22,5 +22,59 @@
         }
       }
     }
+  },
+  "ping": {
+    "name": "ping",
+    "description": "Comprueba la latencia del bot y la velocidad de la API"
+  },
+  "uptime": {
+    "name": "actividad",
+    "description": "Comprueba cuánto tiempo ha estado en línea el bot"
+  },
+  "support": {
+    "name": "soporte",
+    "description": "Obtén el enlace al servidor de soporte"
+  },
+  "stats": {
+    "name": "estadisticas",
+    "description": "Ver estadísticas del bot"
+  },
+  "commands": {
+    "name": "comandos",
+    "description": "Activar o desactivar comandos y categorías del bot para este servidor",
+    "subcommands": {
+      "dashboard": {
+        "name": "panel",
+        "description": "Abrir el panel interactivo de acceso a comandos"
+      },
+      "disable": {
+        "name": "desactivar",
+        "description": "Desactivar un comando o una categoría entera",
+        "options": {
+          "scope": {
+            "name": "alcance",
+            "description": "Desactivar un comando individual o una categoría entera"
+          },
+          "target": {
+            "name": "objetivo",
+            "description": "Nombre de la categoría o comando"
+          }
+        }
+      },
+      "enable": {
+        "name": "activar",
+        "description": "Activar un comando o una categoría entera",
+        "options": {
+          "scope": {
+            "name": "alcance",
+            "description": "Activar un comando individual o una categoría entera"
+          },
+          "target": {
+            "name": "objetivo",
+            "description": "Nombre de la categoría o comando"
+          }
+        }
+      }
+    }
   }
 }

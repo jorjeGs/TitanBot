@@ -1,12 +1,16 @@
 import { SlashCommandBuilder, MessageFlags } from 'discord.js';
 import { createEmbed } from '../../utils/embeds.js';
 import { logger } from '../../utils/logger.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t, localizeSlashCommand } from '../../utils/i18n/index.js';
+
 export default {
-    data: new SlashCommandBuilder()
-    .setName("uptime")
-    .setDescription("Check how long the bot has been online"),
+  data: localizeSlashCommand(
+    new SlashCommandBuilder()
+      .setName("uptime")
+      .setDescription("Check how long the bot has been online"),
+    'uptime',
+  ),
 
   async execute(interaction) {
     try {
@@ -24,7 +28,7 @@ export default {
 
       await InteractionHelper.safeEditReply(interaction, {
         embeds: [createEmbed({ 
-          title: "System Uptime", 
+          title: t('core.uptime.title', {}, interaction), 
           description: `\`\`\`${uptimeStr}\`\`\`` 
         })],
       });
@@ -33,7 +37,7 @@ export default {
       
       try {
         return await InteractionHelper.safeEditReply(interaction, {
-          embeds: [createEmbed({ title: 'System Error', description: 'Could not compute uptime.', color: 'error' })],
+          embeds: [createEmbed({ title: t('core.uptime.error_title', {}, interaction), description: t('core.uptime.error_desc', {}, interaction), color: 'error' })],
           flags: MessageFlags.Ephemeral,
         });
       } catch (replyError) {

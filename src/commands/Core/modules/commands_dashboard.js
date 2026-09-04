@@ -15,6 +15,7 @@ import {
   resetCategoryCommands,
 } from '../../../services/commandAccessService.js';
 import { getGuildConfig } from '../../../services/config/guildConfig.js';
+import { t } from '../../../utils/i18n/index.js';
 
 export const DASHBOARD_CATEGORY_SELECT = 'cmdaccess_category';
 export const DASHBOARD_COMMAND_SELECT = 'cmdaccess_command';
@@ -73,7 +74,7 @@ function chunkLines(lines, maxLength = 980) {
   return chunks;
 }
 
-export function buildOverviewEmbed(snapshot, guild) {
+export function buildOverviewEmbed(snapshot, guild, target = null) {
   const fullyEnabled = snapshot.categories.filter((c) => !c.categoryDisabled && c.disabledCount === 0).length;
   const partial = snapshot.categories.filter((c) => !c.categoryDisabled && c.disabledCount > 0).length;
   const disabled = snapshot.categories.filter((c) => c.categoryDisabled).length;
@@ -86,16 +87,16 @@ export function buildOverviewEmbed(snapshot, guild) {
 
   const fields = [
     {
-      name: '📊 Summary',
+      name: t('core.commands_dashboard.summary_title', {}, target),
       value: [
-        `**${snapshot.enabledTotal}/${snapshot.totalCommands}** entries enabled`,
-        `${STATUS.enabled} ${fullyEnabled} fully on · ${STATUS.partial} ${partial} partial · ${STATUS.disabled} ${disabled} off`,
+        t('core.commands_dashboard.summary_entries', { enabled: snapshot.enabledTotal, total: snapshot.totalCommands }, target),
+        t('core.commands_dashboard.summary_status', { on: STATUS.enabled, fullyEnabled, partial, off: STATUS.disabled, disabled }, target),
       ].join('\n'),
       inline: false,
     },
     {
-      name: '🔑 Legend',
-      value: `${STATUS.enabled} All enabled · ${STATUS.partial} Some disabled · ${STATUS.disabled} Category off`,
+      name: t('core.commands_dashboard.legend_title', {}, target),
+      value: t('core.commands_dashboard.legend_text', { on: STATUS.enabled, partial: STATUS.partial, off: STATUS.disabled }, target),
       inline: false,
     },
   ];
@@ -103,37 +104,33 @@ export function buildOverviewEmbed(snapshot, guild) {
   const chunks = chunkLines(categoryLines);
   chunks.forEach((chunk, index) => {
     fields.push({
-      name: index === 0 ? '📁 Categories' : '📁 Categories (cont.)',
+      name: index === 0 ? t('core.commands_dashboard.categories_title', {}, target) : t('core.commands_dashboard.categories_cont', {}, target),
       value: chunk,
       inline: false,
     });
   });
 
   fields.push({
-    name: 'How to Use',
-    value: [
-      '• Select a category below to manage commands and subcommands',
-      '• `/commands disable` — turn off a category or specific command',
-      '• `/commands enable` — turn something back on',
-    ].join('\n'),
+    name: t('core.commands_dashboard.how_to_use_title', {}, target),
+    value: t('core.commands_dashboard.how_to_use_overview', {}, target),
   });
 
   return createEmbed({
-    title: '⚙️ Command Access',
-    description: `Manage slash and prefix commands for **${guild.name}**. Subcommands (e.g. \`birthday list\`) are listed separately.`,
+    title: t('core.commands_dashboard.title', {}, target),
+    description: t('core.commands_dashboard.description', { server: guild.name }, target),
     color: 'info',
     fields,
-    footer: '🔒 commands & configwizard always stay available',
+    footer: t('core.commands_dashboard.footer', {}, target),
   });
 }
 
-export function buildCategoryEmbed(category, guild) {
+export function buildCategoryEmbed(category, guild, target = null) {
   const statusIcon = getCategoryStatus(category);
   const statusText = category.categoryDisabled
-    ? 'Category disabled'
+    ? t('core.commands_dashboard.status_disabled', {}, target)
     : category.disabledCount === 0
-      ? 'All entries enabled'
-      : `${category.disabledCount} of ${category.totalCount} disabled`;
+      ? t('core.commands_dashboard.status_all_enabled', {}, target)
+      : t('core.commands_dashboard.status_partial', { disabledCount: category.disabledCount, totalCount: category.totalCount }, target);
 
   const commandLines = category.commands.map((command) => {
     const enabled = category.enabledCommands.includes(command.name);
@@ -144,13 +141,13 @@ export function buildCategoryEmbed(category, guild) {
 
   const fields = [
     {
-      name: `${statusIcon} Status`,
+      name: `${statusIcon} ${t('core.commands_dashboard.status_label', {}, target)}`,
       value: statusText,
       inline: true,
     },
     {
-      name: '📈 Count',
-      value: `${category.enabledCount}/${category.totalCount} enabled`,
+      name: `📈 ${t('core.commands_dashboard.count_label', {}, target)}`,
+      value: t('core.commands_dashboard.count_enabled', { enabledCount: category.enabledCount, totalCount: category.totalCount }, target),
       inline: true,
     },
   ];
@@ -158,31 +155,27 @@ export function buildCategoryEmbed(category, guild) {
   const chunks = chunkLines(commandLines);
   chunks.forEach((chunk, index) => {
     fields.push({
-      name: index === 0 ? '📋 Commands & Subcommands' : '📋 (cont.)',
+      name: index === 0 ? t('core.commands_dashboard.commands_field_title', {}, target) : t('core.commands_dashboard.commands_field_cont', {}, target),
       value: chunk,
       inline: false,
     });
   });
 
   fields.push({
-    name: 'How to Use',
-    value: [
-      '• Use the dropdown to toggle individual commands or subcommands',
-      '• **Disable All** turns off the whole category',
-      '• **Clear Overrides** re-enables individually disabled entries',
-    ].join('\n'),
+    name: t('core.commands_dashboard.how_to_use_title', {}, target),
+    value: t('core.commands_dashboard.how_to_use_category', {}, target),
   });
 
   return createEmbed({
     title: `${category.icon} ${category.displayName}`,
-    description: `Command access for **${guild.name}**.`,
+    description: t('core.commands_dashboard.category_desc', { server: guild.name }, target),
     color: category.categoryDisabled ? 'error' : category.disabledCount > 0 ? 'warning' : 'success',
     fields,
-    footer: '🔒 Protected entries cannot be disabled',
+    footer: t('core.commands_dashboard.category_footer', {}, target),
   });
 }
 
-export function buildOverviewComponents(guildId, snapshot) {
+export function buildOverviewComponents(guildId, snapshot, target = null) {
   const categoryOptions = snapshot.categories.slice(0, 25).map((category) => {
     const status = getCategoryStatus(category);
     return new StringSelectMenuOptionBuilder()
@@ -196,20 +189,20 @@ export function buildOverviewComponents(guildId, snapshot) {
     new ActionRowBuilder().addComponents(
       new StringSelectMenuBuilder()
         .setCustomId(customId(DASHBOARD_CATEGORY_SELECT, guildId))
-        .setPlaceholder('📁 Select a category...')
+        .setPlaceholder(t('core.commands_dashboard.select_category_placeholder', {}, target))
         .addOptions(categoryOptions),
     ),
     new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId(customId(DASHBOARD_REFRESH, guildId))
-        .setLabel('Refresh')
+        .setLabel(t('core.commands_dashboard.btn_refresh', {}, target))
         .setEmoji('🔄')
         .setStyle(ButtonStyle.Secondary),
     ),
   ];
 }
 
-export function buildCategoryComponents(guildId, category) {
+export function buildCategoryComponents(guildId, category, target = null) {
   const toggleableCommands = category.commands.filter((command) => !command.protected);
   const commandOptions = toggleableCommands.slice(0, 25).map((command) => {
     const enabled = category.enabledCommands.includes(command.name);
@@ -227,27 +220,27 @@ export function buildCategoryComponents(guildId, category) {
     new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId(customId(DASHBOARD_HOME, guildId))
-        .setLabel('Back')
+        .setLabel(t('core.commands_dashboard.btn_back_overview', {}, target))
         .setEmoji('◀️')
         .setStyle(ButtonStyle.Secondary),
       new ButtonBuilder()
         .setCustomId(customId(DASHBOARD_TOGGLE_CATEGORY, guildId, category.key))
-        .setLabel(category.categoryDisabled ? 'Enable Category' : 'Disable Category')
+        .setLabel(category.categoryDisabled ? t('core.commands_dashboard.btn_enable_all', {}, target) : t('core.commands_dashboard.btn_disable_all', {}, target))
         .setEmoji(category.categoryDisabled ? '🟢' : '🔴')
         .setStyle(category.categoryDisabled ? ButtonStyle.Success : ButtonStyle.Danger),
       new ButtonBuilder()
         .setCustomId(customId(DASHBOARD_ENABLE_ALL, guildId, category.key))
-        .setLabel('Enable All')
+        .setLabel(t('core.commands_dashboard.btn_enable_all', {}, target))
         .setEmoji('✅')
         .setStyle(ButtonStyle.Success),
       new ButtonBuilder()
         .setCustomId(customId(DASHBOARD_DISABLE_ALL, guildId, category.key))
-        .setLabel('Disable All')
+        .setLabel(t('core.commands_dashboard.btn_disable_all', {}, target))
         .setEmoji('⛔')
         .setStyle(ButtonStyle.Danger),
       new ButtonBuilder()
         .setCustomId(customId(DASHBOARD_RESET_COMMANDS, guildId, category.key))
-        .setLabel('Clear Overrides')
+        .setLabel(t('core.commands_dashboard.btn_clear_overrides', {}, target))
         .setEmoji('🧹')
         .setStyle(ButtonStyle.Secondary),
     ),
@@ -258,7 +251,7 @@ export function buildCategoryComponents(guildId, category) {
       new ActionRowBuilder().addComponents(
         new StringSelectMenuBuilder()
           .setCustomId(customId(DASHBOARD_COMMAND_SELECT, guildId, category.key))
-          .setPlaceholder('Toggle a command or subcommand...')
+          .setPlaceholder(t('core.commands_dashboard.select_command_placeholder', {}, target))
           .addOptions(commandOptions),
       ),
     );
@@ -267,7 +260,7 @@ export function buildCategoryComponents(guildId, category) {
   return rows;
 }
 
-export async function buildDashboardView(client, guildId, guild, view = 'overview', categoryKey = null) {
+export async function buildDashboardView(client, guildId, guild, view = 'overview', categoryKey = null, target = null) {
   const config = await getGuildConfig(client, guildId);
   const snapshot = getCommandAccessSnapshot(client, config);
 
@@ -275,21 +268,21 @@ export async function buildDashboardView(client, guildId, guild, view = 'overvie
     const category = snapshot.categories.find((entry) => entry.key === categoryKey);
     if (!category) {
       return {
-        embed: buildOverviewEmbed(snapshot, guild),
-        components: buildOverviewComponents(guildId, snapshot),
+        embed: buildOverviewEmbed(snapshot, guild, target),
+        components: buildOverviewComponents(guildId, snapshot, target),
       };
     }
 
     return {
-      embed: buildCategoryEmbed(category, guild),
-      components: buildCategoryComponents(guildId, category),
+      embed: buildCategoryEmbed(category, guild, target),
+      components: buildCategoryComponents(guildId, category, target),
       categoryKey,
     };
   }
 
   return {
-    embed: buildOverviewEmbed(snapshot, guild),
-    components: buildOverviewComponents(guildId, snapshot),
+    embed: buildOverviewEmbed(snapshot, guild, target),
+    components: buildOverviewComponents(guildId, snapshot, target),
   };
 }
 
@@ -320,20 +313,20 @@ export async function handleDashboardComponent(interaction, client) {
       await enableCommand(client, guildId, commandName);
     }
 
-    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', categoryKey);
+    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', categoryKey, interaction);
     return interaction.update({ embeds: [view.embed], components: view.components });
   }
 
   if (action === DASHBOARD_CATEGORY_SELECT) {
     const categoryKey = interaction.values[0];
-    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', categoryKey);
+    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', categoryKey, interaction);
     return interaction.update({ embeds: [view.embed], components: view.components });
   }
 
   await interaction.deferUpdate();
 
   if (action === DASHBOARD_REFRESH || action === DASHBOARD_HOME) {
-    const view = await buildDashboardView(client, guildId, interaction.guild, 'overview');
+    const view = await buildDashboardView(client, guildId, interaction.guild, 'overview', null, interaction);
     return interaction.editReply({ embeds: [view.embed], components: view.components });
   }
 
@@ -349,31 +342,31 @@ export async function handleDashboardComponent(interaction, client) {
       await disableCategory(client, guildId, categoryKey);
     }
 
-    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', categoryKey);
+    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', categoryKey, interaction);
     return interaction.editReply({ embeds: [view.embed], components: view.components });
   }
 
   if (action === DASHBOARD_ENABLE_ALL) {
     await enableCategory(client, guildId, suffix);
     await resetCategoryCommands(client, guildId, suffix);
-    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', suffix);
+    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', suffix, interaction);
     return interaction.editReply({ embeds: [view.embed], components: view.components });
   }
 
   if (action === DASHBOARD_DISABLE_ALL) {
     await disableCategory(client, guildId, suffix);
-    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', suffix);
+    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', suffix, interaction);
     return interaction.editReply({ embeds: [view.embed], components: view.components });
   }
 
   if (action === DASHBOARD_RESET_COMMANDS) {
     await enableCategory(client, guildId, suffix);
     await resetCategoryCommands(client, guildId, suffix);
-    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', suffix);
+    const view = await buildDashboardView(client, guildId, interaction.guild, 'category', suffix, interaction);
     return interaction.editReply({ embeds: [view.embed], components: view.components });
   }
 
-  return interaction.editReply({ content: 'Unknown dashboard action.', embeds: [], components: [] });
+  return interaction.editReply({ content: t('core.commands_dashboard.dashboard_failed', {}, interaction), embeds: [], components: [] });
 }
 
 export function isCommandAccessCustomId(customIdValue) {

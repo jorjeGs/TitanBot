@@ -1,18 +1,23 @@
 import { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, MessageFlags } from 'discord.js';
 import { createEmbed } from '../../utils/embeds.js';
 import { logger } from '../../utils/logger.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t, localizeSlashCommand } from '../../utils/i18n/index.js';
+
 const SUPPORT_SERVER_URL = "https://discord.gg/QnWNz2dKCE";
+
 export default {
-    data: new SlashCommandBuilder()
-    .setName("support")
-    .setDescription("Get link to the support server"),
+  data: localizeSlashCommand(
+    new SlashCommandBuilder()
+      .setName("support")
+      .setDescription("Get link to the support server"),
+    'support',
+  ),
 
   async execute(interaction) {
     try {
       const supportButton = new ButtonBuilder()
-        .setLabel("Join Support Server")
+        .setLabel(t('core.support.join_button', {}, interaction))
         .setStyle(ButtonStyle.Link)
         .setURL(SUPPORT_SERVER_URL);
 
@@ -20,7 +25,10 @@ export default {
 
       await InteractionHelper.safeReply(interaction, {
         embeds: [
-          createEmbed({ title: "Need Help?", description: "Join our official support server for assistance, report bugs, or suggest features. If you are customizing this bot, remember to change the link in the code!" }),
+          createEmbed({
+            title: t('core.support.title', {}, interaction),
+            description: t('core.support.description', {}, interaction),
+          }),
         ],
         components: [actionRow],
         flags: MessageFlags.Ephemeral,
@@ -30,7 +38,7 @@ export default {
       
       try {
         return await InteractionHelper.safeReply(interaction, {
-          embeds: [createEmbed({ title: 'System Error', description: 'Could not display support information.', color: 'error' })],
+          embeds: [createEmbed({ title: t('core.support.error_title', {}, interaction), description: t('core.support.error_desc', {}, interaction), color: 'error' })],
           flags: MessageFlags.Ephemeral,
         });
       } catch (replyError) {

@@ -38,5 +38,81 @@
     "language_option_desc": "Serversprache einstellen (Auto, English, Español, Deutsch)",
     "modal_title": "Serversprache einstellen",
     "modal_input_label": "Sprachcode (auto, en-US, es-419, de)"
+  },
+  "ping": {
+    "pinging": "Pinge...",
+    "pong": "Pong!",
+    "bot_latency": "Bot-Latenz",
+    "api_latency": "API-Latenz",
+    "error_title": "Systemfehler",
+    "error_desc": "Latenz konnte derzeit nicht ermittelt werden."
+  },
+  "uptime": {
+    "title": "System-Onlinezeit",
+    "error_title": "Systemfehler",
+    "error_desc": "Onlinezeit konnte nicht berechnet werden."
+  },
+  "support": {
+    "title": "Brauchst du Hilfe?",
+    "description": "Tritt unserem offiziellen Support-Server bei, um Hilfe zu erhalten, Fehler zu melden oder Funktionen vorzuschlagen. Wenn du diesen Bot anpasst, denke daran, den Link im Code zu ändern!",
+    "join_button": "Support-Server beitreten",
+    "error_title": "Systemfehler",
+    "error_desc": "Support-Informationen konnten nicht angezeigt werden."
+  },
+  "stats": {
+    "title": "Systemstatistiken",
+    "description": "Echtzeit-Leistungsmetriken.",
+    "servers": "Server",
+    "users": "Benutzer",
+    "nodejs": "Node.js",
+    "discordjs": "Discord.js",
+    "memory": "Speichernutzung",
+    "error_title": "Systemfehler",
+    "error_desc": "Systemstatistiken konnten nicht abgerufen werden."
+  },
+  "commands": {
+    "permission_error": "Du benötigst die Berechtigung **Server verwalten**, um Befehle zu verwalten.",
+    "category_not_found": "Keine Kategorie stimmte mit `{target}` überein. Verwende `/commands dashboard`, um Kategorien zu durchsuchen.",
+    "category_disabled_title": "Kategorie deaktiviert",
+    "category_disabled_desc": "Alle Befehle von **{category}** sind jetzt deaktiviert.\nGeschützte Befehle bleiben verfügbar.",
+    "category_enabled_title": "Kategorie aktiviert",
+    "category_enabled_desc": "Befehle von **{category}** sind jetzt aktiviert (außer einzeln deaktivierte Befehle).",
+    "command_disabled_title": "Befehl deaktiviert",
+    "command_disabled_desc": "`/{command}` ist auf diesem Server nun deaktiviert.",
+    "command_enabled_title": "Befehl aktiviert",
+    "command_enabled_desc": "`/{command}` ist auf diesem Server nun aktiviert.",
+    "dashboard_failed": "Befehlszugriff konnte nicht aktualisiert werden."
+  },
+  "commands_dashboard": {
+    "title": "⚙️ Befehlszugriff",
+    "description": "Verwalte Slash- und Präfix-Befehle für **{server}**. Unterbefehle (z. B. `birthday list`) werden separat aufgeführt.",
+    "footer": "🔒 commands & configwizard bleiben immer verfügbar",
+    "summary_title": "📊 Zusammenfassung",
+    "summary_entries": "**{enabled}/{total}** Einträge aktiviert",
+    "summary_status": "{on} {fullyEnabled} vollständig aktiv · {partial} {partial} teilweise · {off} {disabled} aus",
+    "legend_title": "🔑 Legende",
+    "legend_text": "{on} Alle aktiviert · {partial} Einige deaktiviert · {off} Kategorie aus",
+    "categories_title": "📁 Kategorien",
+    "categories_cont": "📁 Kategorien (Forts.)",
+    "how_to_use_title": "Verwendung",
+    "how_to_use_overview": "• Wähle unten eine Kategorie aus, um Befehle und Unterbefehle zu verwalten\n• `/commands disable` — schalte eine Kategorie oder einen Befehl aus\n• `/commands enable` — schalte etwas wieder ein",
+    "how_to_use_category": "• Verwende das Dropdown-Menü, um einzelne Befehle oder Unterbefehle umzuschalten\n• **Alle deaktivieren** schaltet die gesamte Kategorie aus\n• **Überschreibungen löschen** aktiviert einzeln deaktivierte Einträge wieder",
+    "category_desc": "Befehlszugriff für **{server}**.",
+    "category_footer": "🔒 Geschützte Einträge können nicht deaktiviert werden",
+    "status_label": "Status",
+    "count_label": "Anzahl",
+    "status_disabled": "Kategorie deaktiviert",
+    "status_all_enabled": "Alle Einträge aktiviert",
+    "status_partial": "{disabledCount} von {totalCount} deaktiviert",
+    "count_enabled": "{enabledCount}/{totalCount} aktiviert",
+    "commands_field_title": "📋 Befehle & Unterbefehle",
+    "commands_field_cont": "📋 (Forts.)",
+    "select_category_placeholder": "📁 Wähle eine Kategorie...",
+    "select_command_placeholder": "Befehl oder Unterbefehl umschalten...",
+    "btn_enable_all": "Alle aktivieren",
+    "btn_disable_all": "Alle deaktivieren",
+    "btn_back_overview": "Zurück zu Kategorien",
+    "btn_clear_overrides": "Überschreibungen löschen",
+    "btn_refresh": "Aktualisieren"
   }
 }
