@@ -1785,6 +1785,178 @@ describe('API Routes Integration Tests', () => {
     assert.strictEqual(data.error, 'NotFoundError');
   });
 
+  it('GET /api/guilds/:guildId/applications returns applications list and settings', async () => {
+    const testGuildId = '123456789012345678';
+    const settingsKey = `guild:${testGuildId}:applications:settings`;
+    const appKey = `guild:${testGuildId}:applications:app-test-1`;
+
+    await mockClient.db.set(settingsKey, {
+      enabled: true,
+      applicationChannelId: '123456789012345679',
+      roles: { accepted: '123456789012345680' },
+      questions: ['Why do you want to join?'],
+    });
+
+    await mockClient.db.set(appKey, {
+      id: 'app-test-1',
+      guildId: testGuildId,
+      userId: 'user-applicant-1',
+      status: 'pending',
+      roleId: '123456789012345680',
+      roleName: 'Moderator',
+      answers: [
+        {
+          question: 'Why do you want to join?',
+          answer: 'I have 2 years of experience moderating large Discord servers.',
+        },
+      ],
+      createdAt: Date.now(),
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/applications`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.settings.enabled, true);
+    assert.strictEqual(data.settings.targetRoleId, '123456789012345680');
+    assert.strictEqual(data.applications.length, 1);
+    assert.strictEqual(data.applications[0].id, 'app-test-1');
+  });
+
+  it('PATCH /api/guilds/:guildId/applications/config rejects invalid questions or IDs with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/applications/config`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        applicationChannelId: 'invalid-snowflake',
+        questions: [],
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('PATCH /api/guilds/:guildId/applications/config persists updated settings and questions', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/applications/config`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        enabled: true,
+        applicationChannelId: '123456789012345679',
+        targetRoleId: '123456789012345680',
+        questions: ['Why join us?', 'How active are you?'],
+        cooldownHours: 12,
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.settings.enabled, true);
+    assert.strictEqual(data.settings.questions.length, 2);
+  });
+
+  it('PATCH /api/guilds/:guildId/applications/:appId/review approves application', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/applications/app-test-1/review`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        action: 'approve',
+        reason: 'Welcome to the staff team!',
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.application.status, 'approved');
+  });
+
+  it('PATCH /api/guilds/:guildId/applications/:appId/review denies application with reason', async () => {
+    const testGuildId = '123456789012345678';
+    const appKey = `guild:${testGuildId}:applications:app-test-2`;
+
+    await mockClient.db.set(appKey, {
+      id: 'app-test-2',
+      guildId: testGuildId,
+      userId: 'user-applicant-2',
+      status: 'pending',
+      roleId: '123456789012345680',
+      roleName: 'Moderator',
+      answers: [
+        {
+          question: 'Why do you want to join?',
+          answer: 'Just want free roles.',
+        },
+      ],
+      createdAt: Date.now(),
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/applications/app-test-2/review`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        action: 'deny',
+        reason: 'Requirements not met at this time.',
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.application.status, 'denied');
+  });
+
+  it('DELETE /api/guilds/:guildId/applications/:appId deletes application record', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/applications/app-test-2`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+
+    const appKey = `guild:${testGuildId}:applications:app-test-2`;
+    const appRecord = await mockClient.db.get(appKey);
+    assert.strictEqual(appRecord, null);
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);

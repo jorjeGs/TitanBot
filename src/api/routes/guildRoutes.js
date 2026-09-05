@@ -56,6 +56,12 @@ import {
   updateBirthdayConfig,
   deleteBirthdayRecord,
 } from '../controllers/birthdayController.js';
+import {
+  getApplicationData,
+  updateApplicationSettingsHandler,
+  reviewApplicationHandler,
+  deleteApplicationHandler,
+} from '../controllers/applicationController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
@@ -108,6 +114,12 @@ router.delete('/:guildId/giveaways/:messageId', verifyAuth, checkGuildPermission
 router.get('/:guildId/birthdays', verifyAuth, checkGuildPermissions, getBirthdays);
 router.patch('/:guildId/birthdays/config', verifyAuth, checkGuildPermissions, updateBirthdayConfig);
 router.delete('/:guildId/birthdays/:userId', verifyAuth, checkGuildPermissions, deleteBirthdayRecord);
+
+// Application subroutes protected by checkGuildPermissions
+router.get('/:guildId/applications', verifyAuth, checkGuildPermissions, getApplicationData);
+router.patch('/:guildId/applications/config', verifyAuth, checkGuildPermissions, updateApplicationSettingsHandler);
+router.patch('/:guildId/applications/:appId/review', verifyAuth, checkGuildPermissions, reviewApplicationHandler);
+router.delete('/:guildId/applications/:appId', verifyAuth, checkGuildPermissions, deleteApplicationHandler);
 
 export default router;
 

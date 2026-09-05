@@ -133,6 +133,24 @@ export const UpdateBirthdayConfigSchema = z.object({
   birthdayMessage: z.string().max(1000, 'Birthday message is too long').nullable().optional(),
 });
 
+export const UpdateApplicationConfigSchema = z.object({
+  enabled: z.boolean().default(false),
+  applicationChannelId: z.string().regex(/^\d{17,20}$/, 'Invalid channel ID').nullable().optional(),
+  logChannelId: z.string().regex(/^\d{17,20}$/, 'Invalid channel ID').nullable().optional(),
+  targetRoleId: z.string().regex(/^\d{17,20}$/, 'Invalid role ID').nullable().optional(),
+  questions: z
+    .array(z.string().trim().min(1, 'Question cannot be empty').max(200, 'Question too long'))
+    .min(1, 'At least one question is required')
+    .max(10, 'Maximum 10 questions allowed')
+    .optional(),
+  cooldownHours: z.number().int().min(0).max(720).default(24).optional(),
+});
+
+export const ReviewApplicationSchema = z.object({
+  action: z.enum(['approve', 'deny']),
+  reason: z.string().trim().max(500).nullable().optional(),
+});
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
