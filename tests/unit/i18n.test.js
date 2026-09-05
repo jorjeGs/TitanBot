@@ -452,6 +452,52 @@ test('i18n: Complete 100 Commands & 21 Domains Coverage', async (tContext) => {
         assert.equal(t('jointocreate.btn_name_template', {}, 'de'), '📝 Namensvorlage');
         assert.equal(t('jointocreate.btn_remove_channel', {}, 'de'), '🗑️ Kanal entfernen');
     });
+
+    await tContext.test('fun games strings are localized in all supported languages', () => {
+        assert.equal(t('fun:flip_heads', {}, 'es-419'), 'Cara');
+        assert.equal(t('fun:flip_heads', {}, 'de'), 'Kopf');
+        assert.equal(t('fun:flip_tails', {}, 'es-419'), 'Cruz');
+        assert.equal(t('fun:flip_tails', {}, 'de'), 'Zahl');
+        assert.equal(t('fun:roll_title', { dice: 1, sides: 20, mod: '' }, 'es-419'), '🎲 Tirando 1d20');
+        assert.equal(t('fun:roll_title', { dice: 1, sides: 20, mod: '' }, 'de'), '🎲 Würfeln: 1d20');
+        assert.equal(t('fun:fight_duel_complete', {}, 'es-419'), '🏆 ¡Duelo Terminado!');
+        assert.equal(t('fun:fight_duel_complete', {}, 'de'), '🏆 Duell Beendet!');
+    });
+
+    await tContext.test('community and applications strings are localized in all supported languages', () => {
+        assert.equal(t('community:submit_modal_title', { name: 'Mod' }, 'es-419'), 'Postulación para Mod');
+        assert.equal(t('community:submit_modal_title', { name: 'Mod' }, 'de'), 'Bewerbung für Mod');
+        assert.equal(t('community:status_in_progress', {}, 'es-419'), 'En Progreso');
+        assert.equal(t('community:status_in_progress', {}, 'de'), 'In Bearbeitung');
+        assert.equal(t('community:setup_modal_title', {}, 'es-419'), 'Configurar Nueva Postulación');
+        assert.equal(t('community:setup_modal_title', {}, 'de'), 'Neue Bewerbung Einrichten');
+    });
+
+    await tContext.test('leveling strings are localized in all supported languages', () => {
+        assert.equal(t('leveling:rank_title', { user: 'Test' }, 'es-419'), 'Rango de Test');
+        assert.equal(t('leveling:rank_title', { user: 'Test' }, 'de'), 'Rang von Test');
+        assert.equal(t('leveling:leaderboard_title', {}, 'es-419'), 'Tabla de Clasificación de Niveles');
+        assert.equal(t('leveling:leaderboard_title', {}, 'de'), 'Level-Bestenliste');
+        assert.equal(t('leveling:level_set_title', {}, 'es-419'), 'Nivel Establecido');
+        assert.equal(t('leveling:level_set_title', {}, 'de'), 'Level Festgelegt');
+    });
+
+    await tContext.test('economy commands and dashboard are localized in all supported languages', () => {
+        assert.equal(t('economy:balance_wallet', {}, 'es-419'), '💵 Efectivo');
+        assert.equal(t('economy:balance_wallet', {}, 'de'), '💵 Bargeld');
+        assert.equal(t('economy:daily_claimed_title', {}, 'es-419'), '✅ ¡Recompensa Diaria Reclamada!');
+        assert.equal(t('economy:daily_claimed_title', {}, 'de'), '✅ Tägliche Belohnung abgeholt!');
+        assert.equal(t('economy:beg_success_title', {}, 'es-419'), 'Mendicidad Exitosa');
+        assert.equal(t('economy:beg_success_title', {}, 'de'), 'Betteln erfolgreich');
+        assert.equal(t('economy:work_complete_title', {}, 'es-419'), '💼 ¡Trabajo Completado!');
+        assert.equal(t('economy:work_complete_title', {}, 'de'), '💼 Arbeit abgeschlossen!');
+        assert.equal(t('economy:deposit_title', {}, 'es-419'), 'Depósito Exitoso');
+        assert.equal(t('economy:deposit_title', {}, 'de'), 'Einzahlung erfolgreich');
+        assert.equal(t('economy:withdraw_title', {}, 'es-419'), 'Retiro Exitoso');
+        assert.equal(t('economy:withdraw_title', {}, 'de'), 'Auszahlung erfolgreich');
+        assert.equal(t('economy:dashboard_title', {}, 'es-419'), '💰 Panel de Economía');
+        assert.equal(t('economy:dashboard_title', {}, 'de'), '💰 Wirtschafts-Dashboard');
+    });
 });
 
 

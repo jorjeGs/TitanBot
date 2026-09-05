@@ -2,8 +2,9 @@ import { SlashCommandBuilder, EmbedBuilder, MessageFlags } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
 import { getUserLevelData, getLevelingConfig, getXpForLevel } from '../../services/leveling/leveling.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
   data: new SlashCommandBuilder()
     .setName('rank')
@@ -26,7 +27,7 @@ export default {
         embeds: [
           new EmbedBuilder()
             .setColor('#f1c40f')
-            .setDescription('The leveling system is currently disabled on this server.')
+            .setDescription(t('leveling.disabled', interaction))
         ],
         flags: MessageFlags.Ephemeral
       });
@@ -42,7 +43,7 @@ export default {
       throw new TitanBotError(
         `User ${targetUser.id} not found in guild`,
         ErrorTypes.USER_INPUT,
-        'Could not find the specified user in this server.'
+        t('leveling.user_not_found', interaction)
       );
     }
 
@@ -59,26 +60,26 @@ export default {
     const progressBar = createProgressBar(progress, 20);
 
     const embed = new EmbedBuilder()
-      .setTitle(`${member.displayName}'s Rank`)
+      .setTitle(t('leveling.rank_title', { user: member.displayName }, interaction))
       .setThumbnail(member.displayAvatarURL({ dynamic: true }))
       .addFields(
         {
-          name: 'Level',
+          name: t('leveling.rank_level', interaction),
           value: safeUserData.level.toString(),
           inline: true
         },
         {
-          name: 'XP',
+          name: t('leveling.rank_xp', interaction),
           value: `${safeUserData.xp}/${xpNeeded}`,
           inline: true
         },
         {
-          name: 'Total XP',
+          name: t('leveling.rank_total_xp', interaction),
           value: safeUserData.totalXp.toString(),
           inline: true
         },
         {
-          name: `Progress to Level ${safeUserData.level + 1}`,
+          name: t('leveling.rank_progress', { level: safeUserData.level + 1 }, interaction),
           value: `${progressBar} ${progress}%`
         }
       )

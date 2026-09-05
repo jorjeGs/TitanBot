@@ -4,6 +4,8 @@ import { getEconomyData, setEconomyData } from '../../utils/economy.js';
 import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { BotConfig } from '../../config/bot.js';
+import { t } from '../../utils/i18n.js';
+import { formatDuration } from '../../utils/embeds.js';
 
 const ROB_COOLDOWN = BotConfig.economy?.cooldowns?.rob ?? 4 * 60 * 60 * 1000;
 const BASE_ROB_SUCCESS_CHANCE = BotConfig.economy?.robSuccessRate ?? 0.4;
@@ -34,7 +36,7 @@ export default {
                 throw createError(
                     "Cannot rob self",
                     ErrorTypes.VALIDATION,
-                    "You cannot rob yourself.",
+                    t('economy:rob_err_self', interaction),
                     { robberId, victimId: victimUser.id }
                 );
             }
@@ -43,7 +45,7 @@ export default {
                 throw createError(
                     "Cannot rob bot",
                     ErrorTypes.VALIDATION,
-                    "You cannot rob a bot.",
+                    t('economy:rob_err_bot', interaction),
                     { victimId: victimUser.id, isBot: true }
                 );
             }
@@ -55,7 +57,7 @@ export default {
                 throw createError(
                     "Failed to load economy data",
                     ErrorTypes.DATABASE,
-                    "Failed to load economy data. Please try again later.",
+                    t('economy:error_load_data', interaction),
                     { robberId: !!robberData, victimId: !!victimData, guildId }
                 );
             }
@@ -64,14 +66,11 @@ export default {
 
             if (now < lastRob + ROB_COOLDOWN) {
                 const remaining = lastRob + ROB_COOLDOWN - now;
-                const hours = Math.floor(remaining / (1000 * 60 * 60));
-                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-
                 throw createError(
                     "Robbery cooldown active",
                     ErrorTypes.RATE_LIMIT,
-                    `You need to lay low. Wait **${hours}h ${minutes}m** before attempting another robbery.`,
-                    { remaining, hours, minutes, cooldownType: 'rob' }
+                    t('economy:rob_cooldown', { time: formatDuration(remaining) }, interaction),
+                    { remaining, cooldownType: 'rob' }
                 );
             }
 
@@ -79,7 +78,7 @@ export default {
                 throw createError(
                     "Victim too poor",
                     ErrorTypes.VALIDATION,
-                    `${victimUser.username} is too poor. They need at least $500 cash to be worth robbing.`,
+                    t('economy:rob_err_poor', { victim: victimUser.username }, interaction),
                     { victimWallet: victimData.wallet, required: 500 }
                 );
             }
@@ -93,8 +92,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         warningEmbed(
-                            'Robbery Blocked',
-                            `${victimUser.username} was prepared! Your attempt failed because they own a **Personal Safe**. You got away clean but didn't gain anything.`
+                            t('economy:rob_title_blocked', interaction),
+                            t('economy:rob_blocked', { victim: victimUser.username }, interaction)
                         )
                     ],
                 });
@@ -110,8 +109,8 @@ export default {
                 victimData.wallet = (victimData.wallet || 0) - amountStolen;
 
                 resultEmbed = successEmbed(
-                    'Robbery Successful',
-                    `You successfully stole **$${amountStolen.toLocaleString()}** from ${victimUser.username}!`
+                    t('economy:rob_title_success', interaction),
+                    t('economy:rob_success', { amount: amountStolen.toLocaleString(), victim: victimUser.username }, interaction)
                 );
             } else {
                 const fineAmount = Math.floor((robberData.wallet || 0) * FINE_PERCENTAGE);
@@ -124,8 +123,8 @@ export default {
 
                 resultEmbed = buildUserErrorEmbed(
                     'unknown',
-                    `You failed the robbery and were caught! You were fined **$${fineAmount.toLocaleString()}** of your own cash.`,
-                    { titleOverride: 'Robbery Failed' }
+                    t('economy:rob_fail', { amount: fineAmount.toLocaleString() }, interaction),
+                    { titleOverride: t('economy:rob_title_fail', interaction) }
                 );
             }
 
@@ -137,17 +136,17 @@ export default {
             resultEmbed
                 .addFields(
                     {
-                        name: `Your New Cash (${interaction.user.username})`,
+                        name: t('economy:rob_your_cash', { user: interaction.user.username }, interaction),
                         value: `$${robberData.wallet.toLocaleString()}`,
                         inline: true,
                     },
                     {
-                        name: `Victim's New Cash (${victimUser.username})`,
+                        name: t('economy:rob_victim_cash', { user: victimUser.username }, interaction),
                         value: `$${victimData.wallet.toLocaleString()}`,
                         inline: true,
                     },
                 )
-                .setFooter({ text: `Next robbery available in ${Math.ceil(ROB_COOLDOWN / (60 * 60 * 1000))} hours.` });
+                .setFooter({ text: t('economy:rob_footer_next', { hours: Math.ceil(ROB_COOLDOWN / (60 * 60 * 1000)) }, interaction) });
 
             await InteractionHelper.safeEditReply(interaction, { embeds: [resultEmbed] });
     }, { command: 'rob' })

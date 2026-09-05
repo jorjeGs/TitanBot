@@ -3,6 +3,8 @@ import { createEmbed, errorEmbed, successEmbed, infoEmbed, warningEmbed } from '
 import { getEconomyData, setEconomyData } from '../../utils/economy.js';
 import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n.js';
+import { formatDuration } from '../../utils/embeds.js';
 
 const FISH_COOLDOWN = 45 * 60 * 1000; 
 const BASE_MIN_REWARD = 300;
@@ -21,14 +23,6 @@ const FISH_TYPES = [
     { name: 'Whale', emoji: '🐋', rarity: 'legendary' },
 ];
 
-const CATCH_MESSAGES = [
-    "You cast your line into the crystal clear waters...",
-    "You wait patiently as your bobber floats...",
-    "After a few minutes of waiting, you feel a tug...",
-    "The water ripples as something takes your bait...",
-    "You reel in your catch with expert precision...",
-];
-
 export default {
     data: new SlashCommandBuilder()
         .setName('fish')
@@ -43,20 +37,25 @@ export default {
             const now = Date.now();
 
             const userData = await getEconomyData(client, guildId, userId);
+
+            if (!userData) {
+                throw createError(
+                    "Failed to load economy data",
+                    ErrorTypes.DATABASE,
+                    t('economy:error_load_data', interaction),
+                    { userId, guildId }
+                );
+            }
+
             const lastFish = userData.lastFish || 0;
             const hasFishingRod = userData.inventory["fishing_rod"] || 0;
 
             if (now < lastFish + FISH_COOLDOWN) {
                 const remaining = lastFish + FISH_COOLDOWN - now;
-                const hours = Math.floor(remaining / (1000 * 60 * 60));
-                const minutes = Math.floor(
-                    (remaining % (1000 * 60 * 60)) / (1000 * 60),
-                );
-
                 throw createError(
                     "Fishing cooldown active",
                     ErrorTypes.RATE_LIMIT,
-                    `You're too tired to fish right now. Rest for **${hours}h ${minutes}m** before fishing again.`,
+                    t('economy:fish_cooldown', { time: formatDuration(remaining) }, interaction),
                     { remaining, cooldownType: 'fish' }
                 );
             }
@@ -65,19 +64,14 @@ export default {
             let fishCaught;
             
             if (rand < 0.5) {
-                
                 fishCaught = FISH_TYPES.filter(f => f.rarity === 'common')[Math.floor(Math.random() * 3)];
             } else if (rand < 0.75) {
-                
                 fishCaught = FISH_TYPES.filter(f => f.rarity === 'uncommon')[Math.floor(Math.random() * 2)];
             } else if (rand < 0.9) {
-                
                 fishCaught = FISH_TYPES.filter(f => f.rarity === 'rare')[Math.floor(Math.random() * 2)];
             } else if (rand < 0.98) {
-                
                 fishCaught = FISH_TYPES.find(f => f.rarity === 'epic');
             } else {
-                
                 fishCaught = FISH_TYPES.find(f => f.rarity === 'legendary');
             }
 
@@ -90,12 +84,14 @@ export default {
 
             if (hasFishingRod > 0) {
                 finalEarned = Math.floor(baseEarned * FISHING_ROD_MULTIPLIER);
-                multiplierMessage = `\n🎣 **Fishing Rod Bonus: +50%**`;
+                multiplierMessage = t('economy:fish_rod_bonus', interaction);
             }
 
-            const catchMessage = CATCH_MESSAGES[Math.floor(Math.random() * CATCH_MESSAGES.length)];
+            const msgIndex = Math.floor(Math.random() * 5);
+            const messages = t('economy:fish_messages', interaction);
+            const catchMessage = Array.isArray(messages) ? messages[msgIndex] : '';
 
-            userData.wallet += finalEarned;
+            userData.wallet = (userData.wallet || 0) + finalEarned;
             userData.lastFish = now;
 
             await setEconomyData(client, guildId, userId, userData);
@@ -108,24 +104,33 @@ export default {
                 legendary: '#F1C40F'
             };
 
+            const localizedFishName = t(`economy:fish_names.${fishCaught.name}`, interaction);
+            const localizedRarity = t(`economy:fish_rarities.${fishCaught.rarity}`, interaction);
+
             const embed = createEmbed({
-                title: 'Fishing Success!',
-                description: `${catchMessage}\n\nYou caught a **${fishCaught.emoji} ${fishCaught.name}**! You sold it for **$${finalEarned.toLocaleString()}**!${multiplierMessage}`,
+                title: t('economy:fish_title', interaction),
+                description: t('economy:fish_desc', {
+                    catchMsg: catchMessage,
+                    emoji: fishCaught.emoji,
+                    name: localizedFishName,
+                    amount: finalEarned.toLocaleString(),
+                    bonus: multiplierMessage
+                }, interaction),
                 color: rarityColors[fishCaught.rarity]
             })
                 .addFields(
                     {
-                        name: "New Cash Balance",
+                        name: t('economy:fish_cash', interaction),
                         value: `$${userData.wallet.toLocaleString()}`,
                         inline: true,
                     },
                     {
-                        name: "Rarity",
-                        value: fishCaught.rarity.charAt(0).toUpperCase() + fishCaught.rarity.slice(1),
+                        name: t('economy:fish_rarity', interaction),
+                        value: localizedRarity,
                         inline: true,
                     }
                 )
-                .setFooter({ text: `Next fishing trip available in 45 minutes.` });
+                .setFooter({ text: t('economy:fish_footer', interaction) });
 
             await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });
     }, { command: 'fish' })

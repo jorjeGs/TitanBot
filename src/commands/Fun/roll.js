@@ -2,10 +2,11 @@ import { SlashCommandBuilder } from 'discord.js';
 import { successEmbed } from '../../utils/embeds.js';
 import { logger } from '../../utils/logger.js';
 import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
-    data: new SlashCommandBuilder()
+  data: new SlashCommandBuilder()
     .setName("roll")
     .setDescription("Rolls dice using standard notation (e.g., 2d20, 1d6 + 5).")
     .addStringOption((option) =>
@@ -31,7 +32,7 @@ export default {
       throw new TitanBotError(
         `Invalid dice notation: ${notation}`,
         ErrorTypes.USER_INPUT,
-        'Invalid notation. Use format like `1d20` or `3d6+5`.'
+        t('fun.roll_invalid', interaction)
       );
     }
 
@@ -43,7 +44,7 @@ export default {
       throw new TitanBotError(
         `Too many dice requested: ${numDice}`,
         ErrorTypes.VALIDATION,
-        'Please keep the number of dice between 1 and 20.'
+        t('fun.roll_too_many', interaction)
       );
     }
 
@@ -51,7 +52,7 @@ export default {
       throw new TitanBotError(
         `Invalid number of sides: ${numSides}`,
         ErrorTypes.VALIDATION,
-        'Please keep the number of sides between 1 and 1000.'
+        t('fun.roll_invalid_sides', interaction)
       );
     }
 
@@ -67,12 +68,21 @@ export default {
     const finalTotal = totalRoll + modifier;
 
     const resultsDetail =
-      numDice > 1 ? `**Rolls:** ${rolls.join(" + ")}\n` : "";
+      numDice > 1 ? t('fun.roll_rolls', { rolls: rolls.join(" + ") }, interaction) : "";
     const modifierText = modifier !== 0 ? `+ (${modifier})` : "";
 
     const embed = successEmbed(
-      `🎲 Rolling ${numDice}d${numSides}${modifier !== 0 ? match[3] : ""}`,
-      `${resultsDetail}**Total Roll:** ${totalRoll}${modifierText} = **${finalTotal}**`,
+      t('fun.roll_title', {
+        dice: numDice,
+        sides: numSides,
+        mod: modifier !== 0 ? match[3] : ""
+      }, interaction),
+      t('fun.roll_desc', {
+        details: resultsDetail,
+        total: totalRoll,
+        modText: modifierText,
+        final: finalTotal
+      }, interaction)
     );
 
     await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });

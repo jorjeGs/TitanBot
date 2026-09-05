@@ -4,40 +4,16 @@ import { getEconomyData, setEconomyData } from '../../utils/economy.js';
 import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHandler.js';
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n.js';
 
 const SLUT_COOLDOWN = 45 * 60 * 1000;
 
 const SLUT_ACTIVITIES = [
-    { name: "Cam Stream", min: 120, max: 450, risk: 0.2 },
-    { name: "Private Dance Session", min: 220, max: 700, risk: 0.25 },
-    { name: "After-Hours Club Host", min: 320, max: 900, risk: 0.3 },
-    { name: "VIP Companion Booking", min: 550, max: 1400, risk: 0.35 },
-    { name: "Exclusive Livestream", min: 850, max: 2200, risk: 0.4 },
-];
-
-const POSITIVE_OUTCOMES = [
-    "Your stream blew up and tips poured in.",
-    "A VIP booking paid far above average.",
-    "Your after-hours shift was packed and profitable.",
-    "Premium requests came through and your payout jumped.",
-];
-
-const FINE_OUTCOMES = [
-    "Venue security issued a compliance fine.",
-    "A moderation strike triggered a platform fee.",
-    "You were flagged and had to pay a penalty.",
-];
-
-const ROBBED_OUTCOMES = [
-    "A fake buyer chargeback wiped part of your earnings.",
-    "A scam booking cleaned out a chunk of your cash.",
-    "You got baited by a fraud account and lost money.",
-];
-
-const LOSS_OUTCOMES = [
-    "The set flopped and you had to cover operating costs.",
-    "You burned budget on prep and made no return.",
-    "The shift went sideways and left you in the red.",
+    { key: "cam_stream", name: "Cam Stream", min: 120, max: 450, risk: 0.2 },
+    { key: "private_dance", name: "Private Dance Session", min: 220, max: 700, risk: 0.25 },
+    { key: "club_host", name: "After-Hours Club Host", min: 320, max: 900, risk: 0.3 },
+    { key: "companion_booking", name: "VIP Companion Booking", min: 550, max: 1400, risk: 0.35 },
+    { key: "exclusive_stream", name: "Exclusive Livestream", min: 850, max: 2200, risk: 0.4 },
 ];
 
 function randomInt(min, max) {
@@ -56,11 +32,11 @@ function resolveOutcome(activity, wallet) {
 
     if (roll < successChance) {
         const amount = randomInt(activity.min, activity.max);
+        const msgKey = randomChoice(['pos_1', 'pos_2', 'pos_3', 'pos_4']);
         return {
             type: 'payout',
             delta: amount,
-            message: randomChoice(POSITIVE_OUTCOMES),
-            title: `${activity.name} - Payout`
+            msgKey
         };
     }
 
@@ -70,11 +46,11 @@ function resolveOutcome(activity, wallet) {
         const maxFine = Math.min(wallet, Math.max(150, Math.floor(activity.max * 0.4)));
         const minFine = Math.min(maxFine, Math.max(50, Math.floor(activity.min * 0.2)));
         const amount = maxFine > 0 ? randomInt(minFine, maxFine) : 0;
+        const msgKey = randomChoice(['fine_1', 'fine_2', 'fine_3']);
         return {
             type: 'fine',
             delta: -amount,
-            message: randomChoice(FINE_OUTCOMES),
-            title: `${activity.name} - Fined`
+            msgKey
         };
     }
 
@@ -82,22 +58,22 @@ function resolveOutcome(activity, wallet) {
         const maxRobbed = Math.min(wallet, Math.max(200, Math.floor(wallet * 0.35)));
         const minRobbed = Math.min(maxRobbed, Math.max(75, Math.floor(wallet * 0.1)));
         const amount = maxRobbed > 0 ? randomInt(minRobbed, maxRobbed) : 0;
+        const msgKey = randomChoice(['robbed_1', 'robbed_2', 'robbed_3']);
         return {
             type: 'robbed',
             delta: -amount,
-            message: randomChoice(ROBBED_OUTCOMES),
-            title: `${activity.name} - Robbed`
+            msgKey
         };
     }
 
     const maxLoss = Math.min(wallet, Math.max(100, Math.floor(activity.max * 0.3)));
     const minLoss = Math.min(maxLoss, Math.max(40, Math.floor(activity.min * 0.15)));
     const amount = maxLoss > 0 ? randomInt(minLoss, maxLoss) : 0;
+    const msgKey = randomChoice(['loss_1', 'loss_2', 'loss_3']);
     return {
         type: 'loss',
         delta: -amount,
-        message: randomChoice(LOSS_OUTCOMES),
-        title: `${activity.name} - Loss`
+        msgKey
     };
 }
 
@@ -122,7 +98,7 @@ export default {
                 throw createError(
                     "Failed to load economy data for slut command",
                     ErrorTypes.DATABASE,
-                    "Failed to load your economy data. Please try again later.",
+                    t('economy:error_load_data', interaction),
                     { userId, guildId }
                 );
             }
@@ -134,7 +110,7 @@ export default {
                 throw createError(
                     "Slut cooldown active",
                     ErrorTypes.RATE_LIMIT,
-                    `You need to wait before you can work again! Try again in **${Math.ceil(remainingTime / 60000)}** minutes.`,
+                    t('economy:slut_cooldown', { time: Math.ceil(remainingTime / 60000) }, interaction),
                     { timeRemaining: remainingTime, cooldownType: 'slut' }
                 );
             }
@@ -166,18 +142,23 @@ export default {
                 timestamp: new Date().toISOString()
             });
 
+            const activityName = t(`economy:slut_activities.${activity.key}`, interaction);
+            const outcomeName = t(`economy:slut_outcomes.${outcome.type}`, interaction);
+            const outcomeTitle = `${activityName} - ${outcomeName}`;
+            const message = t(`economy:slut_messages.${outcome.msgKey}`, interaction);
+
             const amountLabel = `${outcome.delta >= 0 ? '+' : '-'}$${Math.abs(outcome.delta).toLocaleString()}`;
             const summaryLines = [
-                `${outcome.message}`,
-                `💸 **Net Result:** ${amountLabel}`,
-                `💳 **Current Balance:** $${userData.wallet.toLocaleString()}`,
-                `📊 **Total Sessions:** ${userData.totalSluts}`,
-                `💵 **Total Earned:** $${(userData.totalSlutEarnings || 0).toLocaleString()}`,
-                `🧾 **Total Lost:** $${(userData.totalSlutLosses || 0).toLocaleString()}`
+                `${message}`,
+                t('economy:slut_net_result', { amount: amountLabel }, interaction),
+                t('economy:slut_current_balance', { balance: userData.wallet.toLocaleString() }, interaction),
+                t('economy:slut_total_sessions', { count: userData.totalSluts }, interaction),
+                t('economy:slut_total_earned', { amount: (userData.totalSlutEarnings || 0).toLocaleString() }, interaction),
+                t('economy:slut_total_lost', { amount: (userData.totalSlutLosses || 0).toLocaleString() }, interaction),
             ];
 
             const embed = createEmbed({
-                title: outcome.title,
+                title: outcomeTitle,
                 description: summaryLines.join('\n'),
                 color: outcome.delta >= 0 ? 'success' : 'error',
                 timestamp: true

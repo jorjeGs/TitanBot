@@ -17,14 +17,15 @@ import {
     updateApplication,
     getApplicationRoleSettings
 } from '../../utils/database.js';
+import { t } from '../../utils/i18n/index.js';
 
-function getApplicationStatusPresentation(statusValue) {
+function getApplicationStatusPresentation(statusValue, target) {
     const normalized = typeof statusValue === 'string' ? statusValue.trim().toLowerCase() : 'unknown';
     const statusLabel =
-        normalized === 'pending' ? 'In Progress' :
-        normalized === 'approved' ? 'Accepted' :
-        normalized === 'denied' ? 'Denied' :
-        'Unknown';
+        normalized === 'pending' ? t('community.status_in_progress', target) :
+        normalized === 'approved' ? t('community.status_accepted', target) :
+        normalized === 'denied' ? t('community.status_denied', target) :
+        t('community.status_unknown', target);
     const statusEmoji =
         normalized === 'pending' ? '🟡' :
         normalized === 'approved' ? '🟢' :
@@ -72,7 +73,7 @@ export default {
 
     execute: withErrorHandling(async (interaction) => {
         if (!interaction.inGuild()) {
-            return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'This command can only be used in a server.' });
+            return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('community.not_in_guild', interaction) });
         }
 
         const { options, guild, member } = interaction;
@@ -98,7 +99,7 @@ export default {
             throw createError(
                 'Applications are disabled',
                 ErrorTypes.CONFIGURATION,
-                'Applications are currently disabled in this server.',
+                t('community.apps_disabled', interaction),
                 { guildId: guild.id }
             );
         }
@@ -125,13 +126,13 @@ export async function handleApplicationModal(interaction) {
     const applicationRole = applicationRoles.find(appRole => appRole.roleId === roleId);
     
     if (!applicationRole) {
-        return await replyUserError(interaction, { type: ErrorTypes.CONFIGURATION, message: 'Application configuration not found.' });
+        return await replyUserError(interaction, { type: ErrorTypes.CONFIGURATION, message: t('community.config_not_found', interaction) });
     }
     
     const role = interaction.guild.roles.cache.get(roleId);
     
     if (!role) {
-        return await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: 'Role not found.' });
+        return await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: t('community.role_not_found', interaction) });
     }
     
     const answers = [];
@@ -163,19 +164,20 @@ export async function handleApplicationModal(interaction) {
         });
         
         const embed = successEmbed(
-            'Application Submitted',
-            `Your application for **${applicationRole.name}** has been submitted successfully!\n\n` +
-            `Application ID: \`${application.id}\`\n` +
-            `You can check the status with \`/apply status id:${application.id}\``
+            t('community.submitted_title', interaction),
+            t('community.submitted_desc', {
+                role: applicationRole.name,
+                id: application.id
+            }, interaction)
         );
         
         await InteractionHelper.safeEditReply(interaction, { embeds: [embed], flags: ["Ephemeral"] });
         
-        const settings = await getApplicationSettings(interaction.client, interaction.guild.id);
-        const roleSettings = await getApplicationRoleSettings(interaction.client, interaction.guild.id, roleId);
+        const currentSettings = await getApplicationSettings(interaction.client, interaction.guild.id);
+        const currentRoleSettings = await getApplicationRoleSettings(interaction.client, interaction.guild.id, roleId);
         const guildConfig = await getGuildConfig(interaction.client, interaction.guild.id);
 
-        const logChannelId = resolveApplicationLogChannel(guildConfig, roleSettings, settings);
+        const logChannelId = resolveApplicationLogChannel(guildConfig, currentRoleSettings, currentSettings);
 
         if (logChannelId) {
             const logMessage = await logEvent({
@@ -227,26 +229,28 @@ async function handleList(interaction) {
         const applicationRoles = await getApplicationRoles(interaction.client, interaction.guild.id);
         
         if (applicationRoles.length === 0) {
-            return await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: 'No applications are currently available.' });
+            return await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: t('community.list_none', interaction) });
         }
 
         const embed = createEmbed({
-            title: "Available Applications",
-            description: "Here are the roles you can apply for:"
+            title: t('community.list_title', interaction),
+            description: t('community.list_desc', interaction)
         });
 
         applicationRoles.forEach((appRole, index) => {
             const role = interaction.guild.roles.cache.get(appRole.roleId);
             embed.addFields({
                 name: `${index + 1}. ${appRole.name}`,
-                value: `**Role:** ${role ?`<@&${appRole.roleId}>`: 'Role not found'}\n` +
-                       `**Apply with:** \`/apply submit application:"${appRole.name}"\``,
+                value: t('community.list_role_field', {
+                    role: role ? `<@&${appRole.roleId}>` : t('community.role_not_found', interaction),
+                    name: appRole.name
+                }, interaction),
                 inline: false
             });
         });
 
         embed.setFooter({
-            text: "Use /apply submit application:<name> to apply for any of these roles."
+            text: t('community.list_footer', interaction)
         });
 
         return InteractionHelper.safeEditReply(interaction, { embeds: [embed] });
@@ -277,7 +281,7 @@ async function handleSubmit(interaction, settings) {
     );
 
     if (!applicationRole) {
-        return await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: 'Use `/apply list` to see available applications.' });
+        return await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: t('community.submit_use_list', interaction) });
     }
 
     const userApps = await getUserApplications(
@@ -288,17 +292,17 @@ async function handleSubmit(interaction, settings) {
     const pendingApp = userApps.find((app) => app.status === "pending");
 
     if (pendingApp) {
-        return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'You already have a pending application. Please wait for it to be reviewed.' });
+        return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('community.submit_pending_exists', interaction) });
     }
 
     const role = interaction.guild.roles.cache.get(applicationRole.roleId);
     if (!role) {
-        return await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: 'The role for this application no longer exists.' });
+        return await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: t('community.submit_role_gone', interaction) });
     }
 
     const modal = new ModalBuilder()
         .setCustomId(`app_modal_${applicationRole.roleId}`)
-        .setTitle(`Application for ${applicationRole.name}`);
+        .setTitle(t('community.submit_modal_title', { name: applicationRole.name }, interaction));
 
     let questions = settings.questions?.length ? settings.questions : getDefaultApplicationQuestions();
     const roleSettings = await getApplicationRoleSettings(interaction.client, interaction.guild.id, applicationRole.roleId);
@@ -336,20 +340,25 @@ async function handleStatus(interaction) {
         );
 
         if (!application || application.userId !== interaction.user.id) {
-            return await replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: 'Application not found or you do not have permission to view it.' });
+            return await replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: t('community.status_not_found', interaction) });
         }
 
         const submittedAt = application?.createdAt ? new Date(application.createdAt) : null;
         const submittedAtDisplay = submittedAt && !Number.isNaN(submittedAt.getTime())
             ? submittedAt.toLocaleString()
             : 'Unknown date';
-        const statusView = getApplicationStatusPresentation(application.status);
+        const statusView = getApplicationStatusPresentation(application.status, interaction);
         const embed = createEmbed({
-            title: `Application #${application.id} - ${application.roleName || 'Unknown Role'}`,
-            description:
-                `**Application ID:** \`${application.id}\`\n` +
-                `**Status:** ${statusView.statusEmoji} ${statusView.statusLabel}\n` +
-                `**Submitted:** ${submittedAtDisplay}`
+            title: t('community.status_single_title', {
+                id: application.id,
+                role: application.roleName || t('community.role_not_found', interaction)
+            }, interaction),
+            description: t('community.status_single_desc', {
+                id: application.id,
+                emoji: statusView.statusEmoji,
+                status: statusView.statusLabel,
+                date: submittedAtDisplay
+            }, interaction)
         });
 
         return InteractionHelper.safeEditReply(interaction, { embeds: [embed], flags: ["Ephemeral"] });
@@ -361,7 +370,7 @@ async function handleStatus(interaction) {
         );
 
         if (applications.length === 0) {
-            return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'You have not submitted any applications yet.' });
+            return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('community.status_no_apps', interaction) });
         }
 
         const recentApplications = applications
@@ -369,8 +378,8 @@ async function handleStatus(interaction) {
             .slice(0, 10);
 
         const embed = createEmbed({
-            title: "Your Applications",
-            description: `Showing ${recentApplications.length} recent application(s).`
+            title: t('community.status_user_title', interaction),
+            description: t('community.status_user_desc', { count: recentApplications.length }, interaction)
         });
 
         recentApplications.forEach((application) => {
@@ -378,20 +387,27 @@ async function handleStatus(interaction) {
             const submittedAtDisplay = submittedAt && !Number.isNaN(submittedAt.getTime())
                 ? submittedAt.toLocaleDateString()
                 : 'Unknown date';
-            const statusView = getApplicationStatusPresentation(application.status);
+            const statusView = getApplicationStatusPresentation(application.status, interaction);
 
             embed.addFields({
-                name: `${statusView.statusEmoji} ${application.roleName || 'Unknown Role'} (${statusView.statusLabel})`,
-                value:
-                    `**ID:** \`${application.id}\`\n` +
-                    `**Status:** ${statusView.statusEmoji} ${statusView.statusLabel}\n` +
-                    `**Submitted:** ${submittedAtDisplay}`,
+                name: `${statusView.statusEmoji} ${application.roleName || t('community.role_not_found', interaction)} (${statusView.statusLabel})`,
+                value: t('community.status_user_field_val', {
+                    id: application.id,
+                    emoji: statusView.statusEmoji,
+                    status: statusView.statusLabel,
+                    date: submittedAtDisplay
+                }, interaction),
                 inline: true,
             });
         });
 
         if (applications.length > recentApplications.length) {
-            embed.setFooter({ text: `Showing latest ${recentApplications.length} of ${applications.length} applications.` });
+            embed.setFooter({
+                text: t('community.status_user_footer', {
+                    count: recentApplications.length,
+                    total: applications.length
+                }, interaction)
+            });
         }
 
         return InteractionHelper.safeEditReply(interaction, { embeds: [embed], flags: ["Ephemeral"] });

@@ -20,6 +20,7 @@ import { logger } from '../../../utils/logger.js';
 import { TitanBotError, ErrorTypes, replyUserError } from '../../../utils/errorHandler.js';
 import { getEconomyPrefix } from '../../../utils/database.js';
 import { getEconomyData, addMoney, removeMoney, getMaxBankCapacity } from '../../../utils/economy.js';
+import { t } from '../../../utils/i18n.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -27,7 +28,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-async function buildDashboardEmbed(guild, client) {
+async function buildDashboardEmbed(guild, client, target) {
     const currencySymbol = BotConfig.economy.currency.symbol;
     const currencyName = BotConfig.economy.currency.name;
 
@@ -58,52 +59,52 @@ async function buildDashboardEmbed(guild, client) {
     const avgBalance = userCount > 0 ? Math.floor(totalInCirculation / userCount) : 0;
 
     return new EmbedBuilder()
-        .setTitle('💰 Economy Dashboard')
-        .setDescription(`Manage the economy system for **${guild.name}**.\nSelect an option below to perform an action.`)
+        .setTitle(t('economy:dashboard_title', target || guild))
+        .setDescription(t('economy:dashboard_desc', { guild: guild.name }, target || guild))
         .setColor(getColor('economy'))
         .addFields(
-            { name: '💰 Total in Circulation', value: `\`${currencySymbol}${totalInCirculation.toLocaleString()}\``, inline: true },
-            { name: '👥 Active Users', value: `\`${userCount.toLocaleString()}\``, inline: true },
-            { name: '📊 Average Balance', value: `\`${currencySymbol}${avgBalance.toLocaleString()}\``, inline: true },
-            { name: '💱 Currency Symbol', value: `\`${currencySymbol}\``, inline: true },
-            { name: '📝 Currency Name', value: `\`${currencyName}\``, inline: true },
+            { name: t('economy:dashboard_circulation', target || guild), value: `\`${currencySymbol}${totalInCirculation.toLocaleString()}\``, inline: true },
+            { name: t('economy:dashboard_users', target || guild), value: `\`${userCount.toLocaleString()}\``, inline: true },
+            { name: t('economy:dashboard_avg_balance', target || guild), value: `\`${currencySymbol}${avgBalance.toLocaleString()}\``, inline: true },
+            { name: t('economy:dashboard_symbol', target || guild), value: `\`${currencySymbol}\``, inline: true },
+            { name: t('economy:dashboard_name', target || guild), value: `\`${currencyName}\``, inline: true },
         )
-        .setFooter({ text: 'Dashboard closes after 10 minutes of inactivity' })
+        .setFooter({ text: t('economy:dashboard_footer', target || guild) })
         .setTimestamp();
 }
 
-function buildSelectMenu(guildId) {
+function buildSelectMenu(guildId, target) {
     return new StringSelectMenuBuilder()
         .setCustomId(`economy_dashboard_${guildId}`)
-        .setPlaceholder('Select an action...')
+        .setPlaceholder(t('economy:dashboard_select_placeholder', target))
         .addOptions(
             new StringSelectMenuOptionBuilder()
-                .setLabel('Add Currency')
-                .setDescription('Add currency to a user\'s wallet or bank')
+                .setLabel(t('economy:dashboard_opt_add', target))
+                .setDescription(t('economy:dashboard_opt_add_desc', target))
                 .setValue('add_currency')
                 .setEmoji('💰'),
             new StringSelectMenuOptionBuilder()
-                .setLabel('Remove Currency')
-                .setDescription('Remove currency from a user\'s wallet or bank')
+                .setLabel(t('economy:dashboard_opt_remove', target))
+                .setDescription(t('economy:dashboard_opt_remove_desc', target))
                 .setValue('remove_currency')
                 .setEmoji('💸'),
             new StringSelectMenuOptionBuilder()
-                .setLabel('Change Currency Symbol')
-                .setDescription('Change the currency symbol (e.g., $, €, £)')
+                .setLabel(t('economy:dashboard_opt_symbol', target))
+                .setDescription(t('economy:dashboard_opt_symbol_desc', target))
                 .setValue('change_currency')
                 .setEmoji('💱'),
             new StringSelectMenuOptionBuilder()
-                .setLabel('Change Currency Name')
-                .setDescription('Change the currency name (e.g., coins, credits)')
+                .setLabel(t('economy:dashboard_opt_name', target))
+                .setDescription(t('economy:dashboard_opt_name_desc', target))
                 .setValue('change_name')
                 .setEmoji('📝'),
         );
 }
 
 async function refreshDashboard(rootInteraction, guild, client) {
-    const selectMenu = buildSelectMenu(guild.id);
+    const selectMenu = buildSelectMenu(guild.id, rootInteraction);
     await InteractionHelper.safeEditReply(rootInteraction, {
-        embeds: [await buildDashboardEmbed(guild, client)],
+        embeds: [await buildDashboardEmbed(guild, client, rootInteraction)],
         components: [
             new ActionRowBuilder().addComponents(selectMenu),
         ],
@@ -144,11 +145,11 @@ export default {
     async execute(interaction, config, client) {
         try {
             const guild = interaction.guild;
-            const selectMenu = buildSelectMenu(guild.id);
+            const selectMenu = buildSelectMenu(guild.id, interaction);
             const selectRow = new ActionRowBuilder().addComponents(selectMenu);
 
             await InteractionHelper.safeEditReply(interaction, {
-                embeds: [await buildDashboardEmbed(guild, client)],
+                embeds: [await buildDashboardEmbed(guild, client, interaction)],
                 components: [selectRow],
             });
 
@@ -202,8 +203,8 @@ export default {
             collector.on('end', async (collected, reason) => {
                 if (reason === 'time') {
                     const timeoutEmbed = new EmbedBuilder()
-                        .setTitle('Dashboard Timed Out')
-                        .setDescription('This dashboard has been closed due to inactivity. Please run the command again to continue.')
+                        .setTitle(t('economy:dashboard_timeout_title', interaction))
+                        .setDescription(t('economy:dashboard_timeout_desc', interaction))
                         .setColor(getColor('error'));
                     
                     await InteractionHelper.safeEditReply(interaction, {
@@ -227,23 +228,23 @@ export default {
 async function handleAddCurrency(selectInteraction, rootInteraction, guild, client) {
     const modal = new ModalBuilder()
         .setCustomId(`economy_add_currency_${guild.id}`)
-        .setTitle('Add Currency');
+        .setTitle(t('economy:dashboard_modal_add', selectInteraction));
 
     const userSelect = new UserSelectMenuBuilder()
         .setCustomId('target_user')
-        .setPlaceholder('Select a user...')
+        .setPlaceholder(t('economy:dashboard_user_placeholder', selectInteraction))
         .setMinValues(1)
         .setMaxValues(1)
         .setRequired(true);
 
     const userLabel = new LabelBuilder()
-        .setLabel('Target User')
-        .setDescription('User to add currency to')
+        .setLabel(t('economy:dashboard_label_target', selectInteraction))
+        .setDescription(t('economy:dashboard_desc_target_add', selectInteraction))
         .setUserSelectMenuComponent(userSelect);
 
     const amountInput = new TextInputBuilder()
         .setCustomId('amount')
-        .setLabel('Amount to add')
+        .setLabel(t('economy:dashboard_amount_add', selectInteraction))
         .setStyle(TextInputStyle.Short)
         .setPlaceholder('100')
         .setMinLength(1)
@@ -252,7 +253,7 @@ async function handleAddCurrency(selectInteraction, rootInteraction, guild, clie
 
     const typeInput = new TextInputBuilder()
         .setCustomId('type')
-        .setLabel('Type (wallet or bank)')
+        .setLabel(t('economy:dashboard_type_label', selectInteraction))
         .setStyle(TextInputStyle.Short)
         .setPlaceholder('wallet')
         .setMinLength(1)
@@ -281,23 +282,23 @@ async function handleAddCurrency(selectInteraction, rootInteraction, guild, clie
     const type = submitted.fields.getTextInputValue('type').trim().toLowerCase();
 
     if (isNaN(amount) || amount <= 0) {
-        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: 'Amount must be a positive number.' });
+        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: t('economy:dashboard_err_amount_positive', submitted) });
         return;
     }
 
     if (type !== 'wallet' && type !== 'bank') {
-        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: 'Type must be either "wallet" or "bank".' });
+        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: t('economy:dashboard_err_type_invalid', submitted) });
         return;
     }
 
     const member = await guild.members.fetch(userId).catch(() => null);
     if (!member) {
-        await replyUserError(submitted, { type: ErrorTypes.USER_INPUT, message: 'The specified user is not in this server.' });
+        await replyUserError(submitted, { type: ErrorTypes.USER_INPUT, message: t('economy:dashboard_err_user_not_found', submitted) });
         return;
     }
 
     if (member.user.bot) {
-        await replyUserError(submitted, { type: ErrorTypes.UNKNOWN, message: 'Bots do not have economy accounts.' });
+        await replyUserError(submitted, { type: ErrorTypes.UNKNOWN, message: t('economy:dashboard_err_bot', submitted) });
         return;
     }
 
@@ -306,7 +307,10 @@ async function handleAddCurrency(selectInteraction, rootInteraction, guild, clie
     const currencySymbol = BotConfig.economy.currency.symbol;
 
     await submitted.reply({
-        embeds: [successEmbed('Currency Added', `Successfully added ${currencySymbol}${amount.toLocaleString()} to ${member.user.tag}'s ${type}.\n**New Balance:** ${currencySymbol}${newBalance.toLocaleString()}`)],
+        embeds: [successEmbed(
+            t('economy:dashboard_added_title', submitted),
+            t('economy:dashboard_added_desc', { symbol: currencySymbol, amount: amount.toLocaleString(), user: member.user.tag, type, balance: newBalance.toLocaleString() }, submitted)
+        )],
         flags: MessageFlags.Ephemeral,
     });
 
@@ -324,23 +328,23 @@ async function handleAddCurrency(selectInteraction, rootInteraction, guild, clie
 async function handleRemoveCurrency(selectInteraction, rootInteraction, guild, client) {
     const modal = new ModalBuilder()
         .setCustomId(`economy_remove_currency_${guild.id}`)
-        .setTitle('Remove Currency');
+        .setTitle(t('economy:dashboard_modal_remove', selectInteraction));
 
     const userSelect = new UserSelectMenuBuilder()
         .setCustomId('target_user')
-        .setPlaceholder('Select a user...')
+        .setPlaceholder(t('economy:dashboard_user_placeholder', selectInteraction))
         .setMinValues(1)
         .setMaxValues(1)
         .setRequired(true);
 
     const userLabel = new LabelBuilder()
-        .setLabel('Target User')
-        .setDescription('User to remove currency from')
+        .setLabel(t('economy:dashboard_label_target', selectInteraction))
+        .setDescription(t('economy:dashboard_desc_target_remove', selectInteraction))
         .setUserSelectMenuComponent(userSelect);
 
     const amountInput = new TextInputBuilder()
         .setCustomId('amount')
-        .setLabel('Amount to remove')
+        .setLabel(t('economy:dashboard_amount_remove', selectInteraction))
         .setStyle(TextInputStyle.Short)
         .setPlaceholder('100')
         .setMinLength(1)
@@ -349,7 +353,7 @@ async function handleRemoveCurrency(selectInteraction, rootInteraction, guild, c
 
     const typeInput = new TextInputBuilder()
         .setCustomId('type')
-        .setLabel('Type (wallet or bank)')
+        .setLabel(t('economy:dashboard_type_label', selectInteraction))
         .setStyle(TextInputStyle.Short)
         .setPlaceholder('wallet')
         .setMinLength(1)
@@ -378,23 +382,23 @@ async function handleRemoveCurrency(selectInteraction, rootInteraction, guild, c
     const type = submitted.fields.getTextInputValue('type').trim().toLowerCase();
 
     if (isNaN(amount) || amount <= 0) {
-        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: 'Amount must be a positive number.' });
+        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: t('economy:dashboard_err_amount_positive', submitted) });
         return;
     }
 
     if (type !== 'wallet' && type !== 'bank') {
-        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: 'Type must be either "wallet" or "bank".' });
+        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: t('economy:dashboard_err_type_invalid', submitted) });
         return;
     }
 
     const member = await guild.members.fetch(userId).catch(() => null);
     if (!member) {
-        await replyUserError(submitted, { type: ErrorTypes.USER_INPUT, message: 'The specified user is not in this server.' });
+        await replyUserError(submitted, { type: ErrorTypes.USER_INPUT, message: t('economy:dashboard_err_user_not_found', submitted) });
         return;
     }
 
     if (member.user.bot) {
-        await replyUserError(submitted, { type: ErrorTypes.UNKNOWN, message: 'Bots do not have economy accounts.' });
+        await replyUserError(submitted, { type: ErrorTypes.UNKNOWN, message: t('economy:dashboard_err_bot', submitted) });
         return;
     }
 
@@ -403,7 +407,10 @@ async function handleRemoveCurrency(selectInteraction, rootInteraction, guild, c
     const currencySymbol = BotConfig.economy.currency.symbol;
 
     await submitted.reply({
-        embeds: [successEmbed('Currency Removed', `Successfully removed ${currencySymbol}${amount.toLocaleString()} from ${member.user.tag}'s ${type}.\n**New Balance:** ${currencySymbol}${newBalance.toLocaleString()}`)],
+        embeds: [successEmbed(
+            t('economy:dashboard_removed_title', submitted),
+            t('economy:dashboard_removed_desc', { symbol: currencySymbol, amount: amount.toLocaleString(), user: member.user.tag, type, balance: newBalance.toLocaleString() }, submitted)
+        )],
         flags: MessageFlags.Ephemeral,
     });
 
@@ -421,11 +428,11 @@ async function handleRemoveCurrency(selectInteraction, rootInteraction, guild, c
 async function handleChangeCurrency(selectInteraction, rootInteraction, guild) {
     const modal = new ModalBuilder()
         .setCustomId(`economy_change_currency_${guild.id}`)
-        .setTitle('Change Currency Symbol');
+        .setTitle(t('economy:dashboard_modal_symbol', selectInteraction));
 
     const symbolInput = new TextInputBuilder()
         .setCustomId('currency_symbol')
-        .setLabel('New Currency Symbol')
+        .setLabel(t('economy:dashboard_symbol_label', selectInteraction))
         .setStyle(TextInputStyle.Short)
         .setValue(BotConfig.economy.currency.symbol)
         .setPlaceholder('$')
@@ -449,19 +456,22 @@ async function handleChangeCurrency(selectInteraction, rootInteraction, guild) {
     const newSymbol = submitted.fields.getTextInputValue('currency_symbol').trim();
 
     if (newSymbol.length === 0 || newSymbol.length > 3) {
-        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: 'Currency symbol must be 1-3 characters long.' });
+        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: t('economy:dashboard_err_symbol_len', submitted) });
         return;
     }
 
     const success = await updateConfigFile(newSymbol, BotConfig.economy.currency.name);
 
     if (!success) {
-        await replyUserError(submitted, { type: ErrorTypes.UNKNOWN, message: 'Could not update the config file. Please check the logs.' });
+        await replyUserError(submitted, { type: ErrorTypes.UNKNOWN, message: t('economy:dashboard_err_config', submitted) });
         return;
     }
 
     await submitted.reply({
-        embeds: [successEmbed('Currency Symbol Updated', `Currency symbol changed to **${newSymbol}**.\n\n**Note:** The bot needs to be restarted for changes to take effect.`)],
+        embeds: [successEmbed(
+            t('economy:dashboard_symbol_title', submitted),
+            t('economy:dashboard_symbol_desc', { symbol: newSymbol }, submitted)
+        )],
         flags: MessageFlags.Ephemeral,
     });
 
@@ -475,11 +485,11 @@ async function handleChangeCurrency(selectInteraction, rootInteraction, guild) {
 async function handleChangeName(selectInteraction, rootInteraction, guild) {
     const modal = new ModalBuilder()
         .setCustomId(`economy_change_name_${guild.id}`)
-        .setTitle('Change Currency Name');
+        .setTitle(t('economy:dashboard_modal_name', selectInteraction));
 
     const nameInput = new TextInputBuilder()
         .setCustomId('currency_name')
-        .setLabel('New Currency Name')
+        .setLabel(t('economy:dashboard_name_label', selectInteraction))
         .setStyle(TextInputStyle.Short)
         .setValue(BotConfig.economy.currency.name)
         .setPlaceholder('coins')
@@ -503,19 +513,22 @@ async function handleChangeName(selectInteraction, rootInteraction, guild) {
     const newName = submitted.fields.getTextInputValue('currency_name').trim();
 
     if (newName.length === 0 || newName.length > 20) {
-        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: 'Currency name must be 1-20 characters long.' });
+        await replyUserError(submitted, { type: ErrorTypes.VALIDATION, message: t('economy:dashboard_err_name_len', submitted) });
         return;
     }
 
     const success = await updateConfigFile(BotConfig.economy.currency.symbol, newName);
 
     if (!success) {
-        await replyUserError(submitted, { type: ErrorTypes.UNKNOWN, message: 'Could not update the config file. Please check the logs.' });
+        await replyUserError(submitted, { type: ErrorTypes.UNKNOWN, message: t('economy:dashboard_err_config', submitted) });
         return;
     }
 
     await submitted.reply({
-        embeds: [successEmbed('Currency Name Updated', `Currency name changed to **${newName}**.\n\n**Note:** The bot needs to be restarted for changes to take effect.`)],
+        embeds: [successEmbed(
+            t('economy:dashboard_name_title', submitted),
+            t('economy:dashboard_name_desc', { name: newName }, submitted)
+        )],
         flags: MessageFlags.Ephemeral,
     });
 

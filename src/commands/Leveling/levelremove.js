@@ -4,8 +4,9 @@ import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
 import { checkUserPermissions } from '../../utils/permissionGuard.js';
 import { removeLevels, getUserLevelData, getLevelingConfig } from '../../services/leveling/leveling.js';
 import { createEmbed } from '../../utils/embeds.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
   data: new SlashCommandBuilder()
     .setName('levelremove')
@@ -43,7 +44,7 @@ export default {
         embeds: [
           new EmbedBuilder()
             .setColor('#f1c40f')
-            .setDescription('The leveling system is currently disabled on this server.')
+            .setDescription(t('leveling.disabled', interaction))
         ],
         flags: MessageFlags.Ephemeral
       });
@@ -58,7 +59,7 @@ export default {
       throw new TitanBotError(
         `User ${targetUser.id} not found in this guild`,
         ErrorTypes.USER_INPUT,
-        'The specified user is not in this server.'
+        t('leveling.user_not_found', interaction)
       );
     }
 
@@ -67,7 +68,7 @@ export default {
       throw new TitanBotError(
         `User ${targetUser.id} is already at minimum level`,
         ErrorTypes.VALIDATION,
-        `${targetUser.tag} is already at level 0 and cannot have levels removed.`
+        t('leveling.level_remove_min', { user: targetUser.tag }, interaction)
       );
     }
 
@@ -76,8 +77,12 @@ export default {
     await InteractionHelper.safeEditReply(interaction, {
       embeds: [
         createEmbed({
-          title: 'Levels Removed',
-          description: `Successfully removed ${levelsToRemove} levels from ${targetUser.tag}.\n**New Level:** ${updatedData.level}`,
+          title: t('leveling.level_removed_title', interaction),
+          description: t('leveling.level_removed_desc', {
+            levels: levelsToRemove,
+            user: targetUser.tag,
+            level: updatedData.level
+          }, interaction),
           color: 'success'
         })
       ]

@@ -12,8 +12,9 @@ import {
   getExpectedCountValue,
 } from '../../services/countingGameService.js';
 import { logger } from '../../utils/logger.js';
-
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
   data: new SlashCommandBuilder()
     .setName('count')
@@ -70,7 +71,7 @@ export default {
       }
 
       if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageGuild)) {
-        return await replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: 'You need the **Manage Server** permission to use this command.' });
+        return await replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: t('fun.count_perm', interaction) });
       }
 
       const guildId = interaction.guildId;
@@ -81,19 +82,22 @@ export default {
         const channel = interaction.options.getChannel('channel');
         const system = interaction.options.getString('system');
         if (!channel || channel.type !== ChannelType.GuildText) {
-          return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: 'Please choose a text channel for the counting game.' });
+          return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: t('fun.count_channel_required', interaction) });
         }
 
         if (config.enabled && config.channelId && config.channelId !== channel.id) {
-          return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: `This server already has an active counting channel configured: <#${config.channelId}>. Disable the current counting game first, or use that existing channel.` });
+          return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('fun.count_already_active', { channel: config.channelId }, interaction) });
         }
 
         await activateCountingGame(interaction.client, guildId, channel.id, system);
         return await InteractionHelper.safeEditReply(interaction, {
           embeds: [
             successEmbed(
-              'Counting Game Enabled',
-              `The counting game is now active in ${channel} using the **${getCountingSystemLabel(system)}** system. Players must count up from **1** and may not post two numbers in a row.`,
+              t('fun.count_enabled_title', interaction),
+              t('fun.count_enabled_desc', {
+                channel: `${channel}`,
+                system: getCountingSystemLabel(system)
+              }, interaction),
             ),
           ],
         });
@@ -102,32 +106,32 @@ export default {
       if (subcommand === 'disable') {
         if (!config.enabled) {
           return await InteractionHelper.safeEditReply(interaction, {
-            embeds: [infoEmbed('Counting Game Disabled', 'The counting game is already disabled for this server.')],
+            embeds: [infoEmbed(t('fun.count_already_disabled_title', interaction), t('fun.count_already_disabled_desc', interaction))],
           });
         }
 
         await disableCountingGame(interaction.client, guildId);
         return await InteractionHelper.safeEditReply(interaction, {
-          embeds: [successEmbed('Counting Game Disabled', 'The counting game has been disabled.')],
+          embeds: [successEmbed(t('fun.count_already_disabled_title', interaction), t('fun.count_disabled_desc', interaction))],
         });
       }
 
       if (subcommand === 'status') {
         const fields = [
-          { name: 'Enabled', value: config.enabled ? 'Yes' : 'No', inline: true },
-          { name: 'Channel', value: config.channelId ? `<#${config.channelId}>` : 'Not configured', inline: true },
-          { name: 'System', value: getCountingSystemLabel(config.system), inline: true },
-          { name: 'Next count', value: getExpectedCountValue(config), inline: true },
-          { name: 'Current streak', value: `${config.currentStreak}`, inline: true },
-          { name: 'Best streak', value: `${config.bestStreak || 0}`, inline: true },
-          { name: 'Last counter', value: config.lastUserId ? `<@${config.lastUserId}>` : 'None', inline: true },
+          { name: t('fun.count_status_enabled', interaction), value: config.enabled ? t('fun.count_status_yes', interaction) : t('fun.count_status_no', interaction), inline: true },
+          { name: t('fun.count_status_channel', interaction), value: config.channelId ? `<#${config.channelId}>` : t('fun.count_status_not_configured', interaction), inline: true },
+          { name: t('fun.count_status_system', interaction), value: getCountingSystemLabel(config.system), inline: true },
+          { name: t('fun.count_status_next', interaction), value: getExpectedCountValue(config), inline: true },
+          { name: t('fun.count_status_streak', interaction), value: `${config.currentStreak}`, inline: true },
+          { name: t('fun.count_status_best', interaction), value: `${config.bestStreak || 0}`, inline: true },
+          { name: t('fun.count_status_last', interaction), value: config.lastUserId ? `<@${config.lastUserId}>` : t('fun.count_status_none', interaction), inline: true },
         ];
 
         return await InteractionHelper.safeEditReply(interaction, {
           embeds: [
             createEmbed({
-              title: 'Counting Game Status',
-              description: 'Overview of the currently configured counting game.',
+              title: t('fun.count_status_title', interaction),
+              description: t('fun.count_status_desc', interaction),
               fields,
               color: 'primary',
             }),
@@ -137,7 +141,7 @@ export default {
 
       if (subcommand === 'reset') {
         if (!config.enabled) {
-          return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'Enable the counting game first with `/count setup`.' });
+          return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('fun.count_reset_first', interaction) });
         }
 
         const startNumber = interaction.options.getInteger('start') || 1;
@@ -146,8 +150,8 @@ export default {
         return await InteractionHelper.safeEditReply(interaction, {
           embeds: [
             successEmbed(
-              'Counting Game Reset',
-              `The counting sequence has been reset. Start again with **${startNumber}** in <#${config.channelId}>.`,
+              t('fun.count_reset_title', interaction),
+              t('fun.count_reset_desc', { start: startNumber, channel: config.channelId }, interaction),
             ),
           ],
         });
@@ -159,18 +163,18 @@ export default {
         return await InteractionHelper.safeEditReply(interaction, {
           embeds: [
             createEmbed({
-              title: 'Counting Game Leaderboard',
-              description: leaderboard.length > 0 ? leaderboard.join('\n') : 'No counts have been recorded yet.',
+              title: t('fun.count_leaderboard_title', interaction),
+              description: leaderboard.length > 0 ? leaderboard.join('\n') : t('fun.count_leaderboard_empty', interaction),
               color: 'primary',
             }),
           ],
         });
       }
 
-      return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: 'Please choose a valid counting game action.' });
+      return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: t('fun.count_choose_action', interaction) });
     } catch (error) {
       logger.error('Count command error:', error);
-      return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'Something went wrong while managing the counting game.' });
+      return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('fun.count_error', interaction) });
     }
   },
 };

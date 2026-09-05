@@ -2,8 +2,9 @@ import { SlashCommandBuilder, EmbedBuilder, MessageFlags } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
 import { getLeaderboard, getLevelingConfig, getXpForLevel } from '../../services/leveling/leveling.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
   data: new SlashCommandBuilder()
     .setName('leaderboard')
@@ -21,7 +22,7 @@ export default {
         embeds: [
           new EmbedBuilder()
             .setColor('#f1c40f')
-            .setDescription('The leveling system is currently disabled on this server.')
+            .setDescription(t('leveling.disabled', interaction))
         ],
         flags: MessageFlags.Ephemeral
       });
@@ -34,14 +35,14 @@ export default {
       throw new TitanBotError(
         'No leaderboard data found',
         ErrorTypes.DATABASE,
-        'No level data found yet. Start chatting to gain XP!'
+        t('leveling.leaderboard_empty', interaction)
       );
     }
 
     const embed = new EmbedBuilder()
-      .setTitle('Level Leaderboard')
+      .setTitle(t('leveling.leaderboard_title', interaction))
       .setColor('#2ecc71')
-      .setDescription("Top 10 most active members in this server:")
+      .setDescription(t('leveling.leaderboard_desc', interaction))
       .setTimestamp();
 
     const leaderboardText = await Promise.all(
@@ -57,7 +58,13 @@ export default {
           else if (index === 2) rankPrefix = '🥉';
           else rankPrefix = `**${index + 1}.**`;
 
-          return `${rankPrefix} ${userMention} - Level ${user.level} (${user.xp}/${xpForNextLevel} XP)`;
+          return t('leveling.leaderboard_entry', {
+            rank: rankPrefix,
+            user: userMention,
+            level: user.level,
+            xp: user.xp,
+            nextXp: xpForNextLevel
+          }, interaction);
         } catch {
           return `**${index + 1}.** Error loading user ${user.userId}`;
         }
@@ -65,7 +72,7 @@ export default {
     );
 
     embed.addFields({
-      name: 'Rankings',
+      name: t('leveling.leaderboard_rankings', interaction),
       value: leaderboardText.join('\n')
     });
 

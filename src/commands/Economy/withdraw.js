@@ -2,8 +2,9 @@ import { SlashCommandBuilder } from 'discord.js';
 import { createEmbed, errorEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/embeds.js';
 import { getEconomyData, setEconomyData, getMaxBankCapacity } from '../../utils/economy.js';
 import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHandler.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n.js';
+
 export default {
     data: new SlashCommandBuilder()
         .setName('withdraw')
@@ -29,7 +30,7 @@ export default {
                 throw createError(
                     "Failed to load economy data",
                     ErrorTypes.DATABASE,
-                    "Failed to load your economy data. Please try again later.",
+                    t('economy:error_load_data', interaction),
                     { userId, guildId }
                 );
             }
@@ -40,7 +41,7 @@ export default {
                 throw createError(
                     "Invalid withdrawal amount",
                     ErrorTypes.VALIDATION,
-                    "You must withdraw a positive amount.",
+                    t('economy:withdraw_err_positive', interaction),
                     { amount: withdrawAmount, userId }
                 );
             }
@@ -53,7 +54,7 @@ export default {
                 throw createError(
                     "Empty bank account",
                     ErrorTypes.VALIDATION,
-                    "Your bank account is empty.",
+                    t('economy:withdraw_err_empty', interaction),
                     { userId, bankBalance: userData.bank }
                 );
             }
@@ -64,17 +65,17 @@ export default {
             await setEconomyData(client, guildId, userId, userData);
 
             const embed = successEmbed(
-                'Withdrawal Successful',
-                `You successfully withdrew **$${withdrawAmount.toLocaleString()}** from your bank.`
+                t('economy:withdraw_title', interaction),
+                t('economy:withdraw_success', { amount: withdrawAmount.toLocaleString() }, interaction)
             )
                 .addFields(
                     {
-                        name: "New Cash Balance",
+                        name: t('economy:withdraw_cash', interaction),
                         value: `$${userData.wallet.toLocaleString()}`,
                         inline: true,
                     },
                     {
-                        name: "New Bank Balance",
+                        name: t('economy:withdraw_bank', interaction),
                         value: `$${userData.bank.toLocaleString()}`,
                         inline: true,
                     },

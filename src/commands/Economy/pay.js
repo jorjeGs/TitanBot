@@ -5,6 +5,7 @@ import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHan
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import EconomyService from '../../services/economyService.js';
+import { t } from '../../utils/i18n.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -44,7 +45,7 @@ export default {
                 throw createError(
                     "Cannot pay bot",
                     ErrorTypes.VALIDATION,
-                    "You cannot pay a bot.",
+                    t('economy:pay_err_bot', interaction),
                     { receiverId: receiver.id, isBot: true }
                 );
             }
@@ -53,7 +54,7 @@ export default {
                 throw createError(
                     "Cannot pay self",
                     ErrorTypes.VALIDATION,
-                    "You cannot pay yourself.",
+                    t('economy:pay_err_self', interaction),
                     { senderId, receiverId: receiver.id }
                 );
             }
@@ -62,7 +63,7 @@ export default {
                 throw createError(
                     "Invalid payment amount",
                     ErrorTypes.VALIDATION,
-                    "Amount must be greater than zero.",
+                    t('economy:pay_err_positive', interaction),
                     { amount, senderId }
                 );
             }
@@ -76,7 +77,7 @@ export default {
                 throw createError(
                     "Failed to load sender economy data",
                     ErrorTypes.DATABASE,
-                    "Failed to load your economy data. Please try again later.",
+                    t('economy:pay_err_sender', interaction),
                     { userId: senderId, guildId }
                 );
             }
@@ -85,7 +86,7 @@ export default {
                 throw createError(
                     "Failed to load receiver economy data",
                     ErrorTypes.DATABASE,
-                    "Failed to load the receiver's economy data. Please try again later.",
+                    t('economy:pay_err_receiver', interaction),
                     { userId: receiver.id, guildId }
                 );
             }
@@ -102,23 +103,23 @@ export default {
             const updatedReceiverData = await getEconomyData(client, guildId, receiver.id);
 
             const embed = successEmbed(
-                'Payment Successful',
-                `You successfully paid **${receiver.username}** the amount of **$${amount.toLocaleString()}**!`
+                t('economy:pay_title', interaction),
+                t('economy:pay_success', { receiver: receiver.username, amount: amount.toLocaleString() }, interaction)
             )
                 .addFields(
                     {
-                        name: "Payment Amount",
+                        name: t('economy:pay_amount', interaction),
                         value: `$${amount.toLocaleString()}`,
                         inline: true,
                     },
                     {
-                        name: "Your New Balance",
+                        name: t('economy:pay_new_balance', interaction),
                         value: `$${updatedSenderData.wallet.toLocaleString()}`,
                         inline: true,
                     },
                 )
                 .setFooter({
-                    text: `Paid to ${receiver.tag}`,
+                    text: t('economy:pay_footer', { receiver: receiver.tag }, interaction),
                     iconURL: receiver.displayAvatarURL(),
                 });
 
@@ -134,10 +135,10 @@ export default {
 
             try {
                 const receiverEmbed = createEmbed({ 
-                    title: "Incoming Payment!", 
-                    description: `${interaction.user.username} paid you **$${amount.toLocaleString()}**.` 
+                    title: t('economy:pay_incoming_title', interaction), 
+                    description: t('economy:pay_incoming_desc', { sender: interaction.user.username, amount: amount.toLocaleString() }, interaction) 
                 }).addFields({
-                    name: "Your New Cash",
+                    name: t('economy:pay_incoming_cash', interaction),
                     value: `$${updatedReceiverData.wallet.toLocaleString()}`,
                     inline: true,
                 });

@@ -1,22 +1,24 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { createEmbed, errorEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/embeds.js';
+import { successEmbed } from '../../utils/embeds.js';
 import { logger } from '../../utils/logger.js';
-import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
-    data: new SlashCommandBuilder()
+  data: new SlashCommandBuilder()
     .setName("flip")
     .setDescription("Flips a coin (Heads or Tails)."),
   category: 'Fun',
 
   async execute(interaction, config, client) {
-    const result = Math.random() < 0.5 ? "Heads" : "Tails";
-    const emoji = result === "Heads" ? "🪙" : "🔮";
+    const isHeads = Math.random() < 0.5;
+    const resultKey = isHeads ? 'fun.flip_heads' : 'fun.flip_tails';
+    const result = t(resultKey, interaction);
+    const emoji = isHeads ? "🪙" : "🔮";
 
     const embed = successEmbed(
-      "Heads or Tails?",
-      `The coin landed on... **${result}** ${emoji}!`,
+      t('fun.flip_title', interaction),
+      t('fun.flip_result', { result, emoji }, interaction)
     );
 
     await InteractionHelper.safeReply(interaction, { embeds: [embed] });

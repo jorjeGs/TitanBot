@@ -5,6 +5,7 @@ import { getEconomyData, setEconomyData } from '../../utils/economy.js';
 import { getGuildConfig } from '../../services/config/guildConfig.js';
 import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n.js';
 
 const SHOP_ITEMS = shopItems;
 
@@ -42,7 +43,7 @@ export default {
                 throw createError(
                     `Item ${itemId} not found`,
                     ErrorTypes.VALIDATION,
-                    `The item ID \`${itemId}\` does not exist in the shop.`,
+                    t('economy:buy_err_not_found', { id: itemId }, interaction),
                     { itemId }
                 );
             }
@@ -51,7 +52,7 @@ export default {
                 throw createError(
                     "Invalid quantity",
                     ErrorTypes.VALIDATION,
-                    "You must purchase a quantity of 1 or more.",
+                    t('economy:buy_err_min_quantity', interaction),
                     { quantity }
                 );
             }
@@ -63,11 +64,20 @@ export default {
 
             const userData = await getEconomyData(client, guildId, userId);
 
+            if (!userData) {
+                throw createError(
+                    "Failed to load economy data",
+                    ErrorTypes.DATABASE,
+                    t('economy:error_load_data', interaction),
+                    { userId, guildId }
+                );
+            }
+
             if (userData.wallet < totalCost) {
                 throw createError(
                     "Insufficient funds",
                     ErrorTypes.VALIDATION,
-                    `You need **$${totalCost.toLocaleString()}** to purchase ${quantity}x **${item.name}**, but you only have **$${userData.wallet.toLocaleString()}** in cash.`,
+                    t('economy:buy_err_insufficient', { cost: totalCost.toLocaleString(), quantity, item: item.name, wallet: userData.wallet.toLocaleString() }, interaction),
                     { required: totalCost, current: userData.wallet, itemId, quantity }
                 );
             }
@@ -77,7 +87,7 @@ export default {
                     throw createError(
                         "Premium role not configured",
                         ErrorTypes.CONFIGURATION,
-                        "The **Premium Shop Role** has not been configured by a server administrator yet.",
+                        t('economy:buy_err_role_not_configured', interaction),
                         { itemId }
                     );
                 }
@@ -85,7 +95,7 @@ export default {
                     throw createError(
                         "Role already owned",
                         ErrorTypes.VALIDATION,
-                        `You already have the **${item.name}** role.`,
+                        t('economy:buy_err_role_owned', { item: item.name }, interaction),
                         { itemId, roleId: PREMIUM_ROLE_ID }
                     );
                 }
@@ -93,7 +103,7 @@ export default {
                     throw createError(
                         "Invalid quantity for role",
                         ErrorTypes.VALIDATION,
-                        `You can only purchase the **${item.name}** role once.`,
+                        t('economy:buy_err_role_quantity', { item: item.name }, interaction),
                         { itemId, quantity }
                     );
                 }
@@ -101,7 +111,7 @@ export default {
 
             userData.wallet -= totalCost;
 
-            let successDescription = `You successfully purchased ${quantity}x **${item.name}** for **$${totalCost.toLocaleString()}**!`;
+            let successDescription = t('economy:buy_desc', { quantity, item: item.name, cost: totalCost.toLocaleString() }, interaction);
 
             if (item.type === "role" && itemId === "premium_role") {
                 const member = interaction.member;
@@ -112,7 +122,7 @@ export default {
                     throw createError(
                         "Role not found",
                         ErrorTypes.CONFIGURATION,
-                        "The configured premium role no longer exists in this guild.",
+                        t('economy:buy_err_role_missing', interaction),
                         { roleId: PREMIUM_ROLE_ID }
                     );
                 }
@@ -122,35 +132,37 @@ export default {
                         role,
                         `Purchased role: ${item.name}`,
                     );
-                    successDescription += `\n\n**👑 The role ${role.toString()} has been granted to you!**`;
+                    successDescription += t('economy:buy_role_granted', { role: role.toString() }, interaction);
                 } catch (roleError) {
                     userData.wallet += totalCost;
                     await setEconomyData(client, guildId, userId, userData);
                     throw createError(
                         "Role assignment failed",
                         ErrorTypes.DISCORD_API,
-                        "Successfully deducted money, but failed to grant the role. Your cash has been refunded.",
+                        t('economy:buy_err_role_failed', interaction),
                         { roleId: PREMIUM_ROLE_ID, originalError: roleError.message }
                     );
                 }
             } else if (item.type === "upgrade") {
+                userData.upgrades = userData.upgrades || {};
                 userData.upgrades[itemId] = true;
-                successDescription += `\n\n**✨ Your upgrade is now active!**`;
+                successDescription += t('economy:buy_upgrade_active', interaction);
             } else if (item.type === "consumable" || item.type === "tool") {
+                userData.inventory = userData.inventory || {};
                 userData.inventory[itemId] =
                     (userData.inventory[itemId] || 0) + quantity;
                 if (item.type === "tool") {
-                    successDescription += `\n\n**🛠️ ${item.name} added to your inventory!**`;
+                    successDescription += t('economy:buy_tool_added', { item: item.name }, interaction);
                 }
             }
 
             await setEconomyData(client, guildId, userId, userData);
 
             const embed = successEmbed(
-                "💰 Purchase Successful",
+                t('economy:buy_title', interaction),
                 successDescription,
             ).addFields({
-                name: "New Balance",
+                name: t('economy:buy_new_balance', interaction),
                 value: `$${userData.wallet.toLocaleString()}`,
                 inline: true,
             });

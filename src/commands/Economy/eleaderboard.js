@@ -4,6 +4,7 @@ import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHan
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { getEconomyPrefix } from '../../utils/database.js';
+import { t } from '../../utils/i18n.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -31,7 +32,7 @@ export default {
                 throw createError(
                     "No economy data found",
                     ErrorTypes.VALIDATION,
-                    "No economy data found for this server."
+                    t('economy:leaderboard_err_no_data', interaction)
                 );
             }
 
@@ -76,12 +77,14 @@ export default {
 
             const description = leaderboardEntries.length > 0
                 ? leaderboardEntries.join("\n")
-                : "No economy data is available for this server yet.";
+                : t('economy:leaderboard_empty', interaction);
+
+            const rankText = userRank > 0 ? `#${userRank}` : t('economy:leaderboard_no_rank', interaction);
 
             const embed = createEmbed({
-                title: `Economy Leaderboard`,
+                title: t('economy:leaderboard_title', interaction),
                 description,
-                footer: `Your Rank: ${userRank > 0 ?`#${userRank}`: "No ranking data available"}`,
+                footer: t('economy:leaderboard_footer', { rank: rankText }, interaction),
             });
 
             await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });

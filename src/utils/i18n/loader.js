@@ -86,7 +86,8 @@ export function getRawTranslation(locale, keyPath) {
         return null;
     }
 
-    const segments = keyPath.split('.');
+    const normalizedKey = keyPath.replace(':', '.');
+    const segments = normalizedKey.split('.');
     const domain = segments[0];
     const subPath = segments.slice(1);
 

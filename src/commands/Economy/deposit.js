@@ -3,6 +3,7 @@ import { successEmbed, buildUserErrorEmbed } from '../../utils/embeds.js';
 import { getEconomyData, setEconomyData, getMaxBankCapacity } from '../../utils/economy.js';
 import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -29,7 +30,7 @@ export default {
                 throw createError(
                     "Failed to load economy data",
                     ErrorTypes.DATABASE,
-                    "Failed to load your economy data. Please try again later.",
+                    t('economy:error_load_data', interaction),
                     { userId, guildId }
                 );
             }
@@ -46,7 +47,7 @@ export default {
                     throw createError(
                         "Invalid deposit amount",
                         ErrorTypes.VALIDATION,
-                        `Please enter a valid number or 'all'. You entered: \`${amountInput}\``,
+                        t('economy:deposit_err_invalid', { input: amountInput }, interaction),
                         { amountInput, userId }
                     );
                 }
@@ -56,7 +57,7 @@ export default {
                 throw createError(
                     "Zero deposit amount",
                     ErrorTypes.VALIDATION,
-                    "You have no cash to deposit.",
+                    t('economy:deposit_err_zero', interaction),
                     { userId, walletBalance: userData.wallet }
                 );
             }
@@ -67,7 +68,7 @@ export default {
                     embeds: [
                         buildUserErrorEmbed(
                             'validation',
-                            `You tried to deposit more than you have. Depositing your remaining cash: **$${depositAmount.toLocaleString()}**`
+                            t('economy:deposit_warn_more', { amount: depositAmount.toLocaleString() }, interaction)
                         )
                     ],
                     flags: MessageFlags.Ephemeral,
@@ -80,7 +81,7 @@ export default {
                 throw createError(
                     "Bank is full",
                     ErrorTypes.VALIDATION,
-                    `Your bank is currently full (Max Capacity: $${maxBank.toLocaleString()}). Purchase a **Bank Upgrade** to increase your limit.`,
+                    t('economy:deposit_err_full', { max: maxBank.toLocaleString() }, interaction),
                     { maxBank, currentBank: userData.bank, userId }
                 );
             }
@@ -94,7 +95,7 @@ export default {
                         embeds: [
                             buildUserErrorEmbed(
                                 'validation',
-                                `You only had space for **$${depositAmount.toLocaleString()}** in your bank account (Max: $${maxBank.toLocaleString()}). The rest remains in your cash.`
+                                t('economy:deposit_warn_space', { amount: depositAmount.toLocaleString(), max: maxBank.toLocaleString() }, interaction)
                             )
                         ],
                         flags: MessageFlags.Ephemeral,
@@ -106,7 +107,7 @@ export default {
                 throw createError(
                     "No space or cash for deposit",
                     ErrorTypes.VALIDATION,
-                    "The amount you tried to deposit was either 0 or exceeded your bank capacity after checking your cash balance.",
+                    t('economy:deposit_err_no_space', interaction),
                     { depositAmount, availableSpace, walletBalance: userData.wallet }
                 );
             }
@@ -117,17 +118,17 @@ export default {
             await setEconomyData(client, guildId, userId, userData);
 
             const embed = successEmbed(
-                'Deposit Successful',
-                `You successfully deposited **$${depositAmount.toLocaleString()}** into your bank.`
+                t('economy:deposit_title', interaction),
+                t('economy:deposit_success', { amount: depositAmount.toLocaleString() }, interaction)
             )
                 .addFields(
                     {
-                        name: "New Cash Balance",
+                        name: t('economy:deposit_cash', interaction),
                         value: `$${userData.wallet.toLocaleString()}`,
                         inline: true,
                     },
                     {
-                        name: "New Bank Balance",
+                        name: t('economy:deposit_bank', interaction),
                         value: `$${userData.bank.toLocaleString()} / $${maxBank.toLocaleString()}`,
                         inline: true,
                     },

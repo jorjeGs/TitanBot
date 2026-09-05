@@ -4,8 +4,9 @@ import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
 import { checkUserPermissions } from '../../utils/permissionGuard.js';
 import { setUserLevel, getLevelingConfig } from '../../services/leveling/leveling.js';
 import { createEmbed } from '../../utils/embeds.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
   data: new SlashCommandBuilder()
     .setName('levelset')
@@ -43,7 +44,7 @@ export default {
         embeds: [
           new EmbedBuilder()
             .setColor('#f1c40f')
-            .setDescription('The leveling system is currently disabled on this server.')
+            .setDescription(t('leveling.disabled', interaction))
         ],
         flags: MessageFlags.Ephemeral
       });
@@ -58,7 +59,7 @@ export default {
       throw new TitanBotError(
         `User ${targetUser.id} not found in this guild`,
         ErrorTypes.USER_INPUT,
-        'The specified user is not in this server.'
+        t('leveling.user_not_found', interaction)
       );
     }
 
@@ -67,8 +68,12 @@ export default {
     await InteractionHelper.safeEditReply(interaction, {
       embeds: [
         createEmbed({
-          title: 'Level Set',
-          description: `Successfully set ${targetUser.tag}'s level to **${newLevel}**.\n**Total XP:** ${userData.totalXp}`,
+          title: t('leveling.level_set_title', interaction),
+          description: t('leveling.level_set_desc', {
+            user: targetUser.tag,
+            level: newLevel,
+            xp: userData.totalXp
+          }, interaction),
           color: 'success'
         })
       ]
