@@ -22,9 +22,12 @@ export function getAllCommands(req, res) {
       categoriesMap[category] = [];
     }
 
+    const data = typeof cmd.data?.toJSON === 'function' ? cmd.data.toJSON() : cmd.data;
     categoriesMap[category].push({
-      name: cmd.data?.name || cmd.name,
-      description: cmd.data?.description || '',
+      name: data?.name || cmd.name,
+      nameLocalizations: data?.name_localizations || cmd.data?.name_localizations || {},
+      description: data?.description || '',
+      descriptionLocalizations: data?.description_localizations || cmd.data?.description_localizations || {},
     });
   }
 

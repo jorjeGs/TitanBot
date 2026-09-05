@@ -47,7 +47,7 @@ export function LoggingTab() {
       <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-4">
         <div className="flex items-center gap-2.5 pb-4 border-b border-slate-800">
           <ScrollText className="w-5 h-5 text-discord-blurple" />
-          <h2 className="text-base font-semibold text-slate-100">Logging System</h2>
+          <h2 className="text-base font-semibold text-slate-100">{t('logging.systemTitle')}</h2>
         </div>
 
         <Toggle
@@ -66,7 +66,7 @@ export function LoggingTab() {
       >
         <div className="flex items-center gap-2.5 pb-4 border-b border-slate-800">
           <ShieldAlert className="w-5 h-5 text-amber-400" />
-          <h2 className="text-base font-semibold text-slate-100">Log Channels</h2>
+          <h2 className="text-base font-semibold text-slate-100">{t('logging.channelsTitle')}</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

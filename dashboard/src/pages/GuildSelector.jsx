@@ -149,9 +149,9 @@ export function GuildSelector() {
       ) : (
         <div className="text-center py-20 bg-discord-darker/40 border border-slate-800 rounded-3xl">
           <Server className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-          <h3 className="text-base font-semibold text-slate-300">No servers found</h3>
+          <h3 className="text-base font-semibold text-slate-300">{t('servers.noServers')}</h3>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-            You need to be the owner or have Administrator / Manage Server permissions on a server to manage it here.
+            {t('servers.noServersHelp')}
           </p>
         </div>
       )}

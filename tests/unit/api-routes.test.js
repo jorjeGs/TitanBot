@@ -15,15 +15,28 @@ describe('API Routes Integration Tests', () => {
   let mockClient;
 
   before(async () => {
+    const store = new Map();
     // Setup mock Discord client
     mockClient = {
       user: { id: 'bot-123', username: 'TitanBot' },
+      db: {
+        get: async (key) => store.get(key) || null,
+        set: async (key, val) => {
+          store.set(key, val);
+          return true;
+        },
+      },
       commands: new Collection([
         [
           'ping',
           {
             category: 'Core',
-            data: { name: 'ping', description: 'Replies with pong' },
+            data: {
+              name: 'ping',
+              description: 'Replies with pong',
+              name_localizations: { 'es-419': 'ping' },
+              description_localizations: { 'es-419': 'Responde con pong' },
+            },
           },
         ],
         [
@@ -94,20 +107,11 @@ describe('API Routes Integration Tests', () => {
         ]),
       },
       db: {
-        getGuildConfig: async () => ({
-          locale: 'en-US',
-          prefix: '!',
-          welcomeChannel: null,
-          welcomeMessage: 'Welcome {user}',
-          autoRole: null,
-          adminRole: null,
-          modRole: null,
-          logging: { enabled: false, channels: {} },
-          verification: { enabled: false },
-          disabledCommands: {},
-          disabledCategories: {},
-        }),
-        setGuildConfig: async (guildId, data) => data,
+        get: async (key) => store.get(key) || null,
+        set: async (key, val) => {
+          store.set(key, val);
+          return true;
+        },
       },
     };
 
@@ -154,6 +158,7 @@ describe('API Routes Integration Tests', () => {
     const coreCat = data.categories.find((c) => c.name === 'Core');
     assert.ok(coreCat);
     assert.strictEqual(coreCat.commands[0].name, 'ping');
+    assert.strictEqual(coreCat.commands[0].descriptionLocalizations['es-419'], 'Responde con pong');
 
     const modCat = data.categories.find((c) => c.name === 'Moderation');
     assert.ok(modCat);
@@ -307,6 +312,29 @@ describe('API Routes Integration Tests', () => {
     const data = await res.json();
     assert.strictEqual(data.success, false);
     assert.ok(data.message.includes('Prefix must be'));
+  });
+
+  it('PATCH /api/guilds/:guildId/config updates disabledCommands and disabledCategories', async () => {
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/guild-123/config`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        disabledCommands: { ping: true, roll: false },
+        disabledCategories: { Fun: true },
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.config.disabledCommands.ping, true);
+    assert.strictEqual(data.config.disabledCommands.roll, false);
+    assert.strictEqual(data.config.disabledCategories.Fun, true);
   });
 
   it('GET / serves the dashboard index.html when dist exists', async () => {

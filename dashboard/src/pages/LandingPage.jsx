@@ -29,23 +29,23 @@ export function LandingPage() {
   const features = [
     {
       icon: Globe2,
-      title: '100% Multilingual (i18n)',
-      desc: 'Seamless support for English, Latin American Spanish, and German across all 100 slash commands and the web dashboard.',
+      title: t('landing.feature1Title'),
+      desc: t('landing.feature1Desc'),
     },
     {
       icon: Sparkles,
-      title: 'Welcome & Auto-Role',
-      desc: 'Automated welcome cards with live Discord preview and instant starter role assignment for newcomers.',
+      title: t('landing.feature2Title'),
+      desc: t('landing.feature2Desc'),
     },
     {
       icon: Shield,
-      title: 'Audit & Moderation',
-      desc: 'Centralized server audit channels, user reports, verification gates, and permission management.',
+      title: t('landing.feature3Title'),
+      desc: t('landing.feature3Desc'),
     },
     {
       icon: Terminal,
-      title: 'Granular Command Toggles',
-      desc: 'Enable or disable entire command categories or individual slash commands per server with a single click.',
+      title: t('landing.feature4Title'),
+      desc: t('landing.feature4Desc'),
     },
   ];
 

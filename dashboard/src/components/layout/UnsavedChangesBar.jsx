@@ -18,7 +18,7 @@ export function UnsavedChangesBar() {
         <div>
           <h4 className="text-sm font-semibold text-slate-100">{t('common.unsavedChanges')}</h4>
           <p className="text-xs text-slate-400 hidden sm:block">
-            {t('welcome.placeholdersNote') || 'Be sure to save your changes before switching tabs.'}
+            {t('common.unsavedChangesHelp')}
           </p>
         </div>
       </div>

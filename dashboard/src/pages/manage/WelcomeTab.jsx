@@ -29,7 +29,7 @@ export function WelcomeTab() {
           <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5">
             <div className="flex items-center gap-2.5 pb-4 border-b border-slate-800">
               <MessageSquare className="w-5 h-5 text-discord-blurple" />
-              <h2 className="text-base font-semibold text-slate-100">Welcome Message</h2>
+              <h2 className="text-base font-semibold text-slate-100">{t('welcome.cardMessageTitle')}</h2>
             </div>
 
             <ChannelSelect
@@ -59,7 +59,7 @@ export function WelcomeTab() {
           <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5">
             <div className="flex items-center gap-2.5 pb-4 border-b border-slate-800">
               <UserCheck className="w-5 h-5 text-emerald-400" />
-              <h2 className="text-base font-semibold text-slate-100">Starter Role (AutoRole)</h2>
+              <h2 className="text-base font-semibold text-slate-100">{t('welcome.cardRoleTitle')}</h2>
             </div>
 
             <RoleSelect

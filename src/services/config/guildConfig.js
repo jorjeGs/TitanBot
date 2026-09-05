@@ -87,6 +87,10 @@ function deepMergeGuildConfig(base, patch) {
     const result = { ...base };
 
     for (const [key, value] of Object.entries(patch)) {
+        if (key === 'disabledCommands' || key === 'disabledCategories') {
+            result[key] = value;
+            continue;
+        }
         if (
             value &&
             typeof value === 'object' &&

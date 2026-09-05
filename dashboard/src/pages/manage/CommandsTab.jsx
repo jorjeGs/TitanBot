@@ -6,7 +6,7 @@ import { Toggle } from '../../components/common/Toggle';
 import { Terminal, ChevronDown, ChevronRight, Search, Sliders } from 'lucide-react';
 
 export function CommandsTab() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { draftConfig, updateDraft } = useGuild();
   const [categories, setCategories] = useState([]);
   const [expandedCategories, setExpandedCategories] = useState({});
@@ -37,26 +37,56 @@ export function CommandsTab() {
   };
 
   const toggleCategoryEnabled = (catName, isEnabled) => {
-    updateDraft('disabledCategories', {
-      ...disabledCategories,
-      [catName]: !isEnabled, // if enabled=false, disabled=true
-    });
+    const next = { ...disabledCategories };
+    const lower = catName.toLowerCase();
+    if (!isEnabled) {
+      next[catName] = true;
+      next[lower] = true;
+    } else {
+      delete next[catName];
+      delete next[lower];
+    }
+    updateDraft('disabledCategories', next);
   };
 
   const toggleCommandEnabled = (cmdName, isEnabled) => {
-    updateDraft('disabledCommands', {
-      ...disabledCommands,
-      [cmdName]: !isEnabled, // if enabled=false, disabled=true
-    });
+    const next = { ...disabledCommands };
+    const lower = cmdName.toLowerCase();
+    if (!isEnabled) {
+      next[cmdName] = true;
+      next[lower] = true;
+    } else {
+      delete next[cmdName];
+      delete next[lower];
+    }
+    updateDraft('disabledCommands', next);
+  };
+
+  const getCommandName = (cmd) => {
+    const lang = i18n.language || 'es-419';
+    if (cmd.nameLocalizations?.[lang]) return cmd.nameLocalizations[lang];
+    if (lang.startsWith('es') && cmd.nameLocalizations?.['es-419']) return cmd.nameLocalizations['es-419'];
+    if (lang.startsWith('de') && cmd.nameLocalizations?.['de']) return cmd.nameLocalizations['de'];
+    return cmd.name;
+  };
+
+  const getCommandDescription = (cmd) => {
+    const lang = i18n.language || 'es-419';
+    if (cmd.descriptionLocalizations?.[lang]) return cmd.descriptionLocalizations[lang];
+    if (lang.startsWith('es') && cmd.descriptionLocalizations?.['es-419']) return cmd.descriptionLocalizations['es-419'];
+    if (lang.startsWith('de') && cmd.descriptionLocalizations?.['de']) return cmd.descriptionLocalizations['de'];
+    return cmd.description;
   };
 
   const filteredCategories = categories
     .map((cat) => {
-      const filteredCmds = cat.commands.filter(
-        (c) =>
-          c.name.toLowerCase().includes(search.toLowerCase()) ||
-          c.description.toLowerCase().includes(search.toLowerCase())
-      );
+      const filteredCmds = cat.commands.filter((c) => {
+        const name = getCommandName(c).toLowerCase();
+        const desc = getCommandDescription(c).toLowerCase();
+        const rawName = c.name.toLowerCase();
+        const q = search.toLowerCase();
+        return name.includes(q) || desc.includes(q) || rawName.includes(q);
+      });
       return { ...cat, commands: filteredCmds };
     })
     .filter((cat) => cat.commands.length > 0);
@@ -93,7 +123,9 @@ export function CommandsTab() {
       ) : filteredCategories.length > 0 ? (
         <div className="space-y-4">
           {filteredCategories.map((cat) => {
-            const isCatDisabled = Boolean(disabledCategories[cat.name]);
+            const isCatDisabled =
+              Boolean(disabledCategories[cat.name]) ||
+              Boolean(disabledCategories[cat.name.toLowerCase()]);
             const isExpanded = Boolean(expandedCategories[cat.name]) || Boolean(search);
 
             return (
@@ -113,9 +145,11 @@ export function CommandsTab() {
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-100 text-base">{cat.name}</span>
+                        <span className="font-bold text-slate-100 text-base">
+                          {t(`categories.${cat.name}`, cat.name)}
+                        </span>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-medium">
-                          {cat.commands.length} {t('commands.commandsCount', { count: cat.commands.length })}
+                          {t('commands.commandsCount', { count: cat.commands.length })}
                         </span>
                       </div>
                     </div>
@@ -133,7 +167,12 @@ export function CommandsTab() {
                 {isExpanded && (
                   <div className="border-t border-slate-800/80 bg-discord-dark/30 p-4 divide-y divide-slate-800/60">
                     {cat.commands.map((cmd) => {
-                      const isCmdDisabled = isCatDisabled || Boolean(disabledCommands[cmd.name]);
+                      const isCmdDisabled =
+                        isCatDisabled ||
+                        Boolean(disabledCommands[cmd.name]) ||
+                        Boolean(disabledCommands[cmd.name.toLowerCase()]);
+                      const cmdDescription = getCommandDescription(cmd);
+
                       return (
                         <div
                           key={cmd.name}
@@ -145,8 +184,8 @@ export function CommandsTab() {
                                 /{cmd.name}
                               </span>
                             </div>
-                            {cmd.description && (
-                              <p className="text-xs text-slate-400 mt-0.5 truncate">{cmd.description}</p>
+                            {cmdDescription && (
+                              <p className="text-xs text-slate-400 mt-0.5 truncate">{cmdDescription}</p>
                             )}
                           </div>
 
@@ -166,7 +205,7 @@ export function CommandsTab() {
         </div>
       ) : (
         <div className="text-center py-16 bg-discord-darker/40 border border-slate-800 rounded-2xl text-slate-400 text-sm">
-          No commands matched your search.
+          {t('commands.noResults')}
         </div>
       )}
     </div>

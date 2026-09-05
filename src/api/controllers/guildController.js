@@ -249,6 +249,26 @@ export async function updateGuildConfigHandler(req, res) {
       };
     }
 
+    // Validate disabledCommands
+    if (patch.disabledCommands !== undefined && typeof patch.disabledCommands === 'object' && patch.disabledCommands !== null) {
+      sanitized.disabledCommands = {};
+      for (const [cmd, val] of Object.entries(patch.disabledCommands)) {
+        if (typeof val === 'boolean') {
+          sanitized.disabledCommands[String(cmd).trim().toLowerCase()] = val;
+        }
+      }
+    }
+
+    // Validate disabledCategories
+    if (patch.disabledCategories !== undefined && typeof patch.disabledCategories === 'object' && patch.disabledCategories !== null) {
+      sanitized.disabledCategories = {};
+      for (const [cat, val] of Object.entries(patch.disabledCategories)) {
+        if (typeof val === 'boolean') {
+          sanitized.disabledCategories[String(cat).trim()] = val;
+        }
+      }
+    }
+
     const updated = await patchGuildConfig(req.client, guildId, sanitized);
 
     return res.json({

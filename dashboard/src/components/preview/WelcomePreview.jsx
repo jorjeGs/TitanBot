@@ -5,8 +5,9 @@ import { Bot, Hash } from 'lucide-react';
 export function WelcomePreview({ message, serverName, channelName }) {
   const { t } = useTranslation();
 
+  const previewUser = t('welcome.previewUser') || '@NuevoMiembro';
   const formattedMessage = (message || 'Welcome {user} to {server}!')
-    .replace(/\{user\}/g, '@NuevoMiembro')
+    .replace(/\{user\}/g, previewUser)
     .replace(/\{server\}/g, serverName || 'Mi Servidor')
     .replace(/\{memberCount\}/g, '42');
 
@@ -36,12 +37,12 @@ export function WelcomePreview({ message, serverName, channelName }) {
             <span className="bg-discord-blurple text-[10px] uppercase font-bold text-white px-1.5 py-0.5 rounded">
               BOT
             </span>
-            <span className="text-[11px] text-slate-400">Hoy a las 12:00</span>
+            <span className="text-[11px] text-slate-400">{t('welcome.previewTime')}</span>
           </div>
 
           <div className="text-sm text-slate-200 whitespace-pre-line leading-relaxed font-sans">
-            {formattedMessage.split(/(@NuevoMiembro)/g).map((part, index) =>
-              part === '@NuevoMiembro' ? (
+            {formattedMessage.split(new RegExp(`(${previewUser})`, 'g')).map((part, index) =>
+              part === previewUser ? (
                 <span
                   key={index}
                   className="bg-discord-blurple/30 text-discord-blurple font-medium px-1 rounded hover:bg-discord-blurple hover:text-white transition-colors cursor-pointer"

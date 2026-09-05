@@ -11,7 +11,7 @@ export function GeneralTab() {
   if (!draftConfig) return null;
 
   const localeOptions = [
-    { value: 'auto', label: 'Auto (Detect from Server / User)' },
+    { value: 'auto', label: t('general.localeAuto') },
     { value: 'es-419', label: 'Español (Latinoamérica) [es-419]' },
     { value: 'en-US', label: 'English (US) [en-US]' },
     { value: 'de', label: 'Deutsch [de]' },
@@ -29,7 +29,7 @@ export function GeneralTab() {
       <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6">
         <div className="flex items-center gap-2.5 pb-4 border-b border-slate-800">
           <Globe className="w-5 h-5 text-discord-blurple" />
-          <h2 className="text-base font-semibold text-slate-100">Localization & Commands</h2>
+          <h2 className="text-base font-semibold text-slate-100">{t('general.locAndCommands')}</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -73,7 +73,7 @@ export function GeneralTab() {
       <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6">
         <div className="flex items-center gap-2.5 pb-4 border-b border-slate-800">
           <Shield className="w-5 h-5 text-emerald-400" />
-          <h2 className="text-base font-semibold text-slate-100">Permission Roles</h2>
+          <h2 className="text-base font-semibold text-slate-100">{t('general.permissionRoles')}</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
