@@ -3,6 +3,7 @@ import { getGuildConfig, patchGuildConfig } from '../../services/config/guildCon
 import { isBotOwner } from '../../config/bot.js';
 import config from '../../config/application.js';
 import { logger } from '../../utils/logger.js';
+import { PermissionFlagsBits } from 'discord.js';
 
 const ADMIN_PERMISSION = 0x8n;
 const MANAGE_GUILD_PERMISSION = 0x20n;
@@ -128,15 +129,32 @@ export function getGuildRoles(req, res) {
     return res.status(404).json({ success: false, error: 'NotFound', message: 'Guild not found' });
   }
 
+  const botMember = guild.members?.me || (req.client?.user?.id ? guild.members?.cache?.get(req.client.user.id) : null);
+  const botHighestPosition = botMember?.roles?.highest?.position ?? (botMember ? 0 : Infinity);
+  const botHasManageRoles = botMember
+    ? Boolean(
+        botMember.permissions?.has?.(PermissionFlagsBits.ManageRoles) ||
+        botMember.permissions?.has?.(PermissionFlagsBits.Administrator)
+      )
+    : true;
+
   const roleList = guild.roles?.cache?.values ? Array.from(guild.roles.cache.values()) : [];
   const roles = roleList
     .filter((r) => !r.managed && r.id !== guild.id)
-    .map((r) => ({
-      id: r.id,
-      name: r.name,
-      color: r.hexColor || '#99aab5',
-      position: r.position || 0,
-    }))
+    .map((r) => {
+      const canManage = Boolean(
+        botMember
+          ? (botHasManageRoles && r.position < botHighestPosition)
+          : true
+      );
+      return {
+        id: r.id,
+        name: r.name,
+        color: r.hexColor || '#99aab5',
+        position: r.position || 0,
+        canManage,
+      };
+    })
     .sort((a, b) => b.position - a.position);
 
   return res.json({

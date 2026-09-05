@@ -1,10 +1,11 @@
 import React from 'react';
-import { Shield } from 'lucide-react';
+import { Shield, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-export function RoleSelect({ roles, value, onChange, label, helpText, disabled = false }) {
+export function RoleSelect({ roles, value, onChange, label, helpText, disabled = false, warnHierarchy = false }) {
   const { t } = useTranslation();
   const selectedRole = roles.find((r) => r.id === value);
+  const isUnmanageable = Boolean(warnHierarchy && selectedRole && selectedRole.canManage === false);
 
   return (
     <div className="mb-4">
@@ -24,12 +25,17 @@ export function RoleSelect({ roles, value, onChange, label, helpText, disabled =
           value={value || ''}
           onChange={(e) => onChange(e.target.value || null)}
           disabled={disabled}
-          className="w-full pl-9 pr-8 py-2.5 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition-colors disabled:opacity-50 appearance-none"
+          className={`w-full pl-9 pr-8 py-2.5 bg-discord-dark border rounded-lg text-sm text-slate-100 focus:outline-none focus:ring-1 transition-colors disabled:opacity-50 appearance-none ${
+            isUnmanageable
+              ? 'border-amber-500/60 focus:border-amber-500 focus:ring-amber-500'
+              : 'border-slate-700/60 focus:border-discord-blurple focus:ring-discord-blurple'
+          }`}
         >
           <option value="">-- {t('common.none')} --</option>
           {roles.map((role) => (
             <option key={role.id} value={role.id}>
               {role.name}
+              {warnHierarchy && role.canManage === false ? ` (${t('common.unmanageableRole')})` : ''}
             </option>
           ))}
         </select>
@@ -39,7 +45,13 @@ export function RoleSelect({ roles, value, onChange, label, helpText, disabled =
           </svg>
         </div>
       </div>
-      {helpText && <p className="mt-1 text-xs text-slate-400">{helpText}</p>}
+      {isUnmanageable && (
+        <div className="mt-2 p-2.5 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-start gap-2 text-amber-400 text-xs">
+          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+          <span>{t('common.hierarchyWarning')}</span>
+        </div>
+      )}
+      {helpText && !isUnmanageable && <p className="mt-1 text-xs text-slate-400">{helpText}</p>}
     </div>
   );
 }

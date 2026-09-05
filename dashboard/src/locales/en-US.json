@@ -19,7 +19,9 @@
     "notSet": "Not configured",
     "enabled": "Enabled",
     "disabled": "Disabled",
-    "none": "None"
+    "none": "None",
+    "unmanageableRole": "Unmanageable",
+    "hierarchyWarning": "This role is above TitanBot's highest role in the server hierarchy or the bot lacks Manage Roles permission. It cannot be assigned automatically."
   },
   "nav": {
     "general": "General Settings",

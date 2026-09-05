@@ -11,11 +11,14 @@ import { LoggingTab } from './pages/manage/LoggingTab';
 import { CommandsTab } from './pages/manage/CommandsTab';
 import { VerificationTab } from './pages/manage/VerificationTab';
 
+import { ErrorBoundary } from './components/common/ErrorBoundary';
+
 export function App() {
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-discord-darkest flex flex-col text-slate-100">
-        <Navbar />
+    <ErrorBoundary>
+      <AuthProvider>
+        <div className="min-h-screen bg-discord-darkest flex flex-col text-slate-100">
+          <Navbar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/servers" element={<GuildSelector />} />
@@ -33,8 +36,9 @@ export function App() {
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </div>
-    </AuthProvider>
+        </div>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

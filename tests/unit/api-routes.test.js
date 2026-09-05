@@ -306,6 +306,43 @@ describe('API Routes Integration Tests', () => {
     const data = await res.json();
     assert.strictEqual(data.success, true);
     assert.strictEqual(data.roles[0].name, 'Admin');
+    assert.strictEqual(typeof data.roles[0].canManage, 'boolean');
+  });
+
+  it('GET /api/guilds/:guildId/roles marks role unmanageable if above bot highest role', async () => {
+    const guild = mockClient.guilds.cache.get('guild-123');
+    guild.roles.cache.set('role-mod', {
+      id: 'role-mod',
+      name: 'Moderator',
+      hexColor: '#00ff00',
+      position: 2,
+      managed: false,
+    });
+    guild.members.me = {
+      roles: {
+        highest: { position: 3 },
+      },
+      permissions: {
+        has: () => true,
+      },
+    };
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/guild-123/roles`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+
+    const adminRole = data.roles.find((r) => r.id === 'role-admin');
+    assert.strictEqual(adminRole.canManage, false);
+
+    const modRole = data.roles.find((r) => r.id === 'role-mod');
+    assert.strictEqual(modRole.canManage, true);
   });
 
   it('PATCH /api/guilds/:guildId/config rejects invalid locale with 400', async () => {

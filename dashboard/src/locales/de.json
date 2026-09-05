@@ -19,7 +19,9 @@
     "notSet": "Nicht konfiguriert",
     "enabled": "Aktiviert",
     "disabled": "Deaktiviert",
-    "none": "Keine"
+    "none": "Keine",
+    "unmanageableRole": "Unerreichbar",
+    "hierarchyWarning": "Diese Rolle liegt in der Serverhierarchie über der höchsten Rolle von TitanBot oder dem Bot fehlen Berechtigungen zum Verwalten von Rollen. Sie kann nicht automatisch zugewiesen werden."
   },
   "nav": {
     "general": "Allgemeine Einstellungen",

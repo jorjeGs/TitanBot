@@ -68,6 +68,7 @@ export function WelcomeTab() {
               roles={roles}
               value={draftConfig.autoRole}
               onChange={(val) => updateDraft('autoRole', val)}
+              warnHierarchy={true}
             />
           </div>
         </div>
