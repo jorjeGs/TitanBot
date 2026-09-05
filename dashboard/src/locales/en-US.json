@@ -109,6 +109,8 @@
     "categoryToggle": "Category Enabled",
     "commandsCount": "{{count}} commands",
     "commandsCount_one": "1 command",
+    "subcommandsCount": "{{count}} subcommands",
+    "subcommandsCount_one": "1 subcommand",
     "noResults": "No commands matched your search.",
     "disableAll": "Disable All",
     "enableAll": "Enable All"

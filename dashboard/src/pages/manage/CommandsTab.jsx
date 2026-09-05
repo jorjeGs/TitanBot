@@ -10,6 +10,7 @@ export function CommandsTab() {
   const { draftConfig, updateDraft } = useGuild();
   const [categories, setCategories] = useState([]);
   const [expandedCategories, setExpandedCategories] = useState({});
+  const [expandedSubcommands, setExpandedSubcommands] = useState({});
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -33,6 +34,13 @@ export function CommandsTab() {
     setExpandedCategories((prev) => ({
       ...prev,
       [catName]: !prev[catName],
+    }));
+  };
+
+  const toggleSubcommandsExpand = (cmdName) => {
+    setExpandedSubcommands((prev) => ({
+      ...prev,
+      [cmdName]: !prev[cmdName],
     }));
   };
 
@@ -85,7 +93,14 @@ export function CommandsTab() {
         const desc = getCommandDescription(c).toLowerCase();
         const rawName = c.name.toLowerCase();
         const q = search.toLowerCase();
-        return name.includes(q) || desc.includes(q) || rawName.includes(q);
+        const matchMain = name.includes(q) || desc.includes(q) || rawName.includes(q);
+        const matchSub = (c.subcommands || []).some((sub) => {
+          const subName = getCommandName(sub).toLowerCase();
+          const subDesc = getCommandDescription(sub).toLowerCase();
+          const rawSubName = sub.name.toLowerCase();
+          return subName.includes(q) || subDesc.includes(q) || rawSubName.includes(q);
+        });
+        return matchMain || matchSub;
       });
       return { ...cat, commands: filteredCmds };
     })
@@ -172,28 +187,90 @@ export function CommandsTab() {
                         Boolean(disabledCommands[cmd.name]) ||
                         Boolean(disabledCommands[cmd.name.toLowerCase()]);
                       const cmdDescription = getCommandDescription(cmd);
+                      const hasSubcommands = cmd.subcommands && cmd.subcommands.length > 0;
+                      const isSubExpanded = Boolean(expandedSubcommands[cmd.name]) || Boolean(search);
 
                       return (
                         <div
                           key={cmd.name}
-                          className="py-3 px-2 flex items-center justify-between gap-4 hover:bg-slate-800/30 rounded-lg transition-colors"
+                          className="py-3 px-2 rounded-lg transition-colors hover:bg-slate-800/20"
                         >
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="font-mono font-semibold text-xs text-discord-blurple">
-                                /{cmd.name}
-                              </span>
+                          <div className="flex items-center justify-between gap-4">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono font-semibold text-xs text-discord-blurple">
+                                  /{cmd.name}
+                                </span>
+                                {hasSubcommands && (
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleSubcommandsExpand(cmd.name)}
+                                    className="flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-slate-200 bg-slate-800/80 px-2 py-0.5 rounded transition-colors"
+                                  >
+                                    <span>
+                                      {t('commands.subcommandsCount', { count: cmd.subcommands.length })}
+                                    </span>
+                                    {isSubExpanded ? (
+                                      <ChevronDown className="w-3 h-3" />
+                                    ) : (
+                                      <ChevronRight className="w-3 h-3" />
+                                    )}
+                                  </button>
+                                )}
+                              </div>
+                              {cmdDescription && (
+                                <p className="text-xs text-slate-400 mt-0.5 truncate">{cmdDescription}</p>
+                              )}
                             </div>
-                            {cmdDescription && (
-                              <p className="text-xs text-slate-400 mt-0.5 truncate">{cmdDescription}</p>
-                            )}
+
+                            <Toggle
+                              enabled={!isCmdDisabled}
+                              disabled={isCatDisabled}
+                              onChange={(enabled) => toggleCommandEnabled(cmd.name, enabled)}
+                            />
                           </div>
 
-                          <Toggle
-                            enabled={!isCmdDisabled}
-                            disabled={isCatDisabled}
-                            onChange={(enabled) => toggleCommandEnabled(cmd.name, enabled)}
-                          />
+                          {/* Subcommands Indented List */}
+                          {hasSubcommands && isSubExpanded && (
+                            <div className="mt-2.5 ml-4 pl-3 border-l-2 border-slate-700/60 space-y-2 py-1">
+                              {cmd.subcommands.map((sub) => {
+                                const isSubDisabled =
+                                  isCmdDisabled ||
+                                  Boolean(disabledCommands[sub.name]) ||
+                                  Boolean(disabledCommands[sub.name.toLowerCase()]);
+                                const subDescription = getCommandDescription(sub);
+
+                                return (
+                                  <div
+                                    key={sub.name}
+                                    className="py-1.5 px-2 flex items-center justify-between gap-4 hover:bg-slate-800/30 rounded-lg transition-colors"
+                                  >
+                                    <div className="min-w-0 flex-1">
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="font-mono text-xs text-slate-400">
+                                          /{cmd.name}
+                                        </span>
+                                        <span className="font-mono font-semibold text-xs text-discord-blurple">
+                                          {sub.subcommandName}
+                                        </span>
+                                      </div>
+                                      {subDescription && (
+                                        <p className="text-xs text-slate-400 mt-0.5 truncate">
+                                          {subDescription}
+                                        </p>
+                                      )}
+                                    </div>
+
+                                    <Toggle
+                                      enabled={!isSubDisabled}
+                                      disabled={isCmdDisabled}
+                                      onChange={(enabled) => toggleCommandEnabled(sub.name, enabled)}
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
                       );
                     })}

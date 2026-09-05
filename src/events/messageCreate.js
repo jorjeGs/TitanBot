@@ -109,10 +109,13 @@ async function handlePrefixCommand(message, client) {
       return;
     }
 
-    if (!(await isCommandEnabled(client, message.guild.id, resolvePrefixAccessKey(command.data, args), command.category))) {
+    const accessKey = resolvePrefixAccessKey(command.data, args);
+    if (!(await isCommandEnabled(client, message.guild.id, accessKey, command.category))) {
+      const title = t('core.commands.command_disabled_title', {}, message, guildConfig) || 'Command Disabled';
+      const description = t('core.commands.command_disabled_desc', { command: accessKey }, message, guildConfig) || 'This command has been disabled for this server.';
       const embed = createEmbed({
-        title: 'Command Disabled',
-        description: 'This command has been disabled for this server.',
+        title,
+        description,
         color: 'error',
       });
       await message.channel.send({ embeds: [embed] }).catch(() => {});

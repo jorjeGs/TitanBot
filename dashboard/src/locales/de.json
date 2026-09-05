@@ -109,6 +109,8 @@
     "categoryToggle": "Kategorie aktiviert",
     "commandsCount": "{{count}} Befehle",
     "commandsCount_one": "1 Befehl",
+    "subcommandsCount": "{{count}} Unterbefehle",
+    "subcommandsCount_one": "1 Unterbefehl",
     "noResults": "Keine Befehle stimmen mit der Suche überein.",
     "disableAll": "Alle deaktivieren",
     "enableAll": "Alle aktivieren"

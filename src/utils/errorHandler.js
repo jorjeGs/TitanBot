@@ -517,7 +517,8 @@ export async function handleInteractionError(interaction, error, context = {}) {
         ? userMessage
         : `${userMessage}\n\n-# Ref: \`${buildErrorReference(resolvedErrorCode, traceId)}\``;
 
-    const embed = buildUserErrorEmbed(errorType, description);
+    const titleOverride = normalizedError?.context?.title || context?.title || null;
+    const embed = buildUserErrorEmbed(errorType, description, { titleOverride });
     await sendErrorResponse(interaction, embed, { ...context, traceId });
 }
 

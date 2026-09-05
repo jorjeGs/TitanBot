@@ -46,6 +46,29 @@ describe('API Routes Integration Tests', () => {
             data: { name: 'ban', description: 'Bans a user' },
           },
         ],
+        [
+          'birthday',
+          {
+            category: 'Birthday',
+            data: {
+              name: 'birthday',
+              description: 'Birthday commands',
+              options: [
+                {
+                  type: 1,
+                  name: 'set',
+                  description: 'Set birthday',
+                  description_localizations: { 'es-419': 'Configura tu cumpleaños' },
+                },
+                {
+                  type: 1,
+                  name: 'list',
+                  description: 'List birthdays',
+                },
+              ],
+            },
+          },
+        ],
       ]),
       guilds: {
         cache: new Map([
@@ -163,6 +186,13 @@ describe('API Routes Integration Tests', () => {
     const modCat = data.categories.find((c) => c.name === 'Moderation');
     assert.ok(modCat);
     assert.strictEqual(modCat.commands[0].name, 'ban');
+
+    const bdayCat = data.categories.find((c) => c.name === 'Birthday');
+    assert.ok(bdayCat);
+    assert.strictEqual(bdayCat.commands[0].name, 'birthday');
+    assert.strictEqual(bdayCat.commands[0].subcommands.length, 2);
+    assert.strictEqual(bdayCat.commands[0].subcommands[0].name, 'birthday set');
+    assert.strictEqual(bdayCat.commands[0].subcommands[0].descriptionLocalizations['es-419'], 'Configura tu cumpleaños');
   });
 
   it('GET /api/auth/login redirects to Discord OAuth2 URL and sets oauth_state cookie', async () => {

@@ -19,6 +19,7 @@ import { resolveSlashAccessKey } from '../utils/messageAdapter.js';
 import { isCollectorManagedComponent } from '../utils/collectorComponents.js';
 import { ResponseCoordinator } from '../utils/responseCoordinator.js';
 import { enforceDefaultCommandPermissions } from '../utils/permissionGuard.js';
+import { t } from '../utils/i18n/index.js';
 
 const COMMAND_ERROR_SUBTYPES = {
   warn: 'warn_failed',
@@ -143,11 +144,13 @@ export default {
               guildConfig = await getGuildConfig(client, interaction.guild.id, interactionTraceContext);
               const accessKey = resolveSlashAccessKey(interaction);
               if (!(await isCommandEnabled(client, interaction.guild.id, accessKey, command.category))) {
+                const title = t('core.commands.command_disabled_title', {}, interaction, guildConfig) || 'Command Disabled';
+                const message = t('core.commands.command_disabled_desc', { command: accessKey }, interaction, guildConfig) || 'This command has been disabled for this server.';
                 throw createError(
                   `Command ${accessKey} is disabled in this guild`,
                   ErrorTypes.CONFIGURATION,
-                  'This command has been disabled for this server.',
-                  withTraceContext({ commandName: accessKey, guildId: interaction.guild.id }, interactionTraceContext)
+                  message,
+                  withTraceContext({ commandName: accessKey, guildId: interaction.guild.id, title }, interactionTraceContext)
                 );
               }
             }

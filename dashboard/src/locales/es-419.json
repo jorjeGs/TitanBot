@@ -109,6 +109,8 @@
     "categoryToggle": "Categoría Habilitada",
     "commandsCount": "{{count}} comandos",
     "commandsCount_one": "1 comando",
+    "subcommandsCount": "{{count}} subcomandos",
+    "subcommandsCount_one": "1 subcomando",
     "noResults": "No se encontraron comandos que coincidan con la búsqueda.",
     "disableAll": "Desactivar Todos",
     "enableAll": "Activar Todos"

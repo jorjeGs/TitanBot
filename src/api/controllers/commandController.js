@@ -23,11 +23,40 @@ export function getAllCommands(req, res) {
     }
 
     const data = typeof cmd.data?.toJSON === 'function' ? cmd.data.toJSON() : cmd.data;
+    const subcommands = [];
+
+    if (Array.isArray(data?.options)) {
+      for (const option of data.options) {
+        if (option.type === 1) {
+          subcommands.push({
+            name: `${data.name || cmd.name} ${option.name}`,
+            subcommandName: option.name,
+            nameLocalizations: option.name_localizations || {},
+            description: option.description || '',
+            descriptionLocalizations: option.description_localizations || {},
+          });
+        } else if (option.type === 2) {
+          for (const sub of option.options || []) {
+            if (sub.type === 1) {
+              subcommands.push({
+                name: `${data.name || cmd.name} ${option.name} ${sub.name}`,
+                subcommandName: `${option.name} ${sub.name}`,
+                nameLocalizations: sub.name_localizations || {},
+                description: sub.description || '',
+                descriptionLocalizations: sub.description_localizations || {},
+              });
+            }
+          }
+        }
+      }
+    }
+
     categoriesMap[category].push({
       name: data?.name || cmd.name,
       nameLocalizations: data?.name_localizations || cmd.data?.name_localizations || {},
       description: data?.description || '',
       descriptionLocalizations: data?.description_localizations || cmd.data?.description_localizations || {},
+      subcommands,
     });
   }
 
