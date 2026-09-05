@@ -51,6 +51,11 @@ import {
   rerollGiveawayHandler,
   deleteGiveawayHandler,
 } from '../controllers/giveawayController.js';
+import {
+  getBirthdays,
+  updateBirthdayConfig,
+  deleteBirthdayRecord,
+} from '../controllers/birthdayController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
@@ -98,6 +103,11 @@ router.post('/:guildId/giveaways', verifyAuth, checkGuildPermissions, createGive
 router.post('/:guildId/giveaways/:messageId/end', verifyAuth, checkGuildPermissions, endGiveawayHandler);
 router.post('/:guildId/giveaways/:messageId/reroll', verifyAuth, checkGuildPermissions, rerollGiveawayHandler);
 router.delete('/:guildId/giveaways/:messageId', verifyAuth, checkGuildPermissions, deleteGiveawayHandler);
+
+// Birthday subroutes protected by checkGuildPermissions
+router.get('/:guildId/birthdays', verifyAuth, checkGuildPermissions, getBirthdays);
+router.patch('/:guildId/birthdays/config', verifyAuth, checkGuildPermissions, updateBirthdayConfig);
+router.delete('/:guildId/birthdays/:userId', verifyAuth, checkGuildPermissions, deleteBirthdayRecord);
 
 export default router;
 

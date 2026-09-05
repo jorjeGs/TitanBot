@@ -39,7 +39,8 @@
     "serverstats": "Server Stats",
     "jointocreate": "Temporary Voice Rooms",
     "moderation": "Moderation & Security",
-    "giveaways": "Giveaways & Rewards"
+    "giveaways": "Giveaways & Rewards",
+    "birthdays": "Birthdays & Anniversaries"
   },
   "landing": {
     "heroTitle": "Powerful Community Management for Discord",
@@ -577,6 +578,46 @@
       "endFailed": "Failed to end giveaway.",
       "rerollFailed": "Failed to reroll winners.",
       "deleteFailed": "Failed to delete giveaway."
+    }
+  },
+  "birthdays": {
+    "title": "Birthday System",
+    "subtitle": "Configure daily automatic birthday announcements, 24-hour temporary celebration roles, and view your community birthday calendar.",
+    "refreshBtn": "Refresh",
+    "previewTitle": "Announcement Preview",
+    "previewDefaultMsg": "Today we celebrate {user}! Wishing you an amazing day from everyone at {server}! 🎈🎉",
+    "embedTitle": "Happy Birthday! 🎉",
+    "temporaryRoleLabel": "Temporary role granted",
+    "roleDuration24h": "24 hours",
+    "previewDailyCheck": "09:00 AM UTC",
+    "configCardTitle": "Announcements & Celebration Settings",
+    "configCardSubtitle": "Customize the channel where the bot sends the celebratory message every morning at 09:00 UTC and the temporary role granted.",
+    "fieldChannel": "Birthday Channel",
+    "fieldChannelHelp": "Public text channel where TitanBot will post birthday announcements.",
+    "fieldRole": "Temporary Celebration Role (Optional)",
+    "fieldRoleHelp": "Role automatically granted to the member for 24 hours and removed the next day.",
+    "fieldMessage": "Birthday Message",
+    "messageTokensHelp": "Available placeholders: {user}, {server}",
+    "calendarCardTitle": "Anniversary Calendar",
+    "calendarCardSubtitle": "Browse registered dates by month or check out upcoming birthdays.",
+    "tabs": {
+      "annualCalendar": "Annual Calendar",
+      "upcoming": "Upcoming"
+    },
+    "searchPlaceholder": "Search member...",
+    "noBirthdaysFound": "No birthdays found for this view.",
+    "noBirthdaysHelp": "Members can register their birthday on Discord using the /birthday set command.",
+    "tomorrow": "Tomorrow",
+    "inDays": "in",
+    "days": "days",
+    "of": "of",
+    "deleteTooltip": "Delete record",
+    "confirmDelete": "Do you want to delete this birthday record?",
+    "saveSuccess": "Birthday configuration saved successfully!",
+    "deleteSuccess": "Birthday record deleted successfully.",
+    "errors": {
+      "saveFailed": "Failed to save configuration.",
+      "deleteFailed": "Failed to delete record."
     }
   }
 }

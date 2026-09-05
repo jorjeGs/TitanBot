@@ -18,6 +18,7 @@ import { ServerStatsTab } from './pages/manage/ServerStatsTab';
 import { JoinToCreateTab } from './pages/manage/JoinToCreateTab';
 import { ModerationTab } from './pages/manage/ModerationTab';
 import { GiveawaysTab } from './pages/manage/GiveawaysTab';
+import { BirthdaysTab } from './pages/manage/BirthdaysTab';
 
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
@@ -39,6 +40,7 @@ export function App() {
             <Route path="roles" element={<RolesTab />} />
             <Route path="moderation" element={<ModerationTab />} />
             <Route path="giveaways" element={<GiveawaysTab />} />
+            <Route path="birthdays" element={<BirthdaysTab />} />
             <Route path="leveling" element={<LevelingTab />} />
             <Route path="economy" element={<EconomyTab />} />
             <Route path="serverstats" element={<ServerStatsTab />} />

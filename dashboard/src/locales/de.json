@@ -39,7 +39,8 @@
     "serverstats": "Server-Statistiken",
     "jointocreate": "Temporäre Sprachkanäle",
     "moderation": "Moderation & Sicherheit",
-    "giveaways": "Gewinnspiele & Belohnungen"
+    "giveaways": "Gewinnspiele & Belohnungen",
+    "birthdays": "Geburtstage & Jubiläen"
   },
   "landing": {
     "heroTitle": "Leistungsstarke Community-Verwaltung für Discord",
@@ -577,6 +578,46 @@
       "endFailed": "Gewinnspiel konnte nicht beendet werden.",
       "rerollFailed": "Fehler beim Neuauslosen der Gewinner.",
       "deleteFailed": "Fehler beim Löschen des Gewinnspiels."
+    }
+  },
+  "birthdays": {
+    "title": "Geburtstagssystem",
+    "subtitle": "Konfiguriere tägliche automatische Geburtstagsgrüße, temporäre 24-Stunden-Feierrollen und sieh dir den Geburtstagskalender deiner Community an.",
+    "refreshBtn": "Aktualisieren",
+    "previewTitle": "Vorschau der Ankündigung",
+    "previewDefaultMsg": "Heute feiern wir {user}! Wir wünschen dir einen wundervollen Tag von allen auf {server}! 🎈🎉",
+    "embedTitle": "Alles Gute zum Geburtstag! 🎉",
+    "temporaryRoleLabel": "Temporäre Rolle verliehen",
+    "roleDuration24h": "24 Stunden",
+    "previewDailyCheck": "09:00 Uhr UTC",
+    "configCardTitle": "Ankündigungs- & Feiereinstellungen",
+    "configCardSubtitle": "Passe den Kanal an, in dem der Bot jeden Morgen um 09:00 Uhr UTC die Glückwunsch-Nachricht sendet, sowie die temporäre Rolle.",
+    "fieldChannel": "Geburtstagskanal",
+    "fieldChannelHelp": "Öffentlicher Textkanal, in dem TitanBot Geburtstagsankündigungen veröffentlicht.",
+    "fieldRole": "Temporäre Feierrolle (Optional)",
+    "fieldRoleHelp": "Rolle, die dem Mitglied automatisch für 24 Stunden verliehen und am nächsten Tag entfernt wird.",
+    "fieldMessage": "Geburtstagsnachricht",
+    "messageTokensHelp": "Verfügbare Platzhalter: {user}, {server}",
+    "calendarCardTitle": "Geburtstagskalender",
+    "calendarCardSubtitle": "Durchsuche registrierte Daten nach Monat oder überprüfe bevorstehende Geburtstage.",
+    "tabs": {
+      "annualCalendar": "Jahreskalender",
+      "upcoming": "Bevorstehend"
+    },
+    "searchPlaceholder": "Mitglied suchen...",
+    "noBirthdaysFound": "Keine Geburtstage für diese Ansicht gefunden.",
+    "noBirthdaysHelp": "Mitglieder können ihren Geburtstag auf Discord mit dem Befehl /birthday set eintragen.",
+    "tomorrow": "Morgen",
+    "inDays": "in",
+    "days": "Tagen",
+    "of": "von",
+    "deleteTooltip": "Eintrag löschen",
+    "confirmDelete": "Möchtest du diesen Geburtstagseintrag löschen?",
+    "saveSuccess": "Geburtstagseinstellungen erfolgreich gespeichert!",
+    "deleteSuccess": "Geburtstagseintrag erfolgreich gelöscht.",
+    "errors": {
+      "saveFailed": "Fehler beim Speichern der Konfiguration.",
+      "deleteFailed": "Fehler beim Löschen des Eintrags."
     }
   }
 }

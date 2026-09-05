@@ -39,7 +39,8 @@
     "serverstats": "Estadísticas del Servidor",
     "jointocreate": "Salas de Voz Temporales",
     "moderation": "Moderación y Seguridad",
-    "giveaways": "Sorteos y Recompensas"
+    "giveaways": "Sorteos y Recompensas",
+    "birthdays": "Cumpleaños y Aniversarios"
   },
   "landing": {
     "heroTitle": "Gestión Potente de Comunidades para Discord",
@@ -577,6 +578,46 @@
       "endFailed": "Error al finalizar el sorteo.",
       "rerollFailed": "Error al sortear nuevos ganadores.",
       "deleteFailed": "Error al eliminar el sorteo."
+    }
+  },
+  "birthdays": {
+    "title": "Sistema de Cumpleaños",
+    "subtitle": "Configura felicitaciones automáticas diarias, roles de celebración temporal por 24 horas y visualiza el calendario de cumpleaños de tu comunidad.",
+    "refreshBtn": "Actualizar",
+    "previewTitle": "Vista Previa del Anuncio",
+    "previewDefaultMsg": "¡Hoy felicitamos a {user}! ¡Te deseamos un maravilloso día de parte de toda la comunidad de {server}! 🎈🎉",
+    "embedTitle": "¡Feliz Cumpleaños! 🎉",
+    "temporaryRoleLabel": "Rol temporal otorgado",
+    "roleDuration24h": "24 horas",
+    "previewDailyCheck": "09:00 AM UTC",
+    "configCardTitle": "Ajustes de Anuncios y Celebración",
+    "configCardSubtitle": "Personaliza el canal donde el bot enviará el mensaje festivo cada mañana a las 09:00 UTC y el rol temporal otorgado.",
+    "fieldChannel": "Canal de Felicitaciones",
+    "fieldChannelHelp": "Canal de texto público donde TitanBot publicará el anuncio de cumpleaños.",
+    "fieldRole": "Rol de Celebración Temporal (Opcional)",
+    "fieldRoleHelp": "Rol otorgado automáticamente al miembro durante 24 horas y removido al día siguiente.",
+    "fieldMessage": "Mensaje de Felicitación",
+    "messageTokensHelp": "Variables disponibles: {user}, {server}",
+    "calendarCardTitle": "Calendario de Aniversarios",
+    "calendarCardSubtitle": "Explora las fechas registradas por mes o revisa los cumpleaños más cercanos.",
+    "tabs": {
+      "annualCalendar": "Calendario Anual",
+      "upcoming": "Próximos"
+    },
+    "searchPlaceholder": "Buscar usuario...",
+    "noBirthdaysFound": "No hay cumpleaños registrados para esta vista.",
+    "noBirthdaysHelp": "Los miembros pueden registrar su fecha de nacimiento en Discord con el comando /birthday set.",
+    "tomorrow": "Mañana",
+    "inDays": "en",
+    "days": "días",
+    "of": "de",
+    "deleteTooltip": "Eliminar registro",
+    "confirmDelete": "¿Deseas eliminar este registro de cumpleaños?",
+    "saveSuccess": "¡Configuración de cumpleaños guardada con éxito!",
+    "deleteSuccess": "Registro de cumpleaños eliminado correctamente.",
+    "errors": {
+      "saveFailed": "Error al guardar la configuración.",
+      "deleteFailed": "Error al eliminar el registro."
     }
   }
 }

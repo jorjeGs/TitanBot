@@ -127,6 +127,12 @@ export const CreateGiveawaySchema = z.object({
   requiredRoleId: z.string().regex(/^\d{17,19}$/, 'Invalid role ID').nullable().optional(),
 });
 
+export const UpdateBirthdayConfigSchema = z.object({
+  birthdayChannelId: z.string().regex(/^\d{17,20}$/, 'Invalid channel ID').nullable().optional(),
+  birthdayRoleId: z.string().regex(/^\d{17,20}$/, 'Invalid role ID').nullable().optional(),
+  birthdayMessage: z.string().max(1000, 'Birthday message is too long').nullable().optional(),
+});
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
@@ -141,6 +147,8 @@ export const GuildConfigSchema = z
     dmOnClose: z.boolean().optional(),
     reportChannelId: z.string().nullable().optional(),
     birthdayChannelId: z.string().nullable().optional(),
+    birthdayRoleId: z.string().nullable().optional(),
+    birthdayMessage: z.string().max(1000).nullable().optional(),
     premiumRoleId: z.string().nullable().optional(),
     logIgnore: LogIgnoreSchema.optional(),
     disabledCommands: z.record(z.boolean()).optional(),

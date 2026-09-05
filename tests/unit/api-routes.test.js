@@ -1679,6 +1679,112 @@ describe('API Routes Integration Tests', () => {
     assert.strictEqual(giveaways['msg-active-to-end'], undefined);
   });
 
+  it('GET /api/guilds/:guildId/birthdays returns birthdays list and config', async () => {
+    const testGuildId = '123456789012345678';
+    const bdayKey = `guild:${testGuildId}:birthdays`;
+
+    await mockClient.db.set(bdayKey, {
+      'user-bday-1': { month: 5, day: 15 },
+      'user-bday-2': { month: 12, day: 25 },
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/birthdays`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.totalCount, 2);
+    assert.strictEqual(Array.isArray(data.birthdays), true);
+    assert.ok(data.birthdays.some((b) => b.userId === 'user-bday-1' && b.month === 5 && b.day === 15));
+    assert.ok(data.config);
+  });
+
+  it('PATCH /api/guilds/:guildId/birthdays/config rejects invalid snowflake with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/birthdays/config`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        birthdayChannelId: 'not-a-snowflake',
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('PATCH /api/guilds/:guildId/birthdays/config updates channel, role, and custom message', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/birthdays/config`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        birthdayChannelId: '123456789012345679',
+        birthdayRoleId: '987654321098765432',
+        birthdayMessage: 'Feliz cumpleaños {user} en {server}!',
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.config.birthdayChannelId, '123456789012345679');
+    assert.strictEqual(data.config.birthdayRoleId, '987654321098765432');
+    assert.strictEqual(data.config.birthdayMessage, 'Feliz cumpleaños {user} en {server}!');
+  });
+
+  it('DELETE /api/guilds/:guildId/birthdays/:userId deletes birthday record', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/birthdays/user-bday-1`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+
+    const bdayKey = `guild:${testGuildId}:birthdays`;
+    const bdays = await mockClient.db.get(bdayKey);
+    assert.strictEqual(bdays['user-bday-1'], undefined);
+  });
+
+  it('DELETE /api/guilds/:guildId/birthdays/:userId returns 404 when user not found', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/birthdays/non-existent-user`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 404);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'NotFoundError');
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);
