@@ -1957,6 +1957,219 @@ describe('API Routes Integration Tests', () => {
     assert.strictEqual(appRecord, null);
   });
 
+  it('POST /api/guilds/:guildId/embeds/send rejects empty embed with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: '123456789012345679',
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('POST /api/guilds/:guildId/embeds/send rejects channel not found with 404', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: '999999999999999999',
+        title: 'Anuncio Importante',
+        description: 'Texto de prueba',
+      }),
+    });
+
+    assert.strictEqual(res.status, 404);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ChannelNotFound');
+  });
+
+  it('POST /api/guilds/:guildId/embeds/send rejects non-text channel with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const voiceChannelId = '123456789012345699';
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.channels.cache.set(voiceChannelId, {
+      id: voiceChannelId,
+      name: 'voice-room',
+      type: 2,
+      isTextBased: () => false,
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: voiceChannelId,
+        title: 'Anuncio',
+        description: 'Texto de prueba',
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('POST /api/guilds/:guildId/embeds/send rejects when bot lacks channel permissions with 422', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    const channel = guild.channels.cache.get(testChannelId);
+
+    const originalPerms = channel.permissionsFor;
+    channel.permissionsFor = () => ({
+      has: (flag) => flag !== PermissionFlagsBits.EmbedLinks,
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: testChannelId,
+        title: 'Anuncio Importante',
+        description: 'Texto de prueba',
+      }),
+    });
+
+    channel.permissionsFor = originalPerms;
+
+    assert.strictEqual(res.status, 422);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ChannelPermissionError');
+    assert.ok(data.missingPermissions.includes('EmbedLinks'));
+  });
+
+  it('POST /api/guilds/:guildId/embeds/send sends complete embed successfully', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    let sentPayload = null;
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    const channel = guild.channels.cache.get(testChannelId);
+    const originalSend = channel.send;
+    channel.send = async (payload) => {
+      sentPayload = payload;
+      return { id: '998877665544332211' };
+    };
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: testChannelId,
+        title: '🚀 Gran Torneo de TitanBot',
+        description: '¡Participa en el torneo de la comunidad!',
+        color: '#5865F2',
+        author: {
+          name: 'Comunidad TitanBot',
+          iconUrl: 'https://example.com/author.png',
+        },
+        footer: {
+          text: 'Servidor Oficial TitanBot',
+        },
+        fields: [
+          { name: 'Premio', value: '$100 USD', inline: true },
+          { name: 'Fecha', value: 'Sábado 20:00 UTC', inline: true },
+        ],
+        timestamp: true,
+      }),
+    });
+
+    channel.send = originalSend;
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.messageId, '998877665544332211');
+    assert.strictEqual(data.channelId, testChannelId);
+    assert.ok(sentPayload);
+    assert.strictEqual(sentPayload.embeds.length, 1);
+  });
+
+  it('GET, POST, and DELETE /api/guilds/:guildId/embeds/templates manages custom templates', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    // 1. Initially empty
+    const getRes1 = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/templates`, {
+      headers: { Cookie: `titanbot_session=${token}` },
+    });
+    assert.strictEqual(getRes1.status, 200);
+    const getData1 = await getRes1.json();
+    assert.strictEqual(getData1.success, true);
+    assert.ok(Array.isArray(getData1.templates));
+
+    // 2. Save template
+    const saveRes = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/templates`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        name: 'Plantilla de Reglamento',
+        embed: {
+          title: 'Reglamento de la Comunidad',
+          description: '1. Respeto mutuo\n2. No spam',
+          color: '#ED4245',
+        },
+      }),
+    });
+    assert.strictEqual(saveRes.status, 200);
+    const saveData = await saveRes.json();
+    assert.strictEqual(saveData.success, true);
+    assert.ok(saveData.template.id);
+    const tplId = saveData.template.id;
+
+    // 3. Verify retrieved list contains template
+    const getRes2 = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/templates`, {
+      headers: { Cookie: `titanbot_session=${token}` },
+    });
+    const getData2 = await getRes2.json();
+    assert.strictEqual(getData2.templates.some((t) => t.id === tplId), true);
+
+    // 4. Delete template
+    const delRes = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/templates/${tplId}`, {
+      method: 'DELETE',
+      headers: { Cookie: `titanbot_session=${token}` },
+    });
+    assert.strictEqual(delRes.status, 200);
+    const delData = await delRes.json();
+    assert.strictEqual(delData.success, true);
+
+    // 5. Verify deleted
+    const getRes3 = await fetch(`${baseUrl}/guilds/${testGuildId}/embeds/templates`, {
+      headers: { Cookie: `titanbot_session=${token}` },
+    });
+    const getData3 = await getRes3.json();
+    assert.strictEqual(getData3.templates.some((t) => t.id === tplId), false);
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);

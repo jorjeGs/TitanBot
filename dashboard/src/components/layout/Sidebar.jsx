@@ -20,6 +20,7 @@ import {
   Gift,
   Cake,
   ClipboardList,
+  LayoutTemplate,
 } from 'lucide-react';
 
 export function Sidebar() {
@@ -35,6 +36,7 @@ export function Sidebar() {
     { to: `/manage/${guildId}/giveaways`, label: t('nav.giveaways') || 'Sorteos y Recompensas', icon: Gift },
     { to: `/manage/${guildId}/birthdays`, label: t('nav.birthdays') || 'Cumpleaños y Aniversarios', icon: Cake },
     { to: `/manage/${guildId}/applications`, label: t('nav.applications') || 'Postulaciones de Staff', icon: ClipboardList },
+    { to: `/manage/${guildId}/embeds`, label: t('nav.embeds') || 'Creador de Embeds', icon: LayoutTemplate },
     { to: `/manage/${guildId}/leveling`, label: t('nav.leveling') || 'Niveles y XP', icon: Trophy },
     { to: `/manage/${guildId}/economy`, label: t('nav.economy') || 'Economía y Tienda', icon: Coins },
     { to: `/manage/${guildId}/serverstats`, label: t('nav.serverstats') || 'Estadísticas del Servidor', icon: BarChart2 },

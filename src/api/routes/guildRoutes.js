@@ -62,6 +62,12 @@ import {
   reviewApplicationHandler,
   deleteApplicationHandler,
 } from '../controllers/applicationController.js';
+import {
+  sendEmbedHandler,
+  getEmbedTemplatesHandler,
+  saveEmbedTemplateHandler,
+  deleteEmbedTemplateHandler,
+} from '../controllers/embedController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
@@ -120,6 +126,12 @@ router.get('/:guildId/applications', verifyAuth, checkGuildPermissions, getAppli
 router.patch('/:guildId/applications/config', verifyAuth, checkGuildPermissions, updateApplicationSettingsHandler);
 router.patch('/:guildId/applications/:appId/review', verifyAuth, checkGuildPermissions, reviewApplicationHandler);
 router.delete('/:guildId/applications/:appId', verifyAuth, checkGuildPermissions, deleteApplicationHandler);
+
+// Embed builder subroutes protected by checkGuildPermissions
+router.post('/:guildId/embeds/send', verifyAuth, checkGuildPermissions, sendEmbedHandler);
+router.get('/:guildId/embeds/templates', verifyAuth, checkGuildPermissions, getEmbedTemplatesHandler);
+router.post('/:guildId/embeds/templates', verifyAuth, checkGuildPermissions, saveEmbedTemplateHandler);
+router.delete('/:guildId/embeds/templates/:templateId', verifyAuth, checkGuildPermissions, deleteEmbedTemplateHandler);
 
 export default router;
 

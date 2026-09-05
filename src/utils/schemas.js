@@ -151,6 +151,82 @@ export const ReviewApplicationSchema = z.object({
   reason: z.string().trim().max(500).nullable().optional(),
 });
 
+export const EmbedFieldSchema = z.object({
+  name: z.string().trim().min(1, 'Field name cannot be empty').max(256, 'Field name too long (max 256)'),
+  value: z.string().trim().min(1, 'Field value cannot be empty').max(1024, 'Field value too long (max 1024)'),
+  inline: z.boolean().optional().default(false),
+});
+
+export const EmbedAuthorSchema = z.object({
+  name: z.string().trim().min(1, 'Author name cannot be empty').max(256, 'Author name too long (max 256)'),
+  iconUrl: z.string().url('Invalid author icon URL').nullable().optional().or(z.literal('')),
+  url: z.string().url('Invalid author URL').nullable().optional().or(z.literal('')),
+});
+
+export const EmbedFooterSchema = z.object({
+  text: z.string().trim().min(1, 'Footer text cannot be empty').max(2048, 'Footer text too long (max 2048)'),
+  iconUrl: z.string().url('Invalid footer icon URL').nullable().optional().or(z.literal('')),
+});
+
+export const SendEmbedSchema = z
+  .object({
+    channelId: z.string().regex(/^\d{17,20}$/, 'Invalid channel ID'),
+    title: z.string().trim().max(256, 'Title too long (max 256)').nullable().optional(),
+    description: z.string().trim().max(4096, 'Description too long (max 4096)').nullable().optional(),
+    color: z.string().nullable().optional(),
+    author: EmbedAuthorSchema.nullable().optional(),
+    footer: EmbedFooterSchema.nullable().optional(),
+    thumbnail: z.string().url('Invalid thumbnail URL').nullable().optional().or(z.literal('')),
+    image: z.string().url('Invalid image URL').nullable().optional().or(z.literal('')),
+    timestamp: z.boolean().optional().default(false),
+    fields: z.array(EmbedFieldSchema).max(25, 'Maximum 25 fields allowed').optional().default([]),
+  })
+  .refine(
+    (data) =>
+      Boolean(
+        (data.title && data.title.length > 0) ||
+        (data.description && data.description.length > 0) ||
+        (Array.isArray(data.fields) && data.fields.length > 0) ||
+        (data.author && data.author.name && data.author.name.length > 0) ||
+        (data.image && data.image.length > 0) ||
+        (data.thumbnail && data.thumbnail.length > 0)
+      ),
+    {
+      message: 'Embed must contain at least a title, description, field, author, image, or thumbnail.',
+    }
+  );
+
+export const SaveEmbedTemplateSchema = z.object({
+  name: z.string().trim().min(1, 'Template name cannot be empty').max(100, 'Template name too long (max 100)'),
+  embed: z
+    .object({
+      title: z.string().trim().max(256).nullable().optional(),
+      description: z.string().trim().max(4096).nullable().optional(),
+      color: z.string().nullable().optional(),
+      author: EmbedAuthorSchema.nullable().optional(),
+      footer: EmbedFooterSchema.nullable().optional(),
+      thumbnail: z.string().url().nullable().optional().or(z.literal('')),
+      image: z.string().url().nullable().optional().or(z.literal('')),
+      timestamp: z.boolean().optional().default(false),
+      fields: z.array(EmbedFieldSchema).max(25).optional().default([]),
+    })
+    .refine(
+      (data) =>
+        Boolean(
+          (data.title && data.title.length > 0) ||
+          (data.description && data.description.length > 0) ||
+          (Array.isArray(data.fields) && data.fields.length > 0) ||
+          (data.author && data.author.name && data.author.name.length > 0) ||
+          (data.image && data.image.length > 0) ||
+          (data.thumbnail && data.thumbnail.length > 0)
+        ),
+      {
+        message: 'Embed must contain at least a title, description, field, author, image, or thumbnail.',
+      }
+    ),
+});
+
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
