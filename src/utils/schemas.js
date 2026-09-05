@@ -231,6 +231,64 @@ export const MusicActionSchema = z.object({
   value: z.union([z.number(), z.string()]).optional(),
 });
 
+export const AutomationEmbedSchema = z.object({
+  title: z.string().trim().max(256).optional().default(''),
+  description: z.string().trim().max(4096).optional().default(''),
+  color: z.string().optional().default('#5865F2'),
+  footer: z.string().trim().max(2048).optional().default(''),
+  image: z.string().url().nullable().optional().or(z.literal('')).default(''),
+  thumbnail: z.string().url().nullable().optional().or(z.literal('')).default(''),
+});
+
+export const StickyMessageSchema = z.object({
+  id: z.string().min(1),
+  channelId: z.string().regex(/^\d{17,20}$/, 'Invalid channel ID'),
+  enabled: z.boolean().default(true),
+  type: z.enum(['text', 'embed']).default('text'),
+  content: z.string().max(2000).optional().default(''),
+  embed: AutomationEmbedSchema.optional().default({}),
+  messageCountThreshold: z.number().int().min(1).max(100).default(3),
+  cooldownSeconds: z.number().int().min(0).max(300).default(5),
+  lastMessageId: z.string().regex(/^\d{17,20}$/).nullable().optional().default(null),
+});
+
+export const ScheduledMessageSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().trim().min(1).max(100),
+  channelId: z.string().regex(/^\d{17,20}$/, 'Invalid channel ID'),
+  enabled: z.boolean().default(true),
+  type: z.enum(['text', 'embed']).default('text'),
+  content: z.string().max(2000).optional().default(''),
+  embed: AutomationEmbedSchema.optional().default({}),
+  scheduleType: z.enum(['interval', 'daily', 'weekly', 'cron']).default('daily'),
+  intervalHours: z.number().int().min(1).max(168).optional().default(24),
+  timeOfDay: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/).optional().default('12:00'),
+  daysOfWeek: z.array(z.number().int().min(0).max(6)).optional().default([1, 2, 3, 4, 5]),
+  cronExpression: z.string().max(100).optional().default('0 12 * * *'),
+  lastRunAt: z.string().nullable().optional().default(null),
+});
+
+export const AutoResponderSchema = z.object({
+  id: z.string().min(1),
+  trigger: z.string().trim().min(1).max(200),
+  matchType: z.enum(['exact', 'contains', 'regex']).default('contains'),
+  caseSensitive: z.boolean().default(false),
+  replyType: z.enum(['channel', 'dm']).default('channel'),
+  type: z.enum(['text', 'embed']).default('text'),
+  content: z.string().max(2000).optional().default(''),
+  embed: AutomationEmbedSchema.optional().default({}),
+  enabled: z.boolean().default(true),
+  allowedChannels: z.array(z.string().regex(/^\d{17,20}$/)).default([]),
+  ignoredRoles: z.array(z.string().regex(/^\d{17,20}$/)).default([]),
+  cooldownSeconds: z.number().int().min(0).max(3600).default(5),
+});
+
+export const AutomationsConfigSchema = z.object({
+  stickyMessages: z.array(StickyMessageSchema).default([]),
+  scheduledMessages: z.array(ScheduledMessageSchema).default([]),
+  autoResponders: z.array(AutoResponderSchema).default([]),
+}).default({ stickyMessages: [], scheduledMessages: [], autoResponders: [] });
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
@@ -288,6 +346,7 @@ export const GuildConfigSchema = z
     economy: EconomyConfigSchema,
     joinToCreate: JoinToCreateConfigSchema,
     moderation: ModerationConfigSchema.optional(),
+    automations: AutomationsConfigSchema.optional(),
   })
   .passthrough();
 

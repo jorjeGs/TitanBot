@@ -53,7 +53,8 @@
     "birthdays": "Birthdays & Anniversaries",
     "applications": "Staff Applications",
     "embeds": "Embed Creator",
-    "music": "Live Music"
+    "music": "Live Music",
+    "automations": "Automations"
   },
   "landing": {
     "heroTitle": "Powerful Community Management for Discord",
@@ -882,5 +883,98 @@
     "voiceCategory": "🔊 PRIVATE VOICE ROOMS",
     "voiceJoinPrompt": "➕ Join to Create Room",
     "serverStatsTitle": "📊 SERVER STATISTICS"
+  },
+  "automations": {
+    "title": "Automations & Dynamic Messaging",
+    "subtitle": "Configure sticky messages, scheduled announcements, and smart auto-responders",
+    "confirmDelete": "Do you want to delete this automation?",
+    "tabs": {
+      "sticky": "Sticky Messages",
+      "scheduled": "Scheduled Announcements",
+      "autoresponder": "Auto-Responders"
+    },
+    "sticky": {
+      "heading": "Dynamic Sticky Messages",
+      "description": "Always stays at the bottom of the channel. When members chat, the bot automatically deletes the previous message and reposts the new one.",
+      "btnNew": "New Sticky Message",
+      "empty": "You have no sticky messages configured",
+      "emptyHint": "Create one to keep rules and important notices visible in active channels.",
+      "thresholdLabel": "Repost every",
+      "messages": "messages",
+      "editTitle": "Edit Sticky Message",
+      "newTitle": "New Sticky Message",
+      "thresholdInput": "Message Threshold",
+      "thresholdHint": "Repost every N messages"
+    },
+    "scheduled": {
+      "heading": "Scheduled Announcements",
+      "description": "Broadcast periodic reminders (daily, every X hours, or on specific days) automatically without touching the bot.",
+      "btnNew": "Schedule New Announcement",
+      "empty": "You have no scheduled announcements",
+      "emptyHint": "Create recurring announcements to keep your community engaged.",
+      "nameLabel": "Announcement Name",
+      "frequency": "Frequency",
+      "freqDaily": "Daily",
+      "freqWeekly": "Specific Days",
+      "freqInterval": "Every X Hours",
+      "hours": "Hours",
+      "timeOfDay": "Time (UTC)",
+      "btnTest": "Test dispatch to Discord",
+      "btnTestShort": "Test now",
+      "editTitle": "Edit Scheduled Announcement",
+      "newTitle": "Schedule New Announcement"
+    },
+    "ar": {
+      "heading": "Auto-Responders & Triggers",
+      "description": "When a user types a trigger phrase in chat, TitanBot responds instantly in the channel or via direct message (DM).",
+      "btnNew": "New Auto-Responder Rule",
+      "empty": "You have no auto-responders configured",
+      "emptyHint": "Automate frequent questions from your community with channel or DM responses.",
+      "triggerInput": "Trigger Word or Phrase",
+      "matchType": "Match Type",
+      "matchContains": "Contains word/phrase",
+      "matchExact": "Exact Match",
+      "matchRegex": "Regular Expression (Regex)",
+      "replyType": "Where to Reply",
+      "replyChannel": "Same Channel",
+      "replyDm": "Direct Message (DM)",
+      "replyContent": "Response Message",
+      "cooldown": "Cooldown:",
+      "editTitle": "Edit Auto-Responder",
+      "newTitle": "New Auto-Responder Rule"
+    },
+    "form": {
+      "channel": "Discord Channel",
+      "formatType": "Message Format",
+      "typeText": "Plain Text",
+      "typeEmbed": "Rich Embed",
+      "variables": "Available variables (click to insert):",
+      "content": "Message Content",
+      "embedTitle": "Embed Title",
+      "embedDesc": "Embed Description",
+      "color": "Border Color",
+      "cooldown": "Cooldown (seconds)",
+      "cooldownHint": "Prevents chat bursts"
+    },
+    "preview": {
+      "title": "Live Discord Preview",
+      "badgeSticky": "📌 Sticky Pin",
+      "badgeScheduled": "⏰ Scheduled Announcement",
+      "badgeAutoresponder": "⚡ Auto-Response"
+    },
+    "success": {
+      "saved": "Configuration saved successfully",
+      "deleted": "Automation deleted successfully",
+      "dispatched": "Announcement sent to Discord successfully!"
+    },
+    "errors": {
+      "loadFailed": "Failed to load automations data",
+      "saveFailed": "Failed to save automation",
+      "deleteFailed": "Failed to delete automation",
+      "dispatchFailed": "Failed to dispatch announcement to Discord",
+      "channelRequired": "Please select a valid channel",
+      "fieldsRequired": "Please complete required name and channel",
+      "triggerRequired": "Please enter a trigger word or phrase"
+    }
   }
 }

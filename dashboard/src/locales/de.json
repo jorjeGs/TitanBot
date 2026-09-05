@@ -53,7 +53,8 @@
     "birthdays": "Geburtstage & Jubiläen",
     "applications": "Bewerbungen & Team",
     "embeds": "Embed-Ersteller",
-    "music": "Live-Musik"
+    "music": "Live-Musik",
+    "automations": "Automatisierungen"
   },
   "landing": {
     "heroTitle": "Leistungsstarke Community-Verwaltung für Discord",
@@ -882,5 +883,98 @@
     "voiceCategory": "🔊 PRIVATE SPRACHKANÄLE",
     "voiceJoinPrompt": "➕ Beitreten um Kanal zu erstellen",
     "serverStatsTitle": "📊 SERVERSTATISTIKEN"
+  },
+  "automations": {
+    "title": "Automatisierungen & Dynamische Nachrichten",
+    "subtitle": "Konfigurieren Sie angeheftete Nachrichten, geplante Ankündigungen und intelligente Auto-Responder",
+    "confirmDelete": "Möchten Sie diese Automatisierung wirklich löschen?",
+    "tabs": {
+      "sticky": "Sticky Messages",
+      "scheduled": "Geplante Ankündigungen",
+      "autoresponder": "Auto-Responder"
+    },
+    "sticky": {
+      "heading": "Dynamische Sticky Messages",
+      "description": "Bleibt immer am Ende des Kanals. Wenn Mitglieder chatten, löscht der Bot automatisch die vorherige Nachricht und sendet die neue.",
+      "btnNew": "Neue Sticky Message",
+      "empty": "Keine angehefteten Nachrichten konfiguriert",
+      "emptyHint": "Erstellen Sie eine, um Regeln und wichtige Hinweise in aktiven Kanälen sichtbar zu halten.",
+      "thresholdLabel": "Erneut anheften alle",
+      "messages": "Nachrichten",
+      "editTitle": "Sticky Message bearbeiten",
+      "newTitle": "Neue Sticky Message",
+      "thresholdInput": "Nachrichtenschwelle",
+      "thresholdHint": "Alle N Nachrichten erneut senden"
+    },
+    "scheduled": {
+      "heading": "Geplante Ankündigungen",
+      "description": "Senden Sie periodische Erinnerungen (täglich, alle X Stunden oder an bestimmten Tagen) automatisch.",
+      "btnNew": "Neue Ankündigung planen",
+      "empty": "Keine geplanten Ankündigungen vorhanden",
+      "emptyHint": "Erstellen Sie wiederkehrende Ankündigungen, um Ihre Community aktiv zu halten.",
+      "nameLabel": "Name der Ankündigung",
+      "frequency": "Häufigkeit",
+      "freqDaily": "Täglich",
+      "freqWeekly": "Bestimmte Tage",
+      "freqInterval": "Alle X Stunden",
+      "hours": "Stunden",
+      "timeOfDay": "Uhrzeit (UTC)",
+      "btnTest": "Testversand an Discord",
+      "btnTestShort": "Jetzt testen",
+      "editTitle": "Geplante Ankündigung bearbeiten",
+      "newTitle": "Neue Ankündigung planen"
+    },
+    "ar": {
+      "heading": "Auto-Responder & Auslöser",
+      "description": "Wenn ein Benutzer eine Schlüsselphrase in den Chat schreibt, antwortet TitanBot sofort im Kanal oder per Direktnachricht (DM).",
+      "btnNew": "Neue Auto-Responder-Regel",
+      "empty": "Keine Auto-Responder konfiguriert",
+      "emptyHint": "Automatisieren Sie häufige Fragen Ihrer Community mit Kanal- oder DM-Antworten.",
+      "triggerInput": "Auslösewort oder -phrase",
+      "matchType": "Übereinstimmungstyp",
+      "matchContains": "Enthält Wort/Phrase",
+      "matchExact": "Exakte Übereinstimmung",
+      "matchRegex": "Regulärer Ausdruck (Regex)",
+      "replyType": "Antwortort",
+      "replyChannel": "Gleicher Kanal",
+      "replyDm": "Direktnachricht (DM)",
+      "replyContent": "Antwortnachricht",
+      "cooldown": "Abklingzeit:",
+      "editTitle": "Auto-Responder bearbeiten",
+      "newTitle": "Neue Auto-Responder-Regel"
+    },
+    "form": {
+      "channel": "Discord-Kanal",
+      "formatType": "Nachrichtenformat",
+      "typeText": "Reiner Text",
+      "typeEmbed": "Rich Embed",
+      "variables": "Verfügbare Variablen (zum Einfügen anklicken):",
+      "content": "Nachrichteninhalt",
+      "embedTitle": "Embed-Titel",
+      "embedDesc": "Embed-Beschreibung",
+      "color": "Rahmenfarbe",
+      "cooldown": "Abklingzeit (Sekunden)",
+      "cooldownHint": "Verhindert Chat-Spam"
+    },
+    "preview": {
+      "title": "Live-Discord-Vorschau",
+      "badgeSticky": "📌 Sticky Pin",
+      "badgeScheduled": "⏰ Geplante Ankündigung",
+      "badgeAutoresponder": "⚡ Auto-Antwort"
+    },
+    "success": {
+      "saved": "Konfiguration erfolgreich gespeichert",
+      "deleted": "Automatisierung erfolgreich gelöscht",
+      "dispatched": "Ankündigung erfolgreich an Discord gesendet!"
+    },
+    "errors": {
+      "loadFailed": "Fehler beim Laden der Automatisierungsdaten",
+      "saveFailed": "Fehler beim Speichern der Automatisierung",
+      "deleteFailed": "Fehler beim Löschen der Automatisierung",
+      "dispatchFailed": "Fehler beim Senden der Ankündigung an Discord",
+      "channelRequired": "Bitte wählen Sie einen gültigen Kanal",
+      "fieldsRequired": "Bitte füllen Sie den Namen und den Kanal aus",
+      "triggerRequired": "Bitte geben Sie ein Auslösewort oder eine Phrase ein"
+    }
   }
 }

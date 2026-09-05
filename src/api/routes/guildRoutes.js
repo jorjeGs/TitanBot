@@ -72,6 +72,16 @@ import {
   getMusicStatusHandler,
   executeMusicActionHandler,
 } from '../controllers/musicController.js';
+import {
+  getAutomations,
+  createOrUpdateSticky,
+  deleteSticky,
+  createOrUpdateScheduled,
+  deleteScheduled,
+  triggerScheduledNow,
+  createOrUpdateAutoResponder,
+  deleteAutoResponder,
+} from '../controllers/automationsController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
@@ -140,6 +150,16 @@ router.delete('/:guildId/embeds/templates/:templateId', verifyAuth, checkGuildPe
 // Music player subroutes protected by checkGuildPermissions
 router.get('/:guildId/music/status', verifyAuth, checkGuildPermissions, getMusicStatusHandler);
 router.post('/:guildId/music/action', verifyAuth, checkGuildPermissions, executeMusicActionHandler);
+
+// Automations subroutes (Sticky, Scheduled, Auto-responders) protected by checkGuildPermissions
+router.get('/:guildId/automations', verifyAuth, checkGuildPermissions, getAutomations);
+router.post('/:guildId/automations/sticky', verifyAuth, checkGuildPermissions, createOrUpdateSticky);
+router.delete('/:guildId/automations/sticky/:id', verifyAuth, checkGuildPermissions, deleteSticky);
+router.post('/:guildId/automations/scheduled', verifyAuth, checkGuildPermissions, createOrUpdateScheduled);
+router.delete('/:guildId/automations/scheduled/:id', verifyAuth, checkGuildPermissions, deleteScheduled);
+router.post('/:guildId/automations/scheduled/:id/trigger', verifyAuth, checkGuildPermissions, triggerScheduledNow);
+router.post('/:guildId/automations/auto-responders', verifyAuth, checkGuildPermissions, createOrUpdateAutoResponder);
+router.delete('/:guildId/automations/auto-responders/:id', verifyAuth, checkGuildPermissions, deleteAutoResponder);
 
 export default router;
 

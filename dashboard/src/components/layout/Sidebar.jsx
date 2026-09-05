@@ -22,6 +22,7 @@ import {
   ClipboardList,
   LayoutTemplate,
   Disc3,
+  Zap,
 } from 'lucide-react';
 
 export function Sidebar() {
@@ -32,6 +33,7 @@ export function Sidebar() {
   const navItems = [
     { to: `/manage/${guildId}/general`, label: t('nav.general'), icon: Sliders },
     { to: `/manage/${guildId}/welcome`, label: t('nav.welcome'), icon: Sparkles },
+    { to: `/manage/${guildId}/automations`, label: t('nav.automations') || 'Automatizaciones', icon: Zap },
     { to: `/manage/${guildId}/roles`, label: t('nav.roles'), icon: KeyRound },
     { to: `/manage/${guildId}/moderation`, label: t('nav.moderation') || 'Moderación y Seguridad', icon: ShieldAlert },
     { to: `/manage/${guildId}/giveaways`, label: t('nav.giveaways') || 'Sorteos y Recompensas', icon: Gift },

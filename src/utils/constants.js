@@ -39,6 +39,11 @@ export const DEFAULT_GUILD_CONFIG = {
     },
     verification: {
         enabled: false
+    },
+    automations: {
+        stickyMessages: [],
+        scheduledMessages: [],
+        autoResponders: [],
     }
 };
 

@@ -19,6 +19,8 @@ import {
   recordCorrectCount,
 } from '../services/countingGameService.js';
 import { t } from '../utils/i18n/index.js';
+import { handleStickyMessage } from '../services/automations/stickyMessageService.js';
+import { handleAutoResponders } from '../services/automations/autoResponderService.js';
 
 const MESSAGE_XP_RATE_LIMIT_ATTEMPTS = 12;
 const MESSAGE_XP_RATE_LIMIT_WINDOW_MS = 10000;
@@ -39,6 +41,10 @@ export default {
       await handlePrefixCommand(message, client);
 
       await handleLeveling(message, client);
+
+      // Automations: Sticky messages and Auto-responders
+      await handleStickyMessage(message, client);
+      await handleAutoResponders(message, client);
     } catch (error) {
       logger.error('Error in messageCreate event:', error);
     }

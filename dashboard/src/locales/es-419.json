@@ -53,7 +53,8 @@
     "birthdays": "Cumpleaños y Aniversarios",
     "applications": "Postulaciones de Staff",
     "embeds": "Creador de Embeds",
-    "music": "Música en Vivo"
+    "music": "Música en Vivo",
+    "automations": "Automatizaciones"
   },
   "landing": {
     "heroTitle": "Gestión Potente de Comunidades para Discord",
@@ -882,5 +883,98 @@
     "voiceCategory": "🔊 SALAS DE VOZ PRIVADAS",
     "voiceJoinPrompt": "➕ Entra para Crear Sala",
     "serverStatsTitle": "📊 ESTADÍSTICAS DEL SERVIDOR"
+  },
+  "automations": {
+    "title": "Automatizaciones & Mensajería Dinámica",
+    "subtitle": "Configura mensajes fijados, avisos programados y respuestas automáticas inteligentes",
+    "confirmDelete": "¿Deseas eliminar esta automatización?",
+    "tabs": {
+      "sticky": "Sticky Messages",
+      "scheduled": "Avisos Programados",
+      "autoresponder": "Auto-Responders"
+    },
+    "sticky": {
+      "heading": "Mensajes Fijados Dinámicos",
+      "description": "Permanece siempre al final del canal. Cuando los miembros conversan, el bot elimina el mensaje anterior y re-publica el nuevo automáticamente.",
+      "btnNew": "Nuevo Sticky Message",
+      "empty": "No tienes mensajes fijados configurados",
+      "emptyHint": "Crea uno para mantener avisos y normas visibles en tus canales más activos.",
+      "thresholdLabel": "Re-fijar cada",
+      "messages": "mensajes",
+      "editTitle": "Editar Sticky Message",
+      "newTitle": "Nuevo Sticky Message",
+      "thresholdInput": "Umbral de Mensajes",
+      "thresholdHint": "Re-fijar cada N mensajes"
+    },
+    "scheduled": {
+      "heading": "Avisos y Anuncios Programados",
+      "description": "Difunde recordatorios periódicos (diarios, cada X horas o en días específicos) automáticamente sin tocar el bot.",
+      "btnNew": "Programar Nuevo Aviso",
+      "empty": "No tienes avisos programados",
+      "emptyHint": "Crea anuncios recurrentes para mantener activa a tu comunidad.",
+      "nameLabel": "Nombre del Aviso",
+      "frequency": "Frecuencia",
+      "freqDaily": "Diario",
+      "freqWeekly": "Días Específicos",
+      "freqInterval": "Cada X Horas",
+      "hours": "Horas",
+      "timeOfDay": "Hora (UTC)",
+      "btnTest": "Probar envío a Discord",
+      "btnTestShort": "Probar ahora",
+      "editTitle": "Editar Aviso Programado",
+      "newTitle": "Programar Nuevo Aviso"
+    },
+    "ar": {
+      "heading": "Respuestas Automáticas & Triggers",
+      "description": "Cuando un usuario escriba una frase clave en el chat, TitanBot responderá instantáneamente en el canal o por mensaje directo (DM).",
+      "btnNew": "Nueva Regla de Auto-Respuesta",
+      "empty": "No tienes respuestas automáticas configuradas",
+      "emptyHint": "Automatiza dudas frecuentes de tu comunidad con respuestas en canal o por DM.",
+      "triggerInput": "Palabra o Frase Disparadora",
+      "matchType": "Tipo de Coincidencia",
+      "matchContains": "Contiene palabra/frase",
+      "matchExact": "Coincidencia Exacta",
+      "matchRegex": "Expresión Regular (Regex)",
+      "replyType": "Dónde Responder",
+      "replyChannel": "Mismo Canal",
+      "replyDm": "Mensaje Privado (DM)",
+      "replyContent": "Mensaje de Respuesta",
+      "cooldown": "Enfriamiento:",
+      "editTitle": "Editar Auto-Responder",
+      "newTitle": "Nueva Regla de Auto-Respuesta"
+    },
+    "form": {
+      "channel": "Canal de Discord",
+      "formatType": "Formato del Mensaje",
+      "typeText": "Texto Plano",
+      "typeEmbed": "Rich Embed",
+      "variables": "Variables disponibles (haz clic para insertar):",
+      "content": "Contenido del Mensaje",
+      "embedTitle": "Título del Embed",
+      "embedDesc": "Descripción del Embed",
+      "color": "Color de Borde",
+      "cooldown": "Cooldown (segundos)",
+      "cooldownHint": "Anti-ráfagas de chat"
+    },
+    "preview": {
+      "title": "Previsualización en Vivo de Discord",
+      "badgeSticky": "📌 Sticky Pin",
+      "badgeScheduled": "⏰ Aviso Programado",
+      "badgeAutoresponder": "⚡ Auto-Respuesta"
+    },
+    "success": {
+      "saved": "Configuración guardada con éxito",
+      "deleted": "Automatización eliminada correctamente",
+      "dispatched": "¡Aviso enviado a Discord con éxito!"
+    },
+    "errors": {
+      "loadFailed": "Error al cargar datos de automatizaciones",
+      "saveFailed": "Error al guardar la automatización",
+      "deleteFailed": "Error al eliminar la automatización",
+      "dispatchFailed": "Error al enviar aviso a Discord",
+      "channelRequired": "Selecciona un canal válido",
+      "fieldsRequired": "Completa el nombre y canal requeridos",
+      "triggerRequired": "Ingresa una palabra o frase disparadora"
+    }
   }
 }
