@@ -81,7 +81,9 @@ export async function getBotPanelStatus(client, guild, {
         return { exists: false, reason: 'no_channel' };
     }
 
-    const channel = await guild.channels.fetch(channelId).catch(() => null);
+    const channel =
+        guild.channels?.cache?.get(channelId) ||
+        (typeof guild.channels?.fetch === 'function' ? await guild.channels.fetch(channelId).catch(() => null) : null);
     if (!channel) {
         return { exists: false, reason: 'channel_missing' };
     }
@@ -96,11 +98,18 @@ export async function getBotPanelStatus(client, guild, {
     }
 
     const messages = await channel.messages.fetch({ limit: scanLimit }).catch(() => null);
-    const messageList = messages
-        ? [...(typeof messages.values === 'function' ? messages.values() : messages)]
-        : [];
+    let messageList = [];
+    if (messages) {
+        if (typeof messages.values === 'function') {
+            messageList = Array.from(messages.values());
+        } else if (Symbol.iterator in Object(messages)) {
+            messageList = [...messages];
+        } else {
+            messageList = [messages];
+        }
+    }
     const recovered = messageList.find(
-        (entry) => entry.author.id === client.user.id && messageHasPanelMarker(entry, marker),
+        (entry) => entry?.author?.id === client?.user?.id && messageHasPanelMarker(entry, marker),
     );
 
     if (recovered) {

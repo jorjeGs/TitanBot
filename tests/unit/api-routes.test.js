@@ -675,6 +675,215 @@ describe('API Routes Integration Tests', () => {
     assert.ok(data.panel.messageUrl.includes('112233445566778899'));
   });
 
+  it('PATCH /api/guilds/:guildId/config persists granular logging configuration', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/config`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        logging: {
+          enabled: true,
+          channels: {
+            audit: '123456789012345679',
+            reports: '123456789012345679',
+            applications: '123456789012345679',
+          },
+          enabledEvents: {
+            'moderation.*': true,
+            'message.delete': true,
+            'role.create': false,
+          },
+          ignore: {
+            channels: ['123456789012345679'],
+            users: [],
+          },
+        },
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.config.logging.enabled, true);
+    assert.strictEqual(data.config.logging.channels.applications, '123456789012345679');
+    assert.strictEqual(data.config.logging.enabledEvents['moderation.*'], true);
+    assert.strictEqual(data.config.logging.enabledEvents['role.create'], false);
+    assert.deepStrictEqual(data.config.logging.ignore.channels, ['123456789012345679']);
+  });
+
+  it('GET /api/guilds/:guildId/tickets returns ticket settings and unconfigured panel status', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/tickets`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok(data.tickets);
+    assert.strictEqual(typeof data.tickets.maxTicketsPerUser, 'number');
+    assert.strictEqual(typeof data.tickets.dmOnClose, 'boolean');
+  });
+
+  it('POST /api/guilds/:guildId/tickets/publish rejects unmanageable staff role with 422', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const testRoleId = '123456789012345680';
+
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 2; // Lower than role position 5
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/tickets/publish`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        panelChannelId: testChannelId,
+        staffRoleId: testRoleId,
+        panelMessage: 'Soporte',
+        buttonLabel: 'Abrir Ticket',
+      }),
+    });
+
+    assert.strictEqual(res.status, 422);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'HierarchyError');
+  });
+
+  it('POST /api/guilds/:guildId/tickets/publish rejects when bot lacks channel permissions with 403', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 20;
+
+    const channel = guild.channels.cache.get(testChannelId);
+    const originalPerms = channel.permissionsFor;
+    channel.permissionsFor = () => ({
+      has: () => false,
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/tickets/publish`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        panelChannelId: testChannelId,
+        panelMessage: 'Soporte',
+        buttonLabel: 'Abrir Ticket',
+      }),
+    });
+
+    // Restore permissionsFor
+    channel.permissionsFor = originalPerms;
+
+    assert.strictEqual(res.status, 403);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'MissingChannelPermissions');
+  });
+
+  it('POST /api/guilds/:guildId/tickets/publish publishes ticket panel and DELETE cleans it up', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const testCategoryId = '123456789012345681';
+    const testClosedCategoryId = '123456789012345682';
+    const testRoleId = '123456789012345680';
+
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 20;
+
+    // Add category channels to cache
+    guild.channels.cache.set(testCategoryId, {
+      id: testCategoryId,
+      name: 'Tickets Activos',
+      type: 4,
+      position: 10,
+    });
+    guild.channels.cache.set(testClosedCategoryId, {
+      id: testClosedCategoryId,
+      name: 'Tickets Cerrados',
+      type: 4,
+      position: 11,
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    // 1. Publish Ticket Panel
+    const pubRes = await fetch(`${baseUrl}/guilds/${testGuildId}/tickets/publish`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        panelChannelId: testChannelId,
+        categoryId: testCategoryId,
+        closedCategoryId: testClosedCategoryId,
+        staffRoleId: testRoleId,
+        panelMessage: 'Panel de Soporte Oficial',
+        buttonLabel: 'Crear Ticket de Ayuda',
+        maxTicketsPerUser: 5,
+        dmOnClose: true,
+      }),
+    });
+
+    assert.strictEqual(pubRes.status, 200);
+    const pubData = await pubRes.json();
+    assert.strictEqual(pubData.success, true);
+    assert.strictEqual(pubData.panel.messageId, '112233445566778899');
+    assert.strictEqual(pubData.panel.channelId, testChannelId);
+
+    // 2. Fetch ticket settings and verify state
+    const getRes = await fetch(`${baseUrl}/guilds/${testGuildId}/tickets`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+    assert.strictEqual(getRes.status, 200);
+    const getData = await getRes.json();
+    assert.strictEqual(getData.success, true);
+    assert.strictEqual(getData.tickets.ticketPanelMessageId, '112233445566778899');
+    assert.strictEqual(getData.tickets.ticketPanelMessage, 'Panel de Soporte Oficial');
+    assert.strictEqual(getData.tickets.ticketButtonLabel, 'Crear Ticket de Ayuda');
+    assert.strictEqual(getData.tickets.ticketCategoryId, testCategoryId);
+    assert.strictEqual(getData.tickets.ticketClosedCategoryId, testClosedCategoryId);
+    assert.strictEqual(getData.tickets.maxTicketsPerUser, 5);
+    assert.strictEqual(getData.tickets.dmOnClose, true);
+
+    // 3. Delete ticket panel
+    const delRes = await fetch(`${baseUrl}/guilds/${testGuildId}/tickets/panel`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+    assert.strictEqual(delRes.status, 200);
+    const delData = await delRes.json();
+    assert.strictEqual(delData.success, true);
+
+    // 4. Verify settings show panel IDs removed
+    const postDelRes = await fetch(`${baseUrl}/guilds/${testGuildId}/tickets`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+    const postDelData = await postDelRes.json();
+    assert.strictEqual(postDelData.tickets.ticketPanelMessageId, null);
+    assert.strictEqual(postDelData.tickets.ticketPanelChannelId, null);
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);

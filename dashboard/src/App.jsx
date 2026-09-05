@@ -11,6 +11,7 @@ import { RolesTab } from './pages/manage/RolesTab';
 import { LoggingTab } from './pages/manage/LoggingTab';
 import { CommandsTab } from './pages/manage/CommandsTab';
 import { VerificationTab } from './pages/manage/VerificationTab';
+import { TicketsTab } from './pages/manage/TicketsTab';
 
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
@@ -31,6 +32,7 @@ export function App() {
             <Route path="welcome" element={<WelcomeTab />} />
             <Route path="roles" element={<RolesTab />} />
             <Route path="logging" element={<LoggingTab />} />
+            <Route path="tickets" element={<TicketsTab />} />
             <Route path="commands" element={<CommandsTab />} />
             <Route path="verification" element={<VerificationTab />} />
           </Route>

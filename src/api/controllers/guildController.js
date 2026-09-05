@@ -106,12 +106,18 @@ export function getGuildChannels(req, res) {
 
   const channelList = guild.channels?.cache?.values ? Array.from(guild.channels.cache.values()) : [];
   const channels = channelList
-    .filter((c) => (typeof c.isTextBased === 'function' ? c.isTextBased() : true) && !c.isDMBased?.() && !c.isThread?.())
+    .filter((c) => {
+      if (c.isDMBased?.() || c.isThread?.()) return false;
+      const isText = typeof c.isTextBased === 'function' ? c.isTextBased() : (c.type === 0);
+      const isCategory = c.type === 4;
+      return isText || isCategory;
+    })
     .map((c) => ({
       id: c.id,
       name: c.name,
-      type: c.type,
+      type: typeof c.type === 'number' ? c.type : (c.isTextBased?.() ? 0 : 0),
       position: c.position || 0,
+      parentId: c.parentId || null,
     }))
     .sort((a, b) => a.position - b.position);
 
@@ -277,6 +283,26 @@ export async function updateGuildConfigHandler(req, res) {
           applications: patch.logging.channels?.applications ? String(patch.logging.channels.applications).trim() : null,
         },
       };
+
+      if (patch.logging.enabledEvents && typeof patch.logging.enabledEvents === 'object') {
+        sanitized.logging.enabledEvents = {};
+        for (const [evt, val] of Object.entries(patch.logging.enabledEvents)) {
+          if (typeof val === 'boolean') {
+            sanitized.logging.enabledEvents[evt] = val;
+          }
+        }
+      }
+
+      if (patch.logging.ignore && typeof patch.logging.ignore === 'object') {
+        sanitized.logging.ignore = {
+          channels: Array.isArray(patch.logging.ignore.channels)
+            ? patch.logging.ignore.channels.map(String).map((s) => s.trim()).filter((id) => /^\d{17,19}$/.test(id))
+            : [],
+          users: Array.isArray(patch.logging.ignore.users)
+            ? patch.logging.ignore.users.map(String).map((s) => s.trim()).filter((id) => /^\d{17,19}$/.test(id))
+            : [],
+        };
+      }
     }
 
     // Validate verification nested object

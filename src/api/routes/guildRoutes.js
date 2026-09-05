@@ -14,6 +14,11 @@ import {
   deleteGuildReactionRole,
 } from '../controllers/reactRoleController.js';
 import { publishVerificationPanel } from '../controllers/verificationController.js';
+import {
+  getTicketSettings,
+  publishTicketPanel,
+  deleteTicketPanel,
+} from '../controllers/ticketController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 
@@ -33,5 +38,8 @@ router.get('/:guildId/reactroles', verifyAuth, checkGuildPermissions, getGuildRe
 router.post('/:guildId/reactroles', verifyAuth, checkGuildPermissions, createGuildReactionRole);
 router.delete('/:guildId/reactroles/:messageId', verifyAuth, checkGuildPermissions, deleteGuildReactionRole);
 router.post('/:guildId/verification/publish', verifyAuth, checkGuildPermissions, publishVerificationPanel);
+router.get('/:guildId/tickets', verifyAuth, checkGuildPermissions, getTicketSettings);
+router.post('/:guildId/tickets/publish', verifyAuth, checkGuildPermissions, publishTicketPanel);
+router.delete('/:guildId/tickets/panel', verifyAuth, checkGuildPermissions, deleteTicketPanel);
 
 export default router;

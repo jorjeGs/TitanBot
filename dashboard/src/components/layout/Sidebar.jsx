@@ -9,6 +9,7 @@ import {
   ScrollText,
   Terminal,
   ShieldCheck,
+  Ticket,
   ChevronLeft,
   Users,
 } from 'lucide-react';
@@ -23,6 +24,7 @@ export function Sidebar() {
     { to: `/manage/${guildId}/welcome`, label: t('nav.welcome'), icon: Sparkles },
     { to: `/manage/${guildId}/roles`, label: t('nav.roles'), icon: KeyRound },
     { to: `/manage/${guildId}/logging`, label: t('nav.logging'), icon: ScrollText },
+    { to: `/manage/${guildId}/tickets`, label: t('nav.tickets') || 'Tickets', icon: Ticket },
     { to: `/manage/${guildId}/commands`, label: t('nav.commands'), icon: Terminal },
     { to: `/manage/${guildId}/verification`, label: t('nav.verification'), icon: ShieldCheck },
   ];
