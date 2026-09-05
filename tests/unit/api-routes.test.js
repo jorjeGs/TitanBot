@@ -884,6 +884,111 @@ describe('API Routes Integration Tests', () => {
     assert.strictEqual(postDelData.tickets.ticketPanelChannelId, null);
   });
 
+  it('GET /api/guilds/:guildId/leveling returns leveling settings and leaderboard', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/leveling`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok(data.leveling);
+    assert.strictEqual(typeof data.leveling.enabled, 'boolean');
+    assert.strictEqual(typeof data.leveling.xpCooldown, 'number');
+    assert.ok(Array.isArray(data.leaderboard));
+  });
+
+  it('PATCH /api/guilds/:guildId/leveling rejects invalid XP range with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/leveling`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        xpPerMessage: { min: 50, max: 10 }, // min > max
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('PATCH /api/guilds/:guildId/leveling rejects unmanageable reward role with 422', async () => {
+    const testGuildId = '123456789012345678';
+    const testRoleId = '123456789012345680';
+
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 2; // Lower than role position 5
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/leveling`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        roleRewards: {
+          '5': testRoleId,
+        },
+      }),
+    });
+
+    assert.strictEqual(res.status, 422);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'HierarchyError');
+  });
+
+  it('PATCH /api/guilds/:guildId/leveling updates settings and persists role rewards', async () => {
+    const testGuildId = '123456789012345678';
+    const testRoleId = '123456789012345680';
+    const testChannelId = '123456789012345679';
+
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 20; // Higher than role position 5
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/leveling`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        enabled: true,
+        announceLevelUp: true,
+        levelUpChannel: testChannelId,
+        levelUpMessage: '¡Bien hecho {user}, has llegado al nivel {level}!',
+        xpMultiplier: 2.0,
+        xpCooldown: 45,
+        xpPerMessage: { min: 20, max: 40 },
+        roleRewards: {
+          '5': testRoleId,
+        },
+        ignoredChannels: [testChannelId],
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.leveling.enabled, true);
+    assert.strictEqual(data.leveling.levelUpChannel, testChannelId);
+    assert.strictEqual(data.leveling.xpMultiplier, 2.0);
+    assert.strictEqual(data.leveling.xpCooldown, 45);
+    assert.deepStrictEqual(data.leveling.xpPerMessage, { min: 20, max: 40 });
+    assert.strictEqual(data.leveling.roleRewards['5'], testRoleId);
+    assert.deepStrictEqual(data.leveling.ignoredChannels, [testChannelId]);
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);

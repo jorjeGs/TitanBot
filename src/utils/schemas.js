@@ -58,6 +58,29 @@ const VerificationConfigSchema = z
   })
   .optional();
 
+export const LevelingConfigSchema = z
+  .object({
+    enabled: z.boolean().default(true),
+    xpPerMessage: z
+      .object({
+        min: z.number().int().min(1).max(500).default(15),
+        max: z.number().int().min(1).max(500).default(25),
+      })
+      .default({ min: 15, max: 25 }),
+    xpCooldown: z.number().int().min(0).max(3600).default(60),
+    levelUpMessage: z
+      .string()
+      .max(2000)
+      .default('{user} has leveled up to level {level}!'),
+    levelUpChannel: z.string().nullable().optional(),
+    ignoredChannels: z.array(z.string()).default([]),
+    ignoredRoles: z.array(z.string()).default([]),
+    roleRewards: z.record(z.string()).default({}),
+    announceLevelUp: z.boolean().default(true),
+    xpMultiplier: z.number().min(0.1).max(10).default(1),
+  })
+  .optional();
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
@@ -79,7 +102,8 @@ export const GuildConfigSchema = z
     logging: LoggingConfigSchema.optional(),
     ticketLogging: TicketLoggingSchema.optional(),
     enableLogging: z.boolean().optional(),
-    verification: VerificationConfigSchema
+    verification: VerificationConfigSchema,
+    leveling: LevelingConfigSchema
   })
   .passthrough();
 

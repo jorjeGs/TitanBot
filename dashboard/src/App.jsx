@@ -12,6 +12,7 @@ import { LoggingTab } from './pages/manage/LoggingTab';
 import { CommandsTab } from './pages/manage/CommandsTab';
 import { VerificationTab } from './pages/manage/VerificationTab';
 import { TicketsTab } from './pages/manage/TicketsTab';
+import { LevelingTab } from './pages/manage/LevelingTab';
 
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
@@ -31,6 +32,7 @@ export function App() {
             <Route path="general" element={<GeneralTab />} />
             <Route path="welcome" element={<WelcomeTab />} />
             <Route path="roles" element={<RolesTab />} />
+            <Route path="leveling" element={<LevelingTab />} />
             <Route path="logging" element={<LoggingTab />} />
             <Route path="tickets" element={<TicketsTab />} />
             <Route path="commands" element={<CommandsTab />} />

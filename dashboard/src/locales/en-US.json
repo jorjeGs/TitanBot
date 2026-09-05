@@ -21,7 +21,8 @@
     "disabled": "Disabled",
     "none": "None",
     "unmanageableRole": "Unmanageable",
-    "hierarchyWarning": "This role is above TitanBot's highest role in the server hierarchy or the bot lacks Manage Roles permission. It cannot be assigned automatically."
+    "hierarchyWarning": "This role is above TitanBot's highest role in the server hierarchy or the bot lacks Manage Roles permission. It cannot be assigned automatically.",
+    "add": "Add"
   },
   "nav": {
     "general": "General Settings",
@@ -32,7 +33,8 @@
     "verification": "Verification",
     "switchServer": "Switch Server",
     "language": "Language",
-    "tickets": "Ticket System"
+    "tickets": "Ticket System",
+    "leveling": "Levels & XP"
   },
   "landing": {
     "heroTitle": "Powerful Community Management for Discord",
@@ -283,6 +285,53 @@
       "roleHierarchy": "The selected staff role is higher than TitanBot in server hierarchy.",
       "publishFailed": "Failed to publish ticket panel.",
       "deleteFailed": "Failed to delete ticket panel."
+    }
+  },
+  "leveling": {
+    "title": "Leveling & Gamification",
+    "subtitle": "Reward chat activity with experience points (XP), levels, and automatic role rewards.",
+    "systemStatus": "Leveling System Status",
+    "enableLeveling": "Enable Leveling System",
+    "enableLevelingHelp": "Members earn experience when chatting and can unlock role rewards.",
+    "announcementsTitle": "Level-Up Announcements",
+    "announceLevelUp": "Send level-up announcement",
+    "announceLevelUpHelp": "Sends a congratulatory message each time a member reaches a new level.",
+    "channel": "Announcement Channel",
+    "channelHelp": "Select a fixed channel for announcements. If \"None\", it will announce in the active chat channel.",
+    "message": "Level-Up Message",
+    "messageHelp": "Available variables: {user} (mention), {level} (number), {xp} (points), {server} (server name).",
+    "defaultMessage": "Congratulations {user}, you have reached **level {level}**!",
+    "ratesTitle": "XP Rates & Cooldown",
+    "multiplier": "XP Multiplier",
+    "multiplierHelp": "Scale the speed at which your community levels up.",
+    "cooldown": "Anti-Spam Cooldown (Seconds)",
+    "cooldownHelp": "Minimum time between messages to grant XP points.",
+    "minXp": "Minimum XP per message",
+    "maxXp": "Maximum XP per message",
+    "roleRewardsTitle": "Level Role Rewards",
+    "roleRewardsHelp": "Automatically grant Discord roles to members when reaching a target level.",
+    "levelInput": "Level",
+    "rewardRole": "Role to Grant",
+    "activeRewards": "Configured Rewards",
+    "noRewards": "No role rewards configured yet.",
+    "exclusionsTitle": "Excluded Channels & Roles",
+    "addIgnoredChannel": "No-XP Channel",
+    "addIgnoredChannelHelp": "Messages sent in this channel will not grant any XP.",
+    "addIgnoredRole": "No-XP Role",
+    "addIgnoredRoleHelp": "Members with this role will not accumulate XP.",
+    "saveButton": "Save Leveling Settings",
+    "saveSuccess": "Leveling configuration saved successfully!",
+    "leaderboardTitle": "Live Leaderboard (Top 10)",
+    "emptyLeaderboard": "No members on the leaderboard yet. Chat activity will populate rankings.",
+    "previewTitle": "Level-Up Announcement Preview",
+    "sameChannel": "same-channel",
+    "embedTitle": "Level Up!",
+    "rewardUnlocked": "Reward unlocked",
+    "errors": {
+      "invalidLevel": "Please enter a valid level (minimum 1).",
+      "noRole": "Please select a role for the reward.",
+      "roleHierarchy": "The selected role is higher than TitanBot in the hierarchy.",
+      "saveFailed": "Failed to save leveling settings."
     }
   }
 }

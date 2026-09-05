@@ -77,22 +77,28 @@ export async function getLeaderboard(client, guildId, limit = 10) {
       return [];
     }
     
-    const members = await guild.members.fetch().catch(error => {
-      logger.error(`Failed to fetch members for guild ${guildId}:`, error);
-      return new Map();
-    });
+    let members = new Map();
+    if (typeof guild.members?.fetch === 'function') {
+      members = await guild.members.fetch().catch(error => {
+        logger.error(`Failed to fetch members for guild ${guildId}:`, error);
+        return guild.members?.cache || new Map();
+      });
+    } else if (guild.members?.cache) {
+      members = guild.members.cache;
+    }
 
     const leaderboard = [];
+    const entries = members?.entries ? Array.from(members.entries()) : Object.entries(members || {});
     
-    for (const [userId, member] of members) {
-      if (member.user.bot) continue;
+    for (const [userId, member] of entries) {
+      if (member?.user?.bot) continue;
       
       const data = await getUserLevelData(client, guildId, userId);
       if (data && (data.totalXp > 0 || data.level > 0)) {
         leaderboard.push({
           userId,
-          username: member.user.username,
-          discriminator: member.user.discriminator,
+          username: member?.user?.username || member?.username || 'Member',
+          discriminator: member?.user?.discriminator || '0',
           ...data
         });
       }

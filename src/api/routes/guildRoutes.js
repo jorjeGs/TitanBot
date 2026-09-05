@@ -19,6 +19,10 @@ import {
   publishTicketPanel,
   deleteTicketPanel,
 } from '../controllers/ticketController.js';
+import {
+  getLevelingSettings,
+  updateLevelingSettings,
+} from '../controllers/levelingController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 
@@ -41,5 +45,7 @@ router.post('/:guildId/verification/publish', verifyAuth, checkGuildPermissions,
 router.get('/:guildId/tickets', verifyAuth, checkGuildPermissions, getTicketSettings);
 router.post('/:guildId/tickets/publish', verifyAuth, checkGuildPermissions, publishTicketPanel);
 router.delete('/:guildId/tickets/panel', verifyAuth, checkGuildPermissions, deleteTicketPanel);
+router.get('/:guildId/leveling', verifyAuth, checkGuildPermissions, getLevelingSettings);
+router.patch('/:guildId/leveling', verifyAuth, checkGuildPermissions, updateLevelingSettings);
 
 export default router;
