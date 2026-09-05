@@ -1,8 +1,10 @@
-﻿import 'dotenv/config';
+import 'dotenv/config';
 import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import cron from 'node-cron';
+import { createApiRouter } from './api/routes/index.js';
 
 import config from './config/application.js';
 import { initializeDatabase } from './utils/database.js';
@@ -155,6 +157,13 @@ class TitanBot extends Client {
       requestCounts.set(ip, times);
       next();
     });
+
+    app.use(cookieParser());
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
+
+    // REST API for Web Dashboard
+    app.use('/api', createApiRouter(this));
 
     app.get('/health', (req, res) => {
       const dbStatus = this.db?.getStatus?.() || { isDegraded: 'unknown' };
