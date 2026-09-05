@@ -24,6 +24,8 @@ import {
   Clock,
   Hash,
   AtSign,
+  Instagram,
+  Video,
 } from 'lucide-react';
 
 const PLATFORMS = [
@@ -44,6 +46,24 @@ const PLATFORMS = [
     bg: 'bg-purple-500/10 border-purple-500/30 text-purple-400',
     activeBg: 'border-purple-500 bg-purple-500/20 text-white',
     desc: 'Alertas en vivo cuando un streamer comienza transmisión con título y juego.',
+  },
+  {
+    id: 'tiktok',
+    name: 'TikTok',
+    icon: Video,
+    color: '#FE2C55',
+    bg: 'bg-rose-500/10 border-rose-500/30 text-rose-400',
+    activeBg: 'border-rose-500 bg-rose-500/20 text-white',
+    desc: 'Notificaciones de nuevos videos cortos publicados en TikTok.',
+  },
+  {
+    id: 'instagram',
+    name: 'Instagram',
+    icon: Instagram,
+    color: '#E1306C',
+    bg: 'bg-pink-500/10 border-pink-500/30 text-pink-400',
+    activeBg: 'border-pink-500 bg-pink-500/20 text-white',
+    desc: 'Alertas de nuevos posts, reels o publicaciones en Instagram.',
   },
   {
     id: 'rss',
@@ -100,6 +120,8 @@ export default function SocialFeedsTab() {
     mentionRole: null,
     youtubeChannelId: '',
     twitchUsername: '',
+    tiktokUsername: '',
+    instagramUsername: '',
     rssFeedUrl: '',
     webhookToken: '',
   });
@@ -145,6 +167,8 @@ export default function SocialFeedsTab() {
       mentionRole: null,
       youtubeChannelId: '',
       twitchUsername: '',
+      tiktokUsername: '',
+      instagramUsername: '',
       rssFeedUrl: '',
       webhookToken: '',
     });
@@ -614,6 +638,44 @@ export default function SocialFeedsTab() {
                     placeholder="ej. jorge"
                     className="w-full bg-discord-dark border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-discord-blurple transition-colors"
                   />
+                </div>
+              )}
+
+              {formData.type === 'tiktok' && (
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                    Usuario de TikTok (@usuario)
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.tiktokUsername}
+                    onChange={(e) => setFormData({ ...formData, tiktokUsername: e.target.value })}
+                    placeholder="ej. @touchpointsupport o touchpointsupport"
+                    className="w-full bg-discord-dark border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-discord-blurple transition-colors"
+                  />
+                  <p className="text-[11px] text-slate-500">
+                    Notificará de nuevos videos y reels publicados en la cuenta de TikTok.
+                  </p>
+                </div>
+              )}
+
+              {formData.type === 'instagram' && (
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                    Usuario de Instagram (@usuario)
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.instagramUsername}
+                    onChange={(e) => setFormData({ ...formData, instagramUsername: e.target.value })}
+                    placeholder="ej. @touchpointsupport o touchpointsupport"
+                    className="w-full bg-discord-dark border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-discord-blurple transition-colors"
+                  />
+                  <p className="text-[11px] text-slate-500">
+                    Alertará de nuevas publicaciones en la cuenta de Instagram.
+                  </p>
                 </div>
               )}
 

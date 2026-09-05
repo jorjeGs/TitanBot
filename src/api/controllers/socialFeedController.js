@@ -169,6 +169,25 @@ export async function testSocialFeed(req, res) {
         thumbnail: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1280&q=80',
         startedAt: new Date().toISOString(),
       };
+    } else if (feed.type === 'tiktok') {
+      testItem = {
+        id: 'sample_tt_123',
+        title: '🎵 Nuevo Video Corto en TikTok',
+        author: `@${feed.tiktokUsername || feed.name || 'creador'}`,
+        url: `https://www.tiktok.com/@${feed.tiktokUsername || 'creador'}`,
+        thumbnail: 'https://images.unsplash.com/photo-1596524430615-b46475ddff6e?w=1280&q=80',
+        published: new Date().toISOString(),
+      };
+    } else if (feed.type === 'instagram') {
+      testItem = {
+        id: 'sample_ig_123',
+        title: '📸 Nueva Publicación en Instagram',
+        author: `@${feed.instagramUsername || feed.name || 'creador'}`,
+        url: `https://www.instagram.com/${feed.instagramUsername || 'creador'}`,
+        description: '¡Echa un vistazo a la nueva sesión fotográfica y novedades en nuestro perfil de Instagram!',
+        thumbnail: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1280&q=80',
+        published: new Date().toISOString(),
+      };
     } else if (feed.type === 'rss') {
       if (feed.rssFeedUrl) {
         try {

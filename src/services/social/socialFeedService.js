@@ -211,6 +211,114 @@ export async function fetchRssLatest(feedUrl) {
 }
 
 /**
+ * Fetch latest TikTok video via RSS bridge or custom feed URL
+ */
+export async function fetchTikTokLatest(username, customFeedUrl = '') {
+  const cleanUser = (username || '').replace(/^@/, '').trim();
+  if (!cleanUser && !customFeedUrl) {
+    throw new Error('TikTok username or feed URL is required');
+  }
+
+  const candidateUrls = customFeedUrl
+    ? [customFeedUrl]
+    : [
+        `https://proxitok.pabloferreros.dev/@${encodeURIComponent(cleanUser)}/rss`,
+        `https://tok.habedieeh.re/@${encodeURIComponent(cleanUser)}/rss`,
+      ];
+
+  for (const url of candidateUrls) {
+    try {
+      const response = await axios.get(url, {
+        timeout: 8000,
+        headers: { 'User-Agent': 'TitanBot-SocialFeeds/2.1' },
+      });
+
+      const xml = response.data;
+      if (!xml || typeof xml !== 'string') continue;
+
+      const itemMatch = xml.match(/<(?:item|entry)>([\s\S]*?)<\/(?:item|entry)>/i);
+      if (!itemMatch) continue;
+
+      const itemXml = itemMatch[1];
+      const title = extractXmlTag(itemXml, 'title') || `Nuevo video de @${cleanUser}`;
+      let link = extractXmlTag(itemXml, 'link') || extractXmlAttr(itemXml, 'link', 'href') || `https://www.tiktok.com/@${cleanUser}`;
+      const id = extractXmlTag(itemXml, 'guid') || extractXmlTag(itemXml, 'id') || link;
+      const published = extractXmlTag(itemXml, 'pubDate') || extractXmlTag(itemXml, 'published') || new Date().toISOString();
+      const thumbnail = extractXmlAttr(itemXml, 'enclosure', 'url') || extractXmlAttr(itemXml, 'media:thumbnail', 'url') || '';
+
+      return {
+        id,
+        title,
+        author: `@${cleanUser}`,
+        url: link,
+        thumbnail,
+        published,
+      };
+    } catch {
+      // Try next candidate
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Fetch latest Instagram post via RSS bridge or custom feed URL
+ */
+export async function fetchInstagramLatest(username, customFeedUrl = '') {
+  const cleanUser = (username || '').replace(/^@/, '').trim();
+  if (!cleanUser && !customFeedUrl) {
+    throw new Error('Instagram username or feed URL is required');
+  }
+
+  const candidateUrls = customFeedUrl
+    ? [customFeedUrl]
+    : [
+        `https://rsshub.app/instagram/user/${encodeURIComponent(cleanUser)}`,
+        `https://feed.eble.io/instagram/${encodeURIComponent(cleanUser)}`,
+      ];
+
+  for (const url of candidateUrls) {
+    try {
+      const response = await axios.get(url, {
+        timeout: 8000,
+        headers: { 'User-Agent': 'TitanBot-SocialFeeds/2.1' },
+      });
+
+      const xml = response.data;
+      if (!xml || typeof xml !== 'string') continue;
+
+      const itemMatch = xml.match(/<(?:item|entry)>([\s\S]*?)<\/(?:item|entry)>/i);
+      if (!itemMatch) continue;
+
+      const itemXml = itemMatch[1];
+      let title = extractXmlTag(itemXml, 'title') || `Publicación de @${cleanUser}`;
+      let link = extractXmlTag(itemXml, 'link') || extractXmlAttr(itemXml, 'link', 'href') || `https://instagram.com/${cleanUser}`;
+      const id = extractXmlTag(itemXml, 'guid') || extractXmlTag(itemXml, 'id') || link;
+      const published = extractXmlTag(itemXml, 'pubDate') || extractXmlTag(itemXml, 'published') || new Date().toISOString();
+      const thumbnail = extractXmlAttr(itemXml, 'enclosure', 'url') || extractXmlAttr(itemXml, 'media:thumbnail', 'url') || '';
+      let description = extractXmlTag(itemXml, 'description') || '';
+      description = description.replace(/<[^>]*>?/gm, '').trim();
+      if (description.length > 250) description = description.slice(0, 247) + '...';
+
+      return {
+        id,
+        title,
+        author: `@${cleanUser}`,
+        url: link,
+        thumbnail,
+        description,
+        published,
+      };
+    } catch {
+      // Try next candidate
+    }
+  }
+
+  return null;
+}
+
+/**
  * Build rich Discord embed for the platform alert
  */
 export function buildFeedEmbed(feed, itemData) {
@@ -260,6 +368,43 @@ export function buildFeedEmbed(feed, itemData) {
       timestamp: itemData.startedAt ? new Date(itemData.startedAt).toISOString() : new Date().toISOString(),
       footer: {
         text: 'TitanBot Social Feeds • Twitch',
+      },
+    };
+  }
+
+  if (type === 'tiktok') {
+    return {
+      title: itemData.title || 'Nuevo Video en TikTok',
+      url: itemData.url,
+      color: 0xfe2c55, // TikTok Pink/Red
+      author: {
+        name: `${itemData.author || feed.name || 'TikTok'} ha publicado un video`,
+        icon_url: 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png',
+        url: itemData.url,
+      },
+      image: itemData.thumbnail ? { url: itemData.thumbnail } : undefined,
+      timestamp: itemData.published ? new Date(itemData.published).toISOString() : new Date().toISOString(),
+      footer: {
+        text: 'TitanBot Social Feeds • TikTok',
+      },
+    };
+  }
+
+  if (type === 'instagram') {
+    return {
+      title: itemData.title || 'Nueva Publicación en Instagram',
+      url: itemData.url,
+      description: itemData.description || undefined,
+      color: 0xe1306c, // Instagram Gradient Pink
+      author: {
+        name: `${itemData.author || feed.name || 'Instagram'} ha compartido un post`,
+        icon_url: 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png',
+        url: itemData.url,
+      },
+      image: itemData.thumbnail ? { url: itemData.thumbnail } : undefined,
+      timestamp: itemData.published ? new Date(itemData.published).toISOString() : new Date().toISOString(),
+      footer: {
+        text: 'TitanBot Social Feeds • Instagram',
       },
     };
   }
@@ -403,6 +548,24 @@ export async function checkGuildSocialFeeds(client, guildId) {
           } else if (status && !status.isLive && feed.isLive) {
             // Stream went offline
             feed.isLive = false;
+            feed.lastChecked = new Date().toISOString();
+            hasUpdates = true;
+          }
+        } else if (feed.type === 'tiktok' && feed.tiktokUsername) {
+          latest = await fetchTikTokLatest(feed.tiktokUsername, feed.rssFeedUrl);
+          if (latest && latest.id && latest.id !== feed.lastItemId) {
+            await dispatchSocialAnnouncement(client, guildId, feed, latest);
+            feed.lastItemId = latest.id;
+            feed.lastPublished = latest.published;
+            feed.lastChecked = new Date().toISOString();
+            hasUpdates = true;
+          }
+        } else if (feed.type === 'instagram' && feed.instagramUsername) {
+          latest = await fetchInstagramLatest(feed.instagramUsername, feed.rssFeedUrl);
+          if (latest && latest.id && latest.id !== feed.lastItemId) {
+            await dispatchSocialAnnouncement(client, guildId, feed, latest);
+            feed.lastItemId = latest.id;
+            feed.lastPublished = latest.published;
             feed.lastChecked = new Date().toISOString();
             hasUpdates = true;
           }

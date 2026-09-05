@@ -56,6 +56,40 @@ describe('Notificaciones Externas & Social Feeds (Sub-project D)', () => {
       assert.strictEqual(parsed.data.twitchUsername, 'titan_streamer');
     });
 
+    it('validates a valid TikTok feed item', () => {
+      const payload = {
+        id: 'tt_1',
+        type: 'tiktok',
+        name: 'TikTok Canal',
+        enabled: true,
+        targetChannelId: '123456789012345678',
+        tiktokUsername: 'touchpointsupport',
+        customMessage: '¡Nuevo video en TikTok de {author}! {url}',
+      };
+
+      const parsed = SocialFeedItemSchema.safeParse(payload);
+      assert.strictEqual(parsed.success, true);
+      assert.strictEqual(parsed.data.type, 'tiktok');
+      assert.strictEqual(parsed.data.tiktokUsername, 'touchpointsupport');
+    });
+
+    it('validates a valid Instagram feed item', () => {
+      const payload = {
+        id: 'ig_1',
+        type: 'instagram',
+        name: 'Instagram Perfil',
+        enabled: true,
+        targetChannelId: '123456789012345678',
+        instagramUsername: 'touchpointsupport',
+        customMessage: '¡Nueva foto en Instagram de {author}!',
+      };
+
+      const parsed = SocialFeedItemSchema.safeParse(payload);
+      assert.strictEqual(parsed.success, true);
+      assert.strictEqual(parsed.data.type, 'instagram');
+      assert.strictEqual(parsed.data.instagramUsername, 'touchpointsupport');
+    });
+
     it('validates a valid RSS feed item', () => {
       const payload = {
         id: 'rss_1',
@@ -154,6 +188,40 @@ describe('Notificaciones Externas & Social Feeds (Sub-project D)', () => {
       assert.strictEqual(embed.fields.length, 2);
       assert.strictEqual(embed.fields[0].value, 'Apex Legends');
       assert.strictEqual(embed.fields[1].value, '2500');
+    });
+
+    it('builds a TikTok embed with correct brand color and fields', () => {
+      const feed = { type: 'tiktok', name: 'TikTok Feed', tiktokUsername: 'gamingclip' };
+      const item = {
+        id: 'tt_vid_1',
+        title: 'Clip Destacado',
+        author: '@gamingclip',
+        url: 'https://tiktok.com/@gamingclip/video/12345',
+        thumbnail: 'https://img.jpg',
+        published: '2026-09-05T16:00:00.000Z',
+      };
+
+      const embed = buildFeedEmbed(feed, item);
+      assert.strictEqual(embed.color, 0xfe2c55);
+      assert.strictEqual(embed.title, 'Clip Destacado');
+      assert.strictEqual(embed.author.name, '@gamingclip ha publicado un video');
+    });
+
+    it('builds an Instagram embed with correct brand color and fields', () => {
+      const feed = { type: 'instagram', name: 'Instagram Feed', instagramUsername: 'officialinsta' };
+      const item = {
+        id: 'ig_post_1',
+        title: 'Foto Exclusiva',
+        author: '@officialinsta',
+        url: 'https://instagram.com/p/abc123xyz',
+        thumbnail: 'https://img.jpg',
+        published: '2026-09-05T16:00:00.000Z',
+      };
+
+      const embed = buildFeedEmbed(feed, item);
+      assert.strictEqual(embed.color, 0xe1306c);
+      assert.strictEqual(embed.title, 'Foto Exclusiva');
+      assert.strictEqual(embed.author.name, '@officialinsta ha compartido un post');
     });
 
     it('interpolates placeholders in custom message templates', () => {

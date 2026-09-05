@@ -445,7 +445,7 @@ export const InsightsOverviewSchema = z.object({
 
 export const SocialFeedItemSchema = z.object({
   id: z.string().min(1),
-  type: z.enum(['youtube', 'twitch', 'rss', 'webhook']),
+  type: z.enum(['youtube', 'twitch', 'rss', 'webhook', 'tiktok', 'instagram']),
   name: z.string().trim().min(1).max(100),
   enabled: z.boolean().default(true),
   targetChannelId: z.string().regex(/^\d{17,20}$/, 'Invalid Discord channel ID'),
@@ -453,6 +453,8 @@ export const SocialFeedItemSchema = z.object({
   mentionRole: z.string().nullable().optional().default(null),
   youtubeChannelId: z.string().optional().default(''),
   twitchUsername: z.string().optional().default(''),
+  tiktokUsername: z.string().optional().default(''),
+  instagramUsername: z.string().optional().default(''),
   rssFeedUrl: z.string().url().optional().or(z.literal('')).default(''),
   webhookToken: z.string().optional().default(''),
   lastItemId: z.string().nullable().optional().default(null),
