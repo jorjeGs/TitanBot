@@ -3,6 +3,8 @@ import { createEmbed, errorEmbed, successEmbed, infoEmbed, warningEmbed } from '
 import { logger } from '../../utils/logger.js';
 import { getColor } from '../../config/bot.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
     data: new SlashCommandBuilder()
         .setName('unixtime')
@@ -16,11 +18,11 @@ export default {
                 const unixTimestamp = Math.floor(now.getTime() / 1000);
 
                 const embed = successEmbed(
-                    '⏱️ Current Unix Timestamp',
-                    `**Seconds since Unix Epoch:** \`${unixTimestamp}\`\n` +
-                    `**Milliseconds since Unix Epoch:** \`${now.getTime()}\`\n\n` +
-                    `**Human-readable (UTC):** ${now.toUTCString()}\n` +
-                    `**ISO String:** ${now.toISOString()}`
+                    t('tools.unixtime_title', {}, interaction),
+                    `**${t('tools.unixtime_seconds', {}, interaction)}:** \`${unixTimestamp}\`\n` +
+                    `**${t('tools.unixtime_millis', {}, interaction)}:** \`${now.getTime()}\`\n\n` +
+                    `**${t('tools.unixtime_human', {}, interaction)}:** ${now.toUTCString()}\n` +
+                    `**${t('tools.unixtime_iso', {}, interaction)}:** ${now.toISOString()}`
                 );
                 embed.setColor(getColor('success'));
 
@@ -28,7 +30,7 @@ export default {
                     embeds: [embed],
                 });
             },
-            'Failed to get unix timestamp. Please try again.',
+            t('tools.unixtime_fail', {}, interaction),
             {
                 autoDefer: true,
                 deferOptions: { flags: MessageFlags.Ephemeral }

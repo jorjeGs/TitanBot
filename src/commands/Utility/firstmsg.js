@@ -2,6 +2,7 @@ import { SlashCommandBuilder, PermissionFlagsBits, PermissionsBitField, ChannelT
 import { createEmbed, errorEmbed, successEmbed } from '../../utils/embeds.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { logger } from '../../utils/logger.js';
+import { t } from '../../utils/i18n/index.js';
 export default {
     data: new SlashCommandBuilder()
         .setName("firstmsg")
@@ -36,7 +37,7 @@ export default {
                 guildId: interaction.guildId
             });
             return await InteractionHelper.safeEditReply(interaction, {
-                embeds: [successEmbed('First Message', "No messages found in this channel!")],
+                embeds: [successEmbed(t('utility.firstmsg_title', {}, interaction), t('utility.firstmsg_none', {}, interaction))],
             });
         }
 
@@ -45,8 +46,8 @@ export default {
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [
                 successEmbed(
-                    "First Message in #" + interaction.channel.name,
-                    `Message Link: ${messageLink}`
+                    t('utility.firstmsg_channel_title', { channel: interaction.channel.name }, interaction),
+                    t('utility.firstmsg_link', { url: messageLink }, interaction)
                 ),
             ],
         });

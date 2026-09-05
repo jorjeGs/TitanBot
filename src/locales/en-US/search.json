@@ -1,5 +1,20 @@
 {
-  "define_not_found": "No definition found for **{word}**.",
-  "google_title": "Search Results for: {query}",
-  "urban_not_found": "No Urban Dictionary definition found for **{term}**."
+  "define_too_short": "Please enter a word with at least 2 characters.",
+  "define_not_found": "No definitions found for \"{word}\".",
+  "define_example": "Example: {example}",
+  "define_footer": "Powered by Free Dictionary API",
+  "define_default_meaning": "Definition",
+  "google_title": "Google Search",
+  "google_desc": "[Search for \"{query}\"]({url})",
+  "google_footer": "Google Search Results",
+  "urban_too_short": "Please enter a term with at least 2 characters.",
+  "urban_not_found": "No definitions found for \"{term}\" on Urban Dictionary.",
+  "urban_no_example": "*No example provided*",
+  "urban_example_field": "Example",
+  "urban_stats_field": "Stats",
+  "urban_author_field": "Author",
+  "urban_author_anon": "Anonymous",
+  "urban_footer": "Urban Dictionary",
+  "urban_rate_limit": "Too many requests to Urban Dictionary. Please try again in a few minutes.",
+  "unknown_subcommand": "Unknown subcommand."
 }

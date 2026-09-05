@@ -5,6 +5,8 @@ import { getColor } from '../../config/bot.js';
 
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
     data: new SlashCommandBuilder()
         .setName('hexcolor')
@@ -27,7 +29,7 @@ export default {
                 } else {
                     hexColor = hexColor.replace('#', '');
                     if (!/^[0-9A-Fa-f]{3,6}$/.test(hexColor)) {
-                        return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: 'Please provide a valid hex code.\n\n**Valid formats:**\n• `#FF5733` (with hash)\n• `FF5733` (without hash)\n• `F57` (3-digit shorthand)\n\n**Invalid:** `#GG5733` (G is not a hex digit)' });
+                        return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: t('tools.hexcolor_invalid', {}, interaction) });
                     }
 
                     if (hexColor.length === 3) {
@@ -46,25 +48,25 @@ export default {
 
                 const colorPreviewUrl = `https://dummyimage.com/200x100/${hexColor.replace('#', '')}/${textColor.replace('#', '')}?text=${encodeURIComponent(hexColor)}`;
 
-                const colorName = getColorName(hexColor);
+                const colorName = getColorName(hexColor, interaction);
 
                 const embed = successEmbed(
-                    '🎨 Color Information',
-                    `**Hex:** \`${hexColor}\`\n` +
-                    `**RGB:** \`rgb(${r}, ${g}, ${b})\`\n` +
-                    `**HSL:** \`${rgbToHsl(r, g, b)}\`\n` +
-                    `**Name:** ${colorName || 'Custom Color'}`
+                    t('tools.hexcolor_title', {}, interaction),
+                    `**${t('tools.hexcolor_hex', {}, interaction)}:** \`${hexColor}\`\n` +
+                    `**${t('tools.hexcolor_rgb', {}, interaction)}:** \`rgb(${r}, ${g}, ${b})\`\n` +
+                    `**${t('tools.hexcolor_hsl', {}, interaction)}:** \`${rgbToHsl(r, g, b)}\`\n` +
+                    `**${t('tools.hexcolor_name', {}, interaction)}:** ${colorName || t('tools.hexcolor_custom', {}, interaction)}`
                 )
                     .setColor(hexColor)
                     .setImage(colorPreviewUrl);
 
                 if (isRandom) {
-                    embed.setFooter({ text: 'Randomly generated color' });
+                    embed.setFooter({ text: t('tools.hexcolor_random_footer', {}, interaction) });
                 }
 
                 await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });
             },
-            'Failed to generate color information. Please try again.',
+            t('tools.hexcolor_err_fail', {}, interaction),
             {
                 autoDefer: true,
                 deferOptions: { flags: MessageFlags.Ephemeral }
@@ -79,7 +81,7 @@ function rgbToHsl(r, g, b) {
     let h, s, l = (max + min) / 2;
 
     if (max === min) {
-h = s = 0;
+        h = s = 0;
     } else {
         const d = max - min;
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
@@ -94,7 +96,7 @@ h = s = 0;
     return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
 }
 
-function getColorName(hex) {
+function getColorName(hex, interaction) {
     const colors = {
         '#FF0000': 'Red',
         '#00FF00': 'Green',
@@ -136,5 +138,5 @@ function getColorName(hex) {
         }
     }
     
-    return minDistance < 1000000 ? `Close to ${closestColor}` : null;
+    return minDistance < 1000000 ? t('tools.hexcolor_close_to', { name: closestColor }, interaction) : null;
 }

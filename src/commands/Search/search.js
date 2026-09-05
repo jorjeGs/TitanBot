@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
+import { t } from '../../utils/i18n/index.js';
 
 import searchDefine from './modules/search_define.js';
 import searchGoogle from './modules/search_google.js';
@@ -48,7 +49,7 @@ export default {
             case 'urban':
                 return await searchUrban.execute(interaction, config, client);
             default:
-                return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'Unknown subcommand' });
+                return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('search.unknown_subcommand', {}, interaction) });
         }
     }
 };

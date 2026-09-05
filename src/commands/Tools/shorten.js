@@ -4,6 +4,7 @@ import { logger } from '../../utils/logger.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
 import { getColor } from '../../config/bot.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -45,14 +46,14 @@ export default {
         } catch (e) {
             return replyUserError(interaction, {
                 type: ErrorTypes.VALIDATION,
-                message: 'Invalid URL format. Include http:// or https://',
+                message: t('tools.shorten_invalid_url', {}, interaction),
             });
         }
 
         if (custom && !/^[a-zA-Z0-9_-]+$/.test(custom)) {
             return replyUserError(interaction, {
                 type: ErrorTypes.VALIDATION,
-                message: 'Custom URL can only contain letters, numbers, underscores, and hyphens.',
+                message: t('tools.shorten_invalid_custom', {}, interaction),
             });
         }
 
@@ -74,8 +75,8 @@ export default {
             });
         } catch (networkError) {
             const message = networkError?.name === 'AbortError'
-                ? 'The URL shortener timed out. Please try again in a moment.'
-                : 'Unable to reach the URL shortener service right now. Please try again later.';
+                ? t('tools.shorten_timeout', {}, interaction)
+                : t('tools.shorten_unreachable', {}, interaction);
             return replyUserError(interaction, {
                 type: ErrorTypes.NETWORK,
                 message,
@@ -87,7 +88,7 @@ export default {
         if (!response.ok) {
             return replyUserError(interaction, {
                 type: ErrorTypes.UNKNOWN,
-                message: `Shortener service returned HTTP ${response.status}. Please try again later.`,
+                message: t('tools.shorten_http_err', { status: response.status }, interaction),
             });
         }
 
@@ -99,21 +100,24 @@ export default {
             if (shortUrl.includes("already exists")) {
                 return replyUserError(interaction, {
                     type: ErrorTypes.VALIDATION,
-                    message: 'That custom URL is already taken. Try a different one.',
+                    message: t('tools.shorten_taken', {}, interaction),
                 });
             } else if (shortUrl.includes("invalid")) {
                 return replyUserError(interaction, {
                     type: ErrorTypes.VALIDATION,
-                    message: 'Invalid URL. Include http:// or https://',
+                    message: t('tools.shorten_invalid_url', {}, interaction),
                 });
             }
             return replyUserError(interaction, {
                 type: ErrorTypes.UNKNOWN,
-                message: `URL shortening failed: ${shortUrl}`,
+                message: t('tools.shorten_failed', { error: shortUrl }, interaction),
             });
         }
 
-        const embed = successEmbed('URL Shortened', `Here's your shortened URL: ${shortUrl}`);
+        const embed = successEmbed(
+            t('tools.shorten_title', {}, interaction),
+            t('tools.shorten_desc', { url: shortUrl }, interaction)
+        );
         embed.setColor(getColor('success'));
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [embed],

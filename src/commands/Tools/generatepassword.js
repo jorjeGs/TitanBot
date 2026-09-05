@@ -5,6 +5,8 @@ import { createEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/
 import { logger } from '../../utils/logger.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
     data: new SlashCommandBuilder()
         .setName('generatepassword')
@@ -48,7 +50,7 @@ export default {
         const includeSymbols = interaction.options.getBoolean('symbols') ?? true;
 
         if (length < 8 || length > 50) {
-            await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: `Password must be 8-50 characters. You provided: ${length}` });
+            await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: t('tools.generatepassword_len_err', { length }, interaction) });
             return;
         }
 
@@ -89,7 +91,7 @@ export default {
             password = password.substring(0, randomIndex) + randomSymbol + password.substring(randomIndex + 1);
         }
 
-        let strength = 'Weak';
+        let strength = t('tools.generatepassword_str_weak', {}, interaction);
         let strengthEmoji = '🔴';
         let strengthColor = getColor('error');
 
@@ -114,29 +116,35 @@ export default {
         if (hasSymbol) score *= 1.3;
 
         if (score > 80) {
-            strength = 'Very Strong';
+            strength = t('tools.generatepassword_str_verystrong', {}, interaction);
             strengthEmoji = '🟢';
             strengthColor = getColor('success');
         } else if (score > 60) {
-            strength = 'Strong';
+            strength = t('tools.generatepassword_str_strong', {}, interaction);
             strengthEmoji = '🟢';
             strengthColor = getColor('success');
         } else if (score > 40) {
-            strength = 'Good';
+            strength = t('tools.generatepassword_str_good', {}, interaction);
             strengthEmoji = '🟡';
             strengthColor = getColor('warning');
         } else if (score > 20) {
-            strength = 'Weak';
+            strength = t('tools.generatepassword_str_weak', {}, interaction);
             strengthEmoji = '🟠';
             strengthColor = getColor('warning');
         }
 
+        const containsParts = [];
+        if (hasLower) containsParts.push(t('tools.generatepassword_lowercase', {}, interaction));
+        if (hasUpper) containsParts.push(t('tools.generatepassword_uppercase', {}, interaction));
+        if (hasNumber) containsParts.push(t('tools.generatepassword_numbers', {}, interaction));
+        if (hasSymbol) containsParts.push(t('tools.generatepassword_symbols', {}, interaction));
+
         const embed = successEmbed(
-            '🔑 Generated Password',
-            `**Password:** ||\`${password}\`||\n` +
-            `**Length:** ${password.length} characters\n` +
-            `**Strength:** ${strengthEmoji} ${strength}\n` +
-            `**Contains:** ${hasLower ? 'Lowercase' : ''}${hasUpper ? ', Uppercase' : ''}${hasNumber ? ', Numbers' : ''}${hasSymbol ? ', Symbols' : ''}`
+            t('tools.generatepassword_title', {}, interaction),
+            `**${t('tools.generatepassword_password', {}, interaction)}:** ||\`${password}\`||\n` +
+            `**${t('tools.generatepassword_length', {}, interaction)}:** ${password.length}\n` +
+            `**${t('tools.generatepassword_strength', {}, interaction)}:** ${strengthEmoji} ${strength}\n` +
+            `**${t('tools.generatepassword_contains', {}, interaction)}:** ${containsParts.join(', ')}`
         ).setColor(strengthColor);
 
         await InteractionHelper.safeEditReply(interaction, {

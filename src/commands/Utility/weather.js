@@ -3,6 +3,7 @@ import { createEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/
 import { logger } from '../../utils/logger.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
 const GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search";
 const WEATHER_URL = "https://api.open-meteo.com/v1/forecast";
 
@@ -41,7 +42,7 @@ export default {
                 city: city,
                 guildId: interaction.guildId
             });
-            await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: `Could not find a location for **${city}**. Please check the spelling.` });
+            await replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: t('utility.weather_not_found', { city }, interaction) });
             return;
         }
 
@@ -60,7 +61,7 @@ export default {
                 userId: interaction.user.id,
                 guildId: interaction.guildId
             });
-            await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'A weather service error occurred.' });
+            await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('utility.weather_api_err', {}, interaction) });
             return;
         }
 
@@ -70,28 +71,28 @@ export default {
         const windSpeed = current.windspeed != null ? Math.round(current.windspeed) : "N/A";
         const weatherCode = current.weathercode ?? current.weather_code ?? null;
 
-        const condition = getWeatherDescription(weatherCode);
+        const condition = getWeatherDescription(weatherCode, interaction);
 
-        const embed = createEmbed({ title: `Weather in ${cityDisplay}, ${country}`, description: condition.description })
+        const embed = createEmbed({ title: t('utility.weather_title', { city: cityDisplay, country }, interaction), description: condition.description })
             .addFields(
                 {
-                    name: "Temperature",
+                    name: t('utility.weather_temp', {}, interaction),
                     value: `${temperature}°C`,
                     inline: true,
                 },
                 {
-                    name: "Humidity",
+                    name: t('utility.weather_humidity', {}, interaction),
                     value: `${humidity}%`,
                     inline: true,
                 },
                 {
-                    name: "Wind Speed",
+                    name: t('utility.weather_wind', {}, interaction),
                     value: `${windSpeed} km/h`,
                     inline: true,
                 },
             )
             .setFooter({
-                text: `Latitude: ${latitude.toFixed(2)} | Longitude: ${longitude.toFixed(2)}`,
+                text: t('utility.weather_coords', { lat: latitude.toFixed(2), lon: longitude.toFixed(2) }, interaction),
             });
 
         await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });
@@ -105,19 +106,19 @@ export default {
     },
 };
 
-function getWeatherDescription(code) {
+function getWeatherDescription(code, context) {
     if (code >= 0 && code <= 3) {
-        return { description: "Clear sky / Partly cloudy", emoji: "" };
+        return { description: t('utility.weather_cond_clear', {}, context), emoji: "" };
     } else if (code >= 45 && code <= 48) {
-        return { description: "Fog and Rime fog", emoji: "" };
+        return { description: t('utility.weather_cond_fog', {}, context), emoji: "" };
     } else if (code >= 51 && code <= 67) {
-        return { description: "Drizzle or Rain", emoji: "" };
+        return { description: t('utility.weather_cond_drizzle', {}, context), emoji: "" };
     } else if (code >= 71 && code <= 75) {
-        return { description: "Snow fall", emoji: "" };
+        return { description: t('utility.weather_cond_snow', {}, context), emoji: "" };
     } else if (code >= 80 && code <= 86) {
-        return { description: "Showers (Rain/Snow)", emoji: "" };
+        return { description: t('utility.weather_cond_showers', {}, context), emoji: "" };
     } else if (code >= 95 && code <= 99) {
-        return { description: "Thunderstorm", emoji: "" };
+        return { description: t('utility.weather_cond_thunder', {}, context), emoji: "" };
     }
-    return { description: "Unknown conditions.", emoji: "" };
+    return { description: t('utility.weather_cond_unknown', {}, context), emoji: "" };
 }

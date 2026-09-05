@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from 'discord.js';
 import { createEmbed } from '../../utils/embeds.js';
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
 export default {
     data: new SlashCommandBuilder()
     .setName("userinfo")
@@ -29,35 +30,35 @@ export default {
     const createdTimestamp = Math.floor(user.createdAt.getTime() / 1000);
     const joinedTimestamp = member?.joinedAt ? Math.floor(member.joinedAt.getTime() / 1000) : null;
 
-    const embed = createEmbed({ title: `User Info: ${user.username}` })
+    const embed = createEmbed({ title: t('utility.userinfo_title', { user: user.username }, interaction) })
       .setThumbnail(user.displayAvatarURL({ size: 256 }))
       .addFields(
-        { name: "ID", value: user.id, inline: true },
-        { name: "Bot", value: user.bot ? "Yes" : "No", inline: true },
+        { name: t('utility.userinfo_id', {}, interaction), value: user.id, inline: true },
+        { name: t('utility.userinfo_bot', {}, interaction), value: user.bot ? t('utility.userinfo_yes', {}, interaction) : t('utility.userinfo_no', {}, interaction), inline: true },
         {
-          name: "Roles",
+          name: t('utility.userinfo_roles', {}, interaction),
           value:
             member && member.roles.cache.size > 1
               ? member.roles.cache
                   .map((r) => r.name)
                   .slice(0, 5)
                   .join(",")
-              : "None",
+              : t('utility.userinfo_none', {}, interaction),
           inline: true,
         },
         {
-          name: "Account Created",
+          name: t('utility.userinfo_account_created', {}, interaction),
           value: `<t:${createdTimestamp}:R>`,
           inline: false,
         },
         {
-          name: "Joined Server",
-          value: joinedTimestamp ? `<t:${joinedTimestamp}:R>` : "Not in server",
+          name: t('utility.userinfo_joined_server', {}, interaction),
+          value: joinedTimestamp ? `<t:${joinedTimestamp}:R>` : t('utility.userinfo_not_in_server', {}, interaction),
           inline: false,
         },
         {
-          name: "Highest Role",
-          value: member?.roles?.highest?.name || "None",
+          name: t('utility.userinfo_highest_role', {}, interaction),
+          value: member?.roles?.highest?.name || t('utility.userinfo_none', {}, interaction),
           inline: true,
         },
       );

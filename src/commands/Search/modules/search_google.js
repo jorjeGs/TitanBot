@@ -1,6 +1,7 @@
 import { createEmbed } from '../../../utils/embeds.js';
 import { logger } from '../../../utils/logger.js';
 import { InteractionHelper } from '../../../utils/interactionHelper.js';
+import { t } from '../../../utils/i18n/index.js';
 
 export default {
     async execute(interaction) {
@@ -8,11 +9,11 @@ export default {
         const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
 
         const embed = createEmbed({
-            title: 'Google Search',
-            description: `[Search for "${query}"](${searchUrl})`,
+            title: t('search.google_title', {}, interaction),
+            description: t('search.google_desc', { query, url: searchUrl }, interaction),
             color: 'info'
         })
-        .setFooter({ text: 'Google Search Results' });
+        .setFooter({ text: t('search.google_footer', {}, interaction) });
 
         await InteractionHelper.safeReply(interaction, { embeds: [embed] });
 

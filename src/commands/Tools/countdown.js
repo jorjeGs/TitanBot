@@ -3,6 +3,7 @@ import { successEmbed } from '../../utils/embeds.js';
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { createControlButtons, formatTime, startCountdown } from '../../handlers/countdownButtons.js';
+import { t } from '../../utils/i18n/index.js';
 
 const activeCountdowns = new Map();
 
@@ -53,21 +54,21 @@ export default {
         const totalSeconds = minutes * 60 + seconds;
 
         if (totalSeconds <= 0) {
-            throw new Error("Please specify a duration of at least 1 second.");
+            throw new Error(t('tools.countdown_min_duration', {}, interaction));
         }
 
         if (totalSeconds > 86400) {
-            throw new Error("Countdown cannot be longer than 24 hours.");
+            throw new Error(t('tools.countdown_max_duration', {}, interaction));
         }
 
         const endTime = Date.now() + totalSeconds * 1000;
         const countdownId = `${interaction.channelId}-${Date.now()}`;
 
-        const row = createControlButtons(countdownId);
+        const row = createControlButtons(countdownId, false, interaction);
 
         const initialEmbed = successEmbed(
             `⏱️ ${title}`,
-            `Time remaining: **${formatTime(totalSeconds)}**`,
+            t('tools.countdown_remaining', { time: formatTime(totalSeconds) }, interaction),
         );
 
         const message = await interaction.channel.send({
@@ -81,6 +82,7 @@ export default {
             remainingTime: totalSeconds * 1000,
             isPaused: false,
             title,
+            guildId: interaction.guildId,
             lastUpdate: Date.now(),
             interval: null,
         };
@@ -89,7 +91,7 @@ export default {
         startCountdown(countdownId, countdownData, activeCountdowns);
 
         await InteractionHelper.safeEditReply(interaction, {
-            content: "✅ Countdown started!",
+            content: t('tools.countdown_started', {}, interaction),
             flags: MessageFlags.Ephemeral,
         });
     },

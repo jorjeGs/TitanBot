@@ -3,8 +3,11 @@ import { createEmbed, errorEmbed, successEmbed, infoEmbed, warningEmbed } from '
 import { logger } from '../../utils/logger.js';
 import { getColor } from '../../config/bot.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 const EMOJIS = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 const MAX_OPTIONS = 10;
+
 export default {
     data: new SlashCommandBuilder()
         .setName('poll')
@@ -79,7 +82,7 @@ export default {
         }
 
         if (options.length < 2) {
-            throw new Error("You must provide at least 2 options for the poll.");
+            throw new Error(t('tools.poll_min_options', {}, interaction));
         }
 
         let description = `**${question}**\n\n`;
@@ -88,13 +91,13 @@ export default {
         });
 
         if (isAnonymous) {
-            description += '\n*This is an anonymous poll. Votes are not tracked to users.*';
+            description += t('tools.poll_anon_notice', {}, interaction);
         } else {
-            description += '\n*React with the emoji to vote!*';
+            description += t('tools.poll_vote_notice', {}, interaction);
         }
 
         const embed = successEmbed(
-            `📊 ${isAnonymous ? 'Anonymous ' : ''}Poll`,
+            isAnonymous ? t('tools.poll_anon_title', {}, interaction) : t('tools.poll_title', {}, interaction),
             description
         );
 
@@ -106,7 +109,7 @@ export default {
         }
 
         await InteractionHelper.safeEditReply(interaction, {
-            content: '✅ Poll created successfully!',
+            content: t('tools.poll_success', {}, interaction),
         });
     },
 };

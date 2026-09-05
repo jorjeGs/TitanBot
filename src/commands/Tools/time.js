@@ -3,6 +3,8 @@ import { createEmbed, successEmbed, infoEmbed, warningEmbed } from '../../utils/
 import { logger } from '../../utils/logger.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
     data: new SlashCommandBuilder()
         .setName('time')
@@ -35,7 +37,7 @@ export default {
                     logger.warn(`Invalid timezone requested: ${timezone}`);
                     await replyUserError(interaction, {
                         type: ErrorTypes.VALIDATION,
-                        message: 'Invalid timezone. Please use a valid timezone identifier (e.g., UTC, America/New_York, Europe/London)',
+                        message: t('tools.time_invalid', {}, interaction),
                     });
                     return;
                 }
@@ -44,15 +46,15 @@ export default {
                 const unixTimestamp = Math.floor(now.getTime() / 1000);
 
                 const embed = successEmbed(
-                    '🕒 Current Time',
+                    t('tools.time_title', {}, interaction),
                     `**${timezone}:** ${timeString}\n` +
-                    `**Unix Timestamp:** \`${unixTimestamp}\`\n` +
-                    `**ISO String:** \`${now.toISOString()}\``
+                    `**${t('tools.time_unix_ts', {}, interaction)}:** \`${unixTimestamp}\`\n` +
+                    `**${t('tools.time_iso', {}, interaction)}:** \`${now.toISOString()}\``
                 );
 
                 await InteractionHelper.safeEditReply(interaction, { embeds: [embed] });
             },
-            'Failed to get current time. Please try again.',
+            t('tools.time_fail', {}, interaction),
             {
                 autoDefer: true,
                 deferOptions: { flags: MessageFlags.Ephemeral }

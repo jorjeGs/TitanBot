@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, ChannelType } from 'discord.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
 
 import report from './modules/report.js';
 import reportSetchannel from './modules/report_setchannel.js';
@@ -53,6 +54,6 @@ export default {
             return await reportSetchannel.execute(interaction, config, client);
         }
 
-        return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'Unknown subcommand.' });
+        return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('utility.report_unknown_subcommand', {}, interaction) });
     },
 };

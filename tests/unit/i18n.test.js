@@ -542,6 +542,46 @@ test('i18n: Complete 100 Commands & 21 Domains Coverage', async (tContext) => {
         assert.equal(t('welcome:dash_title', {}, 'es-419'), '👋 Panel del Sistema de Saludos');
         assert.equal(t('welcome:dash_title', {}, 'de'), '👋 Begrüßungs-Dashboard');
     });
+
+    await tContext.test('search commands are localized in all supported languages', () => {
+        assert.equal(t('search:google_title', {}, 'en-US'), 'Google Search');
+        assert.equal(t('search:google_title', {}, 'es-419'), 'Búsqueda en Google');
+        assert.equal(t('search:google_title', {}, 'de'), 'Google-Suche');
+        assert.equal(t('search:urban_author_anon', {}, 'es-419'), 'Anónimo');
+        assert.equal(t('search:urban_author_anon', {}, 'de'), 'Anonym');
+        assert.equal(t('search:define_default_meaning', {}, 'es-419'), 'Definición');
+        assert.equal(t('search:define_default_meaning', {}, 'de'), 'Definition');
+    });
+
+    await tContext.test('tools commands are localized in all supported languages', () => {
+        assert.equal(t('tools:baseconvert_title_single', {}, 'es-419'), '🔄 Resultado de Conversión de Base');
+        assert.equal(t('tools:baseconvert_title_single', {}, 'de'), '🔄 Basiskonvertierungsergebnis');
+        assert.equal(t('tools:calc_title', {}, 'es-419'), '🧮 Resultado del Cálculo');
+        assert.equal(t('tools:calc_title', {}, 'de'), '🧮 Berechnungsergebnis');
+        assert.equal(t('tools:countdown_started', {}, 'es-419'), '✅ ¡Cuenta regresiva iniciada!');
+        assert.equal(t('tools:countdown_started', {}, 'de'), '✅ Countdown gestartet!');
+        assert.equal(t('tools:embedbuilder_dash_title', {}, 'es-419'), 'Generador de Embeds — Panel de Control');
+        assert.equal(t('tools:embedbuilder_dash_title', {}, 'de'), 'Embed-Baukasten — Bedienfeld');
+        assert.equal(t('tools:embedbuilder_post_sent_title', {}, 'es-419'), 'Embed Enviado');
+        assert.equal(t('tools:embedbuilder_post_sent_title', {}, 'de'), 'Embed gesendet');
+    });
+
+    await tContext.test('utility commands and handlers are localized in all supported languages', () => {
+        assert.equal(t('utility:avatar_title', { user: 'Jorge' }, 'es-419'), 'Avatar de Jorge');
+        assert.equal(t('utility:avatar_title', { user: 'Jorge' }, 'de'), 'Avatar von Jorge');
+        assert.equal(t('utility:firstmsg_title', {}, 'es-419'), 'Primer Mensaje');
+        assert.equal(t('utility:firstmsg_title', {}, 'de'), 'Erste Nachricht');
+        assert.equal(t('utility:serverinfo_title', { name: 'TitanHQ' }, 'es-419'), 'Información del Servidor: TitanHQ');
+        assert.equal(t('utility:serverinfo_title', { name: 'TitanHQ' }, 'de'), 'Server-Info: TitanHQ');
+        assert.equal(t('utility:userinfo_title', { user: 'Jorge' }, 'es-419'), 'Información de Usuario: Jorge');
+        assert.equal(t('utility:userinfo_title', { user: 'Jorge' }, 'de'), 'Benutzer-Info: Jorge');
+        assert.equal(t('utility:weather_title', { city: 'Berlin', country: 'Germany' }, 'es-419'), 'Clima en Berlin, Germany');
+        assert.equal(t('utility:weather_title', { city: 'Berlin', country: 'Germany' }, 'de'), 'Wetter in Berlin, Germany');
+        assert.equal(t('utility:wipedata_cancel_title', {}, 'es-419'), '❌ Borrado de Datos Cancelado');
+        assert.equal(t('utility:wipedata_cancel_title', {}, 'de'), '❌ Datenlöschung abgebrochen');
+        assert.equal(t('utility:todo_shared_created_title', {}, 'es-419'), 'Lista Compartida Creada');
+        assert.equal(t('utility:todo_shared_created_title', {}, 'de'), 'Geteilte Liste erstellt');
+    });
 });
 
 

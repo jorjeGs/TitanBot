@@ -1,17 +1,18 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits } from 'discord.js';
 import { successEmbed } from '../utils/embeds.js';
 import { logger } from '../utils/logger.js';
-
 import { replyUserError, ErrorTypes } from '../utils/errorHandler.js';
-function createControlButtons(countdownId, isPaused = false) {
+import { t } from '../utils/i18n/index.js';
+
+function createControlButtons(countdownId, isPaused = false, context = null) {
     return new ActionRowBuilder().addComponents(
         new ButtonBuilder()
             .setCustomId(`countdown_pause:${countdownId}`)
-            .setLabel(isPaused ? "▶️ Resume" : "⏸️ Pause")
+            .setLabel(isPaused ? t('tools.countdown_btn_resume', {}, context) : t('tools.countdown_btn_pause', {}, context))
             .setStyle(ButtonStyle.Secondary),
         new ButtonBuilder()
             .setCustomId(`countdown_cancel:${countdownId}`)
-            .setLabel("❌ Cancel")
+            .setLabel(t('tools.countdown_btn_cancel', {}, context))
             .setStyle(ButtonStyle.Danger),
     );
 }
@@ -51,7 +52,7 @@ function startCountdown(countdownId, countdownData, activeCountdowns) {
 
                 const embed = successEmbed(
                     `⏱️ ${countdownData.title}`,
-                    `Time remaining: **${formatTime(Math.ceil(remaining / 1000))}**`,
+                    t('tools.countdown_remaining', { time: formatTime(Math.ceil(remaining / 1000)) }, countdownData.guildId),
                 );
 
                 try {
@@ -61,6 +62,7 @@ function startCountdown(countdownId, countdownData, activeCountdowns) {
                             createControlButtons(
                                 countdownId,
                                 countdownData.isPaused,
+                                countdownData.guildId,
                             ),
                         ],
                     });
@@ -73,8 +75,8 @@ function startCountdown(countdownId, countdownData, activeCountdowns) {
                 clearInterval(countdownData.interval);
 
                 const finishedEmbed = successEmbed(
-                    `⏱️ ${countdownData.title} (Finished!)`,
-                    "⏰ Time's up!",
+                    t('tools.countdown_finished_title', { title: countdownData.title }, countdownData.guildId),
+                    t('tools.countdown_finished_desc', {}, countdownData.guildId),
                 );
 
                 await countdownData.message.edit({
@@ -108,14 +110,14 @@ async function countdownButtonHandler(interaction, client, args) {
         const countdownData = activeCountdowns.get(countdownId);
         if (!countdownData) {
             return await interaction.reply({
-                content: "This countdown has expired or was cancelled.",
+                content: t('tools.countdown_expired_or_cancelled', {}, interaction),
                 flags: ["Ephemeral"],
             });
         }
 
         if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
             return await interaction.reply({
-                content: 'You need the "Manage Messages" permission to control countdowns.',
+                content: t('tools.countdown_perm_manage_messages', {}, interaction),
                 flags: ["Ephemeral"],
             });
         }
@@ -130,11 +132,11 @@ async function countdownButtonHandler(interaction, client, args) {
                     const currentEmbed = countdownData.message.embeds[0];
                     await countdownData.message.edit({
                         embeds: [currentEmbed],
-                        components: [createControlButtons(countdownId, false)],
+                        components: [createControlButtons(countdownId, false, interaction)],
                     });
 
                     await interaction.reply({
-                        content: "▶️ Countdown resumed!",
+                        content: t('tools.countdown_resumed', {}, interaction),
                         flags: ["Ephemeral"],
                     });
                 } else {
@@ -145,11 +147,11 @@ async function countdownButtonHandler(interaction, client, args) {
                     const currentEmbed = countdownData.message.embeds[0];
                     await countdownData.message.edit({
                         embeds: [currentEmbed],
-                        components: [createControlButtons(countdownId, true)],
+                        components: [createControlButtons(countdownId, true, interaction)],
                     });
 
                     await interaction.reply({
-                        content: "⏸️ Countdown paused!",
+                        content: t('tools.countdown_paused', {}, interaction),
                         flags: ["Ephemeral"],
                     });
                 }
@@ -159,8 +161,8 @@ async function countdownButtonHandler(interaction, client, args) {
                 clearInterval(countdownData.interval);
 
                 const embed = successEmbed(
-                    `⏱️ ${countdownData.title} (Cancelled)`,
-                    "The countdown was cancelled.",
+                    t('tools.countdown_cancelled_title', { title: countdownData.title }, interaction),
+                    t('tools.countdown_cancelled_desc', {}, interaction),
                 );
 
                 await countdownData.message.edit({
@@ -171,7 +173,7 @@ async function countdownButtonHandler(interaction, client, args) {
                 cleanupCountdown(countdownId, activeCountdowns);
 
                 await interaction.reply({
-                    content: "❌ Countdown cancelled!",
+                    content: t('tools.countdown_cancelled', {}, interaction),
                     flags: ["Ephemeral"],
                 });
                 break;
@@ -179,9 +181,7 @@ async function countdownButtonHandler(interaction, client, args) {
     } catch (error) {
         logger.error('Countdown button handler error:', error);
         try {
-            if (!interaction.replied && !interaction.deferred) {
-                await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'An error occurred controlling the countdown.' });
-            }
+            await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('tools.countdown_err_control', {}, interaction) });
         } catch (err) {
             logger.error('Failed to send error message:', err);
         }

@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, MessageFlags } from 'discord.js';
 import { createEmbed } from '../../utils/embeds.js';
 import { logger } from '../../utils/logger.js';
+import { t } from '../../utils/i18n/index.js';
 
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 export default {
@@ -20,8 +21,8 @@ export default {
     const avatarUrl = user.displayAvatarURL({ size: 2048, dynamic: true });
 
     const embed = createEmbed({ 
-      title: `${user.username}'s Avatar`, 
-      description: `[Download Link](${avatarUrl})` 
+      title: t('utility.avatar_title', { user: user.username }, interaction), 
+      description: t('utility.avatar_download', { url: avatarUrl }, interaction) 
     })
       .setImage(avatarUrl);
 

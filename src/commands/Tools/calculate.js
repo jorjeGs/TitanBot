@@ -4,6 +4,7 @@ import { logger } from '../../utils/logger.js';
 import { replyUserError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { evaluateMathExpression } from '../../utils/safeMathParser.js';
+import { t } from '../../utils/i18n/index.js';
 
 const calculationContexts = new Map();
 
@@ -47,9 +48,7 @@ export default {
         ) {
             return await replyUserError(interaction, {
                 type: ErrorTypes.VALIDATION,
-                message: '**Contains unsupported characters.**\n\n' +
-                    '✅ Supported: Numbers, decimals, + - * / ^ %, sin cos tan sqrt abs log exp, pi e, ()\n' +
-                    '❌ Not supported: Brackets, curly braces, and other symbols'
+                message: t('tools.calc_unsupported_chars', {}, interaction),
             });
         }
 
@@ -66,9 +65,7 @@ export default {
             if (pattern.test(expression)) {
                 return await replyUserError(interaction, {
                     type: ErrorTypes.VALIDATION,
-                    message: '**Contains blocked code patterns.**\n\n' +
-                        '🚫 **Blocked:** import, require, eval, Function, setTimeout, setInterval, process, fs, document, window, fetch, loops, async/await\n\n' +
-                        'Code-like syntax is not allowed in calculations.'
+                    message: t('tools.calc_blocked_code', {}, interaction),
                 });
             }
         }
@@ -92,7 +89,7 @@ export default {
             } else if (typeof result === "boolean") {
                 formattedResult = result ? "true" : "false";
             } else if (result === null || result === undefined) {
-                formattedResult = "No result";
+                formattedResult = t('tools.calc_no_result', {}, interaction);
             } else if (
                 Array.isArray(result) ||
                 typeof result === "object"
@@ -138,15 +135,15 @@ export default {
                     .setStyle(ButtonStyle.Primary),
                 new ButtonBuilder()
                     .setCustomId(`calc_${interaction.id}_history`)
-                    .setLabel("History")
+                    .setLabel(t('tools.calc_btn_history', {}, interaction))
                     .setStyle(ButtonStyle.Secondary),
             );
 
             const embed = successEmbed(
-                "🧮 Calculation Result",
-                `**Expression:** \`${expression.replace(/`/g, "\`")}\`\n` +
-                    `**Result:** \`${formattedResult}\`\n\n` +
-                    `*Use the buttons below to perform operations with the result.*`,
+                t('tools.calc_title', {}, interaction),
+                `**${t('tools.calc_expression', {}, interaction)}:** \`${expression.replace(/`/g, "\`")}\`\n` +
+                    `**${t('tools.calc_result_label', {}, interaction)}:** \`${formattedResult}\`\n\n` +
+                    `*${t('tools.calc_hint', {}, interaction)}*`,
             );
 
             await InteractionHelper.safeEditReply(interaction, {
@@ -178,7 +175,7 @@ export default {
 
                         if (userHistory.length === 0) {
                             await i.followUp({
-                                content: "No calculation history found.",
+                                content: t('tools.calc_no_history', {}, i),
                                 flags: ["Ephemeral"],
                             });
                             return;
@@ -193,7 +190,7 @@ export default {
                             .join("\n\n");
 
                         await i.followUp({
-                            content: `📜 **Your Calculation History**\n\n${historyText}`,
+                            content: `${t('tools.calc_history_title', {}, i)}\n\n${historyText}`,
                             flags: ["Ephemeral"],
                         });
                         return;
@@ -229,7 +226,7 @@ export default {
 
                         await i.showModal({
                             customId: `calc_modal:${operation}`,
-                            title: `Enter a number to ${operation}`,
+                            title: t('tools.calc_modal_title', { operation }, i),
                             components: [
                                 {
                                     type: 1,
@@ -237,8 +234,8 @@ export default {
                                         {
                                             type: 4,
                                             customId: `operand:${contextKey}`,
-                                            label: `Number to ${operator} with ${formattedResult}`,
-                                            placeholder: "Enter a number...",
+                                            label: t('tools.calc_modal_input_label', { operator, result: formattedResult }, i).substring(0, 45),
+                                            placeholder: t('tools.calc_modal_placeholder', {}, i),
                                             style: 1,
                                             required: true,
                                             maxLength: 50,
@@ -251,7 +248,7 @@ export default {
                         logger.error("Failed to show modal:", modalError);
                         if (!i.replied && !i.deferred) {
                             await i.reply({
-                                content: "Failed to open calculator. Please try again.",
+                                content: t('tools.calc_modal_failed', {}, i),
                                 flags: ["Ephemeral"],
                             }).catch(console.error);
                         }
@@ -262,7 +259,7 @@ export default {
                     logger.error("Button interaction error:", error);
                     if (!i.deferred && !i.replied) {
                         await i.followUp({
-                            content: "An error occurred while processing your request.",
+                            content: t('tools.calc_error_processing', {}, i),
                             flags: ["Ephemeral"],
                         }).catch(console.error);
                     }
@@ -277,7 +274,7 @@ export default {
                                 .setCustomId(
                                     `calc_${interaction.id}_expired`,
                                 )
-                                .setLabel("Calculator Expired")
+                                .setLabel(t('tools.calc_expired_btn', {}, interaction))
                                 .setStyle(ButtonStyle.Secondary)
                                 .setDisabled(true),
                         );
@@ -285,8 +282,7 @@ export default {
                     interaction
                         .editReply({
                             components: [disabledRow],
-                            content:
-                                "⏱️ This calculator has expired. Use the command again to perform more calculations.",
+                            content: t('tools.calc_expired_msg', {}, interaction),
                         })
                         .catch(console.error);
                 } else {
@@ -306,24 +302,19 @@ export default {
         } catch (error) {
             logger.error('Calculation error:', error);
 
-            let errorMessage = 'Failed to evaluate the expression.';
+            let errorMessage = t('tools.calc_err_general', {}, interaction);
 
             if (error.message.includes('Unexpected type')) {
-                errorMessage +=
-                    'The expression contains an unsupported operation or function.';
+                errorMessage = t('tools.calc_err_unsupported_op', {}, interaction);
             } else if (error.message.includes('Undefined symbol')) {
-                errorMessage +=
-                    'The expression contains an undefined variable or function.';
+                errorMessage = t('tools.calc_err_undefined_symbol', {}, interaction);
             } else if (error.message.includes('Brackets not balanced')) {
-                errorMessage += 'The expression has unbalanced brackets.';
+                errorMessage = t('tools.calc_err_brackets', {}, interaction);
             } else if (
                 error.message.includes('Unexpected operator') ||
                 error.message.includes('Unexpected character')
             ) {
-                errorMessage +=
-                    'The expression contains an invalid operator or character.';
-            } else {
-                errorMessage += 'Please check the syntax and try again.';
+                errorMessage = t('tools.calc_err_invalid_op', {}, interaction);
             }
 
             await replyUserError(interaction, {
