@@ -3,6 +3,7 @@ import { createEmbed, successEmbed } from '../utils/embeds.js';
 import { performDeletionByCounterId } from '../commands/ServerStats/modules/serverstats_delete.js';
 import { logger } from '../utils/logger.js';
 import { ErrorTypes, replyUserError, handleInteractionError } from '../utils/errorHandler.js';
+import { t } from '../utils/i18n/index.js';
 
 export const counterDeleteActionHandler = {
   name: 'counter-delete',
@@ -19,7 +20,7 @@ export const counterDeleteActionHandler = {
       const [action, counterId, ownerId] = args;
 
       if (!interaction.inGuild()) {
-        await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'This action can only be used in a server.' }).catch(logger.error);
+        await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('community.not_in_guild', {}, interaction) || 'This action can only be used in a server.' }).catch(logger.error);
         return;
       }
 
@@ -29,15 +30,15 @@ export const counterDeleteActionHandler = {
       }
 
       if (ownerId && interaction.user.id !== ownerId) {
-        await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'Only the user who initiated this deletion can use these buttons.' }).catch(logger.error);
+        await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('serverstats.delete_only_author', {}, interaction) }).catch(logger.error);
         return;
       }
 
       if (action === 'cancel') {
         await interaction.editReply({
           embeds: [createEmbed({
-            title: '❌ Cancelled',
-            description: 'Counter deletion cancelled.',
+            title: t('serverstats.delete_cancelled_title', {}, interaction),
+            description: t('serverstats.delete_cancelled_desc', {}, interaction),
             color: 'error'
           })],
           components: []
@@ -50,7 +51,7 @@ export const counterDeleteActionHandler = {
         return;
       }
 
-      const { message } = await performDeletionByCounterId(client, interaction.guild, counterId);
+      const { message } = await performDeletionByCounterId(client, interaction.guild, counterId, interaction);
 
       await interaction.editReply({
         embeds: [successEmbed(message)],

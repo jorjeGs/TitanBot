@@ -14,6 +14,7 @@ import { canControlMusic, VOICE_CHANNEL_DENIAL } from '../services/music/permiss
 import { refreshPlayerMessage } from '../services/music/playerHandler.js';
 import { MUSIC_BUTTON_IDS } from '../services/music/musicEmbeds.js';
 import { replyUserError, ErrorTypes } from '../utils/errorHandler.js';
+import { t } from '../utils/i18n/index.js';
 
 async function handleMusicButton(interaction, client) {
     const player = getPlayer(client, interaction.guild.id);
@@ -22,13 +23,13 @@ async function handleMusicButton(interaction, client) {
 
     if (customId === MUSIC_BUTTON_IDS.QUEUE) {
         if (!player?.current) {
-            return replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: 'Nothing is playing right now.' });
+            return replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: t('music.err_nothing_playing', {}, interaction) });
         }
         if (!canControlMusic(interaction.member, player)) {
-            return replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: VOICE_CHANNEL_DENIAL });
+            return replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: t('music.err_wrong_voice', {}, interaction) });
         }
         guildData.queuePages.set(interaction.user.id, 0);
-        const payload = buildQueueReply(client, interaction.guild.id, 0);
+        const payload = buildQueueReply(client, interaction.guild.id, 0, interaction);
         return interaction.reply({
             embeds: payload.embeds,
             components: payload.components,
@@ -45,14 +46,14 @@ async function handleMusicButton(interaction, client) {
 
     if (queuePaginationIds.includes(customId)) {
         if (!player?.current) {
-            return replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: 'Nothing is playing right now.' });
+            return replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: t('music.err_nothing_playing', {}, interaction) });
         }
         if (!canControlMusic(interaction.member, player)) {
-            return replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: VOICE_CHANNEL_DENIAL });
+            return replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: t('music.err_wrong_voice', {}, interaction) });
         }
 
         await interaction.deferUpdate();
-        const payload = buildQueueReply(client, interaction.guild.id, guildData.queuePages.get(interaction.user.id) || 0);
+        const payload = buildQueueReply(client, interaction.guild.id, guildData.queuePages.get(interaction.user.id) || 0, interaction);
         const totalPages = payload.totalPages;
         let page = payload.page;
 
@@ -74,7 +75,7 @@ async function handleMusicButton(interaction, client) {
         }
 
         guildData.queuePages.set(interaction.user.id, page);
-        const updated = buildQueueReply(client, interaction.guild.id, page);
+        const updated = buildQueueReply(client, interaction.guild.id, page, interaction);
         return interaction.editReply({
             embeds: updated.embeds,
             components: updated.components,
@@ -82,11 +83,11 @@ async function handleMusicButton(interaction, client) {
     }
 
     if (!player) {
-        return replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: 'No music is playing. Use `/play` first.' });
+        return replyUserError(interaction, { type: ErrorTypes.USER_INPUT, message: t('music.err_no_player', {}, interaction) });
     }
 
     if (!canControlMusic(interaction.member, player)) {
-        return replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: VOICE_CHANNEL_DENIAL });
+        return replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: t('music.err_wrong_voice', {}, interaction) });
     }
 
     await interaction.deferUpdate();
@@ -149,7 +150,7 @@ export const musicButtonHandler = {
     async execute(interaction, client) {
         try {
             if (!client.riffy) {
-                return replyUserError(interaction, { type: ErrorTypes.CONFIGURATION, message: 'Music is unavailable — Lavalink is not configured.' });
+                return replyUserError(interaction, { type: ErrorTypes.CONFIGURATION, message: t('music.err_riffy_unavailable', {}, interaction) });
             }
             await handleMusicButton(interaction, client);
         } catch (error) {

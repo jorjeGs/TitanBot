@@ -13,6 +13,7 @@ import {
     getQueuePageSize,
 } from './musicEmbeds.js';
 import { refreshPlayerMessage } from './playerHandler.js';
+import { t } from '../../utils/i18n/index.js';
 
 const YOUTUBE_URL_PATTERN = /(?:youtube\.com|youtu\.be)/i;
 const PLAYER_CONNECT_TIMEOUT_MS = 12_000;
@@ -25,22 +26,22 @@ function getConnectedLavalinkNodes(client) {
     return [...client.riffy.nodeMap.values()].filter((node) => node.connected);
 }
 
-export function assertLavalinkNodeAvailable(client) {
+export function assertLavalinkNodeAvailable(client, target = null) {
     if (!getConnectedLavalinkNodes(client).length) {
         throw new TitanBotError(
             'Lavalink unavailable',
             ErrorTypes.CONFIGURATION,
-            'Music is temporarily unavailable — no Lavalink nodes are connected. Try again shortly or configure your own Lavalink server.',
+            t('music.err_lavalink_unavailable', {}, target),
         );
     }
 }
 
-function assertBotVoicePermissions(channel) {
+function assertBotVoicePermissions(channel, target = null) {
     if (!channel) {
         throw new TitanBotError(
             'Voice channel unavailable',
             ErrorTypes.CONFIGURATION,
-            'Could not access that voice channel.',
+            t('music.err_channel_unavailable', {}, target),
         );
     }
 
@@ -48,12 +49,12 @@ function assertBotVoicePermissions(channel) {
         throw new TitanBotError(
             'Missing voice permissions',
             ErrorTypes.PERMISSION,
-            'I need **Connect** and **Speak** permissions in your voice channel.',
+            t('music.err_missing_permissions', {}, target),
         );
     }
 }
 
-async function waitForPlayerConnection(player) {
+async function waitForPlayerConnection(player, target = null) {
     if (player.connected) {
         return;
     }
@@ -80,13 +81,13 @@ async function waitForPlayerConnection(player) {
         throw new TitanBotError(
             'Voice connection failed',
             ErrorTypes.CONFIGURATION,
-            'Could not connect to the voice channel. Ensure Lavalink is online, the bot has Connect and Speak permissions, then try again.',
+            t('music.err_connection_failed', {}, target),
         );
     }
 }
 
-async function startPlayback(player) {
-    await waitForPlayerConnection(player);
+async function startPlayback(player, target = null) {
+    await waitForPlayerConnection(player, target);
     await player.play();
 }
 
@@ -94,40 +95,40 @@ export function getPlayer(client, guildId) {
     return client.riffy?.players?.get(guildId) || null;
 }
 
-export function assertRiffyAvailable(client) {
+export function assertRiffyAvailable(client, target = null) {
     if (!client.riffy) {
         throw new TitanBotError(
             'Lavalink not configured',
             ErrorTypes.CONFIGURATION,
-            'Music is unavailable — Lavalink is not configured.',
+            t('music.err_riffy_unavailable', {}, target),
         );
     }
 }
 
-export function assertInVoice(member) {
+export function assertInVoice(member, target = null) {
     if (!requireVoiceChannel(member)) {
         throw new TitanBotError(
             'Not in voice channel',
             ErrorTypes.USER_INPUT,
-            'You need to be in a voice channel.',
+            t('music.err_not_in_voice', {}, target || member),
         );
     }
 }
 
-export function assertCanControl(member, player) {
+export function assertCanControl(member, player, target = null) {
     if (!canControlMusic(member, player)) {
         throw new TitanBotError(
             'Wrong voice channel',
             ErrorTypes.PERMISSION,
-            VOICE_CHANNEL_DENIAL,
+            t('music.err_wrong_voice', {}, target || member),
         );
     }
 }
 
 export async function ensurePlayer(client, interaction) {
-    assertRiffyAvailable(client);
-    assertLavalinkNodeAvailable(client);
-    assertInVoice(interaction.member);
+    assertRiffyAvailable(client, interaction);
+    assertLavalinkNodeAvailable(client, interaction);
+    assertInVoice(interaction.member, interaction);
 
     const guildId = interaction.guild.id;
     const guildData = getGuildMusicData(guildId);
@@ -159,13 +160,13 @@ function isDuplicateTrack(player, track) {
 }
 
 export async function joinVoiceChannel(client, interaction) {
-    assertRiffyAvailable(client);
-    assertInVoice(interaction.member);
+    assertRiffyAvailable(client, interaction);
+    assertInVoice(interaction.member, interaction);
 
     const guildId = interaction.guild.id;
     const guildData = getGuildMusicData(guildId);
     const channel = interaction.member.voice.channel;
-    assertBotVoicePermissions(channel);
+    assertBotVoicePermissions(channel, interaction);
     let player = getPlayer(client, guildId);
 
     if (player && player.voiceChannel !== channel.id) {
@@ -190,8 +191,8 @@ export async function joinVoiceChannel(client, interaction) {
     player.setVolume(guildData.volume);
 
     return successEmbed(
-        'Joined Voice Channel',
-        `Connected to **${channel.name}**. Use /play to start music, or /music for playback controls.`,
+        t('music.joined_title', {}, interaction),
+        t('music.joined_desc', { channel: channel.name }, interaction),
     );
 }
 
@@ -200,7 +201,7 @@ export async function playQuery(client, interaction, query) {
         throw new TitanBotError(
             'YouTube URL blocked',
             ErrorTypes.USER_INPUT,
-            'YouTube links are not supported. Try a song name instead.',
+            t('music.err_youtube_blocked', {}, interaction),
         );
     }
 
@@ -228,13 +229,18 @@ export async function playQuery(client, interaction, query) {
         }
 
         if (!player.playing && !player.paused) {
-            await startPlayback(player);
+            await startPlayback(player, interaction);
         }
 
         return {
             embed: successEmbed(
-                'Playlist Added',
-                `**${playlistInfo?.name || 'Playlist'}**\nAdded ${added} of ${tracks.length} track(s).${skipped ? ` Skipped ${skipped} duplicate(s).` : ''}`,
+                t('music.playlist_added_title', {}, interaction),
+                t('music.playlist_added_desc', {
+                    name: playlistInfo?.name || 'Playlist',
+                    added,
+                    total: tracks.length,
+                    skipped: skipped ? t('music.playlist_skipped_dup', { skipped }, interaction) : '',
+                }, interaction),
             ),
         };
     }
@@ -247,14 +253,14 @@ export async function playQuery(client, interaction, query) {
     ) {
         const track = tracks?.[0];
         if (!track) {
-            throw new TitanBotError('No results', ErrorTypes.USER_INPUT, 'No results found for that query.');
+            throw new TitanBotError('No results', ErrorTypes.USER_INPUT, t('music.err_no_results', {}, interaction));
         }
 
         if (isDuplicateTrack(player, track)) {
             throw new TitanBotError(
                 'Duplicate track',
                 ErrorTypes.USER_INPUT,
-                `**${track.info.title}** is already in the queue or playing.`,
+                t('music.err_duplicate_track', { title: track.info.title }, interaction),
             );
         }
 
@@ -265,28 +271,32 @@ export async function playQuery(client, interaction, query) {
         const queuePosition = player.queue.length;
 
         if (willPlayNow) {
-            await startPlayback(player);
+            await startPlayback(player, interaction);
         }
 
         return {
             embed: successEmbed(
-                willPlayNow ? 'Now Playing' : 'Track Added',
+                willPlayNow ? t('music.now_playing_title', {}, interaction) : t('music.track_added_title', {}, interaction),
                 willPlayNow
                     ? `**${track.info.title}**\n${track.info.author}`
-                    : `**${track.info.title}**\n${track.info.author}\nPosition: #${queuePosition} in queue`,
+                    : t('music.track_added_desc', {
+                        title: track.info.title,
+                        author: track.info.author,
+                        position: queuePosition,
+                    }, interaction),
             ),
         };
     }
 
-    throw new TitanBotError('No results', ErrorTypes.USER_INPUT, `No results found. (loadType: ${loadType})`);
+    throw new TitanBotError('No results', ErrorTypes.USER_INPUT, `${t('music.err_no_results', {}, interaction)} (loadType: ${loadType})`);
 }
 
 export async function skipTrack(client, interaction) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player?.current) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'Nothing is playing right now.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_nothing_playing', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
     const title = player.current.info?.title || 'Unknown';
     // Under track-loop, stop() would replay the same track. Clear it so the skip
     // advances; trackStart re-applies the stored loop mode to the next track.
@@ -294,15 +304,15 @@ export async function skipTrack(client, interaction) {
         player.setLoop('none');
     }
     player.stop();
-    return successEmbed('Skipped', `Skipped **${title}**.`);
+    return successEmbed(t('music.skipped_title', {}, interaction), t('music.skipped_desc', { title }, interaction));
 }
 
 export async function stopPlayback(client, interaction) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'No active music player.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_no_player', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
 
     const guildData = getGuildMusicData(interaction.guild.id);
     const queueLength = player.queue?.length || 0;
@@ -315,14 +325,14 @@ export async function stopPlayback(client, interaction) {
             }
         }, 15000);
         return successEmbed(
-            'Confirm Stop',
-            `There are **${queueLength}** tracks in the queue. Run **/music stop** again within 15 seconds to confirm.`,
+            t('music.confirm_stop_title', {}, interaction),
+            t('music.confirm_stop_desc', { count: queueLength }, interaction),
         );
     }
 
     guildData.stopConfirmPending = null;
     await destroyPlayerSession(client, interaction.guild.id, player, guildData);
-    return successEmbed('Stopped', 'Playback stopped and the queue was cleared.');
+    return successEmbed(t('music.stopped_title', {}, interaction), t('music.stopped_desc', {}, interaction));
 }
 
 export async function applyPause(client, guildId) {
@@ -350,59 +360,59 @@ export async function applyResume(client, guildId) {
 export async function pausePlayback(client, interaction) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player?.current) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'Nothing is playing right now.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_nothing_playing', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
 
     if (player.paused) {
-        throw new TitanBotError('Already paused', ErrorTypes.USER_INPUT, 'Playback is already paused.');
+        throw new TitanBotError('Already paused', ErrorTypes.USER_INPUT, t('music.err_already_paused', {}, interaction));
     }
 
     await applyPause(client, interaction.guild.id);
-    return successEmbed('Paused', 'Playback paused.');
+    return successEmbed(t('music.paused', {}, interaction));
 }
 
 export async function resumePlayback(client, interaction) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player?.current) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'Nothing is playing right now.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_nothing_playing', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
 
     if (!player.paused) {
-        throw new TitanBotError('Not paused', ErrorTypes.USER_INPUT, 'Playback is not paused.');
+        throw new TitanBotError('Not paused', ErrorTypes.USER_INPUT, t('music.err_not_paused', {}, interaction));
     }
 
     await applyResume(client, interaction.guild.id);
-    return successEmbed('Resumed', 'Playback resumed.');
+    return successEmbed(t('music.resumed', {}, interaction));
 }
 
 export async function shuffleQueue(client, interaction) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player?.queue?.length) {
-        throw new TitanBotError('Empty queue', ErrorTypes.USER_INPUT, 'The queue is empty.');
+        throw new TitanBotError('Empty queue', ErrorTypes.USER_INPUT, t('music.err_empty_queue', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
     player.queue.shuffle();
     getGuildMusicData(interaction.guild.id).shuffle = true;
     await refreshPlayerMessage(client, interaction.guild.id);
-    return successEmbed('Shuffled', 'The queue has been shuffled.');
+    return successEmbed(t('music.shuffled_title', {}, interaction), t('music.shuffled_desc', {}, interaction));
 }
 
 export async function setLoopMode(client, interaction, mode) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'No active music player.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_no_player', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
 
     const guildData = getGuildMusicData(interaction.guild.id);
     guildData.loop = mode;
     player.setLoop(mode);
 
-    const labels = { none: 'Off', track: 'Track', queue: 'Queue' };
+    const modeLabel = t(`music.loop_${mode}`, {}, interaction) || mode;
     await refreshPlayerMessage(client, interaction.guild.id);
-    return successEmbed('Loop Updated', `Loop mode set to **${labels[mode] || mode}**.`);
+    return successEmbed(t('music.loop_updated_title', {}, interaction), t('music.loop_updated_desc', { mode: modeLabel }, interaction));
 }
 
 export async function toggleLoop(client, interaction) {
@@ -414,15 +424,15 @@ export async function toggleLoop(client, interaction) {
 export async function setVolume(client, interaction, volume) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'No active music player.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_no_player', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
 
     const guildData = getGuildMusicData(interaction.guild.id);
     guildData.volume = Math.max(0, Math.min(100, volume));
     player.setVolume(guildData.volume);
     await refreshPlayerMessage(client, interaction.guild.id);
-    return successEmbed('Volume Updated', `Volume set to **${guildData.volume}%**.`);
+    return successEmbed(t('music.vol_updated_title', {}, interaction), t('music.vol_updated_desc', { volume: guildData.volume }, interaction));
 }
 
 export async function adjustVolume(client, interaction, delta) {
@@ -433,16 +443,16 @@ export async function adjustVolume(client, interaction, delta) {
 export async function seekTrack(client, interaction, seconds) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player?.current) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'Nothing is playing right now.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_nothing_playing', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
 
     const info = player.current.info || {};
     if (info.isStream || info.isSeekable === false) {
         throw new TitanBotError(
             'Not seekable',
             ErrorTypes.USER_INPUT,
-            'This track cannot be seeked (it may be a live stream).',
+            t('music.err_not_seekable', {}, interaction),
         );
     }
 
@@ -451,97 +461,97 @@ export async function seekTrack(client, interaction, seconds) {
         throw new TitanBotError(
             'Seek out of range',
             ErrorTypes.USER_INPUT,
-            `You can only seek up to ${Math.floor(info.length / 1000)}s for this track.`,
+            t('music.err_seek_out_of_range', { seconds: Math.floor(info.length / 1000) }, interaction),
         );
     }
 
     player.seek(position);
     await refreshPlayerMessage(client, interaction.guild.id);
-    return successEmbed('Seeked', `Seeked to **${seconds}s**.`);
+    return successEmbed(t('music.seeked_title', {}, interaction), t('music.seeked_desc', { seconds }, interaction));
 }
 
 export async function removeFromQueue(client, interaction, index) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player?.queue?.length) {
-        throw new TitanBotError('Empty queue', ErrorTypes.USER_INPUT, 'The queue is empty.');
+        throw new TitanBotError('Empty queue', ErrorTypes.USER_INPUT, t('music.err_empty_queue', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
 
     const queueIndex = index - 1;
     if (queueIndex < 0 || queueIndex >= player.queue.length) {
-        throw new TitanBotError('Invalid index', ErrorTypes.USER_INPUT, `Invalid queue position. Queue has ${player.queue.length} track(s).`);
+        throw new TitanBotError('Invalid index', ErrorTypes.USER_INPUT, t('music.err_invalid_index', { count: player.queue.length }, interaction));
     }
 
     const removed = player.queue[queueIndex];
     player.queue.remove(queueIndex);
     await refreshPlayerMessage(client, interaction.guild.id);
-    return successEmbed('Removed', `Removed **${removed.info?.title || 'track'}** from the queue.`);
+    return successEmbed(t('music.removed_title', {}, interaction), t('music.removed_desc', { title: removed.info?.title || 'track' }, interaction));
 }
 
 export async function moveInQueue(client, interaction, from, to) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player?.queue?.length) {
-        throw new TitanBotError('Empty queue', ErrorTypes.USER_INPUT, 'The queue is empty.');
+        throw new TitanBotError('Empty queue', ErrorTypes.USER_INPUT, t('music.err_empty_queue', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
 
     const fromIndex = from - 1;
     const toIndex = to - 1;
     if (fromIndex < 0 || fromIndex >= player.queue.length || toIndex < 0 || toIndex >= player.queue.length) {
-        throw new TitanBotError('Invalid index', ErrorTypes.USER_INPUT, 'Invalid queue positions.');
+        throw new TitanBotError('Invalid index', ErrorTypes.USER_INPUT, t('music.err_invalid_positions', {}, interaction));
     }
 
     const track = player.queue[fromIndex];
     player.queue.remove(fromIndex);
     player.queue.splice(toIndex, 0, track);
     await refreshPlayerMessage(client, interaction.guild.id);
-    return successEmbed('Moved', `Moved **${track.info?.title || 'track'}** to position #${to}.`);
+    return successEmbed(t('music.moved_title', {}, interaction), t('music.moved_desc', { title: track.info?.title || 'track', to }, interaction));
 }
 
 export async function clearQueue(client, interaction) {
     const player = getPlayer(client, interaction.guild.id);
     if (!player?.queue?.length) {
-        throw new TitanBotError('Empty queue', ErrorTypes.USER_INPUT, 'The queue is already empty.');
+        throw new TitanBotError('Empty queue', ErrorTypes.USER_INPUT, t('music.err_empty_queue', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
     player.queue.clear();
     await refreshPlayerMessage(client, interaction.guild.id);
-    return successEmbed('Queue Cleared', 'All queued tracks were removed.');
+    return successEmbed(t('music.cleared_title', {}, interaction), t('music.cleared_desc', {}, interaction));
 }
 
 export async function setTwentyFourSeven(client, interaction, enabled) {
     const guildData = getGuildMusicData(interaction.guild.id);
     guildData.twentyFourSeven = enabled;
     return successEmbed(
-        '24/7 Mode',
+        t('music.mode_247_title', {}, interaction),
         enabled
-            ? '24/7 mode enabled. The bot will stay in the voice channel when the queue ends.'
-            : '24/7 mode disabled. The bot will leave after 30 seconds of idle time.',
+            ? t('music.mode_247_enabled', {}, interaction)
+            : t('music.mode_247_disabled', {}, interaction),
     );
 }
 
-export function buildNowPlayingReply(client, guildId) {
+export function buildNowPlayingReply(client, guildId, target = null) {
     const player = getPlayer(client, guildId);
     if (!player?.current) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'Nothing is playing right now.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_nothing_playing', {}, target || guildId));
     }
     const guildData = getGuildMusicData(guildId);
     return {
-        embeds: [buildNowPlayingEmbed(player.current, player, guildData)],
+        embeds: [buildNowPlayingEmbed(player.current, player, guildData, target || guildId)],
     };
 }
 
-export function buildQueueReply(client, guildId, page = 0) {
+export function buildQueueReply(client, guildId, page = 0, target = null) {
     const player = getPlayer(client, guildId);
     if (!player) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'No active music player.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_no_player', {}, target || guildId));
     }
 
     const totalPages = Math.max(1, Math.ceil((player.queue?.length || 0) / getQueuePageSize()));
     const safePage = Math.min(Math.max(page, 0), totalPages - 1);
 
     return {
-        embeds: [buildQueueEmbed(player.queue, player.current, safePage)],
+        embeds: [buildQueueEmbed(player.queue, player.current, safePage, target || guildId)],
         components: totalPages > 1 ? [buildQueuePaginationRow(safePage, totalPages)] : [],
         page: safePage,
         totalPages,
@@ -585,14 +595,14 @@ export async function destroyPlayerSession(client, guildId, player, guildData, {
 }
 
 export async function leaveVoiceChannel(client, interaction) {
-    assertRiffyAvailable(client);
+    assertRiffyAvailable(client, interaction);
 
     const guildId = interaction.guild.id;
     const player = getPlayer(client, guildId);
     if (!player) {
-        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, 'I am not in a voice channel.');
+        throw new TitanBotError('No player', ErrorTypes.USER_INPUT, t('music.err_not_in_vc', {}, interaction));
     }
-    assertCanControl(interaction.member, player);
+    assertCanControl(interaction.member, player, interaction);
 
     const channel = interaction.guild.channels.cache.get(player.voiceChannel);
     const channelName = channel?.name || 'voice channel';
@@ -600,7 +610,7 @@ export async function leaveVoiceChannel(client, interaction) {
 
     await destroyPlayerSession(client, guildId, player, guildData, { forceDisconnect: true });
 
-    return successEmbed('Left Voice Channel', `Disconnected from **${channelName}**.`);
+    return successEmbed(t('music.left_title', {}, interaction), t('music.left_desc', { channel: channelName }, interaction));
 }
 
 export async function replyMusicSuccess(interaction, embed) {

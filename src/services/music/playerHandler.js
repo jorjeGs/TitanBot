@@ -49,8 +49,8 @@ export async function refreshPlayerMessage(client, guildId) {
         }
 
         const guildData = getGuildMusicData(guildId);
-        const embed = buildNowPlayingEmbed(player.current, player, guildData);
-        const components = buildPlayerButtonRows(player, guildData);
+        const embed = buildNowPlayingEmbed(player.current, player, guildData, guildId);
+        const components = buildPlayerButtonRows(player, guildData, guildId);
         const channelId = guildData.playerChannelId || player.textChannel;
         await editOrSendPlayerMessage(client, guildData, channelId, embed, components);
     } catch (error) {
@@ -142,8 +142,8 @@ export function setupPlayerHandler(client) {
                 guildData.idleTimeout = null;
             }
 
-            const embed = buildNowPlayingEmbed(track, player, guildData);
-            const components = buildPlayerButtonRows(player, guildData);
+            const embed = buildNowPlayingEmbed(track, player, guildData, player.guildId);
+            const components = buildPlayerButtonRows(player, guildData, player.guildId);
             const channelId = guildData.playerChannelId || player.textChannel;
             await editOrSendPlayerMessage(client, guildData, channelId, embed, components);
             startUpdateInterval(client, player.guildId);

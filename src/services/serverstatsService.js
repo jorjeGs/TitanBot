@@ -24,6 +24,8 @@ export const COUNTER_TYPE_CONFIG = {
   }
 };
 
+import { t } from '../utils/i18n/index.js';
+
 function getCounterConfig(type) {
   return COUNTER_TYPE_CONFIG[type] || {
     label: 'Unknown',
@@ -32,12 +34,14 @@ function getCounterConfig(type) {
   };
 }
 
-export function getCounterTypeLabel(type) {
-  return getCounterConfig(type).label;
+export function getCounterTypeLabel(type, target = null) {
+  const translated = t(`serverstats.type_${type}`, {}, target);
+  return (translated && !translated.startsWith('serverstats.')) ? translated : getCounterConfig(type).label;
 }
 
-export function getCounterBaseName(type) {
-  return getCounterConfig(type).baseName;
+export function getCounterBaseName(type, target = null) {
+  const translated = t(`serverstats.base_${type}`, {}, target);
+  return (translated && !translated.startsWith('serverstats.')) ? translated : getCounterConfig(type).baseName;
 }
 
 export function getCounterEmoji(type) {

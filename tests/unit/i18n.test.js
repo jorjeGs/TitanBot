@@ -498,6 +498,50 @@ test('i18n: Complete 100 Commands & 21 Domains Coverage', async (tContext) => {
         assert.equal(t('economy:dashboard_title', {}, 'es-419'), '💰 Panel de Economía');
         assert.equal(t('economy:dashboard_title', {}, 'de'), '💰 Wirtschafts-Dashboard');
     });
+
+    await tContext.test('music strings and player buttons are localized in all supported languages', () => {
+        assert.equal(t('music:joined_title', {}, 'es-419'), 'Conectado al Canal de Voz');
+        assert.equal(t('music:joined_title', {}, 'de'), 'Sprachkanal Beigetreten');
+        assert.equal(t('music:now_playing_title', {}, 'es-419'), 'Reproduciendo Ahora');
+        assert.equal(t('music:now_playing_title', {}, 'de'), 'Jetzt Läuft');
+        assert.equal(t('music:btn_pause', {}, 'es-419'), 'Pausar');
+        assert.equal(t('music:btn_pause', {}, 'de'), 'Pause');
+        assert.equal(t('music:err_empty_queue', {}, 'es-419'), 'La cola de reproducción está vacía.');
+        assert.equal(t('music:err_empty_queue', {}, 'de'), 'Die Warteschlange ist leer.');
+    });
+
+    await tContext.test('serverstats counter types, messages, and buttons are localized in all supported languages', () => {
+        assert.equal(t('serverstats:type_members', {}, 'es-419'), 'Miembros + Bots');
+        assert.equal(t('serverstats:type_members', {}, 'de'), 'Mitglieder + Bots');
+        assert.equal(t('serverstats:type_members_only', {}, 'es-419'), 'Solo Miembros');
+        assert.equal(t('serverstats:type_members_only', {}, 'de'), 'Nur Mitglieder');
+        assert.equal(t('serverstats:create_success_title', {}, 'es-419'), '¡Contador Creado Exitosamente!');
+        assert.equal(t('serverstats:create_success_title', {}, 'de'), 'Zähler Erfolgreich Erstellt!');
+        assert.equal(t('serverstats:delete_btn_confirm', {}, 'es-419'), 'Confirmar Eliminación');
+        assert.equal(t('serverstats:delete_btn_confirm', {}, 'de'), 'Löschen Bestätigen');
+    });
+
+    await tContext.test('logging dashboard, channels, categories, and filters are localized in all supported languages', () => {
+        assert.equal(t('logging:dash_title', {}, 'es-419'), '📝 Panel de Registros');
+        assert.equal(t('logging:dash_title', {}, 'de'), '📝 Protokoll-Dashboard');
+        assert.equal(t('logging:dest_audit', {}, 'es-419'), 'Registro de Auditoría');
+        assert.equal(t('logging:dest_audit', {}, 'de'), 'Audit-Protokoll');
+        assert.equal(t('logging:categories_title', {}, 'es-419'), '📋 Categorías de Eventos');
+        assert.equal(t('logging:categories_title', {}, 'de'), '📋 Ereigniskategorien');
+        assert.equal(t('logging:filters_title', {}, 'es-419'), '🔇 Filtros de Ignorados');
+        assert.equal(t('logging:filters_title', {}, 'de'), '🔇 Ignorierfilter');
+    });
+
+    await tContext.test('welcome, goodbye, autorole, and greet dashboard are localized in all supported languages', () => {
+        assert.equal(t('welcome:welcome_title', {}, 'es-419'), 'Sistema de Bienvenida Configurado');
+        assert.equal(t('welcome:welcome_title', {}, 'de'), 'Willkommenssystem Konfiguriert');
+        assert.equal(t('welcome:goodbye_title', {}, 'es-419'), 'Sistema de Despedida Configurado');
+        assert.equal(t('welcome:goodbye_title', {}, 'de'), 'Abschiedssystem Konfiguriert');
+        assert.equal(t('welcome:autorole_list_title', {}, 'es-419'), 'Rol Autoasignado');
+        assert.equal(t('welcome:autorole_list_title', {}, 'de'), 'Automatisch Zugewiesene Rolle');
+        assert.equal(t('welcome:dash_title', {}, 'es-419'), '👋 Panel del Sistema de Saludos');
+        assert.equal(t('welcome:dash_title', {}, 'de'), '👋 Begrüßungs-Dashboard');
+    });
 });
 
 

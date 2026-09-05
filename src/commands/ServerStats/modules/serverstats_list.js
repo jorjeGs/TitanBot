@@ -3,9 +3,10 @@ import { PermissionFlagsBits } from 'discord.js';
 import { createEmbed } from '../../../utils/embeds.js';
 import { getServerCounters, saveServerCounters, getCounterEmoji as getCounterTypeEmoji, getCounterTypeLabel, getGuildCounterStats } from '../../../services/serverstatsService.js';
 import { logger } from '../../../utils/logger.js';
-
 import { InteractionHelper } from '../../../utils/interactionHelper.js';
 import { replyUserError, ErrorTypes } from '../../../utils/errorHandler.js';
+import { t } from '../../../utils/i18n/index.js';
+
 export async function handleList(interaction, client) {
     const guild = interaction.guild;
 
@@ -17,7 +18,7 @@ export async function handleList(interaction, client) {
     }
 
     if (!interaction.member.permissions.has(PermissionFlagsBits.ManageChannels)) {
-        await replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: 'You need **Manage Channels** permission to view counters.' }).catch(logger.error);
+        await replyUserError(interaction, { type: ErrorTypes.PERMISSION, message: t('serverstats.err_perm_manage', {}, interaction) }).catch(logger.error);
         return;
     }
 
@@ -45,25 +46,25 @@ export async function handleList(interaction, client) {
 
         if (validCounters.length === 0) {
             const embed = createEmbed({
-                title: "Server Counters",
-                description: "No counters have been set up for this server yet.\n\nUse `/serverstats create` to set up your first counter!",
+                title: t('serverstats.list_title', {}, interaction),
+                description: t('serverstats.list_empty_desc', {}, interaction),
                 color: getColor('warning')
             });
 
             embed.addFields({
-                name: "**Available Counter Types**",
-                value: "**Members + Bots** - Total server members\n **Members Only** - Human members only\n **Bots Only** - Bot members only",
+                name: t('serverstats.list_available_types', {}, interaction),
+                value: t('serverstats.list_types_val', {}, interaction),
                 inline: false
             });
 
             embed.addFields({
-                name: "**Usage Examples**",
-                value: "`/serverstats create type:members channel_type:voice category:Stats`\n`/serverstats create type:bots channel_type:text category:Server Info`\n`/serverstats list`",
+                name: t('serverstats.list_examples', {}, interaction),
+                value: t('serverstats.list_examples_val', {}, interaction),
                 inline: false
             });
 
             embed.setFooter({ 
-                text: "Counter System • Automatic updates every 15 minutes" 
+                text: t('serverstats.list_footer', {}, interaction) 
             });
 
             await InteractionHelper.safeEditReply(interaction, { embeds: [embed] }).catch(logger.error);
@@ -71,8 +72,8 @@ export async function handleList(interaction, client) {
         }
 
         const embed = createEmbed({
-            title: `Server Counters (${validCounters.length})`,
-            description: "Here are all the active counters for this server.\n\nCounters automatically update every 15 minutes.",
+            title: `${t('serverstats.list_title', {}, interaction)} (${validCounters.length})`,
+            description: t('serverstats.list_active_desc', {}, interaction),
             color: getColor('info')
         });
 
@@ -81,7 +82,6 @@ export async function handleList(interaction, client) {
             const channel = guild.channels.cache.get(counter.channelId);
             
             if (!channel) {
-                
                 logger.warn(`Counter ${counter.id} still has missing channel after cleanup`);
                 continue;
             }
@@ -91,28 +91,41 @@ export async function handleList(interaction, client) {
             
             embed.addFields({
                 name: `${getCounterTypeEmoji(counter.type)} Counter #${i + 1} - ${channel.name}`,
-                value: `**ID:** \`${counter.id}\`\n**Type:** ${getCounterTypeDisplay(counter.type)}\n**Channel:** ${channel}\n**Current Count:** ${currentCount}\n**Status:** ${status}\n**Created:** ${new Date(counter.createdAt).toLocaleDateString()}`,
+                value: t('serverstats.list_field_val', {
+                    id: counter.id,
+                    type: getCounterTypeDisplay(counter.type, interaction),
+                    channel: channel.toString(),
+                    count: currentCount,
+                    status,
+                    date: new Date(counter.createdAt).toLocaleDateString()
+                }, interaction),
                 inline: false
             });
         }
 
+        const activeCount = validCounters.filter(c => {
+            const channel = guild.channels.cache.get(c.channelId);
+            return channel && channel.name.includes(':');
+        }).length;
+
         embed.addFields({
-            name: "**Statistics**",
-            value: `**Total Counters:** ${validCounters.length}\n**Active Counters:** ${validCounters.filter(c => {
-                const channel = guild.channels.cache.get(c.channelId);
-                return channel && channel.name.includes(':');
-            }).length}\n**Next Update:** <t:${Math.floor(Date.now() / 1000) + 900}:R>`,
+            name: t('serverstats.list_stats_title', {}, interaction),
+            value: t('serverstats.list_stats_val', {
+                total: validCounters.length,
+                active: activeCount,
+                next: Math.floor(Date.now() / 1000) + 900
+            }, interaction),
             inline: false
         });
 
         embed.addFields({
-            name: "**Management Commands**",
-            value: "`/serverstats create` - Create new counter\n`/serverstats update` - Update existing counter\n`/serverstats delete` - Delete counter",
+            name: t('serverstats.list_mgmt_title', {}, interaction),
+            value: t('serverstats.list_mgmt_val', {}, interaction),
             inline: false
         });
 
         embed.setFooter({ 
-            text: "Counter System • Automatic updates every 15 minutes" 
+            text: t('serverstats.list_footer', {}, interaction) 
         });
         embed.setTimestamp();
 
@@ -124,8 +137,8 @@ export async function handleList(interaction, client) {
     }
 }
 
-function getCounterTypeDisplay(type) {
-    return `${getCounterTypeEmoji(type)} ${getCounterTypeLabel(type)}`;
+function getCounterTypeDisplay(type, target = null) {
+    return `${getCounterTypeEmoji(type)} ${getCounterTypeLabel(type, target)}`;
 }
 
 function getCounterEmoji(type) {

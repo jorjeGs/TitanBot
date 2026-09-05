@@ -15,7 +15,7 @@ export default {
     async execute(interaction, config, client) {
         await InteractionHelper.safeDefer(interaction, { flags: MessageFlags.Ephemeral });
         const page = (interaction.options.getInteger('page') || 1) - 1;
-        const payload = buildQueueReply(client, interaction.guild.id, page);
+        const payload = buildQueueReply(client, interaction.guild.id, page, interaction);
         await InteractionHelper.safeEditReply(interaction, {
             embeds: payload.embeds,
             components: payload.components,

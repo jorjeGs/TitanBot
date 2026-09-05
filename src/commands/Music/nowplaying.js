@@ -11,7 +11,7 @@ export default {
 
     async execute(interaction, config, client) {
         await deferMusicCommand(interaction);
-        const payload = buildNowPlayingReply(client, interaction.guild.id);
+        const payload = buildNowPlayingReply(client, interaction.guild.id, interaction);
         await InteractionHelper.safeEditReply(interaction, payload);
     },
 };
