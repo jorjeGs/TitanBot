@@ -44,6 +44,13 @@ import {
   getModerationSettings,
   updateModerationSettings,
 } from '../controllers/moderationController.js';
+import {
+  getGiveaways,
+  createGiveawayHandler,
+  endGiveawayHandler,
+  rerollGiveawayHandler,
+  deleteGiveawayHandler,
+} from '../controllers/giveawayController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
@@ -84,6 +91,13 @@ router.delete('/:guildId/moderation/warnings/:userId/:warningId', verifyAuth, ch
 router.delete('/:guildId/moderation/warnings/:userId', verifyAuth, checkModerationAccess, clearUserWarnings);
 router.get('/:guildId/moderation/config', verifyAuth, checkModerationAccess, getModerationSettings);
 router.patch('/:guildId/moderation/config', verifyAuth, checkModerationAccess, updateModerationSettings);
+
+// Giveaway subroutes protected by checkGuildPermissions
+router.get('/:guildId/giveaways', verifyAuth, checkGuildPermissions, getGiveaways);
+router.post('/:guildId/giveaways', verifyAuth, checkGuildPermissions, createGiveawayHandler);
+router.post('/:guildId/giveaways/:messageId/end', verifyAuth, checkGuildPermissions, endGiveawayHandler);
+router.post('/:guildId/giveaways/:messageId/reroll', verifyAuth, checkGuildPermissions, rerollGiveawayHandler);
+router.delete('/:guildId/giveaways/:messageId', verifyAuth, checkGuildPermissions, deleteGiveawayHandler);
 
 export default router;
 

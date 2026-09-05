@@ -1464,6 +1464,221 @@ describe('API Routes Integration Tests', () => {
     assert.strictEqual(data.moderation.dmOnWarn, false);
   });
 
+  it('GET /api/guilds/:guildId/giveaways returns active and ended giveaways', async () => {
+    const testGuildId = '123456789012345678';
+    const giveawayKey = `guild:${testGuildId}:giveaways`;
+
+    await mockClient.db.set(giveawayKey, {
+      'msg-active-1': {
+        messageId: 'msg-active-1',
+        channelId: '123456789012345679',
+        guildId: testGuildId,
+        prize: 'Discord Nitro 1 Month',
+        hostId: 'admin-user-id',
+        endTime: Date.now() + 3600000,
+        endsAt: Date.now() + 3600000,
+        winnerCount: 1,
+        participants: ['user-1', 'user-2'],
+        isEnded: false,
+        ended: false,
+        createdAt: new Date().toISOString(),
+      },
+      'msg-ended-1': {
+        messageId: 'msg-ended-1',
+        channelId: '123456789012345679',
+        guildId: testGuildId,
+        prize: 'Steam Game Key',
+        hostId: 'admin-user-id',
+        endTime: Date.now() - 3600000,
+        endsAt: Date.now() - 3600000,
+        winnerCount: 1,
+        participants: ['user-3'],
+        winnerIds: ['user-3'],
+        isEnded: true,
+        ended: true,
+        endedAt: new Date(Date.now() - 3600000).toISOString(),
+        createdAt: new Date(Date.now() - 7200000).toISOString(),
+      },
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/giveaways`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.active.length, 1);
+    assert.strictEqual(data.active[0].prize, 'Discord Nitro 1 Month');
+    assert.strictEqual(data.active[0].participantCount, 2);
+    assert.strictEqual(data.ended.length, 1);
+    assert.strictEqual(data.ended[0].prize, 'Steam Game Key');
+    assert.strictEqual(data.ended[0].winnerIds.length, 1);
+  });
+
+  it('POST /api/guilds/:guildId/giveaways rejects invalid payload with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/giveaways`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: '123456789012345679',
+        prize: '', // empty prize
+        durationMinutes: 0, // < 1 min
+        winnerCount: 15, // > 10
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('POST /api/guilds/:guildId/giveaways rejects when bot lacks channel permissions with 422', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    const channel = guild.channels.cache.get(testChannelId);
+
+    // Mock bot lacking permissions
+    const origPerms = channel.permissionsFor;
+    channel.permissionsFor = () => ({
+      has: (flag) => flag !== PermissionFlagsBits.EmbedLinks,
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/giveaways`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: testChannelId,
+        prize: 'Gaming Mouse',
+        durationMinutes: 60,
+        winnerCount: 2,
+      }),
+    });
+
+    channel.permissionsFor = origPerms; // restore
+
+    assert.strictEqual(res.status, 422);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'PermissionError');
+  });
+
+  it('POST /api/guilds/:guildId/giveaways creates and starts giveaway', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/giveaways`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: testChannelId,
+        prize: 'Discord Nitro Classic',
+        durationMinutes: 120,
+        winnerCount: 1,
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.giveaway.prize, 'Discord Nitro Classic');
+    assert.strictEqual(data.giveaway.winnerCount, 1);
+    assert.strictEqual(data.giveaway.isEnded, false);
+  });
+
+  it('POST /api/guilds/:guildId/giveaways/:messageId/end immediately ends active giveaway', async () => {
+    const testGuildId = '123456789012345678';
+    const giveawayKey = `guild:${testGuildId}:giveaways`;
+
+    // Seed active giveaway with participants
+    const giveaways = await mockClient.db.get(giveawayKey) || {};
+    giveaways['msg-active-to-end'] = {
+      messageId: 'msg-active-to-end',
+      channelId: '123456789012345679',
+      guildId: testGuildId,
+      prize: 'Spotify Premium 3 Months',
+      hostId: 'admin-user-id',
+      endTime: Date.now() + 7200000,
+      endsAt: Date.now() + 7200000,
+      winnerCount: 1,
+      participants: ['participant-1', 'participant-2'],
+      isEnded: false,
+      ended: false,
+      createdAt: new Date().toISOString(),
+    };
+    await mockClient.db.set(giveawayKey, giveaways);
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/giveaways/msg-active-to-end/end`, {
+      method: 'POST',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.giveaway.ended, true);
+    assert.strictEqual(data.winners.length, 1);
+  });
+
+  it('POST /api/guilds/:guildId/giveaways/:messageId/reroll rerolls winners for ended giveaway', async () => {
+    const testGuildId = '123456789012345678';
+    const giveawayKey = `guild:${testGuildId}:giveaways`;
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/giveaways/msg-active-to-end/reroll`, {
+      method: 'POST',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.winners.length, 1);
+    assert.ok(['participant-1', 'participant-2'].includes(data.winners[0]));
+  });
+
+  it('DELETE /api/guilds/:guildId/giveaways/:messageId deletes giveaway', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/giveaways/msg-active-to-end`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+
+    const giveawayKey = `guild:${testGuildId}:giveaways`;
+    const giveaways = await mockClient.db.get(giveawayKey);
+    assert.strictEqual(giveaways['msg-active-to-end'], undefined);
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);

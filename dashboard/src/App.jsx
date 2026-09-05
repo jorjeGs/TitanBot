@@ -17,6 +17,7 @@ import { EconomyTab } from './pages/manage/EconomyTab';
 import { ServerStatsTab } from './pages/manage/ServerStatsTab';
 import { JoinToCreateTab } from './pages/manage/JoinToCreateTab';
 import { ModerationTab } from './pages/manage/ModerationTab';
+import { GiveawaysTab } from './pages/manage/GiveawaysTab';
 
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
@@ -37,6 +38,7 @@ export function App() {
             <Route path="welcome" element={<WelcomeTab />} />
             <Route path="roles" element={<RolesTab />} />
             <Route path="moderation" element={<ModerationTab />} />
+            <Route path="giveaways" element={<GiveawaysTab />} />
             <Route path="leveling" element={<LevelingTab />} />
             <Route path="economy" element={<EconomyTab />} />
             <Route path="serverstats" element={<ServerStatsTab />} />

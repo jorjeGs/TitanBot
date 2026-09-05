@@ -119,6 +119,14 @@ export const ModerationConfigSchema = z
   })
   .default({ autoPunish: [], dmOnWarn: true });
 
+export const CreateGiveawaySchema = z.object({
+  channelId: z.string().regex(/^\d{17,19}$/, 'Invalid channel ID'),
+  prize: z.string().trim().min(1, 'Prize is required').max(256, 'Prize is too long'),
+  durationMinutes: z.number().int().min(1, 'Minimum duration is 1 minute').max(43200, 'Maximum duration is 30 days'),
+  winnerCount: z.number().int().min(1, 'Minimum 1 winner').max(10, 'Maximum 10 winners').default(1),
+  requiredRoleId: z.string().regex(/^\d{17,19}$/, 'Invalid role ID').nullable().optional(),
+});
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),

@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   Users,
   ShieldAlert,
+  Gift,
 } from 'lucide-react';
 
 export function Sidebar() {
@@ -29,6 +30,7 @@ export function Sidebar() {
     { to: `/manage/${guildId}/welcome`, label: t('nav.welcome'), icon: Sparkles },
     { to: `/manage/${guildId}/roles`, label: t('nav.roles'), icon: KeyRound },
     { to: `/manage/${guildId}/moderation`, label: t('nav.moderation') || 'Moderación y Seguridad', icon: ShieldAlert },
+    { to: `/manage/${guildId}/giveaways`, label: t('nav.giveaways') || 'Sorteos y Recompensas', icon: Gift },
     { to: `/manage/${guildId}/leveling`, label: t('nav.leveling') || 'Niveles y XP', icon: Trophy },
     { to: `/manage/${guildId}/economy`, label: t('nav.economy') || 'Economía y Tienda', icon: Coins },
     { to: `/manage/${guildId}/serverstats`, label: t('nav.serverstats') || 'Estadísticas del Servidor', icon: BarChart2 },
