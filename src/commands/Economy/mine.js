@@ -3,7 +3,7 @@ import { createEmbed, errorEmbed, successEmbed, infoEmbed, warningEmbed } from '
 import { getEconomyData, setEconomyData } from '../../utils/economy.js';
 import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
-import { t } from '../../utils/i18n.js';
+import { t } from '../../utils/i18n/index.js';
 import { formatDuration } from '../../utils/embeds.js';
 
 const MINE_COOLDOWN = 60 * 60 * 1000;

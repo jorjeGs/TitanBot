@@ -4,7 +4,7 @@ import { getGuildConfig, setGuildConfig } from '../../../services/config/guildCo
 import { InteractionHelper } from '../../../utils/interactionHelper.js';
 import { logger } from '../../../utils/logger.js';
 import { replyUserError, ErrorTypes } from '../../../utils/errorHandler.js';
-import { t } from '../../../utils/i18n.js';
+import { t } from '../../../utils/i18n/index.js';
 
 export default {
     async execute(interaction, config, client) {

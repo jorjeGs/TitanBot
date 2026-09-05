@@ -7,7 +7,7 @@ import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHan
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { botConfig } from '../../config/bot.js';
-import { t } from '../../utils/i18n.js';
+import { t } from '../../utils/i18n/index.js';
 
 const DAILY_COOLDOWN = 24 * 60 * 60 * 1000;
 const DAILY_AMOUNT = botConfig.economy?.dailyAmount ?? 100;

@@ -3,7 +3,7 @@ import { shopItems } from '../../../config/shop/items.js';
 import { getColor } from '../../../config/bot.js';
 import { logger } from '../../../utils/logger.js';
 import { handleInteractionError } from '../../../utils/errorHandler.js';
-import { t } from '../../../utils/i18n.js';
+import { t } from '../../../utils/i18n/index.js';
 
 export default {
     async execute(interaction, config, client) {

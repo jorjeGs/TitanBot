@@ -3,7 +3,7 @@ import { successEmbed, buildUserErrorEmbed } from '../../utils/embeds.js';
 import { getEconomyData, setEconomyData, getMaxBankCapacity } from '../../utils/economy.js';
 import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
-import { t } from '../../utils/i18n.js';
+import { t } from '../../utils/i18n/index.js';
 
 export default {
     data: new SlashCommandBuilder()

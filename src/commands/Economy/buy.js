@@ -5,7 +5,7 @@ import { getEconomyData, setEconomyData } from '../../utils/economy.js';
 import { getGuildConfig } from '../../services/config/guildConfig.js';
 import { withErrorHandling, createError, ErrorTypes } from '../../utils/errorHandler.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
-import { t } from '../../utils/i18n.js';
+import { t } from '../../utils/i18n/index.js';
 
 const SHOP_ITEMS = shopItems;
 
