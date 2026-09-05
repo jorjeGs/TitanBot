@@ -226,6 +226,10 @@ export const SaveEmbedTemplateSchema = z.object({
     ),
 });
 
+export const MusicActionSchema = z.object({
+  action: z.enum(['pause', 'resume', 'skip', 'stop', 'volume', 'shuffle', 'loop']),
+  value: z.union([z.number(), z.string()]).optional(),
+});
 
 export const GuildConfigSchema = z
   .object({

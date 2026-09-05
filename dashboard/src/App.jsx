@@ -21,6 +21,7 @@ import { GiveawaysTab } from './pages/manage/GiveawaysTab';
 import { BirthdaysTab } from './pages/manage/BirthdaysTab';
 import { ApplicationsTab } from './pages/manage/ApplicationsTab';
 import { EmbedCreatorTab } from './pages/manage/EmbedCreatorTab';
+import { MusicTab } from './pages/manage/MusicTab';
 
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
@@ -45,6 +46,7 @@ export function App() {
             <Route path="birthdays" element={<BirthdaysTab />} />
             <Route path="applications" element={<ApplicationsTab />} />
             <Route path="embeds" element={<EmbedCreatorTab />} />
+            <Route path="music" element={<MusicTab />} />
             <Route path="leveling" element={<LevelingTab />} />
             <Route path="economy" element={<EconomyTab />} />
             <Route path="serverstats" element={<ServerStatsTab />} />

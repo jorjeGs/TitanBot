@@ -68,6 +68,10 @@ import {
   saveEmbedTemplateHandler,
   deleteEmbedTemplateHandler,
 } from '../controllers/embedController.js';
+import {
+  getMusicStatusHandler,
+  executeMusicActionHandler,
+} from '../controllers/musicController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
@@ -132,6 +136,10 @@ router.post('/:guildId/embeds/send', verifyAuth, checkGuildPermissions, sendEmbe
 router.get('/:guildId/embeds/templates', verifyAuth, checkGuildPermissions, getEmbedTemplatesHandler);
 router.post('/:guildId/embeds/templates', verifyAuth, checkGuildPermissions, saveEmbedTemplateHandler);
 router.delete('/:guildId/embeds/templates/:templateId', verifyAuth, checkGuildPermissions, deleteEmbedTemplateHandler);
+
+// Music player subroutes protected by checkGuildPermissions
+router.get('/:guildId/music/status', verifyAuth, checkGuildPermissions, getMusicStatusHandler);
+router.post('/:guildId/music/action', verifyAuth, checkGuildPermissions, executeMusicActionHandler);
 
 export default router;
 

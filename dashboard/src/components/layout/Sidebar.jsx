@@ -21,6 +21,7 @@ import {
   Cake,
   ClipboardList,
   LayoutTemplate,
+  Disc3,
 } from 'lucide-react';
 
 export function Sidebar() {
@@ -37,6 +38,7 @@ export function Sidebar() {
     { to: `/manage/${guildId}/birthdays`, label: t('nav.birthdays') || 'Cumpleaños y Aniversarios', icon: Cake },
     { to: `/manage/${guildId}/applications`, label: t('nav.applications') || 'Postulaciones de Staff', icon: ClipboardList },
     { to: `/manage/${guildId}/embeds`, label: t('nav.embeds') || 'Creador de Embeds', icon: LayoutTemplate },
+    { to: `/manage/${guildId}/music`, label: t('nav.music') || 'Música en Vivo', icon: Disc3 },
     { to: `/manage/${guildId}/leveling`, label: t('nav.leveling') || 'Niveles y XP', icon: Trophy },
     { to: `/manage/${guildId}/economy`, label: t('nav.economy') || 'Economía y Tienda', icon: Coins },
     { to: `/manage/${guildId}/serverstats`, label: t('nav.serverstats') || 'Estadísticas del Servidor', icon: BarChart2 },

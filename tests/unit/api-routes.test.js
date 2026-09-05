@@ -2170,6 +2170,222 @@ describe('API Routes Integration Tests', () => {
     assert.strictEqual(getData3.templates.some((t) => t.id === tplId), false);
   });
 
+  it('GET /api/guilds/:guildId/music/status returns idle state when no player is active', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    mockClient.riffy = {
+      nodeMap: new Map([['node-1', { name: 'Node 1 (Lavalink)', connected: true }]]),
+      players: new Map(),
+    };
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/music/status`, {
+      headers: { Cookie: `titanbot_session=${token}` },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.isPlaying, false);
+    assert.strictEqual(data.current, null);
+    assert.deepStrictEqual(data.queue, []);
+    assert.strictEqual(data.nodes.length, 1);
+    assert.strictEqual(data.nodes[0].connected, true);
+  });
+
+  it('POST /api/guilds/:guildId/music/action rejects invalid action with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/music/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        action: 'invalid_action_xyz',
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('POST /api/guilds/:guildId/music/action rejects controlling idle player with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    mockClient.riffy = {
+      nodeMap: new Map(),
+      players: new Map(),
+    };
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/music/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        action: 'pause',
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'NoActivePlayer');
+  });
+
+  it('GET and POST /api/guilds/:guildId/music/status & action manages active player', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    let destroyed = false;
+    const mockPlayer = {
+      connected: true,
+      playing: true,
+      paused: false,
+      position: 45000,
+      volume: 80,
+      loop: 'none',
+      voiceChannel: testChannelId,
+      current: {
+        info: {
+          title: 'TitanBot Anthem',
+          author: 'TitanBot Records',
+          length: 210000,
+          thumbnail: 'https://example.com/anthem.jpg',
+          uri: 'https://example.com/anthem',
+          requester: { id: 'admin-user-id', username: 'Admin' },
+        },
+      },
+      queue: [
+        {
+          info: {
+            title: 'Community Beat',
+            author: 'Titan DJ',
+            length: 180000,
+            thumbnail: 'https://example.com/beat.jpg',
+            uri: 'https://example.com/beat',
+          },
+        },
+      ],
+      pause(state) {
+        this.paused = state;
+        this.playing = !state;
+      },
+      stop() {
+        this.current = this.queue.shift() || null;
+      },
+      destroy() {
+        this.current = null;
+        this.queue = [];
+        this.playing = false;
+        this.connected = false;
+        destroyed = true;
+      },
+      setVolume(vol) {
+        this.volume = vol;
+      },
+      setLoop(mode) {
+        this.loop = mode;
+      },
+    };
+
+    mockClient.riffy = {
+      nodeMap: new Map([['main', { name: 'Main Lavalink', connected: true }]]),
+      players: new Map([[testGuildId, mockPlayer]]),
+    };
+
+    // 1. GET status of active player
+    const getRes = await fetch(`${baseUrl}/guilds/${testGuildId}/music/status`, {
+      headers: { Cookie: `titanbot_session=${token}` },
+    });
+    assert.strictEqual(getRes.status, 200);
+    const getData = await getRes.json();
+    assert.strictEqual(getData.success, true);
+    assert.strictEqual(getData.isPlaying, true);
+    assert.strictEqual(getData.current.title, 'TitanBot Anthem');
+    assert.strictEqual(getData.queue.length, 1);
+    assert.strictEqual(getData.queue[0].title, 'Community Beat');
+    assert.strictEqual(getData.volume, 80);
+
+    // 2. Pause
+    const pauseRes = await fetch(`${baseUrl}/guilds/${testGuildId}/music/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({ action: 'pause' }),
+    });
+    assert.strictEqual(pauseRes.status, 200);
+    assert.strictEqual(mockPlayer.paused, true);
+
+    // 3. Resume
+    const resumeRes = await fetch(`${baseUrl}/guilds/${testGuildId}/music/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({ action: 'resume' }),
+    });
+    assert.strictEqual(resumeRes.status, 200);
+    assert.strictEqual(mockPlayer.paused, false);
+
+    // 4. Volume
+    const volRes = await fetch(`${baseUrl}/guilds/${testGuildId}/music/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({ action: 'volume', value: 95 }),
+    });
+    assert.strictEqual(volRes.status, 200);
+    assert.strictEqual(mockPlayer.volume, 95);
+
+    // 5. Loop mode
+    const loopRes = await fetch(`${baseUrl}/guilds/${testGuildId}/music/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({ action: 'loop', value: 'queue' }),
+    });
+    assert.strictEqual(loopRes.status, 200);
+    assert.strictEqual(mockPlayer.loop, 'queue');
+
+    // 6. Skip
+    const skipRes = await fetch(`${baseUrl}/guilds/${testGuildId}/music/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({ action: 'skip' }),
+    });
+    assert.strictEqual(skipRes.status, 200);
+    assert.strictEqual(mockPlayer.current.info.title, 'Community Beat');
+
+    // 7. Stop
+    const stopRes = await fetch(`${baseUrl}/guilds/${testGuildId}/music/action`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({ action: 'stop' }),
+    });
+    assert.strictEqual(stopRes.status, 200);
+    assert.strictEqual(destroyed, true);
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);
