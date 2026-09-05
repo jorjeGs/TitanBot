@@ -1,0 +1,99 @@
+{
+  "common": {
+    "save": "Guardar Cambios",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "discard": "Descartar",
+    "loading": "Cargando...",
+    "success": "¡Configuración guardada exitosamente!",
+    "error": "Error al guardar la configuración. Por favor intenta de nuevo.",
+    "unsavedChanges": "Tienes cambios sin guardar",
+    "logout": "Cerrar Sesión",
+    "loginWithDiscord": "Iniciar sesión con Discord",
+    "manage": "Administrar",
+    "inviteBot": "Invitar Bot",
+    "backToServers": "Volver a Servidores",
+    "selectServer": "Seleccionar Servidor",
+    "notSet": "No configurado",
+    "enabled": "Activado",
+    "disabled": "Desactivado",
+    "none": "Ninguno"
+  },
+  "nav": {
+    "general": "Ajustes Generales",
+    "welcome": "Bienvenida y Roles",
+    "logging": "Logs y Auditoría",
+    "commands": "Gestor de Comandos",
+    "verification": "Verificación",
+    "switchServer": "Cambiar Servidor",
+    "language": "Idioma"
+  },
+  "landing": {
+    "heroTitle": "Gestión Potente de Comunidades para Discord",
+    "heroSubtitle": "Configura TitanBot fácilmente con un panel web moderno en tiempo real. Gestiona mensajes de bienvenida, registros de auditoría, permisos de comandos y localización multilingüe en segundos.",
+    "getStarted": "Comenzar con Discord",
+    "liveStats": "Estadísticas del Bot en Vivo",
+    "activeServers": "Servidores",
+    "loadedCommands": "Comandos Cargados",
+    "botStatus": "Estado Operativo",
+    "statusOnline": "En línea y listo"
+  },
+  "servers": {
+    "title": "Selecciona un Servidor para Administrar",
+    "subtitle": "Puedes configurar cualquier servidor donde tengas permisos de Administrador o Gestionar Servidor.",
+    "botActive": "Bot Activo",
+    "botNotInvited": "No está en el Servidor",
+    "search": "Buscar servidores..."
+  },
+  "general": {
+    "title": "Ajustes Generales",
+    "subtitle": "Personaliza los ajustes clave del bot, idioma, prefijo de texto y roles de administración.",
+    "botLanguage": "Idioma del Bot",
+    "botLanguageHelp": "Controla el idioma que TitanBot utiliza en respuestas e interacciones en este servidor.",
+    "botPrefix": "Prefijo de Comandos de Texto",
+    "botPrefixHelp": "Prefijo utilizado para comandos tradicionales (1-5 caracteres). Por defecto es '!'.",
+    "adminRole": "Rol de Administrador",
+    "adminRoleHelp": "Los miembros con este rol pueden ejecutar comandos de nivel administrador.",
+    "modRole": "Rol de Moderador",
+    "modRoleHelp": "Los miembros con este rol pueden ejecutar comandos de moderación como /ban, /kick y /timeout."
+  },
+  "welcome": {
+    "title": "Bienvenida y Rol Automático",
+    "subtitle": "Recibe a nuevos miembros con mensajes personalizados y asígnales roles automáticamente.",
+    "channel": "Canal de Bienvenida",
+    "channelHelp": "El canal de texto donde se publicarán los mensajes de bienvenida.",
+    "message": "Mensaje de Bienvenida",
+    "messageHelp": "Personaliza tu mensaje. Puedes usar variables: {user}, {server}, {memberCount}.",
+    "autoRole": "Rol Automático (AutoRole)",
+    "autoRoleHelp": "Rol otorgado a los miembros inmediatamente al unirse al servidor.",
+    "livePreview": "Vista Previa en Tiempo Real de Discord",
+    "previewTitle": "Vista Previa en Discord",
+    "placeholdersNote": "Las variables {user}, {server} y {memberCount} se sustituirán dinámicamente cuando un usuario se una."
+  },
+  "logging": {
+    "title": "Logs y Auditoría",
+    "subtitle": "Registra eventos importantes del servidor, sanciones de moderación y reportes de usuarios.",
+    "enableLogging": "Activar Sistema de Logs",
+    "enableLoggingHelp": "Habilita o deshabilita el registro de actividad del servidor.",
+    "auditChannel": "Canal de Auditoría",
+    "auditChannelHelp": "Canal donde se guardarán las acciones de moderación y eventos de auditoría.",
+    "reportsChannel": "Canal de Reportes",
+    "reportsChannelHelp": "Canal donde se enviarán los reportes y postulaciones de la comunidad."
+  },
+  "commands": {
+    "title": "Gestor de Comandos",
+    "subtitle": "Activa o desactiva categorías completas de comandos o slash commands individuales en tu servidor.",
+    "allCommands": "Todos los Comandos",
+    "searchPlaceholder": "Buscar comandos por nombre o descripción...",
+    "categoryToggle": "Categoría Habilitada",
+    "commandsCount": "{{count}} comandos",
+    "disableAll": "Desactivar Todos",
+    "enableAll": "Activar Todos"
+  },
+  "verification": {
+    "title": "Verificación de Miembros",
+    "subtitle": "Protege tu comunidad requiriendo que los nuevos usuarios completen una verificación antes de acceder.",
+    "enableVerification": "Activar Verificación de Miembros",
+    "verificationHelp": "Al activarse, los nuevos usuarios deberán verificarse antes de interactuar en la comunidad."
+  }
+}

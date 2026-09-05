@@ -4,6 +4,8 @@ import { REST } from '@discordjs/rest';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cron from 'node-cron';
+import fs from 'fs';
+import path from 'path';
 import { createApiRouter } from './api/routes/index.js';
 
 import config from './config/application.js';
@@ -211,13 +213,26 @@ class TitanBot extends Client {
       });
     });
 
-    app.get('/', (req, res) => {
-      res.status(200).json({ 
-        message: 'TitanBot System Online',
-        version: pkg.version,
-        timestamp: new Date().toISOString()
+    // Serve dashboard static assets & SPA fallback
+    const distPath = path.resolve('dashboard/dist');
+    if (fs.existsSync(distPath)) {
+      app.use(express.static(distPath));
+
+      app.use((req, res, next) => {
+        if (req.path.startsWith('/api') || req.path === '/health' || req.path === '/ready') {
+          return next();
+        }
+        res.sendFile(path.join(distPath, 'index.html'));
       });
-    });
+    } else {
+      app.get('/', (req, res) => {
+        res.status(200).json({ 
+          message: 'TitanBot System Online (Dashboard not built)',
+          version: pkg.version,
+          timestamp: new Date().toISOString()
+        });
+      });
+    }
 
     const startServer = (port, attempt = 0) => {
       let hasStartedListening = false;

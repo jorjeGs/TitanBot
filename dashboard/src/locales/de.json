@@ -1,0 +1,99 @@
+{
+  "common": {
+    "save": "Änderungen speichern",
+    "saving": "Speichern...",
+    "cancel": "Abbrechen",
+    "discard": "Verwerfen",
+    "loading": "Laden...",
+    "success": "Konfiguration erfolgreich gespeichert!",
+    "error": "Fehler beim Speichern der Konfiguration. Bitte versuche es erneut.",
+    "unsavedChanges": "Du hast ungespeicherte Änderungen",
+    "logout": "Abmelden",
+    "loginWithDiscord": "Mit Discord anmelden",
+    "manage": "Verwalten",
+    "inviteBot": "Bot einladen",
+    "backToServers": "Zurück zur Serverübersicht",
+    "selectServer": "Server auswählen",
+    "notSet": "Nicht konfiguriert",
+    "enabled": "Aktiviert",
+    "disabled": "Deaktiviert",
+    "none": "Keine"
+  },
+  "nav": {
+    "general": "Allgemeine Einstellungen",
+    "welcome": "Willkommen & Rollen",
+    "logging": "Protokolle & Audit",
+    "commands": "Befehlsverwaltung",
+    "verification": "Verifizierung",
+    "switchServer": "Server wechseln",
+    "language": "Sprache"
+  },
+  "landing": {
+    "heroTitle": "Leistungsstarke Community-Verwaltung für Discord",
+    "heroSubtitle": "Konfiguriere TitanBot mühelos über ein modernes Echtzeit-Web-Dashboard. Verwalte Willkommensnachrichten, Audit-Logs, Befehlsberechtigungen und mehrsprachige Lokalisierung in Sekunden.",
+    "getStarted": "Jetzt mit Discord starten",
+    "liveStats": "Live-Bot-Statistiken",
+    "activeServers": "Server",
+    "loadedCommands": "Geladene Befehle",
+    "botStatus": "Betriebsstatus",
+    "statusOnline": "Online & Einsatzbereit"
+  },
+  "servers": {
+    "title": "Wähle einen Server zur Verwaltung",
+    "subtitle": "Du kannst jeden Server konfigurieren, auf dem du Administrator- oder Server-Verwalten-Rechte hast.",
+    "botActive": "Bot Aktiv",
+    "botNotInvited": "Nicht auf dem Server",
+    "search": "Server suchen..."
+  },
+  "general": {
+    "title": "Allgemeine Einstellungen",
+    "subtitle": "Passe wichtige Bot-Einstellungen, Sprache, Textpräfix und administrative Rollen an.",
+    "botLanguage": "Bot-Sprache",
+    "botLanguageHelp": "Steuert die Sprache, die TitanBot für Antworten und Embeds auf diesem Server verwendet.",
+    "botPrefix": "Befehlspräfix",
+    "botPrefixHelp": "Präfix für Textbefehle (1-5 Zeichen). Standard ist '!'.",
+    "adminRole": "Administrator-Rolle",
+    "adminRoleHelp": "Mitglieder mit dieser Rolle können Administratorbefehle des Bots ausführen.",
+    "modRole": "Moderator-Rolle",
+    "modRoleHelp": "Mitglieder mit dieser Rolle können Moderationsbefehle wie /ban, /kick und /timeout ausführen."
+  },
+  "welcome": {
+    "title": "Willkommen & Automatische Rollen",
+    "subtitle": "Begrüße neue Community-Mitglieder mit personalisierten Nachrichten und weise Starter-Rollen zu.",
+    "channel": "Willkommenskanal",
+    "channelHelp": "Der Textkanal, in dem Willkommensnachrichten gepostet werden.",
+    "message": "Willkommensnachricht",
+    "messageHelp": "Passe deine Begrüßung an. Verfügbare Variablen: {user}, {server}, {memberCount}.",
+    "autoRole": "Automatische Rolle (AutoRole)",
+    "autoRoleHelp": "Rolle, die Mitgliedern beim Beitritt zum Server automatisch zugewiesen wird.",
+    "livePreview": "Discord Live-Vorschau",
+    "previewTitle": "Discord-Vorschau",
+    "placeholdersNote": "Die Variablen {user}, {server} und {memberCount} werden dynamisch ersetzt, wenn ein Mitglied beitritt."
+  },
+  "logging": {
+    "title": "Protokolle & Audit",
+    "subtitle": "Verfolge wichtige Serverereignisse, Moderationsaktionen und Benutzerberichte in dedizierten Kanälen.",
+    "enableLogging": "Server-Protokollierung aktivieren",
+    "enableLoggingHelp": "Aktiviert oder deaktiviert die Protokollierung der Serveraktivitäten.",
+    "auditChannel": "Audit-Log-Kanal",
+    "auditChannelHelp": "Kanal für Moderationsmaßnahmen und Server-Audit-Einträge.",
+    "reportsChannel": "Berichtskanal",
+    "reportsChannelHelp": "Kanal für Community-Meldungen und Bewerbungen."
+  },
+  "commands": {
+    "title": "Befehlsverwaltung",
+    "subtitle": "Aktiviere oder deaktiviere ganze Befehlskategorien oder einzelne Slash-Befehle auf deinem Server.",
+    "allCommands": "Alle Befehle",
+    "searchPlaceholder": "Befehle nach Name oder Beschreibung durchsuchen...",
+    "categoryToggle": "Kategorie aktiviert",
+    "commandsCount": "{{count}} Befehle",
+    "disableAll": "Alle deaktivieren",
+    "enableAll": "Alle aktivieren"
+  },
+  "verification": {
+    "title": "Server-Verifizierung",
+    "subtitle": "Schütze deine Community, indem neue Mitglieder vor dem Zugriff eine Verifizierung abschließen müssen.",
+    "enableVerification": "Mitglieder-Verifizierung aktivieren",
+    "verificationHelp": "Wenn aktiviert, müssen neue Mitglieder sich verifizieren, bevor sie interagieren können."
+  }
+}

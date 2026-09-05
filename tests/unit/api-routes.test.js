@@ -2,6 +2,8 @@ import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert';
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import fs from 'fs';
+import path from 'path';
 import { createApiRouter } from '../../src/api/routes/index.js';
 import { createSessionToken } from '../../src/api/utils/tokenHelper.js';
 import { Collection, PermissionFlagsBits } from 'discord.js';
@@ -9,6 +11,7 @@ import { Collection, PermissionFlagsBits } from 'discord.js';
 describe('API Routes Integration Tests', () => {
   let server;
   let baseUrl;
+  let rootUrl;
   let mockClient;
 
   before(async () => {
@@ -113,10 +116,22 @@ describe('API Routes Integration Tests', () => {
     app.use(express.json());
     app.use('/api', createApiRouter(mockClient));
 
+    const distPath = path.resolve('dashboard/dist');
+    if (fs.existsSync(distPath)) {
+      app.use(express.static(distPath));
+      app.use((req, res, next) => {
+        if (req.path.startsWith('/api') || req.path === '/health' || req.path === '/ready') {
+          return next();
+        }
+        res.sendFile(path.join(distPath, 'index.html'));
+      });
+    }
+
     await new Promise((resolve) => {
       server = app.listen(0, () => {
         const port = server.address().port;
         baseUrl = `http://localhost:${port}/api`;
+        rootUrl = `http://localhost:${port}`;
         resolve();
       });
     });
@@ -292,5 +307,19 @@ describe('API Routes Integration Tests', () => {
     const data = await res.json();
     assert.strictEqual(data.success, false);
     assert.ok(data.message.includes('Prefix must be'));
+  });
+
+  it('GET / serves the dashboard index.html when dist exists', async () => {
+    const res = await fetch(`${rootUrl}/`);
+    assert.strictEqual(res.status, 200);
+    const text = await res.text();
+    assert.ok(text.includes('<div id="root">') || text.includes('TitanBot Dashboard'));
+  });
+
+  it('GET /servers serves the dashboard index.html (SPA client fallback)', async () => {
+    const res = await fetch(`${rootUrl}/servers`);
+    assert.strictEqual(res.status, 200);
+    const text = await res.text();
+    assert.ok(text.includes('<div id="root">') || text.includes('TitanBot Dashboard'));
   });
 });

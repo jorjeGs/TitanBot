@@ -48,6 +48,8 @@ build/Release
 
 # Dependency directories
 node_modules/
+dashboard/node_modules/
+dashboard/dist/
 jspm_packages/
 
 # Snowpack dependency directory (https:

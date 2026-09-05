@@ -1,0 +1,99 @@
+{
+  "common": {
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "discard": "Discard",
+    "loading": "Loading...",
+    "success": "Configuration saved successfully!",
+    "error": "Failed to save configuration. Please try again.",
+    "unsavedChanges": "You have unsaved changes",
+    "logout": "Log Out",
+    "loginWithDiscord": "Login with Discord",
+    "manage": "Manage",
+    "inviteBot": "Invite Bot",
+    "backToServers": "Back to Servers",
+    "selectServer": "Select a Server",
+    "notSet": "Not configured",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "none": "None"
+  },
+  "nav": {
+    "general": "General Settings",
+    "welcome": "Welcome & Roles",
+    "logging": "Logs & Audit",
+    "commands": "Command Manager",
+    "verification": "Verification",
+    "switchServer": "Switch Server",
+    "language": "Language"
+  },
+  "landing": {
+    "heroTitle": "Powerful Community Management for Discord",
+    "heroSubtitle": "Configure TitanBot effortlessly with a modern, real-time web dashboard. Manage welcome messages, audit logs, command permissions, and multilingual localization in seconds.",
+    "getStarted": "Get Started with Discord",
+    "liveStats": "Live Bot Statistics",
+    "activeServers": "Servers",
+    "loadedCommands": "Commands Loaded",
+    "botStatus": "Operational Status",
+    "statusOnline": "Online & Ready"
+  },
+  "servers": {
+    "title": "Select a Server to Manage",
+    "subtitle": "You can configure any server where you have Administrator or Manage Server permissions.",
+    "botActive": "Bot Active",
+    "botNotInvited": "Not in Server",
+    "search": "Search servers..."
+  },
+  "general": {
+    "title": "General Settings",
+    "subtitle": "Customize core bot settings, language, text command prefix, and elevated management roles.",
+    "botLanguage": "Bot Language",
+    "botLanguageHelp": "Controls the language TitanBot uses for command replies and embeds on this server.",
+    "botPrefix": "Text Command Prefix",
+    "botPrefixHelp": "Prefix used for legacy text commands (1-5 characters). Default is '!'.",
+    "adminRole": "Administrator Role",
+    "adminRoleHelp": "Members with this role can run bot administrator commands.",
+    "modRole": "Moderator Role",
+    "modRoleHelp": "Members with this role can execute moderation commands like /ban, /kick, and /timeout."
+  },
+  "welcome": {
+    "title": "Welcome & Auto-Role",
+    "subtitle": "Greet new community members with personalized messages and automatically assign starter roles.",
+    "channel": "Welcome Channel",
+    "channelHelp": "The text channel where welcome greeting cards will be posted.",
+    "message": "Welcome Message",
+    "messageHelp": "Customize your greeting. You can use variables: {user}, {server}, {memberCount}.",
+    "autoRole": "Automatic Role (AutoRole)",
+    "autoRoleHelp": "The role given to members immediately when they join the server.",
+    "livePreview": "Live Discord Message Preview",
+    "previewTitle": "Discord Preview",
+    "placeholdersNote": "Variables {user}, {server}, and {memberCount} will be dynamically rendered when a user joins."
+  },
+  "logging": {
+    "title": "Logs & Audit",
+    "subtitle": "Track important server events, moderation actions, and user reports in dedicated channels.",
+    "enableLogging": "Enable Server Logging",
+    "enableLoggingHelp": "Toggle server activity logging on or off.",
+    "auditChannel": "Audit Log Channel",
+    "auditChannelHelp": "Channel where moderation actions and server audit entries will be recorded.",
+    "reportsChannel": "User Reports Channel",
+    "reportsChannelHelp": "Channel where community reports and applications will be sent."
+  },
+  "commands": {
+    "title": "Command Manager",
+    "subtitle": "Enable or disable entire command categories or individual slash commands on your server.",
+    "allCommands": "All Commands",
+    "searchPlaceholder": "Search commands by name or description...",
+    "categoryToggle": "Category Enabled",
+    "commandsCount": "{{count}} commands",
+    "disableAll": "Disable All",
+    "enableAll": "Enable All"
+  },
+  "verification": {
+    "title": "Server Verification",
+    "subtitle": "Protect your community by requiring new members to complete a verification check before gaining access.",
+    "enableVerification": "Enable Member Verification",
+    "verificationHelp": "When enabled, newcomers will need to complete verification before interacting in the community."
+  }
+}
