@@ -50,9 +50,10 @@ const VerificationConfigSchema = z
     enabled: z.boolean().default(false),
     channelId: z.string().nullable().optional(),
     messageId: z.string().nullable().optional(),
-    roleId: z.string().optional(),
-    message: z.string().optional(),
-    buttonText: z.string().default('Verify'),
+    roleId: z.string().nullable().optional(),
+    unverifiedRoleId: z.string().nullable().optional(),
+    message: z.string().nullable().optional(),
+    buttonText: z.string().default('Verify').optional(),
     autoVerify: AutoVerifyConfigSchema
   })
   .optional();
@@ -67,6 +68,7 @@ export const GuildConfigSchema = z
     welcomeChannel: z.string().nullable().optional(),
     welcomeMessage: z.string().optional(),
     autoRole: z.string().nullable().optional(),
+    autoRoles: z.array(z.string()).default([]).optional(),
     dmOnClose: z.boolean().optional(),
     reportChannelId: z.string().nullable().optional(),
     birthdayChannelId: z.string().nullable().optional(),

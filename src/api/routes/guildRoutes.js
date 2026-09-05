@@ -13,6 +13,7 @@ import {
   createGuildReactionRole,
   deleteGuildReactionRole,
 } from '../controllers/reactRoleController.js';
+import { publishVerificationPanel } from '../controllers/verificationController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 
@@ -31,5 +32,6 @@ router.patch('/:guildId/commands', verifyAuth, checkGuildPermissions, updateGuil
 router.get('/:guildId/reactroles', verifyAuth, checkGuildPermissions, getGuildReactionRoles);
 router.post('/:guildId/reactroles', verifyAuth, checkGuildPermissions, createGuildReactionRole);
 router.delete('/:guildId/reactroles/:messageId', verifyAuth, checkGuildPermissions, deleteGuildReactionRole);
+router.post('/:guildId/verification/publish', verifyAuth, checkGuildPermissions, publishVerificationPanel);
 
 export default router;

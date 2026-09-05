@@ -574,6 +574,107 @@ describe('API Routes Integration Tests', () => {
     assert.strictEqual(verifyData.panels.length, 0);
   });
 
+  it('PATCH /api/guilds/:guildId/config updates autoRoles array and full verification config', async () => {
+    const testGuildId = '123456789012345678';
+    const testRoleId = '123456789012345680';
+    const testChannelId = '123456789012345679';
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/config`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        autoRoles: [testRoleId],
+        verification: {
+          enabled: true,
+          channelId: testChannelId,
+          roleId: testRoleId,
+          message: 'Personalized verification greeting',
+          buttonText: 'Click to Verify',
+          autoVerify: {
+            enabled: true,
+            accountAgeDays: 14,
+          },
+        },
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.deepStrictEqual(data.config.autoRoles, [testRoleId]);
+    assert.strictEqual(data.config.autoRole, testRoleId);
+    assert.strictEqual(data.config.verification.enabled, true);
+    assert.strictEqual(data.config.verification.channelId, testChannelId);
+    assert.strictEqual(data.config.verification.roleId, testRoleId);
+    assert.strictEqual(data.config.verification.message, 'Personalized verification greeting');
+    assert.strictEqual(data.config.verification.buttonText, 'Click to Verify');
+    assert.strictEqual(data.config.verification.autoVerify.enabled, true);
+    assert.strictEqual(data.config.verification.autoVerify.accountAgeDays, 14);
+  });
+
+  it('POST /api/guilds/:guildId/verification/publish rejects unmanageable role with 422', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const testRoleId = '123456789012345680';
+
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 2; // Lower than role position 5
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/verification/publish`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: testChannelId,
+        roleId: testRoleId,
+        message: 'Click to verify',
+        buttonText: 'Verify',
+      }),
+    });
+
+    assert.strictEqual(res.status, 422);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'HierarchyError');
+  });
+
+  it('POST /api/guilds/:guildId/verification/publish sends embed and button to channel', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const testRoleId = '123456789012345680';
+
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 20; // Higher than role position 5
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/verification/publish`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: testChannelId,
+        roleId: testRoleId,
+        message: 'Bienvenido, pulsa para verificarte',
+        buttonText: 'Verificarme Ahora',
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.panel.messageId, '112233445566778899');
+    assert.strictEqual(data.panel.roleName, 'Gamer');
+    assert.ok(data.panel.messageUrl.includes('112233445566778899'));
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);

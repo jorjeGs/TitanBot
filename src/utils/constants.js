@@ -30,6 +30,7 @@ export const DEFAULT_GUILD_CONFIG = {
     adminRole: null,
     welcomeChannel: null,
     autoRole: null,
+    autoRoles: [],
     logging: {
         enabled: false,
         channels: { audit: null, applications: null, reports: null },

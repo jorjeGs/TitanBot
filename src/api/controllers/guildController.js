@@ -1,5 +1,6 @@
 import { fetchDiscordUserGuilds } from '../utils/oauthHelper.js';
 import { getGuildConfig, patchGuildConfig } from '../../services/config/guildConfig.js';
+import { updateWelcomeConfig } from '../../utils/database.js';
 import { isBotOwner } from '../../config/bot.js';
 import config from '../../config/application.js';
 import { logger } from '../../utils/logger.js';
@@ -241,11 +242,29 @@ export async function updateGuildConfigHandler(req, res) {
     }
 
     // Validate snowflakes or null
-    const snowflakeFields = ['welcomeChannel', 'autoRole', 'adminRole', 'modRole', 'birthdayChannelId'];
+    const snowflakeFields = ['welcomeChannel', 'adminRole', 'modRole', 'birthdayChannelId'];
     for (const field of snowflakeFields) {
       if (patch[field] !== undefined) {
         sanitized[field] = patch[field] ? String(patch[field]).trim() : null;
       }
+    }
+
+    // Validate autoRoles (array of snowflakes) and sync autoRole
+    if (patch.autoRoles !== undefined) {
+      if (Array.isArray(patch.autoRoles)) {
+        sanitized.autoRoles = patch.autoRoles
+          .map((id) => String(id).trim())
+          .filter((id) => /^\d{17,19}$/.test(id))
+          .slice(0, 10);
+        sanitized.autoRole = sanitized.autoRoles.length > 0 ? sanitized.autoRoles[0] : null;
+      } else if (patch.autoRoles === null) {
+        sanitized.autoRoles = [];
+        sanitized.autoRole = null;
+      }
+    } else if (patch.autoRole !== undefined) {
+      const cleanRole = patch.autoRole ? String(patch.autoRole).trim() : null;
+      sanitized.autoRole = cleanRole;
+      sanitized.autoRoles = cleanRole ? [cleanRole] : [];
     }
 
     // Validate logging nested object
@@ -262,9 +281,28 @@ export async function updateGuildConfigHandler(req, res) {
 
     // Validate verification nested object
     if (patch.verification && typeof patch.verification === 'object') {
+      const v = patch.verification;
       sanitized.verification = {
-        enabled: Boolean(patch.verification.enabled),
+        enabled: Boolean(v.enabled),
+        channelId: v.channelId ? String(v.channelId).trim() : null,
+        roleId: v.roleId ? String(v.roleId).trim() : null,
+        unverifiedRoleId: v.unverifiedRoleId ? String(v.unverifiedRoleId).trim() : null,
+        messageId: v.messageId ? String(v.messageId).trim() : null,
+        message: typeof v.message === 'string' ? v.message.slice(0, 2000) : null,
+        buttonText: typeof v.buttonText === 'string' ? v.buttonText.slice(0, 80) : 'Verify',
       };
+
+      if (v.autoVerify && typeof v.autoVerify === 'object') {
+        const av = v.autoVerify;
+        const rawAge = parseInt(av.accountAgeDays ?? av.minAccountAge ?? 7, 10);
+        const accountAgeDays = Number.isFinite(rawAge) ? Math.max(1, Math.min(365, rawAge)) : 7;
+        sanitized.verification.autoVerify = {
+          enabled: Boolean(av.enabled),
+          criteria: av.criteria === 'account_age' || av.criteria === 'none' ? av.criteria : (av.enabled ? 'account_age' : 'none'),
+          accountAgeDays,
+          roleId: av.roleId ? String(av.roleId).trim() : sanitized.verification.roleId,
+        };
+      }
     }
 
     // Validate disabledCommands
@@ -288,6 +326,12 @@ export async function updateGuildConfigHandler(req, res) {
     }
 
     const updated = await patchGuildConfig(req.client, guildId, sanitized);
+
+    if (sanitized.autoRoles !== undefined) {
+      await updateWelcomeConfig(req.client, guildId, { roleIds: sanitized.autoRoles }).catch((err) => {
+        logger.debug('Non-critical: Failed to sync welcomeConfig roleIds:', err?.message);
+      });
+    }
 
     return res.json({
       success: true,
