@@ -107,6 +107,20 @@ import {
   getHeatmapHandler,
   getChannelsHandler,
 } from '../controllers/insightsController.js';
+import {
+  getSocialFeeds,
+  saveSocialFeed,
+  deleteSocialFeed,
+  testSocialFeed,
+  receiveIncomingWebhook,
+} from '../controllers/socialFeedController.js';
+import {
+  getAiAssistantConfig,
+  updateAiAssistantConfig,
+  testAiPrompt,
+  saveKnowledgeItem,
+  deleteKnowledgeItem,
+} from '../controllers/aiAssistantController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
@@ -210,6 +224,21 @@ router.get('/:guildId/insights/overview', verifyAuth, checkModerationAccess, get
 router.get('/:guildId/insights/growth', verifyAuth, checkModerationAccess, getGrowthHandler);
 router.get('/:guildId/insights/heatmap', verifyAuth, checkModerationAccess, getHeatmapHandler);
 router.get('/:guildId/insights/channels', verifyAuth, checkModerationAccess, getChannelsHandler);
+
+// Social Feeds & Webhooks subroutes
+router.get('/:guildId/socialfeeds', verifyAuth, checkGuildPermissions, getSocialFeeds);
+router.post('/:guildId/socialfeeds', verifyAuth, checkGuildPermissions, saveSocialFeed);
+router.delete('/:guildId/socialfeeds/:id', verifyAuth, checkGuildPermissions, deleteSocialFeed);
+router.post('/:guildId/socialfeeds/:id/test', verifyAuth, checkGuildPermissions, testSocialFeed);
+router.post('/:guildId/socialfeeds/webhooks/incoming/:feedId', receiveIncomingWebhook);
+router.post('/webhooks/incoming/:guildId/:feedId', receiveIncomingWebhook);
+
+// AI Assistant subroutes
+router.get('/:guildId/aiassistant', verifyAuth, checkGuildPermissions, getAiAssistantConfig);
+router.patch('/:guildId/aiassistant', verifyAuth, checkGuildPermissions, updateAiAssistantConfig);
+router.post('/:guildId/aiassistant/test', verifyAuth, checkGuildPermissions, testAiPrompt);
+router.post('/:guildId/aiassistant/knowledge', verifyAuth, checkGuildPermissions, saveKnowledgeItem);
+router.delete('/:guildId/aiassistant/knowledge/:id', verifyAuth, checkGuildPermissions, deleteKnowledgeItem);
 
 export default router;
 

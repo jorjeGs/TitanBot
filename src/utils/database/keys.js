@@ -156,6 +156,14 @@ export function getAnalyticsIndexKey(guildId) {
     return `guild:${guildId}:analytics:index`;
 }
 
+export function getSocialFeedsKey(guildId) {
+    return `guild:${guildId}:socialfeeds:config`;
+}
+
+export function getAiAssistantKey(guildId) {
+    return `guild:${guildId}:aiassistant:config`;
+}
+
 /**
  * Legacy key patterns mapped to canonical builders.
  * Used by migration script and read-time fallback.

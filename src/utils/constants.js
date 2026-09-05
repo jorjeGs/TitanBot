@@ -44,6 +44,23 @@ export const DEFAULT_GUILD_CONFIG = {
         stickyMessages: [],
         scheduledMessages: [],
         autoResponders: [],
+    },
+    socialFeeds: {
+        enabled: true,
+        checkIntervalMinutes: 5,
+        feeds: [],
+    },
+    aiAssistant: {
+        enabled: false,
+        model: 'gemini-2.0-flash',
+        systemPrompt: 'Eres el Asistente Virtual oficial de la comunidad en Discord. Eres amigable, servicial, conciso y respetuoso.',
+        allowedChannelIds: [],
+        respondToMentions: true,
+        ignoredRoleIds: [],
+        cooldownSeconds: 10,
+        maxOutputTokens: 500,
+        temperature: 0.7,
+        knowledgeBase: [],
     }
 };
 

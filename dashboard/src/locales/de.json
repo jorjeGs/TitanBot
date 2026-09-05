@@ -55,7 +55,9 @@
     "embeds": "Embed-Ersteller",
     "music": "Live-Musik",
     "automations": "Automatisierungen",
-    "snapshots": "Backups & Snapshots"
+    "snapshots": "Backups & Snapshots",
+    "socialFeeds": "Social Feeds & Benachrichtigungen",
+    "aiAssistant": "KI-Assistent"
   },
   "landing": {
     "heroTitle": "Leistungsstarke Community-Verwaltung für Discord",
@@ -1146,5 +1148,30 @@
       "fri": "Fr",
       "sat": "Sa"
     }
+  },
+  "socialFeeds": {
+    "title": "Externe Benachrichtigungen & Social Feeds",
+    "subtitle": "Überwache YouTube-Kanäle, Twitch-Streams, RSS-Feeds und Webhooks, um automatische Embed-Benachrichtigungen in deiner Community zu posten.",
+    "addFeed": "Neuen Feed hinzufügen",
+    "saveSuccess": "Social-Feed erfolgreich gespeichert",
+    "deleteConfirm": "Möchtest du diese Benachrichtigung wirklich löschen?",
+    "deleteSuccess": "Social-Feed erfolgreich gelöscht",
+    "testSuccess": "Test-Benachrichtigung erfolgreich an den Kanal gesendet!",
+    "listTitle": "Konfigurierte Feeds & Benachrichtigungen",
+    "listSubtitle": "TitanBot überprüft aktive Feeds regelmäßig alle 5 Minuten.",
+    "noFeeds": "Noch keine Feeds konfiguriert",
+    "noFeedsDesc": "Füge deinen YouTube-Kanal, Twitch-Stream oder RSS-Feed hinzu, um deinen Server zu benachrichtigen.",
+    "createFirst": "Erste Benachrichtigung einrichten"
+  },
+  "aiAssistant": {
+    "title": "Community-KI-Assistent",
+    "subtitle": "Unterstützt von Google Gemini mit kontextueller Einbindung deiner Serverregeln, Kanäle und FAQ.",
+    "masterStatus": "Status des virtuellen Assistenten",
+    "personalityTitle": "Persönlichkeit & Richtlinien (System Prompt)",
+    "kbTitle": "Server-Wissensdatenbank",
+    "saveSuccess": "KI-Konfiguration erfolgreich gespeichert",
+    "kbSaved": "Wissenselement gespeichert",
+    "kbDeleteConfirm": "Dieses Element aus der Wissensdatenbank löschen?",
+    "kbDeleted": "Element erfolgreich gelöscht"
   }
 }

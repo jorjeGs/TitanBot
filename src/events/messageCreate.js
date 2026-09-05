@@ -22,6 +22,7 @@ import { t } from '../utils/i18n/index.js';
 import { handleStickyMessage } from '../services/automations/stickyMessageService.js';
 import { handleAutoResponders } from '../services/automations/autoResponderService.js';
 import { recordMessageActivity } from '../services/analytics/analyticsService.js';
+import { handleAiMessage } from '../services/ai/aiAssistantService.js';
 
 const MESSAGE_XP_RATE_LIMIT_ATTEMPTS = 12;
 const MESSAGE_XP_RATE_LIMIT_WINDOW_MS = 10000;
@@ -49,6 +50,9 @@ export default {
       // Automations: Sticky messages and Auto-responders
       await handleStickyMessage(message, client);
       await handleAutoResponders(message, client);
+
+      // AI Community Assistant
+      await handleAiMessage(message, client);
     } catch (error) {
       logger.error('Error in messageCreate event:', error);
     }

@@ -55,7 +55,9 @@
     "embeds": "Embed Creator",
     "music": "Live Music",
     "automations": "Automations",
-    "snapshots": "Backups & Snapshots"
+    "snapshots": "Backups & Snapshots",
+    "socialFeeds": "Social Feeds & Alerts",
+    "aiAssistant": "AI Assistant"
   },
   "landing": {
     "heroTitle": "Powerful Community Management for Discord",
@@ -1146,5 +1148,30 @@
       "fri": "Fri",
       "sat": "Sat"
     }
+  },
+  "socialFeeds": {
+    "title": "External Notifications & Social Feeds",
+    "subtitle": "Monitor YouTube channels, Twitch streams, RSS feeds, and Webhook endpoints to post automated rich embed alerts in your community.",
+    "addFeed": "Add New Alert",
+    "saveSuccess": "Social alert saved successfully",
+    "deleteConfirm": "Are you sure you want to delete this social alert?",
+    "deleteSuccess": "Social alert deleted successfully",
+    "testSuccess": "Test alert sent successfully to the channel!",
+    "listTitle": "Configured Feeds & Alerts",
+    "listSubtitle": "TitanBot periodically checks active feeds every 5 minutes.",
+    "noFeeds": "No social alerts configured yet",
+    "noFeedsDesc": "Add your YouTube channel, Twitch stream, or RSS feed to notify your server.",
+    "createFirst": "Configure first alert"
+  },
+  "aiAssistant": {
+    "title": "Community AI Assistant",
+    "subtitle": "Powered by Google Gemini with contextual injection of your Discord server rules, channels, and FAQ.",
+    "masterStatus": "Virtual Assistant Status",
+    "personalityTitle": "Personality & Guidelines (System Prompt)",
+    "kbTitle": "Server Knowledge Base",
+    "saveSuccess": "AI configuration saved successfully",
+    "kbSaved": "Knowledge item saved",
+    "kbDeleteConfirm": "Delete this item from the knowledge base?",
+    "kbDeleted": "Item deleted successfully"
   }
 }

@@ -16,6 +16,7 @@ import { logger, startupLog, shutdownLog } from './utils/logger.js';
 import { checkBirthdays } from './services/birthdayService.js';
 import { checkGiveaways } from './services/giveawayService.js';
 import { checkScheduledMessages } from './services/automations/scheduledMessageService.js';
+import { checkAllSocialFeeds } from './services/social/socialFeedService.js';
 import { loadCommands, registerCommands as registerSlashCommands } from './handlers/loaders/commandLoader.js';
 import { runSafeTask, handleTaskError, ErrorCodes } from './utils/errorHandler.js';
 import { initializeMusic } from './services/music/riffySetup.js';
@@ -277,6 +278,7 @@ class TitanBot extends Client {
     cron.schedule('0 6 * * *', runSafeTask('birthday_check', () => checkBirthdays(this)));
     cron.schedule('* * * * *', runSafeTask('giveaway_check', () => checkGiveaways(this)));
     cron.schedule('* * * * *', runSafeTask('scheduled_messages_check', () => checkScheduledMessages(this)));
+    cron.schedule('*/5 * * * *', runSafeTask('social_feeds_check', () => checkAllSocialFeeds(this)));
     cron.schedule('*/15 * * * *', runSafeTask('counter_update', () => this.updateAllCounters()));
   }
 

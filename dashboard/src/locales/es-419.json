@@ -55,7 +55,9 @@
     "embeds": "Creador de Embeds",
     "music": "Música en Vivo",
     "automations": "Automatizaciones",
-    "snapshots": "Copias y Respaldos"
+    "snapshots": "Copias y Respaldos",
+    "socialFeeds": "Notificaciones & Redes",
+    "aiAssistant": "Asistente IA"
   },
   "landing": {
     "heroTitle": "Gestión Potente de Comunidades para Discord",
@@ -1146,5 +1148,30 @@
       "fri": "Vie",
       "sat": "Sáb"
     }
+  },
+  "socialFeeds": {
+    "title": "Notificaciones Externas & Social Feeds",
+    "subtitle": "Monitorea canales de YouTube, streams de Twitch, feeds RSS y endpoints Webhook para publicar alertas automáticas con embeds enriquecidos en tu comunidad.",
+    "addFeed": "Añadir Nueva Alerta",
+    "saveSuccess": "Alerta social guardada correctamente",
+    "deleteConfirm": "¿Estás seguro de eliminar esta alerta social?",
+    "deleteSuccess": "Alerta social eliminada con éxito",
+    "testSuccess": "¡Alerta de prueba enviada exitosamente al canal!",
+    "listTitle": "Fuentes y Alertas Configuradas",
+    "listSubtitle": "TitanBot comprueba las fuentes activas periódicamente cada 5 minutos.",
+    "noFeeds": "No hay alertas configuradas todavía",
+    "noFeedsDesc": "Añade tu canal de YouTube, tu canal de Twitch o una fuente RSS para notificar a tu servidor.",
+    "createFirst": "Configurar primera alerta"
+  },
+  "aiAssistant": {
+    "title": "Asistente IA para la Comunidad",
+    "subtitle": "Potenciado por Google Gemini con inyección contextual de las normas, canales y preguntas frecuentes (FAQ) de tu servidor de Discord.",
+    "masterStatus": "Estado del Asistente Virtual",
+    "personalityTitle": "Personalidad y Directrices (System Prompt)",
+    "kbTitle": "Base de Conocimiento del Servidor",
+    "saveSuccess": "Configuración de IA guardada con éxito",
+    "kbSaved": "Elemento de conocimiento guardado",
+    "kbDeleteConfirm": "¿Eliminar este elemento de la base de conocimiento?",
+    "kbDeleted": "Elemento eliminado con éxito"
   }
 }

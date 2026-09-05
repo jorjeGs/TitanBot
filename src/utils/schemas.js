@@ -443,6 +443,65 @@ export const InsightsOverviewSchema = z.object({
   heatmap: ActivityHeatmapSchema.optional(),
 });
 
+export const SocialFeedItemSchema = z.object({
+  id: z.string().min(1),
+  type: z.enum(['youtube', 'twitch', 'rss', 'webhook']),
+  name: z.string().trim().min(1).max(100),
+  enabled: z.boolean().default(true),
+  targetChannelId: z.string().regex(/^\d{17,20}$/, 'Invalid Discord channel ID'),
+  customMessage: z.string().max(2000).default('{author} ha publicado nuevo contenido: {title}\n{url}'),
+  mentionRole: z.string().nullable().optional().default(null),
+  youtubeChannelId: z.string().optional().default(''),
+  twitchUsername: z.string().optional().default(''),
+  rssFeedUrl: z.string().url().optional().or(z.literal('')).default(''),
+  webhookToken: z.string().optional().default(''),
+  lastItemId: z.string().nullable().optional().default(null),
+  lastPublished: z.string().nullable().optional().default(null),
+  lastChecked: z.string().nullable().optional().default(null),
+  isLive: z.boolean().optional().default(false),
+});
+
+export const SocialFeedsConfigSchema = z.object({
+  enabled: z.boolean().default(true),
+  checkIntervalMinutes: z.number().int().min(1).max(60).default(5),
+  feeds: z.array(SocialFeedItemSchema).default([]),
+}).default({ enabled: true, checkIntervalMinutes: 5, feeds: [] });
+
+export const KnowledgeItemSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().trim().min(1).max(150),
+  content: z.string().trim().min(1).max(4000),
+  tags: z.array(z.string()).default([]),
+  enabled: z.boolean().default(true),
+  updatedAt: z.string().default(() => new Date().toISOString()),
+});
+
+export const AiAssistantConfigSchema = z.object({
+  enabled: z.boolean().default(false),
+  model: z.string().default('gemini-2.0-flash'),
+  systemPrompt: z.string().max(4000).default(
+    'Eres el Asistente Virtual oficial de la comunidad en Discord. Eres amigable, servicial, conciso y respetuoso. Usa la base de conocimiento provista para responder preguntas sobre las reglas, canales y servicios del servidor.'
+  ),
+  allowedChannelIds: z.array(z.string().regex(/^\d{17,20}$/)).default([]),
+  respondToMentions: z.boolean().default(true),
+  ignoredRoleIds: z.array(z.string().regex(/^\d{17,20}$/)).default([]),
+  cooldownSeconds: z.number().int().min(1).max(300).default(10),
+  maxOutputTokens: z.number().int().min(50).max(2048).default(500),
+  temperature: z.number().min(0).max(1).default(0.7),
+  knowledgeBase: z.array(KnowledgeItemSchema).default([]),
+}).default({
+  enabled: false,
+  model: 'gemini-2.0-flash',
+  systemPrompt: 'Eres el Asistente Virtual oficial de la comunidad en Discord. Eres amigable, servicial, conciso y respetuoso.',
+  allowedChannelIds: [],
+  respondToMentions: true,
+  ignoredRoleIds: [],
+  cooldownSeconds: 10,
+  maxOutputTokens: 500,
+  temperature: 0.7,
+  knowledgeBase: [],
+});
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
@@ -502,6 +561,8 @@ export const GuildConfigSchema = z
     moderation: ModerationConfigSchema.optional(),
     automations: AutomationsConfigSchema.optional(),
     antiRaid: AntiRaidConfigSchema.optional(),
+    socialFeeds: SocialFeedsConfigSchema.optional(),
+    aiAssistant: AiAssistantConfigSchema.optional(),
   })
   .passthrough();
 

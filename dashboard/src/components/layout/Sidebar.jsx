@@ -24,6 +24,8 @@ import {
   Disc3,
   Zap,
   Archive,
+  Radio,
+  Bot,
 } from 'lucide-react';
 
 export function Sidebar() {
@@ -51,6 +53,8 @@ export function Sidebar() {
     { to: `/manage/${guildId}/commands`, label: t('nav.commands'), icon: Terminal },
     { to: `/manage/${guildId}/verification`, label: t('nav.verification'), icon: ShieldCheck },
     { to: `/manage/${guildId}/snapshots`, label: t('nav.snapshots') || 'Copias y Respaldos', icon: Archive },
+    { to: `/manage/${guildId}/socialfeeds`, label: t('nav.socialFeeds') || 'Notificaciones & Redes', icon: Radio },
+    { to: `/manage/${guildId}/aiassistant`, label: t('nav.aiAssistant') || 'Asistente IA', icon: Bot },
   ];
 
   return (

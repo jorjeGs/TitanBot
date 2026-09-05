@@ -28,6 +28,8 @@ const TicketsTab = React.lazy(() => import('./pages/manage/TicketsTab').then(m =
 const CommandsTab = React.lazy(() => import('./pages/manage/CommandsTab').then(m => ({ default: m.CommandsTab })));
 const VerificationTab = React.lazy(() => import('./pages/manage/VerificationTab').then(m => ({ default: m.VerificationTab })));
 const SnapshotsTab = React.lazy(() => import('./pages/manage/SnapshotsTab'));
+const SocialFeedsTab = React.lazy(() => import('./pages/manage/SocialFeedsTab'));
+const AiAssistantTab = React.lazy(() => import('./pages/manage/AiAssistantTab'));
 
 function TabLoadingFallback() {
   return (
@@ -77,6 +79,8 @@ export function App() {
             <Route path="commands" element={<React.Suspense fallback={<TabLoadingFallback />}><CommandsTab /></React.Suspense>} />
             <Route path="verification" element={<React.Suspense fallback={<TabLoadingFallback />}><VerificationTab /></React.Suspense>} />
             <Route path="snapshots" element={<React.Suspense fallback={<TabLoadingFallback />}><SnapshotsTab /></React.Suspense>} />
+            <Route path="socialfeeds" element={<React.Suspense fallback={<TabLoadingFallback />}><SocialFeedsTab /></React.Suspense>} />
+            <Route path="aiassistant" element={<React.Suspense fallback={<TabLoadingFallback />}><AiAssistantTab /></React.Suspense>} />
           </Route>
 
           {/* Fallback */}
