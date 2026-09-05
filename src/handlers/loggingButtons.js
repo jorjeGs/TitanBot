@@ -30,7 +30,7 @@ import {
   isFilterView,
   refreshDashboardMessage,
 } from '../commands/Logging/modules/logging_dashboard.js';
-import { t } from '../services/i18n.js';
+import { t } from '../utils/i18n/index.js';
 
 const LOGGING_CATEGORIES = [...new Set(Object.values(EVENT_TYPES).map((eventType) => eventType.split('.')[0]))];
 

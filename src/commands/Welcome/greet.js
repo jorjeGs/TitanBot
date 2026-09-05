@@ -2,7 +2,7 @@ import { SlashCommandBuilder, PermissionFlagsBits, MessageFlags } from 'discord.
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { logger } from '../../utils/logger.js';
 import { handleInteractionError, TitanBotError, ErrorTypes, replyUserError } from '../../utils/errorHandler.js';
-import { t } from '../../services/i18n.js';
+import { t } from '../../utils/i18n/index.js';
 import greetDashboard from './modules/greet_dashboard.js';
 
 export default {

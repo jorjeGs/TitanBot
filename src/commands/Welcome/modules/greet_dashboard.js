@@ -23,7 +23,7 @@ import { logger } from '../../../utils/logger.js';
 import { TitanBotError, ErrorTypes, replyUserError } from '../../../utils/errorHandler.js';
 import { getWelcomeConfig, saveWelcomeConfig } from '../../../utils/database.js';
 import { botHasPermission } from '../../../utils/permissionGuard.js';
-import { t } from '../../../services/i18n.js';
+import { t } from '../../../utils/i18n/index.js';
 
 async function deferComponent(interaction) {
     if (interaction.deferred || interaction.replied) {

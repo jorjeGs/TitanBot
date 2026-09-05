@@ -12,7 +12,7 @@ import {
 } from '../../../utils/logging/loggingUi.js';
 import { InteractionHelper } from '../../../utils/interactionHelper.js';
 import { logger } from '../../../utils/logger.js';
-import { t } from '../../../services/i18n.js';
+import { t } from '../../../utils/i18n/index.js';
 import { replyUserError, ErrorTypes } from '../../../utils/errorHandler.js';
 
 export function getCategoryStatus(enabledEvents, category, auditEnabled) {

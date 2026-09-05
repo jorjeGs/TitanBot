@@ -5,7 +5,7 @@ import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { getGuildConfig } from '../../services/config/guildConfig.js';
 import { ErrorTypes, replyUserError } from '../../utils/errorHandler.js';
-import { t } from '../../services/i18n.js';
+import { t } from '../../utils/i18n/index.js';
 
 function createAutoroleInfoEmbed(description) {
     return new EmbedBuilder()
