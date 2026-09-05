@@ -144,6 +144,18 @@ export function getSnapshotsIndexKey(guildId) {
     return `guild:${guildId}:snapshots:index`;
 }
 
+export function getDailyAnalyticsKey(guildId, dateString) {
+    return `guild:${guildId}:analytics:daily:${dateString}`;
+}
+
+export function getAnalyticsHeatmapKey(guildId) {
+    return `guild:${guildId}:analytics:heatmap`;
+}
+
+export function getAnalyticsIndexKey(guildId) {
+    return `guild:${guildId}:analytics:index`;
+}
+
 /**
  * Legacy key patterns mapped to canonical builders.
  * Used by migration script and read-time fallback.

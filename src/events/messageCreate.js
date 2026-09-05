@@ -21,6 +21,7 @@ import {
 import { t } from '../utils/i18n/index.js';
 import { handleStickyMessage } from '../services/automations/stickyMessageService.js';
 import { handleAutoResponders } from '../services/automations/autoResponderService.js';
+import { recordMessageActivity } from '../services/analytics/analyticsService.js';
 
 const MESSAGE_XP_RATE_LIMIT_ATTEMPTS = 12;
 const MESSAGE_XP_RATE_LIMIT_WINDOW_MS = 10000;
@@ -32,6 +33,9 @@ export default {
       if (message.author.bot || !message.guild) return;
 
       logger.debug(`Message received from ${message.author.tag}: ${message.content}`);
+
+      // Track chat activity metrics in fast buffer
+      recordMessageActivity(message.guild, message.channel, message.author);
 
       const countingProcessed = await handleCountingGame(message, client);
       if (countingProcessed) {

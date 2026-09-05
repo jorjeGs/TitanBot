@@ -7,6 +7,7 @@ import { logEvent, EVENT_TYPES } from '../services/loggingService.js';
 import { getServerCounters, updateCounter } from '../services/serverstatsService.js';
 import { setBirthday as dbSetBirthday } from '../utils/database.js';
 import { handleMemberJoin } from '../services/security/antiRaidService.js';
+import { recordMemberJoin } from '../services/analytics/analyticsService.js';
 import { logger } from '../utils/logger.js';
 
 export default {
@@ -17,6 +18,11 @@ export default {
     try {
         const { guild, user } = member;
         
+        // Track analytics join metrics
+        recordMemberJoin(guild, member).catch((err) => {
+            logger.warn('Error recording member join analytics:', err);
+        });
+
         // Anti-Raid Shield inspection
         const raidResult = await handleMemberJoin(member).catch((err) => {
             logger.warn('Anti-Raid check failed in guildMemberAdd:', err);

@@ -458,6 +458,10 @@
       "noTypeSelected": "Por favor selecciona al menos un tipo de contador.",
       "setupFailed": "Error al aprovisionar los contadores en Discord.",
       "deleteFailed": "Error al eliminar los contadores."
+    },
+    "subtabs": {
+      "insights": "Analíticas y Crecimiento",
+      "counters": "Canales Contadores"
     }
   },
   "jointocreate": {
@@ -1104,6 +1108,43 @@
       "importFailed": "Error al importar la instantánea.",
       "restoreFailed": "Error al restaurar la instantánea.",
       "deleteFailed": "Error al eliminar la instantánea."
+    }
+  },
+  "insights": {
+    "rangeLabel": "Período:",
+    "daysUnit": "días",
+    "kpi": {
+      "totalMembers": "Miembros Totales",
+      "growthHint": "Crecimiento neto en los últimos {{days}} días",
+      "netGrowth": "Balance Neto",
+      "netGrowthHint": "Nuevas uniones menos salidas registradas",
+      "messages": "Mensajes de Chat",
+      "messagesToday": "Hoy",
+      "peakActivity": "Momento Más Activo",
+      "peakActivityHint": "Hora y día de mayor concurrencia en chat"
+    },
+    "growthChartTitle": "Tendencia de Miembros (Uniones vs Salidas)",
+    "growthChartSubtitle": "Visualiza el flujo diario de personas que ingresan y abandonan el servidor.",
+    "joins": "Uniones",
+    "leaves": "Salidas",
+    "total": "Total",
+    "heatmapTitle": "Mapa de Calor de Actividad Semanal (7 Días × 24 Horas)",
+    "heatmapSubtitle": "Identifica las franjas horarias y días de mayor dinamismo y participación comunitaria.",
+    "lessActive": "Poco activo",
+    "moreActive": "Muy activo",
+    "hoverHeatmapHint": "Pasa el cursor sobre una celda para ver detalles",
+    "topChannelsTitle": "Canales Más Activos de la Comunidad",
+    "topChannelsSubtitle": "Distribución porcentual del volumen de mensajes enviados en cada canal de texto.",
+    "noChannelsData": "No se han registrado mensajes suficientes en canales de texto todavía.",
+    "messages": "mensajes",
+    "days": {
+      "sun": "Dom",
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mié",
+      "thu": "Jue",
+      "fri": "Vie",
+      "sat": "Sáb"
     }
   }
 }

@@ -6,6 +6,7 @@ import { logEvent, EVENT_TYPES } from '../services/loggingService.js';
 import { getServerCounters, updateCounter } from '../services/serverstatsService.js';
 import { getGuildBirthdays, deleteBirthday } from '../utils/database.js';
 import { deleteUserLevelData } from '../services/leveling/leveling.js';
+import { recordMemberLeave } from '../services/analytics/analyticsService.js';
 import { logger } from '../utils/logger.js';
 
 export default {
@@ -16,6 +17,11 @@ export default {
     try {
         const { guild, user } = member;
         
+        // Track analytics leave metrics
+        recordMemberLeave(guild, member).catch((err) => {
+            logger.warn('Error recording member leave analytics:', err);
+        });
+
         const welcomeConfig = await getWelcomeConfig(member.client, guild.id);
         
         const goodbyeChannelId = welcomeConfig?.goodbyeChannelId;

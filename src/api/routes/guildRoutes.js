@@ -101,6 +101,12 @@ import {
   restoreSnapshotHandler,
   deleteSnapshotHandler,
 } from '../controllers/snapshotController.js';
+import {
+  getInsightsOverviewHandler,
+  getGrowthHandler,
+  getHeatmapHandler,
+  getChannelsHandler,
+} from '../controllers/insightsController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
@@ -198,6 +204,12 @@ router.get('/:guildId/snapshots/:id/export', verifyAuth, checkGuildPermissions, 
 router.post('/:guildId/snapshots/import', verifyAuth, checkGuildPermissions, importSnapshotHandler);
 router.post('/:guildId/snapshots/:id/restore', verifyAuth, checkGuildPermissions, restoreSnapshotHandler);
 router.delete('/:guildId/snapshots/:id', verifyAuth, checkGuildPermissions, deleteSnapshotHandler);
+
+// Server insights & analytics subroutes
+router.get('/:guildId/insights/overview', verifyAuth, checkModerationAccess, getInsightsOverviewHandler);
+router.get('/:guildId/insights/growth', verifyAuth, checkModerationAccess, getGrowthHandler);
+router.get('/:guildId/insights/heatmap', verifyAuth, checkModerationAccess, getHeatmapHandler);
+router.get('/:guildId/insights/channels', verifyAuth, checkModerationAccess, getChannelsHandler);
 
 export default router;
 

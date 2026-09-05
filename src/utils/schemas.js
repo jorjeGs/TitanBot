@@ -405,6 +405,44 @@ export const ServerSnapshotSchema = z.object({
   channels: z.array(ChannelSnapshotSchema).default([]),
 });
 
+export const DailyAnalyticsSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  joins: z.number().int().nonnegative().default(0),
+  leaves: z.number().int().nonnegative().default(0),
+  net: z.number().int().default(0),
+  totalMembers: z.number().int().nonnegative().default(0),
+  messages: z.number().int().nonnegative().default(0),
+  activeUsers: z.number().int().nonnegative().default(0),
+  channels: z.record(z.string(), z.number().int().nonnegative()).default({}),
+});
+
+export const ActivityHeatmapSchema = z.object({
+  matrix: z.array(z.array(z.number().int().nonnegative())).default(() =>
+    Array.from({ length: 7 }, () => Array(24).fill(0))
+  ),
+  totalMessages: z.number().int().nonnegative().default(0),
+  lastUpdated: z.string().optional(),
+});
+
+export const InsightsOverviewSchema = z.object({
+  guildId: z.string(),
+  totalMembers: z.number().int().nonnegative(),
+  growth7d: z.number().int().default(0),
+  growth30d: z.number().int().default(0),
+  messagesToday: z.number().int().nonnegative().default(0),
+  messages7d: z.number().int().nonnegative().default(0),
+  peakHour: z.number().int().min(0).max(23).default(0),
+  peakDay: z.number().int().min(0).max(6).default(0),
+  topChannels: z.array(z.object({
+    id: z.string(),
+    name: z.string(),
+    count: z.number().int().nonnegative(),
+    percentage: z.number().min(0).max(100),
+  })).default([]),
+  history: z.array(DailyAnalyticsSchema).default([]),
+  heatmap: ActivityHeatmapSchema.optional(),
+});
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),

@@ -458,6 +458,10 @@
       "noTypeSelected": "Bitte wähle mindestens einen Zählertyp aus.",
       "setupFailed": "Fehler beim Erstellen der Zählerkanäle in Discord.",
       "deleteFailed": "Fehler beim Löschen der Zählerkanäle."
+    },
+    "subtabs": {
+      "insights": "Insights & Analysen",
+      "counters": "Zähler-Kanäle"
     }
   },
   "jointocreate": {
@@ -1104,6 +1108,43 @@
       "importFailed": "Fehler beim Importieren des Snapshots.",
       "restoreFailed": "Fehler beim Wiederherstellen des Snapshots.",
       "deleteFailed": "Fehler beim Löschen des Snapshots."
+    }
+  },
+  "insights": {
+    "rangeLabel": "Zeitraum:",
+    "daysUnit": "Tage",
+    "kpi": {
+      "totalMembers": "Mitglieder Gesamt",
+      "growthHint": "Nettowachstum in den letzten {{days}} Tagen",
+      "netGrowth": "Nettobilanz",
+      "netGrowthHint": "Neue Beitritte minus erfasste Austritte",
+      "messages": "Chat-Nachrichten",
+      "messagesToday": "Heute",
+      "peakActivity": "Aktivitätsspitze",
+      "peakActivityHint": "Stunde und Tag mit dem höchsten Chataufkommen"
+    },
+    "growthChartTitle": "Mitgliedertrend (Beitritte vs. Austritte)",
+    "growthChartSubtitle": "Visualisiere den täglichen Fluss von Mitgliedern, die dem Server beitreten und ihn verlassen.",
+    "joins": "Beitritte",
+    "leaves": "Austritte",
+    "total": "Gesamt",
+    "heatmapTitle": "Wöchentliche Aktivitäts-Heatmap (7 Tage × 24 Stunden)",
+    "heatmapSubtitle": "Erkenne die Zeitfenster und Tage mit dem höchsten Engagement und der höchsten Beteiligung.",
+    "lessActive": "Geringe Aktivität",
+    "moreActive": "Hohe Aktivität",
+    "hoverHeatmapHint": "Bewege den Mauszeiger über eine Zelle für Details",
+    "topChannelsTitle": "Aktivste Community-Kanäle",
+    "topChannelsSubtitle": "Prozentuale Verteilung des Nachrichtenvolumens über die Textkanäle.",
+    "noChannelsData": "Noch nicht genügend Nachrichten in Textkanälen aufgezeichnet.",
+    "messages": "Nachrichten",
+    "days": {
+      "sun": "So",
+      "mon": "Mo",
+      "tue": "Di",
+      "wed": "Mi",
+      "thu": "Do",
+      "fri": "Fr",
+      "sat": "Sa"
     }
   }
 }

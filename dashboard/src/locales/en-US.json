@@ -458,6 +458,10 @@
       "noTypeSelected": "Please select at least one counter type.",
       "setupFailed": "Failed to provision counter channels in Discord.",
       "deleteFailed": "Failed to delete counter channels."
+    },
+    "subtabs": {
+      "insights": "Insights & Analytics",
+      "counters": "Counter Channels"
     }
   },
   "jointocreate": {
@@ -1104,6 +1108,43 @@
       "importFailed": "Failed to import snapshot.",
       "restoreFailed": "Failed to restore snapshot.",
       "deleteFailed": "Failed to delete snapshot."
+    }
+  },
+  "insights": {
+    "rangeLabel": "Period:",
+    "daysUnit": "days",
+    "kpi": {
+      "totalMembers": "Total Members",
+      "growthHint": "Net growth in the last {{days}} days",
+      "netGrowth": "Net Balance",
+      "netGrowthHint": "New joins minus recorded leaves",
+      "messages": "Chat Messages",
+      "messagesToday": "Today",
+      "peakActivity": "Peak Activity",
+      "peakActivityHint": "Hour and day of highest chat engagement"
+    },
+    "growthChartTitle": "Member Growth Trend (Joins vs Leaves)",
+    "growthChartSubtitle": "Visualize the daily flow of members joining and leaving the server.",
+    "joins": "Joins",
+    "leaves": "Leaves",
+    "total": "Total",
+    "heatmapTitle": "Weekly Activity Heatmap (7 Days × 24 Hours)",
+    "heatmapSubtitle": "Identify the time slots and days with the highest participation and engagement.",
+    "lessActive": "Low activity",
+    "moreActive": "High activity",
+    "hoverHeatmapHint": "Hover over a cell to view details",
+    "topChannelsTitle": "Most Active Community Channels",
+    "topChannelsSubtitle": "Percentage distribution of message volume across text channels.",
+    "noChannelsData": "Not enough messages recorded in text channels yet.",
+    "messages": "messages",
+    "days": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
     }
   }
 }
