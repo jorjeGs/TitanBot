@@ -4,6 +4,7 @@ import { PermissionFlagsBits } from 'discord.js';
 import { logger } from '../../utils/logger.js';
 import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
 import { logModerationAction } from '../../utils/moderation.js';
+import { getGuildConfig } from '../config/guildConfig.js';
 
 function getTargetLabel(target) {
   return target.user?.tag ?? target.displayName ?? 'this user';
@@ -442,5 +443,77 @@ export class ModerationService {
       logger.error('Error unbanning user:', error);
       throw error;
     }
+  }
+
+  static async checkAndApplyAutoPunish({ guild, member, warnCount, client }) {
+    try {
+      if (!guild || !member || !warnCount) return null;
+      const config = await getGuildConfig(client || guild.client, guild.id);
+      const autoPunishRules = config.moderation?.autoPunish;
+      if (!Array.isArray(autoPunishRules) || autoPunishRules.length === 0) return null;
+
+      const matchedRule = autoPunishRules.find((r) => r.warnThreshold === warnCount);
+      if (!matchedRule) return null;
+
+      logger.info(`Auto-punish triggered for ${member.user?.tag || member.id} at ${warnCount} warnings: action ${matchedRule.action}`);
+
+      const reason = `Auto-punish: Reached ${warnCount} warning(s)`;
+
+      if (matchedRule.action === 'timeout') {
+        const durationMinutes = matchedRule.durationMinutes || 60;
+        const durationMs = durationMinutes * 60 * 1000;
+        if (member.moderatable) {
+          await member.timeout(durationMs, reason);
+          await logModerationAction({
+            client: client || guild.client,
+            guild,
+            event: {
+              action: 'Member Timed Out',
+              target: `${member.user?.tag || member.id} (${member.id})`,
+              executor: `${guild.client?.user?.tag || 'TitanBot'} (${guild.client?.user?.id || 'bot'})`,
+              reason,
+              duration: `${durationMinutes} minutes`,
+              metadata: { userId: member.id, autoPunish: true, warnThreshold: warnCount },
+            },
+          });
+          return { applied: true, action: 'timeout', durationMinutes };
+        }
+      } else if (matchedRule.action === 'kick') {
+        if (member.kickable) {
+          await member.kick(reason);
+          await logModerationAction({
+            client: client || guild.client,
+            guild,
+            event: {
+              action: 'Member Kicked',
+              target: `${member.user?.tag || member.id} (${member.id})`,
+              executor: `${guild.client?.user?.tag || 'TitanBot'} (${guild.client?.user?.id || 'bot'})`,
+              reason,
+              metadata: { userId: member.id, autoPunish: true, warnThreshold: warnCount },
+            },
+          });
+          return { applied: true, action: 'kick' };
+        }
+      } else if (matchedRule.action === 'ban') {
+        if (member.bannable) {
+          await guild.members.ban(member.id, { reason });
+          await logModerationAction({
+            client: client || guild.client,
+            guild,
+            event: {
+              action: 'Member Banned',
+              target: `${member.user?.tag || member.id} (${member.id})`,
+              executor: `${guild.client?.user?.tag || 'TitanBot'} (${guild.client?.user?.id || 'bot'})`,
+              reason,
+              metadata: { userId: member.id, autoPunish: true, warnThreshold: warnCount },
+            },
+          });
+          return { applied: true, action: 'ban' };
+        }
+      }
+    } catch (err) {
+      logger.error('Error executing auto-punish rule:', err);
+    }
+    return null;
   }
 }

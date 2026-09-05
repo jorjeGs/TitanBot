@@ -48,23 +48,33 @@ class WarningService {
     };
   }
 
-  static async getWarnings(guildId, userId) {
+  static async getWarnings(guildId, userId, client = null) {
     const key = getWarningsKey(guildId, userId);
-    const warnings = await getFromDb(key, []);
+    let warnings;
+    if (client?.db && typeof client.db.get === 'function') {
+      warnings = await client.db.get(key);
+    } else {
+      warnings = await getFromDb(key, []);
+    }
 
     return Array.isArray(warnings)
       ? warnings.filter(w => w && w.status !== 'deleted')
       : [];
   }
 
-  static async getWarningCount(guildId, userId) {
-    const warnings = await this.getWarnings(guildId, userId);
+  static async getWarningCount(guildId, userId, client = null) {
+    const warnings = await this.getWarnings(guildId, userId, client);
     return warnings.length;
   }
 
-  static async removeWarning(guildId, userId, warningId) {
+  static async removeWarning(guildId, userId, warningId, client = null) {
     const key = getWarningsKey(guildId, userId);
-    const warnings = await getFromDb(key, []);
+    let warnings;
+    if (client?.db && typeof client.db.get === 'function') {
+      warnings = await client.db.get(key) || [];
+    } else {
+      warnings = await getFromDb(key, []);
+    }
 
     const index = warnings.findIndex(w => w.id === warningId);
     if (index === -1) {
@@ -77,32 +87,55 @@ class WarningService {
     }
 
     warnings[index].status = 'deleted';
-    await setInDb(key, warnings);
+    if (client?.db && typeof client.db.set === 'function') {
+      await client.db.set(key, warnings);
+    } else {
+      await setInDb(key, warnings);
+    }
 
     logger.info(`Warning removed: ${warningId} for ${userId} in ${guildId}`);
     return { removed: true };
   }
 
-  static async clearWarnings(guildId, userId) {
+  static async clearWarnings(guildId, userId, client = null) {
     const key = getWarningsKey(guildId, userId);
-    const warnings = await getFromDb(key, []);
-    const count = warnings.length;
+    let warnings;
+    if (client?.db && typeof client.db.get === 'function') {
+      warnings = await client.db.get(key) || [];
+    } else {
+      warnings = await getFromDb(key, []);
+    }
+    const count = Array.isArray(warnings) ? warnings.length : 0;
 
-    await setInDb(key, []);
+    if (client?.db && typeof client.db.set === 'function') {
+      await client.db.set(key, []);
+    } else {
+      await setInDb(key, []);
+    }
 
     logger.info(`Warnings cleared for ${userId} in ${guildId} (${count} removed)`);
     return { count };
   }
 
-  static async getGuildWarnings(guildId, filters = {}) {
+  static async getGuildWarnings(guildId, filters = {}, client = null) {
     const { moderatorId, limit = 100 } = filters;
     const prefix = getWarningsPrefix(guildId);
 
-    const keys = await db.list(prefix);
+    let keys;
+    if (client?.db && typeof client.db.list === 'function') {
+      keys = await client.db.list(prefix);
+    } else {
+      keys = await db.list(prefix);
+    }
     const allWarnings = [];
 
     for (const key of Array.isArray(keys) ? keys : []) {
-      const warnings = await getFromDb(key, []);
+      let warnings;
+      if (client?.db && typeof client.db.get === 'function') {
+        warnings = await client.db.get(key);
+      } else {
+        warnings = await getFromDb(key, []);
+      }
       if (!Array.isArray(warnings)) continue;
 
       for (const warning of warnings) {

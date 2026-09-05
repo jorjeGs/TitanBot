@@ -1223,6 +1223,247 @@ describe('API Routes Integration Tests', () => {
     assert.strictEqual(data.joinToCreate.bitrate, 128000);
   });
 
+  it('GET /api/guilds/:guildId/moderation/cases returns cases and warnings', async () => {
+    const testGuildId = '123456789012345678';
+    const targetUserId = 'target-user-456';
+    const warningId = 1700000000000;
+
+    await mockClient.db.set(`guild:${testGuildId}:warnings:${targetUserId}`, [
+      {
+        id: warningId,
+        guildId: testGuildId,
+        userId: targetUserId,
+        moderatorId: 'admin-user-id',
+        reason: 'Spamming in general',
+        timestamp: Date.now(),
+        status: 'active',
+      },
+    ]);
+    await mockClient.db.set(`moderation_cases_list_${testGuildId}`, [
+      {
+        caseId: 1,
+        action: 'User Warned',
+        target: 'spammerbob#1234 (target-user-456)',
+        executor: 'Admin#0001 (admin-user-id)',
+        reason: 'Spamming in general',
+        targetUserId,
+        moderatorId: 'admin-user-id',
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/moderation/cases`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok(Array.isArray(data.cases));
+    assert.strictEqual(data.cases.length, 1);
+    assert.strictEqual(data.cases[0].action, 'User Warned');
+    assert.ok(Array.isArray(data.warnings));
+    assert.strictEqual(data.warnings.length, 1);
+    assert.strictEqual(data.warnings[0].id, warningId);
+  });
+
+  it('GET /api/guilds/:guildId/moderation/users/:userId returns disciplinary record', async () => {
+    const testGuildId = '123456789012345678';
+    const targetUserId = 'target-user-456';
+    const guild = mockClient.guilds.cache.get(testGuildId);
+
+    guild.members.cache.set(targetUserId, {
+      id: targetUserId,
+      displayName: 'SpammerBob',
+      user: {
+        id: targetUserId,
+        username: 'spammerbob',
+        tag: 'spammerbob#1234',
+        displayAvatarURL: () => 'https://cdn.discordapp.com/avatars/target-user-456/abc.png',
+      },
+      roles: {
+        cache: new Map([
+          ['role-regular', { id: 'role-regular', name: 'Member', hexColor: '#99aab5' }],
+        ]),
+        highest: { position: 1, name: 'Member' },
+      },
+      communicationDisabledUntilTimestamp: null,
+    });
+
+    await mockClient.db.set(`guild:${testGuildId}:usernotes:${targetUserId}`, [
+      {
+        id: 1,
+        type: 'warning',
+        content: 'User was previously warned verbally',
+        moderatorId: 'admin-user-id',
+        moderatorTag: 'Admin#0001',
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/moderation/users/${targetUserId}`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.member.displayName, 'SpammerBob');
+    assert.strictEqual(data.member.inGuild, true);
+    assert.strictEqual(data.warnings.length, 1);
+    assert.strictEqual(data.notes.length, 1);
+    assert.strictEqual(data.notes[0].content, 'User was previously warned verbally');
+  });
+
+  it('DELETE /api/guilds/:guildId/moderation/warnings/:userId/:warningId rejects when target outranks moderator', async () => {
+    const testGuildId = '123456789012345678';
+    const targetUserId = 'target-user-456';
+    const guild = mockClient.guilds.cache.get(testGuildId);
+
+    // Target outranks admin
+    const targetMember = guild.members.cache.get(targetUserId);
+    targetMember.roles.highest = { position: 20, name: 'SuperAdmin' };
+    const adminMember = guild.members.cache.get('admin-user-id');
+    adminMember.roles = { highest: { position: 10, name: 'Admin' } };
+    guild.ownerId = 'other-owner-id';
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/moderation/warnings/${targetUserId}/1700000000000`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 422);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'HierarchyError');
+  });
+
+  it('DELETE /api/guilds/:guildId/moderation/warnings/:userId/:warningId revokes warning', async () => {
+    const testGuildId = '123456789012345678';
+    const targetUserId = 'target-user-456';
+    const guild = mockClient.guilds.cache.get(testGuildId);
+
+    // Reset hierarchy so admin outranks target
+    const targetMember = guild.members.cache.get(targetUserId);
+    targetMember.roles.highest = { position: 1, name: 'Member' };
+    const adminMember = guild.members.cache.get('admin-user-id');
+    adminMember.roles = { highest: { position: 10, name: 'Admin' } };
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/moderation/warnings/${targetUserId}/1700000000000`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+
+    const activeWarns = await mockClient.db.get(`guild:${testGuildId}:warnings:${targetUserId}`);
+    assert.strictEqual(activeWarns[0].status, 'deleted');
+  });
+
+  it('DELETE /api/guilds/:guildId/moderation/warnings/:userId clears all warnings', async () => {
+    const testGuildId = '123456789012345678';
+    const targetUserId = 'target-user-456';
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/moderation/warnings/${targetUserId}`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(typeof data.count, 'number');
+
+    const activeWarns = await mockClient.db.get(`guild:${testGuildId}:warnings:${targetUserId}`);
+    assert.deepStrictEqual(activeWarns, []);
+  });
+
+  it('GET /api/guilds/:guildId/moderation/config returns moderation settings', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/moderation/config`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok(Array.isArray(data.moderation.autoPunish));
+  });
+
+  it('PATCH /api/guilds/:guildId/moderation/config rejects invalid autoPunish rules with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/moderation/config`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        autoPunish: [
+          {
+            warnThreshold: 0, // Invalid: min is 1
+            action: 'invalid_action',
+          },
+        ],
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('PATCH /api/guilds/:guildId/moderation/config persists valid autoPunish rules', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/moderation/config`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        autoPunish: [
+          { warnThreshold: 3, action: 'timeout', durationMinutes: 60 },
+          { warnThreshold: 5, action: 'kick' },
+          { warnThreshold: 7, action: 'ban' },
+        ],
+        dmOnWarn: false,
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.moderation.autoPunish.length, 3);
+    assert.strictEqual(data.moderation.autoPunish[0].action, 'timeout');
+    assert.strictEqual(data.moderation.autoPunish[0].durationMinutes, 60);
+    assert.strictEqual(data.moderation.dmOnWarn, false);
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);

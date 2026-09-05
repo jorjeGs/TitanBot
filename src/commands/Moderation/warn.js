@@ -109,11 +109,26 @@ export default {
             }
         });
 
+        const autoPunishResult = await ModerationService.checkAndApplyAutoPunish({
+            guild: interaction.guild,
+            member,
+            warnCount: totalCount,
+            client,
+        }).catch((err) => {
+            logger.warn('Auto-punish execution error:', err);
+            return null;
+        });
+
+        let successDescription = t('moderation.warn.success_desc', { reason, totalCount }, interaction);
+        if (autoPunishResult?.applied) {
+            successDescription += `\n⚡ **Auto-punish triggered:** ${autoPunishResult.action.toUpperCase()}`;
+        }
+
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [
                 successEmbed(
                     t('moderation.warn.success_title', { user: target.tag }, interaction),
-                    t('moderation.warn.success_desc', { reason, totalCount }, interaction),
+                    successDescription,
                 ),
             ],
         });

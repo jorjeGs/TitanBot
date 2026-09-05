@@ -105,6 +105,20 @@ export const JoinToCreateConfigSchema = z
   })
   .optional();
 
+export const AutoPunishRuleSchema = z
+  .object({
+    warnThreshold: z.number().int().min(1).max(50),
+    action: z.enum(['timeout', 'kick', 'ban']),
+    durationMinutes: z.number().int().min(1).max(40320).optional().nullable(),
+  });
+
+export const ModerationConfigSchema = z
+  .object({
+    autoPunish: z.array(AutoPunishRuleSchema).default([]),
+    dmOnWarn: z.boolean().default(true),
+  })
+  .default({ autoPunish: [], dmOnWarn: true });
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
@@ -129,7 +143,8 @@ export const GuildConfigSchema = z
     verification: VerificationConfigSchema,
     leveling: LevelingConfigSchema,
     economy: EconomyConfigSchema,
-    joinToCreate: JoinToCreateConfigSchema
+    joinToCreate: JoinToCreateConfigSchema,
+    moderation: ModerationConfigSchema.optional(),
   })
   .passthrough();
 

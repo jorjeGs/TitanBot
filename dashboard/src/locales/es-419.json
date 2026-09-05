@@ -37,7 +37,8 @@
     "leveling": "Niveles y XP",
     "economy": "Economía y Tienda",
     "serverstats": "Estadísticas del Servidor",
-    "jointocreate": "Salas de Voz Temporales"
+    "jointocreate": "Salas de Voz Temporales",
+    "moderation": "Moderación y Seguridad"
   },
   "landing": {
     "heroTitle": "Gestión Potente de Comunidades para Discord",
@@ -416,6 +417,94 @@
     "previewTitle": "Vista Previa de Salas Temporales",
     "errors": {
       "saveFailed": "Error al guardar los ajustes de Join-to-Create."
+    }
+  },
+  "moderation": {
+    "title": "Moderación y Seguridad",
+    "subtitle": "Inspecciona el historial disciplinario de miembros, gestiona sanciones activas, audita casos del servidor y automatiza castigos por acumulación de advertencias.",
+    "tabs": {
+      "lookup": "Buscador de Miembros",
+      "cases": "Casos del Servidor",
+      "autoPunish": "Castigos Automáticos"
+    },
+    "memberLookup": {
+      "title": "Buscador Disciplinario de Miembros",
+      "placeholder": "ID de usuario de Discord o nombre...",
+      "searchBtn": "Buscar Miembro",
+      "searching": "Buscando...",
+      "notFound": "No se encontró ningún miembro con ese ID.",
+      "noMemberSelected": "Introduce un ID de usuario de Discord para consultar su expediente disciplinario completo."
+    },
+    "memberProfile": {
+      "inServer": "En el Servidor",
+      "leftServer": "Fuera del Servidor",
+      "activeWarns": "Advertencias Activas",
+      "isTimedOut": "En Aislamiento (Timeout)",
+      "timedOutUntil": "Aislado hasta",
+      "isBanned": "Baneado",
+      "banReason": "Motivo del Baneo",
+      "clearAllWarnsBtn": "Limpiar Todas las Advertencias",
+      "confirmClearAll": "¿Estás seguro de que deseas eliminar todas las advertencias de este usuario?",
+      "clearedSuccess": "Todas las advertencias del usuario han sido eliminadas."
+    },
+    "warnings": {
+      "title": "Advertencias Registradas",
+      "noWarnings": "Este miembro no tiene advertencias activas en este servidor.",
+      "colId": "ID",
+      "colReason": "Motivo",
+      "colMod": "Moderador",
+      "colDate": "Fecha",
+      "colActions": "Acciones",
+      "revokeBtn": "Revocar Sanción",
+      "confirmRevoke": "¿Revocar esta advertencia?",
+      "revokeSuccess": "Advertencia revocada correctamente."
+    },
+    "notes": {
+      "title": "Notas de Moderación Internas",
+      "noNotes": "No hay notas internas registradas para este usuario.",
+      "colType": "Tipo",
+      "colContent": "Contenido",
+      "colMod": "Moderador",
+      "colDate": "Fecha"
+    },
+    "serverCases": {
+      "title": "Auditoría de Casos del Servidor",
+      "subtitle": "Registro cronológico de todas las intervenciones de moderación aplicadas por TitanBot y el equipo.",
+      "filterAll": "Todos los Casos",
+      "filterWarns": "Advertencias",
+      "filterTimeouts": "Aislamientos",
+      "filterKicks": "Expulsiones",
+      "filterBans": "Baneos",
+      "noCases": "No se han registrado casos de moderación con los filtros actuales.",
+      "colCaseId": "# Caso",
+      "colAction": "Acción",
+      "colTarget": "Usuario",
+      "colMod": "Moderador",
+      "colReason": "Motivo",
+      "colDate": "Fecha"
+    },
+    "autoPunish": {
+      "title": "Reglas de Castigo Automático (Auto-Punish)",
+      "subtitle": "Aplica sanciones escalonadas de forma autónoma cuando un miembro alcance un umbral determinado de advertencias.",
+      "dmOnWarn": "Notificación por Mensaje Directo al Advertir",
+      "dmOnWarnHelp": "Envía un mensaje privado al infractor con los detalles del aviso y el número acumulado de advertencias.",
+      "whenUserReaches": "Al acumular",
+      "warns": "advertencia(s)",
+      "applyAction": "Aplicar automáticamente",
+      "actionTimeout": "Aislamiento (Timeout)",
+      "actionKick": "Expulsión (Kick)",
+      "actionBan": "Baneo Permanente (Ban)",
+      "duration": "Duración del Aislamiento",
+      "minutes": "minutos",
+      "addRuleBtn": "Añadir Regla",
+      "ruleListTitle": "Reglas Escaladas Configuradas",
+      "noRules": "No hay reglas de castigo automático configuradas. Añade una regla arriba para automatizar la disciplina del servidor.",
+      "ruleTemplate": "Al llegar a {{count}} advertencias ➔ {{action}}",
+      "deleteRuleBtn": "Eliminar Regla",
+      "saveBtn": "Guardar Ajustes de Moderación",
+      "saveSuccess": "¡Reglas de moderación y castigo automático guardadas correctamente!",
+      "saveError": "Error al guardar los ajustes de moderación.",
+      "thresholdRequired": "Debes especificar un umbral de advertencias válido (entre 1 y 50)."
     }
   }
 }

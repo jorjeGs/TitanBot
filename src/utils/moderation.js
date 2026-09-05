@@ -136,16 +136,19 @@ export async function storeModerationCase({ guildId, caseId, caseData }) {
   }
 }
 
-export async function getModerationCases(guildId, filters = {}) {
+export async function getModerationCases(guildId, filters = {}, client = null) {
   try {
     const { userId, moderatorId, action, limit = 50, offset = 0 } = filters;
     
-    const allCases = [];
-    
     const caseListKey = `moderation_cases_list_${guildId}`;
-    const caseList = await getFromDb(caseListKey, []);
+    let caseList;
+    if (client?.db && typeof client.db.get === 'function') {
+      caseList = (await client.db.get(caseListKey)) || [];
+    } else {
+      caseList = await getFromDb(caseListKey, []);
+    }
     
-    let filteredCases = caseList;
+    let filteredCases = Array.isArray(caseList) ? caseList : [];
     
     if (userId) {
       filteredCases = filteredCases.filter(case_ => case_.targetUserId === userId);

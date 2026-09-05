@@ -37,7 +37,8 @@
     "leveling": "Levels & XP",
     "economy": "Economy & Shop",
     "serverstats": "Server Stats",
-    "jointocreate": "Temporary Voice Rooms"
+    "jointocreate": "Temporary Voice Rooms",
+    "moderation": "Moderation & Security"
   },
   "landing": {
     "heroTitle": "Powerful Community Management for Discord",
@@ -416,6 +417,94 @@
     "previewTitle": "Temporary Rooms Preview",
     "errors": {
       "saveFailed": "Failed to save Join-to-Create settings."
+    }
+  },
+  "moderation": {
+    "title": "Moderation & Security",
+    "subtitle": "Inspect member disciplinary history, manage active penalties, audit server moderation cases, and automate punishment escalation based on warnings.",
+    "tabs": {
+      "lookup": "Member Lookup",
+      "cases": "Server Cases",
+      "autoPunish": "Auto-Punish Rules"
+    },
+    "memberLookup": {
+      "title": "Member Disciplinary Lookup",
+      "placeholder": "Discord User ID or username...",
+      "searchBtn": "Lookup Member",
+      "searching": "Searching...",
+      "notFound": "No member found with that ID.",
+      "noMemberSelected": "Enter a Discord user ID to view their full disciplinary record and active warnings."
+    },
+    "memberProfile": {
+      "inServer": "In Server",
+      "leftServer": "Not in Server",
+      "activeWarns": "Active Warnings",
+      "isTimedOut": "Timed Out",
+      "timedOutUntil": "Timed out until",
+      "isBanned": "Banned",
+      "banReason": "Ban Reason",
+      "clearAllWarnsBtn": "Clear All Warnings",
+      "confirmClearAll": "Are you sure you want to delete all warnings for this user?",
+      "clearedSuccess": "All warnings for this user have been cleared."
+    },
+    "warnings": {
+      "title": "Recorded Warnings",
+      "noWarnings": "This member has no active warnings in this server.",
+      "colId": "ID",
+      "colReason": "Reason",
+      "colMod": "Moderator",
+      "colDate": "Date",
+      "colActions": "Actions",
+      "revokeBtn": "Revoke Warning",
+      "confirmRevoke": "Revoke this warning?",
+      "revokeSuccess": "Warning revoked successfully."
+    },
+    "notes": {
+      "title": "Internal Moderation Notes",
+      "noNotes": "No internal notes recorded for this user.",
+      "colType": "Type",
+      "colContent": "Content",
+      "colMod": "Moderator",
+      "colDate": "Date"
+    },
+    "serverCases": {
+      "title": "Server Cases & Audit Log",
+      "subtitle": "Chronological audit log of all moderation interventions performed by TitanBot and staff.",
+      "filterAll": "All Cases",
+      "filterWarns": "Warnings",
+      "filterTimeouts": "Timeouts",
+      "filterKicks": "Kicks",
+      "filterBans": "Bans",
+      "noCases": "No moderation cases found with the current filters.",
+      "colCaseId": "# Case",
+      "colAction": "Action",
+      "colTarget": "Target User",
+      "colMod": "Moderator",
+      "colReason": "Reason",
+      "colDate": "Date"
+    },
+    "autoPunish": {
+      "title": "Auto-Punishment Escalation Rules",
+      "subtitle": "Automatically enforce sanctions when a member reaches specified warning thresholds.",
+      "dmOnWarn": "Direct Message Notification on Warn",
+      "dmOnWarnHelp": "Send a private direct message to the offender containing violation details and their accumulated warning count.",
+      "whenUserReaches": "When member reaches",
+      "warns": "warning(s)",
+      "applyAction": "Automatically apply",
+      "actionTimeout": "Timeout",
+      "actionKick": "Kick",
+      "actionBan": "Permanent Ban",
+      "duration": "Timeout Duration",
+      "minutes": "minutes",
+      "addRuleBtn": "Add Rule",
+      "ruleListTitle": "Configured Punishment Escalations",
+      "noRules": "No auto-punish rules configured. Add a rule above to automate server discipline.",
+      "ruleTemplate": "At {{count}} warnings ➔ {{action}}",
+      "deleteRuleBtn": "Delete Rule",
+      "saveBtn": "Save Moderation Settings",
+      "saveSuccess": "Moderation and auto-punish rules saved successfully!",
+      "saveError": "Failed to save moderation settings.",
+      "thresholdRequired": "You must specify a valid warning threshold (between 1 and 50)."
     }
   }
 }

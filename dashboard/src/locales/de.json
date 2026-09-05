@@ -37,7 +37,8 @@
     "leveling": "Level & XP",
     "economy": "Wirtschaft & Shop",
     "serverstats": "Server-Statistiken",
-    "jointocreate": "Temporäre Sprachkanäle"
+    "jointocreate": "Temporäre Sprachkanäle",
+    "moderation": "Moderation & Sicherheit"
   },
   "landing": {
     "heroTitle": "Leistungsstarke Community-Verwaltung für Discord",
@@ -416,6 +417,94 @@
     "previewTitle": "Vorschau temporärer Räume",
     "errors": {
       "saveFailed": "Fehler beim Speichern der Join-to-Create-Einstellungen."
+    }
+  },
+  "moderation": {
+    "title": "Moderation & Sicherheit",
+    "subtitle": "Überprüfe Disziplinarakten von Mitgliedern, verwalte aktive Verwarnungen, auditiere Serverfälle und automatisiere Bestrafungen bei Verwarnungshäufung.",
+    "tabs": {
+      "lookup": "Mitgliedersuche",
+      "cases": "Serverfälle",
+      "autoPunish": "Automatische Bestrafungen"
+    },
+    "memberLookup": {
+      "title": "Disziplinarische Mitgliedersuche",
+      "placeholder": "Discord Benutzer-ID oder Name...",
+      "searchBtn": "Mitglied suchen",
+      "searching": "Suchen...",
+      "notFound": "Kein Mitglied mit dieser ID gefunden.",
+      "noMemberSelected": "Gib eine Discord Benutzer-ID ein, um die vollständige Disziplinarakte und aktive Verwarnungen anzuzeigen."
+    },
+    "memberProfile": {
+      "inServer": "Auf dem Server",
+      "leftServer": "Nicht auf dem Server",
+      "activeWarns": "Aktive Verwarnungen",
+      "isTimedOut": "Im Timeout",
+      "timedOutUntil": "Timeout bis",
+      "isBanned": "Gebannt",
+      "banReason": "Banngrund",
+      "clearAllWarnsBtn": "Alle Verwarnungen löschen",
+      "confirmClearAll": "Möchtest du wirklich alle Verwarnungen für diesen Benutzer löschen?",
+      "clearedSuccess": "Alle Verwarnungen dieses Benutzers wurden gelöscht."
+    },
+    "warnings": {
+      "title": "Erfasste Verwarnungen",
+      "noWarnings": "Dieses Mitglied hat keine aktiven Verwarnungen auf diesem Server.",
+      "colId": "ID",
+      "colReason": "Grund",
+      "colMod": "Moderator",
+      "colDate": "Datum",
+      "colActions": "Aktionen",
+      "revokeBtn": "Verwarnung aufheben",
+      "confirmRevoke": "Diese Verwarnung aufheben?",
+      "revokeSuccess": "Verwarnung erfolgreich aufgehoben."
+    },
+    "notes": {
+      "title": "Interne Moderationsnotizen",
+      "noNotes": "Keine internen Notizen für diesen Benutzer erfasst.",
+      "colType": "Typ",
+      "colContent": "Inhalt",
+      "colMod": "Moderator",
+      "colDate": "Datum"
+    },
+    "serverCases": {
+      "title": "Serverfälle & Audit-Protokoll",
+      "subtitle": "Chronologisches Protokoll aller von TitanBot und dem Team durchgeführten Moderationsmaßnahmen.",
+      "filterAll": "Alle Fälle",
+      "filterWarns": "Verwarnungen",
+      "filterTimeouts": "Timeouts",
+      "filterKicks": "Kicks",
+      "filterBans": "Banns",
+      "noCases": "Keine Moderationsfälle mit den aktuellen Filtern gefunden.",
+      "colCaseId": "# Fall",
+      "colAction": "Aktion",
+      "colTarget": "Benutzer",
+      "colMod": "Moderator",
+      "colReason": "Grund",
+      "colDate": "Datum"
+    },
+    "autoPunish": {
+      "title": "Automatische Bestrafungsregeln (Auto-Punish)",
+      "subtitle": "Wende automatisch Sanktionen an, wenn ein Mitglied eine bestimmte Schwelle an Verwarnungen erreicht.",
+      "dmOnWarn": "Direktnachricht bei Verwarnung",
+      "dmOnWarnHelp": "Sendet dem Benutzer eine private Nachricht mit Einzelheiten zum Verstoß und der Gesamtzahl der Verwarnungen.",
+      "whenUserReaches": "Beim Erreichen von",
+      "warns": "Verwarnung(en)",
+      "applyAction": "Automatisch anwenden",
+      "actionTimeout": "Timeout",
+      "actionKick": "Kick (Rauswurf)",
+      "actionBan": "Permanenter Bann",
+      "duration": "Timeout-Dauer",
+      "minutes": "Minuten",
+      "addRuleBtn": "Regel hinzufügen",
+      "ruleListTitle": "Konfigurierte Sanktionsstufen",
+      "noRules": "Keine automatischen Bestrafungsregeln konfiguriert. Füge oben eine Regel hinzu.",
+      "ruleTemplate": "Bei {{count}} Verwarnungen ➔ {{action}}",
+      "deleteRuleBtn": "Regel löschen",
+      "saveBtn": "Moderationseinstellungen speichern",
+      "saveSuccess": "Moderations- und Bestrafungsregeln erfolgreich gespeichert!",
+      "saveError": "Fehler beim Speichern der Moderationseinstellungen.",
+      "thresholdRequired": "Du musst einen gültigen Verwarnungsschwellenwert angeben (zwischen 1 und 50)."
     }
   }
 }

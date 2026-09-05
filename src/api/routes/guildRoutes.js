@@ -36,8 +36,17 @@ import {
   getJoinToCreateSettings,
   updateJoinToCreateSettings,
 } from '../controllers/jointocreateController.js';
+import {
+  getGuildCases,
+  getUserModHistory,
+  deleteWarning,
+  clearUserWarnings,
+  getModerationSettings,
+  updateModerationSettings,
+} from '../controllers/moderationController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
+import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
 
 const router = Router();
 
@@ -68,4 +77,13 @@ router.delete('/:guildId/serverstats', verifyAuth, checkGuildPermissions, delete
 router.get('/:guildId/jointocreate', verifyAuth, checkGuildPermissions, getJoinToCreateSettings);
 router.patch('/:guildId/jointocreate', verifyAuth, checkGuildPermissions, updateJoinToCreateSettings);
 
+// Moderation subroutes protected by checkModerationAccess
+router.get('/:guildId/moderation/cases', verifyAuth, checkModerationAccess, getGuildCases);
+router.get('/:guildId/moderation/users/:userId', verifyAuth, checkModerationAccess, getUserModHistory);
+router.delete('/:guildId/moderation/warnings/:userId/:warningId', verifyAuth, checkModerationAccess, deleteWarning);
+router.delete('/:guildId/moderation/warnings/:userId', verifyAuth, checkModerationAccess, clearUserWarnings);
+router.get('/:guildId/moderation/config', verifyAuth, checkModerationAccess, getModerationSettings);
+router.patch('/:guildId/moderation/config', verifyAuth, checkModerationAccess, updateModerationSettings);
+
 export default router;
+
