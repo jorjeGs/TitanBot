@@ -115,6 +115,7 @@ class TitanBot extends Client {
 
   startWebServer() {
     const app = express();
+    app.enable('trust proxy');
     const configuredPort = Number(this.config.api?.port || process.env.PORT || 3000);
     const maxPortRetryAttempts = Number(process.env.PORT_RETRY_ATTEMPTS || 5);
     const host = process.env.WEB_HOST || '0.0.0.0';

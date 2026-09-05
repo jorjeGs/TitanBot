@@ -2,18 +2,26 @@ import { generateOAuthState, getOAuthUrl, exchangeCodeForTokens, fetchDiscordUse
 import { createSessionToken } from '../utils/tokenHelper.js';
 import { logger } from '../../utils/logger.js';
 
+function isConnectionSecure(req) {
+  if (req.secure) return true;
+  if (req.headers['x-forwarded-proto'] === 'https') return true;
+  const dashboardUrl = process.env.DASHBOARD_URL || '';
+  if (dashboardUrl.startsWith('https://')) return true;
+  return false;
+}
+
 /**
  * Initiates the Discord OAuth2 authorization flow.
  */
 export function login(req, res) {
   try {
     const state = generateOAuthState();
-    const isProduction = process.env.NODE_ENV === 'production';
+    const secure = isConnectionSecure(req);
 
     res.cookie('oauth_state', state, {
       httpOnly: true,
       sameSite: 'lax',
-      secure: isProduction,
+      secure,
       maxAge: 10 * 60 * 1000, // 10 minutes
       path: '/',
     });
@@ -63,12 +71,12 @@ export async function callback(req, res) {
     };
 
     const sessionToken = createSessionToken(sessionPayload);
-    const isProduction = process.env.NODE_ENV === 'production';
+    const secure = isConnectionSecure(req);
 
     res.cookie('titanbot_session', sessionToken, {
       httpOnly: true,
       sameSite: 'lax',
-      secure: isProduction,
+      secure,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       path: '/',
     });
