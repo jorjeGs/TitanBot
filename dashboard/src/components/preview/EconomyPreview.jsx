@@ -36,26 +36,32 @@ export function EconomyPreview({
             <span className="bg-discord-blurple text-[10px] uppercase font-bold text-white px-1.5 py-0.5 rounded">
               BOT
             </span>
-            <span className="text-[11px] text-slate-400">Hoy a las 16:20</span>
+            <span className="text-[11px] text-slate-400">
+              {t('previews.todayAt', { time: '16:20' })}
+            </span>
           </div>
 
           {/* Embed Container */}
           <div className="border-l-4 border-amber-400 bg-[#2b2d31] p-3.5 rounded-r-md space-y-3 shadow-sm">
             <div className="font-bold text-white text-sm leading-snug flex items-center gap-2">
               <Wallet className="w-4 h-4 text-amber-400" />
-              <span>Balance de @GamerPro</span>
+              <span>{t('previews.balanceOf', { user: 'GamerPro' })}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="bg-[#1e1f22] p-2 rounded border border-slate-800">
-                <span className="text-[11px] text-slate-400 block font-medium">Monedero</span>
+                <span className="text-[11px] text-slate-400 block font-medium">
+                  {t('previews.wallet', 'Monedero')}
+                </span>
                 <span className="text-white font-bold text-sm">
                   {sampleBalance.toLocaleString()} {currencySymbol}
                 </span>
               </div>
 
               <div className="bg-[#1e1f22] p-2 rounded border border-slate-800">
-                <span className="text-[11px] text-slate-400 block font-medium">Banco</span>
+                <span className="text-[11px] text-slate-400 block font-medium">
+                  {t('previews.bank', 'Banco')}
+                </span>
                 <span className="text-white font-bold text-sm">
                   5,000 / 10,000 {currencySymbol}
                 </span>
@@ -65,7 +71,7 @@ export function EconomyPreview({
             <div className="bg-[#1e1f22] p-2 rounded border border-slate-800 flex items-center justify-between text-xs">
               <div className="flex items-center gap-1.5 text-slate-300">
                 <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Patrimonio Total</span>
+                <span>{t('previews.netWorth', 'Patrimonio Total')}</span>
               </div>
               <span className="text-amber-300 font-bold text-sm">
                 {(sampleBalance + 5000).toLocaleString()} {currencySymbol}

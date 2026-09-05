@@ -417,7 +417,7 @@ export function GiveawaysTab() {
 
                     {g.requiredRoleName && (
                       <div className="text-[11px] text-slate-300 bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded truncate">
-                        <span className="text-amber-400 font-medium">Requisito:</span> @{g.requiredRoleName}
+                        <span className="text-amber-400 font-medium">{t('giveaways.requirementLabel', 'Requisito:')}</span> @{g.requiredRoleName}
                       </div>
                     )}
                   </div>

@@ -374,11 +374,11 @@ export function LevelingTab() {
                     onChange={(e) => updateConfigField('xpMultiplier', parseFloat(e.target.value))}
                     className="w-full px-3.5 py-2.5 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition-colors"
                   >
-                    <option value={0.5}>0.5x (Lento)</option>
-                    <option value={1.0}>1.0x (Estándar)</option>
-                    <option value={1.5}>1.5x (Rápido)</option>
-                    <option value={2.0}>2.0x (Doble XP)</option>
-                    <option value={3.0}>3.0x (Triple XP)</option>
+                    <option value={0.5}>{t('leveling.multipliers.slow', '0.5x (Lento)')}</option>
+                    <option value={1.0}>{t('leveling.multipliers.standard', '1.0x (Estándar)')}</option>
+                    <option value={1.5}>{t('leveling.multipliers.fast', '1.5x (Rápido)')}</option>
+                    <option value={2.0}>{t('leveling.multipliers.double', '2.0x (Doble XP)')}</option>
+                    <option value={3.0}>{t('leveling.multipliers.triple', '3.0x (Triple XP)')}</option>
                   </select>
                   <p className="mt-1 text-xs text-slate-400">
                     {t('leveling.multiplierHelp') || 'Escala la velocidad a la que la comunidad progresa.'}
@@ -457,7 +457,7 @@ export function LevelingTab() {
                     type="number"
                     min={1}
                     max={1000}
-                    placeholder="Ej. 5"
+                    placeholder={t('leveling.levelPlaceholder', 'Ej. 5')}
                     value={newRewardLevel}
                     onChange={(e) => setNewRewardLevel(e.target.value)}
                     className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple transition-colors"
@@ -521,7 +521,7 @@ export function LevelingTab() {
                             type="button"
                             onClick={() => handleRemoveReward(lvl)}
                             className="text-slate-400 hover:text-red-400 p-1 transition-colors"
-                            title="Eliminar recompensa"
+                            title={t('leveling.deleteRewardTooltip', 'Eliminar recompensa')}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>

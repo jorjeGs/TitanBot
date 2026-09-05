@@ -291,7 +291,7 @@ export function LoggingTab() {
                           type="button"
                           onClick={() => removeIgnoredChannel(chId)}
                           className="text-slate-400 hover:text-red-400 transition-colors p-0.5 rounded"
-                          title="Quitar exclusión"
+                          title={t('logging.removeExclusion', 'Quitar exclusión')}
                         >
                           <X className="w-3 h-3" />
                         </button>

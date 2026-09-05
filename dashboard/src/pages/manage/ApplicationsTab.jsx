@@ -502,7 +502,7 @@ export function ApplicationsTab() {
                       {/* Role Info */}
                       <div className="flex items-center gap-2 text-xs bg-[#1e1f22] px-3 py-1.5 rounded-lg border border-slate-700/40">
                         <Shield className="w-3.5 h-3.5 text-discord-blurple shrink-0" />
-                        <span className="text-slate-400 text-[11px]">Rol:</span>
+                        <span className="text-slate-400 text-[11px]">{t('applications.roleColon', 'Rol:')}</span>
                         <span className="font-semibold text-slate-200 truncate">
                           {app.roleName || 'Staff'}
                         </span>
@@ -523,7 +523,7 @@ export function ApplicationsTab() {
                       {/* Review Reason / Note if processed */}
                       {!isPending && app.reviewMessage && (
                         <div className="text-[11px] text-slate-400 bg-[#1e1f22]/70 p-2 rounded border border-slate-700/40">
-                          <span className="font-semibold text-slate-300">Nota:</span> {app.reviewMessage}
+                          <span className="font-semibold text-slate-300">{t('applications.noteColon', 'Nota:')}</span> {app.reviewMessage}
                         </div>
                       )}
                     </div>
@@ -681,7 +681,7 @@ export function ApplicationsTab() {
                         type="button"
                         onClick={() => handleRemoveQuestion(idx)}
                         className="p-1 text-slate-400 hover:text-red-400 rounded transition-colors shrink-0"
-                        title="Eliminar pregunta"
+                        title={t('applications.deleteQuestionTooltip', 'Eliminar pregunta')}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -787,15 +787,15 @@ export function ApplicationsTab() {
             {/* Application Info Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
               <div className="bg-[#1e1f22] p-3 rounded-xl border border-slate-700/40">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Rol Postulado</span>
+                <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('applications.tableRole', 'Rol Postulado')}</span>
                 <span className="font-bold text-discord-blurple">{selectedApp.roleName || 'Staff'}</span>
               </div>
               <div className="bg-[#1e1f22] p-3 rounded-xl border border-slate-700/40">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Estado</span>
+                <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('applications.tableStatus', 'Estado')}</span>
                 <span className="font-bold text-slate-200 capitalize">{selectedApp.status}</span>
               </div>
               <div className="bg-[#1e1f22] p-3 rounded-xl border border-slate-700/40 col-span-2 sm:col-span-1">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Enviado</span>
+                <span className="text-[10px] text-slate-400 uppercase font-semibold block">{t('applications.tableSubmitted', 'Enviado')}</span>
                 <span className="font-semibold text-slate-300">
                   {new Date(selectedApp.createdAt).toLocaleDateString()}
                 </span>
@@ -805,7 +805,7 @@ export function ApplicationsTab() {
             {/* Questions & Answers */}
             <div className="space-y-4">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                Respuestas del Cuestionario:
+                {t('applications.answersSubmitted', 'Respuestas del Cuestionario:')}
               </h4>
               <div className="space-y-3">
                 {Array.isArray(selectedApp.answers) && selectedApp.answers.length > 0 ? (
@@ -824,7 +824,7 @@ export function ApplicationsTab() {
                     </div>
                   ))
                 ) : (
-                  <p className="text-xs text-slate-400 italic">No se registraron respuestas detalladas.</p>
+                  <p className="text-xs text-slate-400 italic">{t('applications.noAnswersRecorded', 'No se registraron respuestas detalladas.')}</p>
                 )}
               </div>
             </div>
@@ -833,7 +833,7 @@ export function ApplicationsTab() {
             {selectedApp.status !== 'pending' && selectedApp.reviewMessage && (
               <div className="p-3.5 bg-discord-dark rounded-xl border border-slate-700/60 text-xs space-y-1">
                 <span className="font-semibold text-slate-300 block">
-                  Decisión de Moderación ({selectedApp.status}):
+                  {t('applications.decision', 'Decisión de Moderación')} ({selectedApp.status}):
                 </span>
                 <p className="text-slate-400 italic">"{selectedApp.reviewMessage}"</p>
               </div>
@@ -851,7 +851,7 @@ export function ApplicationsTab() {
                     className="px-4 py-2 bg-red-500/15 hover:bg-red-500/25 text-red-400 border border-red-500/30 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5"
                   >
                     <XCircle className="w-4 h-4" />
-                    <span>Denegar</span>
+                    <span>{t('applications.deny', 'Denegar')}</span>
                   </button>
 
                   <button
@@ -862,7 +862,7 @@ export function ApplicationsTab() {
                     className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5 shadow-md shadow-emerald-500/20"
                   >
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Aprobar y Asignar Rol</span>
+                    <span>{t('applications.approveAndAssign', 'Aprobar y Asignar Rol')}</span>
                   </button>
                 </>
               )}
@@ -880,12 +880,12 @@ export function ApplicationsTab() {
                 {reviewModal.action === 'approve' ? (
                   <>
                     <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                    <span>Aprobar Postulación</span>
+                    <span>{t('applications.approveModalTitle', 'Aprobar Postulación')}</span>
                   </>
                 ) : (
                   <>
                     <XCircle className="w-5 h-5 text-red-400" />
-                    <span>Denegar Postulación</span>
+                    <span>{t('applications.denyModalTitle', 'Denegar Postulación')}</span>
                   </>
                 )}
               </h3>

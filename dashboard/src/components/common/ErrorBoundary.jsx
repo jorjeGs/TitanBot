@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import i18n from '../../i18n';
 
 export class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -34,10 +35,10 @@ export class ErrorBoundary extends React.Component {
 
             <div className="space-y-2">
               <h2 className="text-xl font-bold text-white tracking-tight">
-                Ha ocurrido un error inesperado
+                {i18n.t('errorBoundary.title', 'Algo salió mal')}
               </h2>
               <p className="text-sm text-slate-400">
-                La interfaz encontró un problema. No te preocupes, la configuración en el servidor está segura.
+                {i18n.t('errorBoundary.message', 'Ha ocurrido un error inesperado al renderizar la aplicación.')}
               </p>
             </div>
 
@@ -56,7 +57,7 @@ export class ErrorBoundary extends React.Component {
                 className="w-full sm:flex-1 py-2.5 px-4 bg-discord-blurple hover:bg-discord-blurple/90 text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-md"
               >
                 <RefreshCw className="w-4 h-4" />
-                <span>Recargar</span>
+                <span>{i18n.t('errorBoundary.reload', 'Recargar')}</span>
               </button>
 
               <button
@@ -65,7 +66,7 @@ export class ErrorBoundary extends React.Component {
                 className="w-full sm:flex-1 py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-colors border border-slate-700/60"
               >
                 <Home className="w-4 h-4" />
-                <span>Inicio</span>
+                <span>{i18n.t('errorBoundary.home', 'Inicio')}</span>
               </button>
             </div>
           </div>

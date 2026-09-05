@@ -240,6 +240,35 @@ export const GuildConfigSchema = z
     logChannelId: z.string().nullable().optional(),
     welcomeChannel: z.string().nullable().optional(),
     welcomeMessage: z.string().optional(),
+    welcomeEnabled: z.boolean().optional(),
+    welcomeType: z.enum(['text', 'embed']).optional(),
+    welcomeEmbed: z
+      .object({
+        title: z.string().max(256).optional(),
+        description: z.string().max(4096).optional(),
+        color: z.string().optional(),
+        footer: z.string().max(2048).optional(),
+        image: z.string().url().nullable().optional().or(z.literal('')),
+        thumbnail: z.boolean().optional(),
+      })
+      .optional(),
+    welcomePing: z.boolean().optional(),
+    autoRoleDelay: z.number().int().min(0).max(300).optional(),
+    goodbyeEnabled: z.boolean().optional(),
+    goodbyeChannelId: z.string().nullable().optional(),
+    leaveMessage: z.string().max(2000).optional(),
+    leaveType: z.enum(['text', 'embed']).optional(),
+    leaveEmbed: z
+      .object({
+        title: z.string().max(256).optional(),
+        description: z.string().max(4096).optional(),
+        color: z.string().optional(),
+        footer: z.string().max(2048).optional(),
+        image: z.string().url().nullable().optional().or(z.literal('')),
+        thumbnail: z.boolean().optional(),
+      })
+      .optional(),
+    goodbyePing: z.boolean().optional(),
     autoRole: z.string().nullable().optional(),
     autoRoles: z.array(z.string()).default([]).optional(),
     dmOnClose: z.boolean().optional(),

@@ -49,7 +49,9 @@ export function LevelUpPreview({
             <span className="bg-discord-blurple text-[10px] uppercase font-bold text-white px-1.5 py-0.5 rounded">
               BOT
             </span>
-            <span className="text-[11px] text-slate-400">Hoy a las 15:45</span>
+            <span className="text-[11px] text-slate-400">
+              {t('previews.todayAt', { time: '15:45' })}
+            </span>
           </div>
 
           {/* Embed Container */}

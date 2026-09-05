@@ -25,7 +25,7 @@ export function ServerStatsPreview({
         {/* Category Header */}
         <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">
           <ChevronDown className="w-3 h-3" />
-          <span>📊 ESTADÍSTICAS DEL SERVIDOR</span>
+          <span>{t('previews.serverStatsTitle', '📊 ESTADÍSTICAS DEL SERVIDOR')}</span>
         </div>
 
         {/* Counter Channels */}

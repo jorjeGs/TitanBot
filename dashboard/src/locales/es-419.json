@@ -22,7 +22,17 @@
     "none": "Ninguno",
     "unmanageableRole": "Fuera de alcance",
     "hierarchyWarning": "Este rol está por encima del rol más alto de TitanBot en la jerarquía del servidor o el bot no tiene permiso de Gestionar Roles. No podrá asignarlo automáticamente.",
-    "add": "Añadir"
+    "add": "Añadir",
+    "refresh": "Actualizar",
+    "reset": "Reiniciar",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "close": "Cerrar",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "delete": "Eliminar",
+    "moveUp": "Subir",
+    "moveDown": "Bajar"
   },
   "nav": {
     "general": "Ajustes Generales",
@@ -107,7 +117,34 @@
     "previewTitle": "Vista Previa en Discord",
     "previewTime": "Hoy a las 12:00",
     "previewUser": "@NuevoMiembro",
-    "placeholdersNote": "Las variables {user}, {server} y {memberCount} se sustituirán dinámicamente cuando un usuario se una."
+    "placeholdersNote": "Las variables {user}, {server} y {memberCount} se sustituirán dinámicamente cuando un usuario se una.",
+    "tabWelcome": "Bienvenidas",
+    "tabGoodbye": "Despedidas",
+    "tabAutoRoles": "Roles Automáticos",
+    "formatType": "Formato del Mensaje",
+    "formatText": "Texto Plano",
+    "formatEmbed": "Embed Elegante",
+    "embedTitle": "Título del Embed",
+    "embedColor": "Color del Embed",
+    "embedDescription": "Descripción / Contenido",
+    "embedFooter": "Pie de Página (Footer)",
+    "embedImage": "Banner / Imagen Grande (URL)",
+    "embedThumbnail": "Incluir avatar del usuario como miniatura",
+    "pingUser": "Mencionar al usuario fuera del embed",
+    "pingUserHelp": "Si está activo, enviará una mención directa para notificar al usuario.",
+    "variablesTitle": "Variables dinámicas (haz clic para insertar):",
+    "delay": "Retraso de asignación",
+    "delayImmediate": "Inmediato (0 segundos)",
+    "delay5s": "5 segundos",
+    "delay15s": "15 segundos",
+    "delay30s": "30 segundos",
+    "delay60s": "60 segundos",
+    "goodbyeEnable": "Habilitar mensajes de despedida",
+    "goodbyeChannel": "Canal de despedidas",
+    "goodbyeChannelHelp": "Canal donde se publicará cuando un miembro salga.",
+    "goodbyeMessage": "Mensaje de despedida",
+    "goodbyeMessageHelp": "Mensaje cuando un miembro abandona el servidor.",
+    "previewGoodbyeTitle": "Vista Previa de Despedida"
   },
   "logging": {
     "title": "Logs y Auditoría",
@@ -143,7 +180,8 @@
       "levelingDesc": "Ascensos de nivel y recompensas por actividad en el chat.",
       "giveaway": "Sorteos",
       "giveawayDesc": "Lanzamiento de sorteos, ganadores y relanzamientos."
-    }
+    },
+    "removeExclusion": "Quitar exclusión"
   },
   "commands": {
     "title": "Gestor de Comandos",
@@ -227,7 +265,8 @@
     "selectPlaceholder": "Elige tus roles...",
     "availableRoles": "Roles Disponibles",
     "footerText": "TitanBot Roles",
-    "atLeastOneRole": "Debes agregar al menos un rol antes de publicar."
+    "atLeastOneRole": "Debes agregar al menos un rol antes de publicar.",
+    "loadingPanels": "Cargando paneles..."
   },
   "categories": {
     "Birthday": "Cumpleaños",
@@ -294,7 +333,8 @@
       "roleHierarchy": "El rol de staff seleccionado está por encima de TitanBot en la jerarquía.",
       "publishFailed": "Error al publicar el panel de tickets.",
       "deleteFailed": "Error al eliminar el panel de tickets."
-    }
+    },
+    "panelPlaceholder": "Crear Ticket"
   },
   "leveling": {
     "title": "Niveles y Gamificación",
@@ -341,7 +381,16 @@
       "noRole": "Por favor selecciona un rol para la recompensa.",
       "roleHierarchy": "El rol seleccionado está por encima de TitanBot en la jerarquía.",
       "saveFailed": "Error al guardar los ajustes de niveles."
-    }
+    },
+    "multipliers": {
+      "slow": "0.5x (Lento)",
+      "standard": "1.0x (Estándar)",
+      "fast": "1.5x (Rápido)",
+      "double": "2.0x (Doble XP)",
+      "triple": "3.0x (Triple XP)"
+    },
+    "deleteRewardTooltip": "Eliminar recompensa",
+    "levelPlaceholder": "Ej. 5"
   },
   "economy": {
     "title": "Sistema de Economía y Tienda",
@@ -422,6 +471,13 @@
     "previewTitle": "Vista Previa de Salas Temporales",
     "errors": {
       "saveFailed": "Error al guardar los ajustes de Join-to-Create."
+    },
+    "bitrates": {
+      "standard": "64 kbps (Estándar)",
+      "highFidelity": "96 kbps (Alta fidelidad)",
+      "musicQuality": "128 kbps (Calidad música)",
+      "studio": "256 kbps (Estudio)",
+      "maxDiscord": "384 kbps (Máximo Discord)"
     }
   },
   "moderation": {
@@ -510,7 +566,9 @@
       "saveSuccess": "¡Reglas de moderación y castigo automático guardadas correctamente!",
       "saveError": "Error al guardar los ajustes de moderación.",
       "thresholdRequired": "Debes especificar un umbral de advertencias válido (entre 1 y 50)."
-    }
+    },
+    "refreshData": "Actualizar datos",
+    "rolesLabel": "Roles:"
   },
   "giveaways": {
     "title": "Sorteos y Recompensas",
@@ -581,7 +639,8 @@
       "endFailed": "Error al finalizar el sorteo.",
       "rerollFailed": "Error al sortear nuevos ganadores.",
       "deleteFailed": "Error al eliminar el sorteo."
-    }
+    },
+    "requirementLabel": "Requisito:"
   },
   "birthdays": {
     "title": "Sistema de Cumpleaños",
@@ -679,7 +738,18 @@
       "deleteFailed": "Error al eliminar la postulación.",
       "maxQuestions": "Máximo 10 preguntas permitidas.",
       "minQuestions": "Debe haber al menos 1 pregunta."
-    }
+    },
+    "roleColon": "Rol:",
+    "noteColon": "Nota:",
+    "tableRole": "Rol Postulado",
+    "tableStatus": "Estado",
+    "tableSubmitted": "Enviado",
+    "noAnswersRecorded": "No se registraron respuestas detalladas.",
+    "deny": "Denegar",
+    "approveAndAssign": "Aprobar y Asignar Rol",
+    "approveModalTitle": "Aprobar Postulación",
+    "denyModalTitle": "Denegar Postulación",
+    "deleteQuestionTooltip": "Eliminar pregunta"
   },
   "embeds": {
     "title": "Creador de Embeds (WYSIWYG)",
@@ -796,5 +866,21 @@
       "shuffleSuccess": "Cola de reproducción mezclada.",
       "loopSuccess": "Modo de bucle actualizado."
     }
+  },
+  "errorBoundary": {
+    "title": "Algo salió mal",
+    "message": "Ha ocurrido un error inesperado al renderizar la aplicación.",
+    "reload": "Recargar",
+    "home": "Inicio"
+  },
+  "previews": {
+    "todayAt": "Hoy a las {{time}}",
+    "balanceOf": "Balance de @{{user}}",
+    "wallet": "Monedero",
+    "bank": "Banco",
+    "netWorth": "Patrimonio Total",
+    "voiceCategory": "🔊 SALAS DE VOZ PRIVADAS",
+    "voiceJoinPrompt": "➕ Entra para Crear Sala",
+    "serverStatsTitle": "📊 ESTADÍSTICAS DEL SERVIDOR"
   }
 }

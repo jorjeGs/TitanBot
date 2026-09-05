@@ -403,7 +403,7 @@ export function RolesTab() {
             {loading ? (
               <div className="p-8 flex items-center justify-center gap-2 text-slate-400">
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span className="text-sm">Loading panels...</span>
+                <span className="text-sm">{t('roles.loadingPanels', 'Loading panels...')}</span>
               </div>
             ) : panels.length === 0 ? (
               <div className="bg-discord-darker/60 border border-slate-800/80 rounded-2xl p-8 text-center space-y-2">

@@ -932,7 +932,7 @@ export function EmbedCreatorTab() {
                           onClick={() => handleMoveField(index, -1)}
                           disabled={index === 0}
                           className="p-1 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
-                          title="Subir"
+                          title={t('common.moveUp', 'Subir')}
                         >
                           <ArrowUp className="w-3.5 h-3.5" />
                         </button>
@@ -941,7 +941,7 @@ export function EmbedCreatorTab() {
                           onClick={() => handleMoveField(index, 1)}
                           disabled={index === fields.length - 1}
                           className="p-1 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
-                          title="Bajar"
+                          title={t('common.moveDown', 'Bajar')}
                         >
                           <ArrowDown className="w-3.5 h-3.5" />
                         </button>
@@ -949,7 +949,7 @@ export function EmbedCreatorTab() {
                           type="button"
                           onClick={() => handleRemoveField(index)}
                           className="p-1 text-slate-400 hover:text-red-400 ml-1 transition"
-                          title="Eliminar campo"
+                          title={t('common.delete', 'Eliminar campo')}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -1182,7 +1182,7 @@ export function EmbedCreatorTab() {
                             type="button"
                             onClick={() => handleDeleteTemplate(template.id)}
                             className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition"
-                            title="Eliminar plantilla"
+                            title={t('common.delete', 'Eliminar plantilla')}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>

@@ -284,11 +284,11 @@ export function JoinToCreateTab() {
                     onChange={(e) => updateConfigField('bitrate', parseInt(e.target.value, 10) || 64000)}
                     className="w-full px-3.5 py-2.5 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple transition-colors"
                   >
-                    <option value={64000}>64 kbps (Estándar)</option>
-                    <option value={96000}>96 kbps (Alta fidelidad)</option>
-                    <option value={128000}>128 kbps (Calidad música)</option>
-                    <option value={256000}>256 kbps (Estudio)</option>
-                    <option value={384000}>384 kbps (Máximo Discord)</option>
+                    <option value={64000}>{t('jointocreate.bitrates.standard', '64 kbps (Estándar)')}</option>
+                    <option value={96000}>{t('jointocreate.bitrates.highFidelity', '96 kbps (Alta fidelidad)')}</option>
+                    <option value={128000}>{t('jointocreate.bitrates.musicQuality', '128 kbps (Calidad música)')}</option>
+                    <option value={256000}>{t('jointocreate.bitrates.studio', '256 kbps (Estudio)')}</option>
+                    <option value={384000}>{t('jointocreate.bitrates.maxDiscord', '384 kbps (Máximo Discord)')}</option>
                   </select>
                 </div>
               </div>

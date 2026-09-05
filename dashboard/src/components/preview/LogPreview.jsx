@@ -142,7 +142,9 @@ export function LogPreview({
             <span className="bg-discord-blurple text-[10px] uppercase font-bold text-white px-1.5 py-0.5 rounded">
               BOT
             </span>
-            <span className="text-[11px] text-slate-400">Hoy a las 14:30</span>
+            <span className="text-[11px] text-slate-400">
+              {t('previews.todayAt', { time: '14:30' })}
+            </span>
           </div>
 
           {/* Embed Container */}
@@ -171,7 +173,7 @@ export function LogPreview({
             {/* Embed Footer */}
             <div className="pt-2 border-t border-slate-700/40 text-[10px] text-slate-400 flex items-center justify-between">
               <span>TitanBot Logging System</span>
-              <span>Hoy a las 14:30:12</span>
+              <span>{t('previews.todayAt', { time: '14:30:12' })}</span>
             </div>
           </div>
         </div>

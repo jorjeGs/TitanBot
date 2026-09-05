@@ -22,7 +22,17 @@
     "none": "None",
     "unmanageableRole": "Unmanageable",
     "hierarchyWarning": "This role is above TitanBot's highest role in the server hierarchy or the bot lacks Manage Roles permission. It cannot be assigned automatically.",
-    "add": "Add"
+    "add": "Add",
+    "refresh": "Refresh",
+    "reset": "Reset",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "close": "Close",
+    "active": "Active",
+    "inactive": "Inactive",
+    "delete": "Delete",
+    "moveUp": "Move up",
+    "moveDown": "Move down"
   },
   "nav": {
     "general": "General Settings",
@@ -107,7 +117,34 @@
     "previewTitle": "Discord Preview",
     "previewTime": "Today at 12:00 PM",
     "previewUser": "@NewMember",
-    "placeholdersNote": "Variables {user}, {server}, and {memberCount} will be dynamically rendered when a user joins."
+    "placeholdersNote": "Variables {user}, {server}, and {memberCount} will be dynamically rendered when a user joins.",
+    "tabWelcome": "Welcome",
+    "tabGoodbye": "Farewell",
+    "tabAutoRoles": "Auto Roles",
+    "formatType": "Message Format",
+    "formatText": "Plain Text",
+    "formatEmbed": "Rich Embed",
+    "embedTitle": "Embed Title",
+    "embedColor": "Embed Color",
+    "embedDescription": "Description / Content",
+    "embedFooter": "Footer Text",
+    "embedImage": "Banner / Large Image (URL)",
+    "embedThumbnail": "Include user avatar as thumbnail",
+    "pingUser": "Mention user outside embed",
+    "pingUserHelp": "If enabled, sends a direct mention notification to the user.",
+    "variablesTitle": "Dynamic variables (click to insert):",
+    "delay": "Assignment Delay",
+    "delayImmediate": "Immediate (0 seconds)",
+    "delay5s": "5 seconds",
+    "delay15s": "15 seconds",
+    "delay30s": "30 seconds",
+    "delay60s": "60 seconds",
+    "goodbyeEnable": "Enable farewell messages",
+    "goodbyeChannel": "Farewell Channel",
+    "goodbyeChannelHelp": "Channel where departure notices will be sent.",
+    "goodbyeMessage": "Farewell Message",
+    "goodbyeMessageHelp": "Message when a member leaves the server.",
+    "previewGoodbyeTitle": "Farewell Preview"
   },
   "logging": {
     "title": "Logs & Audit",
@@ -143,7 +180,8 @@
       "levelingDesc": "Chat rank promotions and role reward unlocks.",
       "giveaway": "Giveaways",
       "giveawayDesc": "Giveaway launches, winner picks, and rerolls."
-    }
+    },
+    "removeExclusion": "Remove exclusion"
   },
   "commands": {
     "title": "Command Manager",
@@ -227,7 +265,8 @@
     "selectPlaceholder": "Choose your roles...",
     "availableRoles": "Available Roles",
     "footerText": "TitanBot Roles",
-    "atLeastOneRole": "You must add at least one role before publishing."
+    "atLeastOneRole": "You must add at least one role before publishing.",
+    "loadingPanels": "Loading panels..."
   },
   "categories": {
     "Birthday": "Birthday",
@@ -294,7 +333,8 @@
       "roleHierarchy": "The selected staff role is higher than TitanBot in server hierarchy.",
       "publishFailed": "Failed to publish ticket panel.",
       "deleteFailed": "Failed to delete ticket panel."
-    }
+    },
+    "panelPlaceholder": "Create Ticket"
   },
   "leveling": {
     "title": "Leveling & Gamification",
@@ -341,7 +381,16 @@
       "noRole": "Please select a role for the reward.",
       "roleHierarchy": "The selected role is higher than TitanBot in the hierarchy.",
       "saveFailed": "Failed to save leveling settings."
-    }
+    },
+    "multipliers": {
+      "slow": "0.5x (Slow)",
+      "standard": "1.0x (Standard)",
+      "fast": "1.5x (Fast)",
+      "double": "2.0x (Double XP)",
+      "triple": "3.0x (Triple XP)"
+    },
+    "deleteRewardTooltip": "Delete reward",
+    "levelPlaceholder": "e.g. 5"
   },
   "economy": {
     "title": "Economy & Shop System",
@@ -422,6 +471,13 @@
     "previewTitle": "Temporary Rooms Preview",
     "errors": {
       "saveFailed": "Failed to save Join-to-Create settings."
+    },
+    "bitrates": {
+      "standard": "64 kbps (Standard)",
+      "highFidelity": "96 kbps (High fidelity)",
+      "musicQuality": "128 kbps (Music quality)",
+      "studio": "256 kbps (Studio)",
+      "maxDiscord": "384 kbps (Max Discord)"
     }
   },
   "moderation": {
@@ -510,7 +566,9 @@
       "saveSuccess": "Moderation and auto-punish rules saved successfully!",
       "saveError": "Failed to save moderation settings.",
       "thresholdRequired": "You must specify a valid warning threshold (between 1 and 50)."
-    }
+    },
+    "refreshData": "Refresh data",
+    "rolesLabel": "Roles:"
   },
   "giveaways": {
     "title": "Giveaways & Rewards",
@@ -581,7 +639,8 @@
       "endFailed": "Failed to end giveaway.",
       "rerollFailed": "Failed to reroll winners.",
       "deleteFailed": "Failed to delete giveaway."
-    }
+    },
+    "requirementLabel": "Requirement:"
   },
   "birthdays": {
     "title": "Birthday System",
@@ -679,7 +738,18 @@
       "deleteFailed": "Failed to delete application.",
       "maxQuestions": "Maximum 10 questions allowed.",
       "minQuestions": "At least 1 question is required."
-    }
+    },
+    "roleColon": "Role:",
+    "noteColon": "Note:",
+    "tableRole": "Applied Role",
+    "tableStatus": "Status",
+    "tableSubmitted": "Submitted",
+    "noAnswersRecorded": "No detailed answers were recorded.",
+    "deny": "Deny",
+    "approveAndAssign": "Approve and Assign Role",
+    "approveModalTitle": "Approve Application",
+    "denyModalTitle": "Deny Application",
+    "deleteQuestionTooltip": "Delete question"
   },
   "embeds": {
     "title": "Embed Creator (WYSIWYG)",
@@ -796,5 +866,21 @@
       "shuffleSuccess": "Queue tracks shuffled.",
       "loopSuccess": "Loop mode updated."
     }
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "message": "An unexpected error occurred while rendering the application.",
+    "reload": "Reload",
+    "home": "Home"
+  },
+  "previews": {
+    "todayAt": "Today at {{time}}",
+    "balanceOf": "Balance of @{{user}}",
+    "wallet": "Wallet",
+    "bank": "Bank",
+    "netWorth": "Net Worth",
+    "voiceCategory": "🔊 PRIVATE VOICE ROOMS",
+    "voiceJoinPrompt": "➕ Join to Create Room",
+    "serverStatsTitle": "📊 SERVER STATISTICS"
   }
 }

@@ -374,7 +374,7 @@ export function TicketsTab() {
                   maxLength={80}
                   value={ticketConfig.ticketButtonLabel}
                   onChange={(e) => updateField('ticketButtonLabel', e.target.value)}
-                  placeholder="Crear Ticket"
+                  placeholder={t('tickets.panelPlaceholder', 'Crear Ticket')}
                   className="w-full px-3.5 py-2.5 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition-colors"
                 />
                 <p className="mt-1 text-xs text-slate-400">

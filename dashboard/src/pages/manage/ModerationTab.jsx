@@ -288,10 +288,10 @@ export function ModerationTab() {
           onClick={loadInitialData}
           disabled={loading}
           className="inline-flex items-center justify-center gap-2 px-3.5 py-2 text-sm font-medium text-slate-300 bg-discord-darker hover:bg-slate-800 border border-slate-700/60 rounded-lg transition-colors"
-          title="Actualizar datos"
+          title={t('moderation.refreshData', 'Actualizar datos')}
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          <span>Refrescar</span>
+          <span>{t('common.refresh', 'Refrescar')}</span>
         </button>
       </div>
 
@@ -490,7 +490,7 @@ export function ModerationTab() {
                 {/* Roles */}
                 {targetMember.roles && targetMember.roles.length > 0 && (
                   <div className="mt-4 pt-4 border-t border-slate-800/80 flex flex-wrap items-center gap-1.5">
-                    <span className="text-xs text-slate-400 font-medium mr-1">Roles:</span>
+                    <span className="text-xs text-slate-400 font-medium mr-1">{t('moderation.rolesLabel', 'Roles:')}</span>
                     {targetMember.roles.map((r) => (
                       <span
                         key={r.id}

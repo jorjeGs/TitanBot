@@ -31,7 +31,7 @@ export function JoinToCreatePreview({
         {/* Category Header */}
         <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider px-1">
           <ChevronDown className="w-3 h-3" />
-          <span>🔊 SALAS DE VOZ PRIVADAS</span>
+          <span>{t('previews.voiceCategory', '🔊 SALAS DE VOZ PRIVADAS')}</span>
         </div>
 
         {/* Trigger Voice Channel */}
@@ -39,7 +39,7 @@ export function JoinToCreatePreview({
           <div className="flex items-center justify-between px-2 py-1.5 rounded text-xs bg-discord-blurple/15 text-discord-blurple border border-discord-blurple/30 font-medium">
             <div className="flex items-center gap-2 min-w-0 truncate">
               <PlusCircle className="w-3.5 h-3.5 shrink-0 text-discord-blurple" />
-              <span className="truncate">➕ Entra para Crear Sala</span>
+              <span className="truncate">{t('previews.voiceJoinPrompt', '➕ Entra para Crear Sala')}</span>
             </div>
             <span className="text-[10px] bg-discord-blurple/20 px-1.5 py-0.5 rounded uppercase font-bold">
               Disparador

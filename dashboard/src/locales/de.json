@@ -22,7 +22,17 @@
     "none": "Keine",
     "unmanageableRole": "Unerreichbar",
     "hierarchyWarning": "Diese Rolle liegt in der Serverhierarchie über der höchsten Rolle von TitanBot oder dem Bot fehlen Berechtigungen zum Verwalten von Rollen. Sie kann nicht automatisch zugewiesen werden.",
-    "add": "Hinzufügen"
+    "add": "Hinzufügen",
+    "refresh": "Aktualisieren",
+    "reset": "Zurücksetzen",
+    "copy": "Kopieren",
+    "copied": "Kopiert!",
+    "close": "Schließen",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "delete": "Löschen",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten"
   },
   "nav": {
     "general": "Allgemeine Einstellungen",
@@ -107,7 +117,34 @@
     "previewTitle": "Discord-Vorschau",
     "previewTime": "Heute um 12:00",
     "previewUser": "@NeuesMitglied",
-    "placeholdersNote": "Die Variablen {user}, {server} und {memberCount} werden dynamisch ersetzt, wenn ein Mitglied beitritt."
+    "placeholdersNote": "Die Variablen {user}, {server} und {memberCount} werden dynamisch ersetzt, wenn ein Mitglied beitritt.",
+    "tabWelcome": "Willkommen",
+    "tabGoodbye": "Verabschiedung",
+    "tabAutoRoles": "Automatische Rollen",
+    "formatType": "Nachrichtenformat",
+    "formatText": "Reiner Text",
+    "formatEmbed": "Rich Embed",
+    "embedTitle": "Embed-Titel",
+    "embedColor": "Embed-Farbe",
+    "embedDescription": "Beschreibung / Inhalt",
+    "embedFooter": "Fußzeile",
+    "embedImage": "Banner / Großes Bild (URL)",
+    "embedThumbnail": "Benutzeravatar als Miniaturansicht einbinden",
+    "pingUser": "Benutzer außerhalb des Embeds erwähnen",
+    "pingUserHelp": "Wenn aktiviert, wird eine direkte Benachrichtigung an den Benutzer gesendet.",
+    "variablesTitle": "Dynamische Variablen (zum Einfügen klicken):",
+    "delay": "Zuweisungsverzögerung",
+    "delayImmediate": "Sofort (0 Sekunden)",
+    "delay5s": "5 Sekunden",
+    "delay15s": "15 Sekunden",
+    "delay30s": "30 Sekunden",
+    "delay60s": "60 Sekunden",
+    "goodbyeEnable": "Verabschiedungsnachrichten aktivieren",
+    "goodbyeChannel": "Verabschiedungskanal",
+    "goodbyeChannelHelp": "Kanal, in dem Austrittsnachrichten gesendet werden.",
+    "goodbyeMessage": "Verabschiedungsnachricht",
+    "goodbyeMessageHelp": "Nachricht, wenn ein Mitglied den Server verlässt.",
+    "previewGoodbyeTitle": "Verabschiedungsvorschau"
   },
   "logging": {
     "title": "Protokolle & Audit",
@@ -143,7 +180,8 @@
       "levelingDesc": "Rangaufstiege und Belohnungsrollen für Chataktivität.",
       "giveaway": "Giveaways",
       "giveawayDesc": "Giveaway-Starts, Gewinnerauslosungen und Neuauslosungen."
-    }
+    },
+    "removeExclusion": "Ausschluss entfernen"
   },
   "commands": {
     "title": "Befehlsverwaltung",
@@ -227,7 +265,8 @@
     "selectPlaceholder": "Wähle deine Rollen...",
     "availableRoles": "Verfügbare Rollen",
     "footerText": "TitanBot Rollen",
-    "atLeastOneRole": "Du musst vor dem Veröffentlichen mindestens eine Rolle hinzufügen."
+    "atLeastOneRole": "Du musst vor dem Veröffentlichen mindestens eine Rolle hinzufügen.",
+    "loadingPanels": "Paneele werden geladen..."
   },
   "categories": {
     "Birthday": "Geburtstag",
@@ -294,7 +333,8 @@
       "roleHierarchy": "Die ausgewählte Support-Rolle steht in der Hierarchie über TitanBot.",
       "publishFailed": "Fehler beim Veröffentlichen des Ticket-Panels.",
       "deleteFailed": "Fehler beim Löschen des Ticket-Panels."
-    }
+    },
+    "panelPlaceholder": "Ticket erstellen"
   },
   "leveling": {
     "title": "Levelsystem & Gamification",
@@ -341,7 +381,16 @@
       "noRole": "Bitte wähle eine Rolle für die Belohnung aus.",
       "roleHierarchy": "Die ausgewählte Rolle steht in der Hierarchie über TitanBot.",
       "saveFailed": "Fehler beim Speichern der Level-Einstellungen."
-    }
+    },
+    "multipliers": {
+      "slow": "0.5x (Langsam)",
+      "standard": "1.0x (Standard)",
+      "fast": "1.5x (Schnell)",
+      "double": "2.0x (Doppelte EP)",
+      "triple": "3.0x (Dreifache EP)"
+    },
+    "deleteRewardTooltip": "Belohnung löschen",
+    "levelPlaceholder": "z. B. 5"
   },
   "economy": {
     "title": "Wirtschafts- und Shop-System",
@@ -422,6 +471,13 @@
     "previewTitle": "Vorschau temporärer Räume",
     "errors": {
       "saveFailed": "Fehler beim Speichern der Join-to-Create-Einstellungen."
+    },
+    "bitrates": {
+      "standard": "64 kbps (Standard)",
+      "highFidelity": "96 kbps (Hohe Wiedergabetreue)",
+      "musicQuality": "128 kbps (Musikqualität)",
+      "studio": "256 kbps (Studio)",
+      "maxDiscord": "384 kbps (Discord-Maximum)"
     }
   },
   "moderation": {
@@ -510,7 +566,9 @@
       "saveSuccess": "Moderations- und Bestrafungsregeln erfolgreich gespeichert!",
       "saveError": "Fehler beim Speichern der Moderationseinstellungen.",
       "thresholdRequired": "Du musst einen gültigen Verwarnungsschwellenwert angeben (zwischen 1 und 50)."
-    }
+    },
+    "refreshData": "Daten aktualisieren",
+    "rolesLabel": "Rollen:"
   },
   "giveaways": {
     "title": "Gewinnspiele & Belohnungen",
@@ -581,7 +639,8 @@
       "endFailed": "Gewinnspiel konnte nicht beendet werden.",
       "rerollFailed": "Fehler beim Neuauslosen der Gewinner.",
       "deleteFailed": "Fehler beim Löschen des Gewinnspiels."
-    }
+    },
+    "requirementLabel": "Anforderung:"
   },
   "birthdays": {
     "title": "Geburtstagssystem",
@@ -679,7 +738,18 @@
       "deleteFailed": "Fehler beim Löschen der Bewerbung.",
       "maxQuestions": "Maximal 10 Fragen erlaubt.",
       "minQuestions": "Mindestens 1 Frage erforderlich."
-    }
+    },
+    "roleColon": "Rolle:",
+    "noteColon": "Hinweis:",
+    "tableRole": "Bewerbungsrolle",
+    "tableStatus": "Status",
+    "tableSubmitted": "Eingereicht",
+    "noAnswersRecorded": "Es wurden keine detaillierten Antworten aufgezeichnet.",
+    "deny": "Ablehnen",
+    "approveAndAssign": "Genehmigen und Rolle zuweisen",
+    "approveModalTitle": "Bewerbung genehmigen",
+    "denyModalTitle": "Bewerbung ablehnen",
+    "deleteQuestionTooltip": "Frage löschen"
   },
   "embeds": {
     "title": "Embed-Ersteller (WYSIWYG)",
@@ -796,5 +866,21 @@
       "shuffleSuccess": "Warteschlange gemischt.",
       "loopSuccess": "Schleifenmodus aktualisiert."
     }
+  },
+  "errorBoundary": {
+    "title": "Etwas ist schiefgelaufen",
+    "message": "Beim Rendern der Anwendung ist ein unerwarteter Fehler aufgetreten.",
+    "reload": "Neu laden",
+    "home": "Startseite"
+  },
+  "previews": {
+    "todayAt": "Heute um {{time}}",
+    "balanceOf": "Guthaben von @{{user}}",
+    "wallet": "Brieftasche",
+    "bank": "Bank",
+    "netWorth": "Gesamtvermögen",
+    "voiceCategory": "🔊 PRIVATE SPRACHKANÄLE",
+    "voiceJoinPrompt": "➕ Beitreten um Kanal zu erstellen",
+    "serverStatsTitle": "📊 SERVERSTATISTIKEN"
   }
 }
