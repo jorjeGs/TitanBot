@@ -70,6 +70,12 @@ const appConfig = {
     },
   },
 
+  dashboard: {
+    clientSecret: process.env.CLIENT_SECRET,
+    sessionSecret: process.env.SESSION_SECRET || "default_session_secret_change_me_in_production_32char",
+    url: process.env.DASHBOARD_URL || `http://localhost:${process.env.PORT || 3000}`,
+  },
+
   shop,
 
   features: {
