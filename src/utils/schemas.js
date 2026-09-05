@@ -289,6 +289,122 @@ export const AutomationsConfigSchema = z.object({
   autoResponders: z.array(AutoResponderSchema).default([]),
 }).default({ stickyMessages: [], scheduledMessages: [], autoResponders: [] });
 
+export const TranscriptAttachmentSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  url: z.string(),
+  size: z.number().optional(),
+  contentType: z.string().nullable().optional(),
+});
+
+export const TranscriptMessageSchema = z.object({
+  id: z.string(),
+  author: z.object({
+    id: z.string(),
+    username: z.string(),
+    discriminator: z.string().optional(),
+    avatarUrl: z.string().nullable().optional(),
+    bot: z.boolean().default(false),
+  }),
+  content: z.string().default(''),
+  embeds: z.array(z.record(z.any())).default([]),
+  attachments: z.array(TranscriptAttachmentSchema).default([]),
+  createdAt: z.string(),
+  pinned: z.boolean().default(false),
+});
+
+export const TicketTranscriptSchema = z.object({
+  id: z.string(),
+  guildId: z.string().regex(/^\d{17,20}$/),
+  channelId: z.string().regex(/^\d{17,20}$/),
+  ticketNumber: z.string().or(z.number()),
+  title: z.string().default('Ticket Transcript'),
+  ticketCreatorId: z.string().regex(/^\d{17,20}$/),
+  ticketCreatorTag: z.string().default('Unknown User'),
+  closedById: z.string().regex(/^\d{17,20}$/).optional().nullable(),
+  closedByTag: z.string().optional().nullable(),
+  closeReason: z.string().default('Ticket closed'),
+  createdAt: z.string(),
+  closedAt: z.string(),
+  messageCount: z.number().default(0),
+  viewToken: z.string(),
+  messages: z.array(TranscriptMessageSchema).default([]),
+});
+
+export const AntiRaidConfigSchema = z.object({
+  enabled: z.boolean().default(false),
+  joinThreshold: z.number().int().min(3).max(50).default(5),
+  windowSeconds: z.number().int().min(3).max(60).default(10),
+  minAccountAgeHours: z.number().int().min(0).max(720).default(24),
+  action: z.enum(['quarantine', 'kick', 'ban']).default('quarantine'),
+  quarantineRoleId: z.string().regex(/^\d{17,20}$/).nullable().optional().default(null),
+  lockdownOnRaid: z.boolean().default(false),
+  lockdownChannelIds: z.array(z.string().regex(/^\d{17,20}$/)).default([]),
+  alertChannelId: z.string().regex(/^\d{17,20}$/).nullable().optional().default(null),
+  isLockdownActive: z.boolean().default(false),
+  lastRaidTimestamp: z.string().nullable().optional().default(null),
+}).default({
+  enabled: false,
+  joinThreshold: 5,
+  windowSeconds: 10,
+  minAccountAgeHours: 24,
+  action: 'quarantine',
+  quarantineRoleId: null,
+  lockdownOnRaid: false,
+  lockdownChannelIds: [],
+  alertChannelId: null,
+  isLockdownActive: false,
+  lastRaidTimestamp: null,
+});
+
+export const RoleSnapshotSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  color: z.number().default(0),
+  hoist: z.boolean().default(false),
+  position: z.number().default(0),
+  permissions: z.string().default('0'),
+  mentionable: z.boolean().default(false),
+});
+
+export const OverwriteSnapshotSchema = z.object({
+  id: z.string(),
+  type: z.number().default(0),
+  allow: z.string().default('0'),
+  deny: z.string().default('0'),
+});
+
+export const ChannelSnapshotSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  type: z.number(),
+  parentId: z.string().nullable().optional().default(null),
+  position: z.number().default(0),
+  topic: z.string().nullable().optional().default(null),
+  nsfw: z.boolean().default(false),
+  bitrate: z.number().optional(),
+  userLimit: z.number().optional(),
+  permissionOverwrites: z.array(OverwriteSnapshotSchema).default([]),
+});
+
+export const ServerSnapshotSchema = z.object({
+  id: z.string(),
+  guildId: z.string().regex(/^\d{17,20}$/),
+  name: z.string(),
+  createdAt: z.string(),
+  createdBy: z.object({
+    id: z.string(),
+    tag: z.string(),
+  }),
+  counts: z.object({
+    roles: z.number(),
+    categories: z.number(),
+    channels: z.number(),
+  }),
+  roles: z.array(RoleSnapshotSchema).default([]),
+  channels: z.array(ChannelSnapshotSchema).default([]),
+});
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
@@ -347,6 +463,7 @@ export const GuildConfigSchema = z
     joinToCreate: JoinToCreateConfigSchema,
     moderation: ModerationConfigSchema.optional(),
     automations: AutomationsConfigSchema.optional(),
+    antiRaid: AntiRaidConfigSchema.optional(),
   })
   .passthrough();
 

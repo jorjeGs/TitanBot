@@ -54,7 +54,8 @@
     "applications": "Bewerbungen & Team",
     "embeds": "Embed-Ersteller",
     "music": "Live-Musik",
-    "automations": "Automatisierungen"
+    "automations": "Automatisierungen",
+    "snapshots": "Backups & Snapshots"
   },
   "landing": {
     "heroTitle": "Leistungsstarke Community-Verwaltung für Discord",
@@ -298,7 +299,7 @@
     "panelActiveIn": "Veröffentlicht in",
     "panelNotPublishedDesc": "Passe die Einstellungen unten an und klicke auf Veröffentlichen, um es an Discord zu senden.",
     "viewInDiscord": "In Discord ansehen",
-    "deletePanel": "Panel entfernen",
+    "deletePanel": "Panel löschen",
     "confirmDeletePanel": "Bist du sicher, dass du das aktive Ticket-Panel löschen möchtest?",
     "publishSuccess": "Ticket-Panel erfolgreich in Discord veröffentlicht!",
     "deleteSuccess": "Ticket-Panel entfernt und gelöscht.",
@@ -323,10 +324,10 @@
     "unmanageableRoleWarning": "Warnung: Die Support-Rolle steht in Discord über TitanBot. Platziere die Bot-Rolle höher, um Berechtigungen verwalten zu können.",
     "maxTickets": "Max. Tickets pro Benutzer",
     "maxTicketsHelp": "Maximal gleichzeitig offene Tickets pro Benutzer (1-10).",
-    "dmOnClose": "DM beim Schließen senden",
-    "dmOnCloseHelp": "Sendet eine Direktnachricht an den Benutzer, wenn sein Ticket geschlossen wird.",
-    "publishPanelButton": "Panel in Discord veröffentlichen",
-    "updatePanelButton": "Panel in Discord aktualisieren",
+    "dmOnClose": "Bei Schließung per DM benachrichtigen",
+    "dmOnCloseHelp": "Sende dem Benutzer eine Direktnachricht, wenn sein Ticket geschlossen wird.",
+    "publishPanelButton": "Panel auf Discord veröffentlichen",
+    "updatePanelButton": "Panel auf Discord aktualisieren",
     "previewTitle": "Ticket-Panel-Vorschau",
     "embedTitle": "Support-Ticketsystem",
     "errors": {
@@ -335,7 +336,16 @@
       "publishFailed": "Fehler beim Veröffentlichen des Ticket-Panels.",
       "deleteFailed": "Fehler beim Löschen des Ticket-Panels."
     },
-    "panelPlaceholder": "Ticket erstellen"
+    "panelPlaceholder": "Ticket erstellen",
+    "subtabs": {
+      "panel": "Panel-Einstellungen",
+      "transcripts": "Transkript-Verlauf"
+    },
+    "panelActiveDescription": "Das Panel ist in #{{channel}} aktiv. Mitglieder können Tickets per Knopfdruck erstellen.",
+    "panelInactiveDescription": "Du hast noch kein Ticket-Panel in einem Discord-Kanal veröffentlicht.",
+    "goToDiscord": "Auf Discord ansehen",
+    "contentSection": "Panel-Nachricht",
+    "contentSectionHelp": "Passe den Text und die Schaltfläche an, mit denen Benutzer interagieren."
   },
   "leveling": {
     "title": "Levelsystem & Gamification",
@@ -487,7 +497,8 @@
     "tabs": {
       "lookup": "Mitgliedersuche",
       "cases": "Serverfälle",
-      "autoPunish": "Automatische Bestrafungen"
+      "autoPunish": "Automatische Bestrafungen",
+      "antiRaid": "Anti-Raid-Schutz"
     },
     "memberLookup": {
       "title": "Disziplinarische Mitgliedersuche",
@@ -975,6 +986,124 @@
       "channelRequired": "Bitte wählen Sie einen gültigen Kanal",
       "fieldsRequired": "Bitte füllen Sie den Namen und den Kanal aus",
       "triggerRequired": "Bitte geben Sie ein Auslösewort oder eine Phrase ein"
+    }
+  },
+  "transcripts": {
+    "creator": "Ersteller",
+    "closedBy": "Geschlossen von",
+    "messages": "Nachrichten",
+    "copyLink": "Web-Link kopieren",
+    "share": "Teilen",
+    "downloadHtml": "HTML herunterladen",
+    "download": "Herunterladen",
+    "noMessages": "Keine Nachrichten in diesem Ticket aufgezeichnet.",
+    "searchPlaceholder": "Nach Ticket-#, Ersteller oder Grund suchen...",
+    "noTranscripts": "Keine Transkripte aufgezeichnet",
+    "noTranscriptsDesc": "Sobald Tickets geschlossen werden, erscheinen sie hier mit ihrem vollständigen Verlauf.",
+    "ticket": "Ticket",
+    "reason": "Grund",
+    "viewModal": "Transkript ansehen",
+    "loadError": "Fehler beim Laden des Transkripts",
+    "linkCopied": "Link in die Zwischenablage kopiert"
+  },
+  "antiraid": {
+    "title": "Anti-Raid-Schutz & Notfall-Sperrung",
+    "description": "Erkennt massive Beitrittswellen und koordinierte Bot-Angriffe, um deine Community sofort zu schützen.",
+    "lockdownActive": "NOTFALL-SPERRUNG AKTIV",
+    "lockdownInactive": "Normaler Serverstatus",
+    "lockdownActiveDesc": "Das Senden von Nachrichten in Textkanälen ist für @everyone gesperrt.",
+    "lockdownInactiveDesc": "Kanäle und Chat-Berechtigungen funktionieren normal ohne Notfallbeschränkungen.",
+    "liftLockdownBtn": "Sperre aufheben",
+    "panicLockdownBtn": "Notfall-Sperre",
+    "configSection": "Schutzparameter",
+    "configSectionHelp": "Konfiguriere Empfindlichkeit, Zeitfenster und Systemsanktionen.",
+    "toggleLabel": "Schutz aktivieren",
+    "joinThreshold": "Beitrittsschwelle",
+    "joinThresholdHelp": "Anzahl der Benutzer, die innerhalb des Zeitfensters beitreten müssen, um einen Raid auszulösen.",
+    "windowSeconds": "Zeitfenster",
+    "windowSecondsHelp": "Sekunden, in denen der Massenbeitritt gemessen wird.",
+    "minAccountAgeHours": "Mindestalter des Accounts",
+    "minAccountAgeHoursHelp": "Mindeststunden seit Erstellung des Accounts (0 = Deaktiviert, 24h = 1 Tag).",
+    "action": "Aktion bei Raid",
+    "actions": {
+      "quarantine": "Unter Quarantäne stellen (Rolle)",
+      "kick": "Mitglied kicken",
+      "ban": "Mitglied bannen"
+    },
+    "quarantineRole": "Quarantäne-Rolle",
+    "selectQuarantineRole": "Quarantäne-Rolle auswählen...",
+    "alertChannel": "Benachrichtigungskanal",
+    "selectAlertChannel": "Benachrichtigungskanal auswählen...",
+    "lockdownOnRaid": "Automatische temporäre Sperre",
+    "lockdownOnRaidHelp": "Entzieht @everyone automatisch die Berechtigung zum Senden von Nachrichten in Textkanälen bei aktiven Angriffen.",
+    "saveSettingsBtn": "Anti-Raid-Schutz speichern",
+    "success": {
+      "saved": "Anti-Raid-Einstellungen erfolgreich gespeichert.",
+      "lockdownEnabled": "Notfall-Sperre in den Serverkanälen aktiviert!",
+      "lockdownDisabled": "Notfall-Sperre aufgehoben!"
+    },
+    "errors": {
+      "saveFailed": "Fehler beim Speichern der Anti-Raid-Einstellungen.",
+      "lockdownFailed": "Fehler beim Ändern des Server-Sperrstatus."
+    }
+  },
+  "snapshots": {
+    "title": "Sicherungen & Server-Snapshots",
+    "description": "Erstelle vollständige Backups deiner Serverarchitektur (Rollen, Kategorien, Kanäle und Berechtigungen) und stelle sie jederzeit wieder her.",
+    "importBtn": "JSON importieren",
+    "createBtn": "Neuer Snapshot",
+    "safeSyncTitle": "Safe-Sync-Modus (Empfohlen)",
+    "safeSyncDesc": "Stellt fehlende Rollen, Kategorien und Kanäle wieder her und synchronisiert sie, während bestehende erhalten bleiben.",
+    "fullReplaceTitle": "Full-Replace-Modus",
+    "fullReplaceDesc": "Baut die exakte Hierarchie des Backups wieder auf, indem nicht vorhandene Kanäle oder Rollen entfernt werden. Erfordert strenge Bestätigung.",
+    "loading": "Lade Server-Snapshots...",
+    "emptyTitle": "Noch keine Snapshots gespeichert",
+    "emptyDesc": "Speichere jetzt ein Backup, um deine Kanäle, Rollen und Berechtigungen vor Unfällen oder Raids zu schützen.",
+    "createFirst": "Ersten Snapshot erstellen",
+    "roles": "Rollen",
+    "categories": "Kategorien",
+    "channels": "Kanäle",
+    "createdBy": "Von",
+    "downloadJson": "JSON herunterladen",
+    "restoreBtn": "Wiederherstellen",
+    "modalCreateTitle": "Neuen Snapshot erstellen",
+    "modalSnapshotName": "Snapshot-Name",
+    "modalIncludedElements": "Im Backup enthaltene Elemente:",
+    "creating": "Erfasse...",
+    "confirmCreate": "Backup erstellen",
+    "modalImportTitle": "JSON-Backup importieren",
+    "modalImportDesc": "Lade eine zuvor aus TitanBot exportierte .json-Datei hoch, um sie in der Snapshot-Liste dieses Servers zu speichern.",
+    "modalImportSelect": "Klicke hier, um eine JSON-Datei auszuwählen",
+    "importing": "Speichere...",
+    "confirmImport": "Snapshot importieren",
+    "modalRestoreTitle": "Snapshot wiederherstellen",
+    "modalRestoreWarning": "Das Wiederherstellen eines Snapshots ändert Serverrollen und Kanäle auf Discord. Stelle sicher, dass der Bot Administratorrechte und eine hohe Rollenposition hat.",
+    "selectMode": "Wähle den Wiederherstellungsmodus:",
+    "safeSyncOption": "Safe Sync (Empfohlen / Additiv)",
+    "safeSyncOptionDesc": "Erstellt fehlende Rollen und Kanäle und synchronisiert Berechtigungen, ohne bestehende Kanäle oder Rollen auf dem Server zu löschen.",
+    "fullReplaceOption": "Full Replace (Vollständige Neuerstellung)",
+    "fullReplaceOptionDesc": "Löscht Kanäle und Rollen, die nicht im Snapshot enthalten sind, um das exakte Layout wiederherzustellen.",
+    "confirmReplacePrompt": "Gib \"CONFIRMAR\" in Großbuchstaben ein, um das Löschen von Kanälen und Rollen zu autorisieren:",
+    "restoring": "Stelle Server wieder her...",
+    "executeRestore": "Wiederherstellung starten",
+    "restoreSuccessTitle": "Wiederherstellung erfolgreich abgeschlossen!",
+    "restoreSuccessDesc": "Die Serverarchitektur wurde gemäß dem Snapshot synchronisiert.",
+    "modalDeleteTitle": "Snapshot löschen?",
+    "modalDeleteDesc": "Diese Aktion löscht den Snapshot \"{{name}}\" aus der TitanBot-Datenbank. Deine Discord-Serverkanäle sind davon nicht betroffen.",
+    "success": {
+      "created": "Snapshot erfolgreich erstellt!",
+      "imported": "Backup erfolgreich importiert!",
+      "restored": "Server erfolgreich wiederhergestellt!",
+      "deleted": "Snapshot gelöscht."
+    },
+    "errors": {
+      "loadFailed": "Fehler beim Laden der Server-Snapshots.",
+      "createFailed": "Fehler beim Erstellen des Snapshots.",
+      "exportFailed": "Fehler beim Herunterladen der Backup-Datei.",
+      "invalidFileType": "Bitte wähle eine gültige .json-Datei aus.",
+      "importFailed": "Fehler beim Importieren des Snapshots.",
+      "restoreFailed": "Fehler beim Wiederherstellen des Snapshots.",
+      "deleteFailed": "Fehler beim Löschen des Snapshots."
     }
   }
 }

@@ -18,6 +18,7 @@ import { createError, ErrorTypes } from '../utils/errorHandler.js';
 import { ensureTypedServiceError, wrapServiceBoundary } from '../utils/serviceErrorBoundary.js';
 import { PRIORITY_MAP } from '../utils/helpers.js';
 import { t } from '../utils/i18n/index.js';
+import { captureChannelTranscript } from './transcripts/transcriptService.js';
 
 const TICKET_DELETE_DELAY_MS = 3000;
 const TICKET_DELETE_DELAY_SECONDS = Math.floor(TICKET_DELETE_DELAY_MS / 1000);
@@ -643,86 +644,27 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
-async function generateTranscript(channel) {
+async function generateTranscript(channel, options = {}) {
   try {
-    logger.debug('Generating transcript for channel', {
+    logger.debug('Generating rich transcript for channel', {
       channelId: channel.id,
       channelName: channel.name
     });
 
-    const messages = [];
-    let before = undefined;
-    let batch;
-    do {
-      batch = await channel.messages.fetch({ limit: 100, ...(before ? { before } : {}) });
-      if (batch.size === 0) break;
-      messages.push(...batch.values());
-      before = batch.last()?.id;
-    } while (batch.size === 100);
-
-    messages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
-
-    const escape = (str) =>
-      String(str ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-
-    const rows = messages.map((msg) => {
-      const ts = new Date(msg.createdTimestamp).toISOString().replace('T', ' ').slice(0, 19);
-      const author = escape(msg.author?.tag ?? msg.author?.username ?? 'Unknown');
-      const content = escape(msg.content || (msg.embeds.length ? '[embed]' : '[attachment]'));
-      return `<tr><td class="ts">${ts}</td><td class="author">${author}</td><td class="msg">${content}</td></tr>`;
-    }).join('\n');
-
-    const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Transcript – #${escape(channel.name)}</title>
-<style>
-body{font-family:sans-serif;background:#36393f;color:#dcddde;margin:0;padding:16px}
-h1{color:#fff;font-size:1.2rem;margin-bottom:8px}
-table{width:100%;border-collapse:collapse;font-size:0.85rem}
-th{background:#2f3136;color:#8e9297;padding:6px 8px;text-align:left;border-bottom:2px solid #202225}
-td{padding:4px 8px;border-bottom:1px solid #40444b;vertical-align:top}
-.ts{color:#72767d;white-space:nowrap;width:160px}
-.author{color:#7289da;white-space:nowrap;width:160px}
-.msg{word-break:break-word}
-</style>
-</head>
-<body>
-<h1>📜 Transcript – #${escape(channel.name)}</h1>
-<p style="color:#72767d">${messages.length} message(s) exported on ${new Date().toUTCString()}</p>
-<table>
-<thead><tr><th>Timestamp (UTC)</th><th>Author</th><th>Message</th></tr></thead>
-<tbody>
-${rows}
-</tbody>
-</table>
-</body>
-</html>`;
-
-    const buffer = Buffer.from(html, 'utf8');
-    const attachment = new AttachmentBuilder(buffer, { name: `ticket-${channel.id}.html` });
-
-    logger.info('✅ Successfully generated transcript', {
-      channelId: channel.id,
-      channelName: channel.name,
-      messageCount: messages.length,
-      size: buffer.length
-    });
-
-    return attachment;
+    const result = await captureChannelTranscript(channel, options);
+    if (result?.html) {
+      const buffer = Buffer.from(result.html, 'utf8');
+      const attachment = new AttachmentBuilder(buffer, { name: `ticket-${channel.id}.html` });
+      attachment.transcript = result.transcript;
+      attachment.viewToken = result.viewToken;
+      return attachment;
+    }
+    return null;
   } catch (error) {
     logger.error('❌ Failed to generate transcript:', {
       channelId: channel.id,
       channelName: channel.name,
       errorMessage: error.message,
-      errorName: error.name,
-      errorStack: error.stack
     });
     return null;
   }
@@ -765,7 +707,12 @@ export async function deleteTicket(channel, deleter) {
 
         let attachment = null;
         try {
-          attachment = await generateTranscript(channel);
+          attachment = await generateTranscript(channel, {
+            closedBy: deleter,
+            closeReason: 'Ticket deleted',
+            ticketData,
+            client: channel.client,
+          });
           if (attachment) {
             logger.info('Transcript generated successfully, attempting to send', {
               channelId: channel.id,

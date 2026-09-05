@@ -54,7 +54,8 @@
     "applications": "Postulaciones de Staff",
     "embeds": "Creador de Embeds",
     "music": "Música en Vivo",
-    "automations": "Automatizaciones"
+    "automations": "Automatizaciones",
+    "snapshots": "Copias y Respaldos"
   },
   "landing": {
     "heroTitle": "Gestión Potente de Comunidades para Discord",
@@ -298,7 +299,7 @@
     "panelActiveIn": "Publicado en",
     "panelNotPublishedDesc": "Personaliza los ajustes abajo y haz clic en Publicar para enviarlo a Discord.",
     "viewInDiscord": "Ver en Discord",
-    "deletePanel": "Despublicar Panel",
+    "deletePanel": "Eliminar Panel",
     "confirmDeletePanel": "¿Estás seguro de que deseas eliminar el panel de tickets activo?",
     "publishSuccess": "¡Panel de tickets publicado exitosamente en Discord!",
     "deleteSuccess": "Panel de tickets despublicado y eliminado.",
@@ -335,7 +336,16 @@
       "publishFailed": "Error al publicar el panel de tickets.",
       "deleteFailed": "Error al eliminar el panel de tickets."
     },
-    "panelPlaceholder": "Crear Ticket"
+    "panelPlaceholder": "Crear Ticket",
+    "subtabs": {
+      "panel": "Configuración del Panel",
+      "transcripts": "Historial de Transcripciones"
+    },
+    "panelActiveDescription": "El panel está activo en #{{channel}}. Los miembros pueden abrir tickets pulsando el botón.",
+    "panelInactiveDescription": "Aún no has publicado un panel de tickets en ningún canal de Discord.",
+    "goToDiscord": "Ver en Discord",
+    "contentSection": "Mensaje del Panel",
+    "contentSectionHelp": "Personaliza el texto y el botón con el que interactuarán los usuarios."
   },
   "leveling": {
     "title": "Niveles y Gamificación",
@@ -487,7 +497,8 @@
     "tabs": {
       "lookup": "Buscador de Miembros",
       "cases": "Casos del Servidor",
-      "autoPunish": "Castigos Automáticos"
+      "autoPunish": "Castigos Automáticos",
+      "antiRaid": "Escudo Anti-Raid"
     },
     "memberLookup": {
       "title": "Buscador Disciplinario de Miembros",
@@ -975,6 +986,124 @@
       "channelRequired": "Selecciona un canal válido",
       "fieldsRequired": "Completa el nombre y canal requeridos",
       "triggerRequired": "Ingresa una palabra o frase disparadora"
+    }
+  },
+  "transcripts": {
+    "creator": "Creador",
+    "closedBy": "Cerrado por",
+    "messages": "Mensajes",
+    "copyLink": "Copiar Enlace Web",
+    "share": "Compartir",
+    "downloadHtml": "Descargar HTML",
+    "download": "Descargar",
+    "noMessages": "No se registraron mensajes en este ticket.",
+    "searchPlaceholder": "Buscar por ticket #, creador o motivo...",
+    "noTranscripts": "No hay transcripciones registradas",
+    "noTranscriptsDesc": "Cuando los tickets sean cerrados, aparecerán aquí con su historial completo.",
+    "ticket": "Ticket",
+    "reason": "Motivo",
+    "viewModal": "Ver Transcripción",
+    "loadError": "Error al cargar la transcripción",
+    "linkCopied": "Enlace copiado al portapapeles"
+  },
+  "antiraid": {
+    "title": "Escudo Anti-Raid y Bloqueo de Emergencia",
+    "description": "Detecta ráfagas masivas de ingresos y ataques coordinados de bots para proteger tu comunidad al instante.",
+    "lockdownActive": "BLOQUEO DE EMERGENCIA ACTIVO",
+    "lockdownInactive": "Servidor en Estado Normal",
+    "lockdownActiveDesc": "El envío de mensajes en canales de texto está bloqueado para @everyone.",
+    "lockdownInactiveDesc": "El canal y los permisos de chat funcionan normalmente sin restricciones de pánico.",
+    "liftLockdownBtn": "Levantar Bloqueo",
+    "panicLockdownBtn": "Bloqueo de Emergencia",
+    "configSection": "Parámetros del Escudo",
+    "configSectionHelp": "Configura la sensibilidad, ventana temporal y sanciones del sistema.",
+    "toggleLabel": "Habilitar Escudo",
+    "joinThreshold": "Umbral de Uniones",
+    "joinThresholdHelp": "Número de usuarios que deben unirse en la ventana para considerarlo raid.",
+    "windowSeconds": "Ventana de Tiempo",
+    "windowSecondsHelp": "Segundos en los que se mide la ráfaga de ingresos masivos.",
+    "minAccountAgeHours": "Antigüedad Mínima",
+    "minAccountAgeHoursHelp": "Horas mínimas de creación de la cuenta (0 = Desactivado, 24h = 1 día).",
+    "action": "Acción ante Raid",
+    "actions": {
+      "quarantine": "Poner en Cuarentena (Rol)",
+      "kick": "Expulsar Miembro (Kick)",
+      "ban": "Bloquear Permanente (Ban)"
+    },
+    "quarantineRole": "Rol de Cuarentena",
+    "selectQuarantineRole": "Seleccionar rol de cuarentena...",
+    "alertChannel": "Canal de Alertas",
+    "selectAlertChannel": "Seleccionar canal de avisos...",
+    "lockdownOnRaid": "Bloqueo Temporal Automático (*Lockdown*)",
+    "lockdownOnRaidHelp": "Revoca automáticamente el permiso de enviar mensajes para @everyone en canales de texto mientras el ataque esté activo.",
+    "saveSettingsBtn": "Guardar Escudo Anti-Raid",
+    "success": {
+      "saved": "Configuración de Anti-Raid guardada exitosamente.",
+      "lockdownEnabled": "¡Bloqueo de emergencia activado en los canales del servidor!",
+      "lockdownDisabled": "¡Bloqueo de emergencia levantado!"
+    },
+    "errors": {
+      "saveFailed": "Error al guardar los ajustes de Anti-Raid.",
+      "lockdownFailed": "Error al modificar el estado de bloqueo del servidor."
+    }
+  },
+  "snapshots": {
+    "title": "Copias de Seguridad e Instantáneas",
+    "description": "Crea respaldos completos de la arquitectura de tu servidor (roles, categorías, canales y permisos) y restáuralas en cualquier momento.",
+    "importBtn": "Importar JSON",
+    "createBtn": "Nueva Instantánea",
+    "safeSyncTitle": "Modo Safe Sync (Recomendado)",
+    "safeSyncDesc": "Restaura y sincroniza roles, categorías y canales faltantes preservando los existentes. Ideal para recuperar canales borrados por error.",
+    "fullReplaceTitle": "Modo Full Replace (Reemplazo Total)",
+    "fullReplaceDesc": "Reconstruye la jerarquía idéntica al backup eliminando canales o roles no pertenecientes a la instantánea. Requiere confirmación estricta.",
+    "loading": "Cargando instantáneas del servidor...",
+    "emptyTitle": "No hay instantáneas guardadas",
+    "emptyDesc": "Guarda una copia de seguridad ahora para proteger la configuración de tus canales, roles y permisos ante posibles accidentes.",
+    "createFirst": "Crear Primera Instantánea",
+    "roles": "roles",
+    "categories": "categorías",
+    "channels": "canales",
+    "createdBy": "Por",
+    "downloadJson": "Descargar JSON",
+    "restoreBtn": "Restaurar",
+    "modalCreateTitle": "Crear Nueva Instantánea",
+    "modalSnapshotName": "Nombre de la Instantánea",
+    "modalIncludedElements": "Elementos incluidos en la copia:",
+    "creating": "Capturando...",
+    "confirmCreate": "Crear Copia",
+    "modalImportTitle": "Importar Respaldo JSON",
+    "modalImportDesc": "Sube un archivo .json exportado previamente desde TitanBot para guardarlo en la lista de instantáneas de este servidor.",
+    "modalImportSelect": "Haz clic para seleccionar archivo JSON",
+    "importing": "Guardando...",
+    "confirmImport": "Importar Instantánea",
+    "modalRestoreTitle": "Restaurar Instantánea",
+    "modalRestoreWarning": "Restaurar una instantánea modificará los roles y canales del servidor en Discord. Asegúrate de que el bot tenga permisos de Administrador y jerarquía alta.",
+    "selectMode": "Selecciona el Modo de Restauración:",
+    "safeSyncOption": "Safe Sync (Recomendado / Aditivo)",
+    "safeSyncOptionDesc": "Crea roles y canales faltantes y sincroniza permisos sin eliminar ningún canal o rol existente en el servidor.",
+    "fullReplaceOption": "Full Replace (Reemplazo Total)",
+    "fullReplaceOptionDesc": "Borra los canales y roles que no estén en la instantánea para replicar exactamente la estructura guardada.",
+    "confirmReplacePrompt": "Escribe \"CONFIRMAR\" en mayúsculas para autorizar la eliminación de canales y roles:",
+    "restoring": "Restaurando servidor...",
+    "executeRestore": "Iniciar Restauración",
+    "restoreSuccessTitle": "¡Restauración Finalizada con Éxito!",
+    "restoreSuccessDesc": "La arquitectura del servidor ha sido sincronizada según la instantánea.",
+    "modalDeleteTitle": "¿Eliminar Instantánea?",
+    "modalDeleteDesc": "Esta acción eliminará la instantánea \"{{name}}\" de la base de datos de TitanBot. No afectará los canales de tu servidor de Discord.",
+    "success": {
+      "created": "¡Instantánea creada exitosamente!",
+      "imported": "¡Copia de respaldo importada con éxito!",
+      "restored": "¡Servidor restaurado exitosamente!",
+      "deleted": "Instantánea eliminada."
+    },
+    "errors": {
+      "loadFailed": "Error al cargar las instantáneas del servidor.",
+      "createFailed": "Error al crear la instantánea.",
+      "exportFailed": "Error al descargar el archivo de respaldo.",
+      "invalidFileType": "Por favor selecciona un archivo .json válido.",
+      "importFailed": "Error al importar la instantánea.",
+      "restoreFailed": "Error al restaurar la instantánea.",
+      "deleteFailed": "Error al eliminar la instantánea."
     }
   }
 }

@@ -23,6 +23,7 @@ import {
   LayoutTemplate,
   Disc3,
   Zap,
+  Archive,
 } from 'lucide-react';
 
 export function Sidebar() {
@@ -49,6 +50,7 @@ export function Sidebar() {
     { to: `/manage/${guildId}/tickets`, label: t('nav.tickets') || 'Tickets', icon: Ticket },
     { to: `/manage/${guildId}/commands`, label: t('nav.commands'), icon: Terminal },
     { to: `/manage/${guildId}/verification`, label: t('nav.verification'), icon: ShieldCheck },
+    { to: `/manage/${guildId}/snapshots`, label: t('nav.snapshots') || 'Copias y Respaldos', icon: Archive },
   ];
 
   return (

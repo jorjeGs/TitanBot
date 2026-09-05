@@ -82,6 +82,25 @@ import {
   createOrUpdateAutoResponder,
   deleteAutoResponder,
 } from '../controllers/automationsController.js';
+import {
+  getTranscripts,
+  getTranscriptDetail,
+  downloadTranscriptHtml,
+  deleteTranscriptHandler,
+} from '../controllers/transcriptsController.js';
+import {
+  getAntiRaidSettings,
+  updateAntiRaidSettings,
+  toggleEmergencyLockdownHandler,
+} from '../controllers/antiRaidController.js';
+import {
+  getSnapshots,
+  createSnapshotHandler,
+  exportSnapshotJson,
+  importSnapshotHandler,
+  restoreSnapshotHandler,
+  deleteSnapshotHandler,
+} from '../controllers/snapshotController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 import { checkModerationAccess } from '../middlewares/checkModerationAccess.js';
@@ -160,6 +179,25 @@ router.delete('/:guildId/automations/scheduled/:id', verifyAuth, checkGuildPermi
 router.post('/:guildId/automations/scheduled/:id/trigger', verifyAuth, checkGuildPermissions, triggerScheduledNow);
 router.post('/:guildId/automations/auto-responders', verifyAuth, checkGuildPermissions, createOrUpdateAutoResponder);
 router.delete('/:guildId/automations/auto-responders/:id', verifyAuth, checkGuildPermissions, deleteAutoResponder);
+
+// Ticket transcripts subroutes
+router.get('/:guildId/transcripts', verifyAuth, checkModerationAccess, getTranscripts);
+router.get('/:guildId/transcripts/:id', verifyAuth, checkModerationAccess, getTranscriptDetail);
+router.get('/:guildId/transcripts/:id/download', verifyAuth, checkModerationAccess, downloadTranscriptHtml);
+router.delete('/:guildId/transcripts/:id', verifyAuth, checkGuildPermissions, deleteTranscriptHandler);
+
+// Anti-Raid shield subroutes
+router.get('/:guildId/antiraid', verifyAuth, checkModerationAccess, getAntiRaidSettings);
+router.patch('/:guildId/antiraid', verifyAuth, checkGuildPermissions, updateAntiRaidSettings);
+router.post('/:guildId/antiraid/lockdown/toggle', verifyAuth, checkGuildPermissions, toggleEmergencyLockdownHandler);
+
+// Server snapshots & backups subroutes
+router.get('/:guildId/snapshots', verifyAuth, checkGuildPermissions, getSnapshots);
+router.post('/:guildId/snapshots', verifyAuth, checkGuildPermissions, createSnapshotHandler);
+router.get('/:guildId/snapshots/:id/export', verifyAuth, checkGuildPermissions, exportSnapshotJson);
+router.post('/:guildId/snapshots/import', verifyAuth, checkGuildPermissions, importSnapshotHandler);
+router.post('/:guildId/snapshots/:id/restore', verifyAuth, checkGuildPermissions, restoreSnapshotHandler);
+router.delete('/:guildId/snapshots/:id', verifyAuth, checkGuildPermissions, deleteSnapshotHandler);
 
 export default router;
 

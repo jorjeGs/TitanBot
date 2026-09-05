@@ -124,6 +124,26 @@ export function getGiveawayLockKey(messageId) {
     return `giveaway:lock:${messageId}`;
 }
 
+export function getTranscriptKey(guildId, transcriptId) {
+    return `guild:${guildId}:transcript:${transcriptId}`;
+}
+
+export function getTranscriptsIndexKey(guildId) {
+    return `guild:${guildId}:transcripts:index`;
+}
+
+export function getAntiRaidConfigKey(guildId) {
+    return `guild:${guildId}:antiraid:config`;
+}
+
+export function getSnapshotKey(guildId, snapshotId) {
+    return `guild:${guildId}:snapshot:${snapshotId}`;
+}
+
+export function getSnapshotsIndexKey(guildId) {
+    return `guild:${guildId}:snapshots:index`;
+}
+
 /**
  * Legacy key patterns mapped to canonical builders.
  * Used by migration script and read-time fallback.

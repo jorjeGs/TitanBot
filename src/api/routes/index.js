@@ -2,6 +2,7 @@ import { Router } from 'express';
 import authRoutes from './authRoutes.js';
 import guildRoutes from './guildRoutes.js';
 import commandRoutes from './commandRoutes.js';
+import { getPublicTranscript } from '../controllers/transcriptsController.js';
 
 /**
  * Creates and configures the master API router with Discord client dependency.
@@ -20,6 +21,7 @@ export function createApiRouter(client) {
   router.use('/auth', authRoutes);
   router.use('/guilds', guildRoutes);
   router.use('/commands', commandRoutes);
+  router.get('/transcripts/:id', getPublicTranscript);
 
   return router;
 }

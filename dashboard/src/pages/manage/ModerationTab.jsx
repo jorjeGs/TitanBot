@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { useGuild } from '../../contexts/GuildContext';
 import { apiFetch } from '../../api/client';
 import { Toggle } from '../../components/common/Toggle';
+import { RoleSelect } from '../../components/common/RoleSelect';
+import { ChannelSelect } from '../../components/common/ChannelSelect';
 import {
   ShieldAlert,
   Search,
@@ -22,13 +25,18 @@ import {
   AlertOctagon,
   RefreshCw,
   Info,
+  Lock,
+  Unlock,
+  Sliders,
+  ShieldCheck,
 } from 'lucide-react';
 
 export function ModerationTab() {
   const { t } = useTranslation();
   const { guildId } = useParams();
+  const { channels, roles } = useGuild();
 
-  const [activeTab, setActiveTab] = useState('lookup'); // 'lookup' | 'cases' | 'autoPunish'
+  const [activeTab, setActiveTab] = useState('lookup'); // 'lookup' | 'cases' | 'autoPunish' | 'antiRaid'
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
 
@@ -55,13 +63,30 @@ export function ModerationTab() {
   const [newDuration, setNewDuration] = useState(60);
   const [isSavingConfig, setIsSavingConfig] = useState(false);
 
+  // Anti-Raid Shield state
+  const [antiRaidConfig, setAntiRaidConfig] = useState({
+    enabled: false,
+    joinThreshold: 5,
+    windowSeconds: 10,
+    minAccountAgeHours: 24,
+    action: 'quarantine',
+    quarantineRoleId: '',
+    lockdownOnRaid: false,
+    lockdownChannelIds: [],
+    alertChannelId: '',
+    isLockdownActive: false,
+  });
+  const [isSavingAntiRaid, setIsSavingAntiRaid] = useState(false);
+  const [isTogglingLockdown, setIsTogglingLockdown] = useState(false);
+
   // Initial load
   const loadInitialData = async () => {
     try {
       setLoading(true);
-      const [casesRes, configRes] = await Promise.all([
+      const [casesRes, configRes, antiRaidRes] = await Promise.all([
         apiFetch(`/guilds/${guildId}/moderation/cases?limit=100`),
         apiFetch(`/guilds/${guildId}/moderation/config`),
+        apiFetch(`/guilds/${guildId}/antiraid`).catch(() => ({ success: false })),
       ]);
 
       if (casesRes.success) {
@@ -71,6 +96,13 @@ export function ModerationTab() {
         setModerationConfig({
           autoPunish: Array.isArray(configRes.moderation.autoPunish) ? configRes.moderation.autoPunish : [],
           dmOnWarn: configRes.moderation.dmOnWarn !== false,
+        });
+      }
+      if (antiRaidRes?.success && antiRaidRes.antiRaid) {
+        setAntiRaidConfig({
+          ...antiRaidRes.antiRaid,
+          quarantineRoleId: antiRaidRes.antiRaid.quarantineRoleId || '',
+          alertChannelId: antiRaidRes.antiRaid.alertChannelId || '',
         });
       }
     } catch (err) {
@@ -248,6 +280,76 @@ export function ModerationTab() {
     }
   };
 
+  const handleSaveAntiRaid = async () => {
+    try {
+      setIsSavingAntiRaid(true);
+      setNotification(null);
+
+      const res = await apiFetch(`/guilds/${guildId}/antiraid`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          ...antiRaidConfig,
+          quarantineRoleId: antiRaidConfig.quarantineRoleId || null,
+          alertChannelId: antiRaidConfig.alertChannelId || null,
+        }),
+      });
+
+      if (res.success && res.antiRaid) {
+        setAntiRaidConfig(res.antiRaid);
+        setNotification({
+          type: 'success',
+          message: t('antiraid.saveSuccess') || 'Ajustes del Escudo Anti-Raid guardados.',
+        });
+      }
+    } catch (err) {
+      setNotification({
+        type: 'error',
+        message: err.message || t('antiraid.saveError') || 'Error al guardar el Escudo Anti-Raid.',
+      });
+    } finally {
+      setIsSavingAntiRaid(false);
+    }
+  };
+
+  const handleToggleLockdown = async () => {
+    const nextState = !antiRaidConfig.isLockdownActive;
+    const confirmMsg = nextState
+      ? (t('antiraid.confirmLockdown') || '¿Deseas activar el BLOQUEO DE EMERGENCIA? Los miembros no podrán enviar mensajes en canales públicos.')
+      : (t('antiraid.confirmUnlock') || '¿Deseas LEVANTAR el bloqueo de emergencia y reabrir los canales?');
+
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      setIsTogglingLockdown(true);
+      setNotification(null);
+
+      const res = await apiFetch(`/guilds/${guildId}/antiraid/lockdown/toggle`, {
+        method: 'POST',
+        body: JSON.stringify({ active: nextState }),
+      });
+
+      if (res.success) {
+        setAntiRaidConfig((prev) => ({
+          ...prev,
+          isLockdownActive: res.isLockdownActive,
+        }));
+        setNotification({
+          type: 'success',
+          message: res.isLockdownActive
+            ? (t('antiraid.lockdownActivated') || '¡Bloqueo de emergencia activado!')
+            : (t('antiraid.lockdownLifted') || 'Bloqueo de emergencia levantado correctamente.'),
+        });
+      }
+    } catch (err) {
+      setNotification({
+        type: 'error',
+        message: err.message || 'Error al modificar el estado de bloqueo.',
+      });
+    } finally {
+      setIsTogglingLockdown(false);
+    }
+  };
+
   // Filtered cases list
   const filteredCases = serverCases.filter((c) => {
     if (caseFilter === 'all') return true;
@@ -363,6 +465,22 @@ export function ModerationTab() {
           {moderationConfig.autoPunish.length > 0 && (
             <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono">
               {moderationConfig.autoPunish.length}
+            </span>
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab('antiRaid')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+            activeTab === 'antiRaid'
+              ? 'bg-discord-blurple text-white shadow-md'
+              : 'text-slate-400 hover:text-white hover:bg-discord-darker'
+          }`}
+        >
+          <ShieldAlert className="w-4 h-4" />
+          <span>{t('antiraid.tabTitle') || 'Escudo Anti-Raid'}</span>
+          {antiRaidConfig.isLockdownActive && (
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30 font-bold uppercase tracking-wide animate-pulse">
+              LOCKDOWN
             </span>
           )}
         </button>
@@ -855,6 +973,257 @@ export function ModerationTab() {
                   <Save className="w-4 h-4" />
                 )}
                 <span>{isSavingConfig ? t('common.saving') : t('moderation.autoPunish.saveBtn')}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: Anti-Raid Shield */}
+      {activeTab === 'antiRaid' && (
+        <div className="space-y-6">
+          {/* Status & Panic Lockdown Card */}
+          <div className="bg-discord-dark rounded-xl p-6 border border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-start gap-4">
+              <div
+                className={`p-3 rounded-xl shrink-0 ${
+                  antiRaidConfig.isLockdownActive
+                    ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse'
+                    : antiRaidConfig.enabled
+                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                    : 'bg-slate-800 text-slate-400'
+                }`}
+              >
+                {antiRaidConfig.isLockdownActive ? (
+                  <Lock className="w-6 h-6" />
+                ) : antiRaidConfig.enabled ? (
+                  <ShieldCheck className="w-6 h-6" />
+                ) : (
+                  <ShieldAlert className="w-6 h-6" />
+                )}
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2.5">
+                  <h2 className="text-lg font-bold text-white">
+                    {t('antiraid.shieldTitle') || 'Escudo Anti-Raid Proactivo'}
+                  </h2>
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${
+                      antiRaidConfig.enabled
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                        : 'bg-slate-800 text-slate-400 border border-slate-700'
+                    }`}
+                  >
+                    {antiRaidConfig.enabled ? (t('common.active') || 'Activo') : (t('common.inactive') || 'Inactivo')}
+                  </span>
+                  {antiRaidConfig.isLockdownActive && (
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30 animate-pulse">
+                      LOCKDOWN ACTIVO
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm text-slate-400 max-w-2xl">
+                  {t('antiraid.shieldDescription') ||
+                    'Monitorea y mitiga automáticamente ráfagas anormales de uniones masivas de bots o cuentas sospechosas.'}
+                </p>
+                {antiRaidConfig.lastRaidTimestamp && (
+                  <p className="text-xs text-amber-400/90 pt-1">
+                    ⚠️ {t('antiraid.lastRaidDetected') || 'Último incidente detectado'}:{' '}
+                    {new Date(antiRaidConfig.lastRaidTimestamp).toLocaleString()}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Emergency Panic Button */}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleToggleLockdown}
+                disabled={isTogglingLockdown}
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold shadow transition-all cursor-pointer ${
+                  antiRaidConfig.isLockdownActive
+                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20'
+                    : 'bg-rose-600 hover:bg-rose-500 text-white shadow-rose-600/25'
+                }`}
+              >
+                {isTogglingLockdown ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : antiRaidConfig.isLockdownActive ? (
+                  <Unlock className="w-4 h-4" />
+                ) : (
+                  <Lock className="w-4 h-4" />
+                )}
+                <span>
+                  {antiRaidConfig.isLockdownActive
+                    ? (t('antiraid.liftLockdownBtn') || 'Levantar Bloqueo')
+                    : (t('antiraid.panicLockdownBtn') || 'Bloqueo de Emergencia')}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Configuration Form */}
+          <div className="bg-discord-dark rounded-xl p-6 border border-slate-800 shadow-sm space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div>
+                <h3 className="text-base font-semibold text-white">
+                  {t('antiraid.configSection') || 'Parámetros del Escudo'}
+                </h3>
+                <p className="text-xs text-slate-400">
+                  {t('antiraid.configSectionHelp') || 'Configura la sensibilidad, ventana temporal y sanciones del sistema.'}
+                </p>
+              </div>
+
+              <Toggle
+                enabled={antiRaidConfig.enabled}
+                onChange={(val) => setAntiRaidConfig((prev) => ({ ...prev, enabled: val }))}
+                label={t('antiraid.toggleLabel') || 'Habilitar Escudo'}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Threshold */}
+              <div className="space-y-2">
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  {t('antiraid.joinThreshold') || 'Umbral de Uniones'} ({antiRaidConfig.joinThreshold} miembros)
+                </label>
+                <input
+                  type="range"
+                  min={3}
+                  max={30}
+                  value={antiRaidConfig.joinThreshold}
+                  onChange={(e) =>
+                    setAntiRaidConfig((prev) => ({ ...prev, joinThreshold: parseInt(e.target.value, 10) || 5 }))
+                  }
+                  className="w-full accent-discord-blurple cursor-pointer"
+                />
+                <p className="text-xs text-slate-400">
+                  {t('antiraid.joinThresholdHelp') || 'Número de usuarios que deben unirse en la ventana para considerarlo raid.'}
+                </p>
+              </div>
+
+              {/* Time Window */}
+              <div className="space-y-2">
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  {t('antiraid.windowSeconds') || 'Ventana de Tiempo'} ({antiRaidConfig.windowSeconds}s)
+                </label>
+                <input
+                  type="range"
+                  min={3}
+                  max={60}
+                  value={antiRaidConfig.windowSeconds}
+                  onChange={(e) =>
+                    setAntiRaidConfig((prev) => ({ ...prev, windowSeconds: parseInt(e.target.value, 10) || 10 }))
+                  }
+                  className="w-full accent-discord-blurple cursor-pointer"
+                />
+                <p className="text-xs text-slate-400">
+                  {t('antiraid.windowSecondsHelp') || 'Segundos en los que se mide la ráfaga de ingresos masivos.'}
+                </p>
+              </div>
+
+              {/* Min Account Age */}
+              <div className="space-y-2">
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  {t('antiraid.minAccountAgeHours') || 'Antigüedad Mínima'} ({antiRaidConfig.minAccountAgeHours}h)
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  max={720}
+                  value={antiRaidConfig.minAccountAgeHours}
+                  onChange={(e) =>
+                    setAntiRaidConfig((prev) => ({ ...prev, minAccountAgeHours: parseInt(e.target.value, 10) || 0 }))
+                  }
+                  className="w-full px-3.5 py-2 bg-discord-darker border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple"
+                />
+                <p className="text-xs text-slate-400">
+                  {t('antiraid.minAccountAgeHoursHelp') || 'Horas mínimas de creación de la cuenta (0 = Desactivado, 24h = 1 día).'}
+                </p>
+              </div>
+            </div>
+
+            <hr className="border-slate-800" />
+
+            {/* Actions & Roles */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                  {t('antiraid.action') || 'Acción ante Raid'}
+                </label>
+                <select
+                  value={antiRaidConfig.action}
+                  onChange={(e) => setAntiRaidConfig((prev) => ({ ...prev, action: e.target.value }))}
+                  className="w-full px-3.5 py-2.5 bg-discord-darker border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple cursor-pointer"
+                >
+                  <option value="quarantine">{t('antiraid.actions.quarantine') || 'Poner en Cuarentena (Rol)'}</option>
+                  <option value="kick">{t('antiraid.actions.kick') || 'Expulsar Miembro (Kick)'}</option>
+                  <option value="ban">{t('antiraid.actions.ban') || 'Bloquear Permanente (Ban)'}</option>
+                </select>
+              </div>
+
+              {antiRaidConfig.action === 'quarantine' && (
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                    {t('antiraid.quarantineRole') || 'Rol de Cuarentena'}
+                  </label>
+                  <RoleSelect
+                    roles={roles || []}
+                    value={antiRaidConfig.quarantineRoleId}
+                    onChange={(val) => setAntiRaidConfig((prev) => ({ ...prev, quarantineRoleId: val }))}
+                    placeholder={t('antiraid.selectQuarantineRole') || 'Seleccionar rol de cuarentena...'}
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                  {t('antiraid.alertChannel') || 'Canal de Alertas'}
+                </label>
+                <ChannelSelect
+                  channels={(channels || []).filter((c) => c.type === 0 || c.type === undefined)}
+                  value={antiRaidConfig.alertChannelId}
+                  onChange={(val) => setAntiRaidConfig((prev) => ({ ...prev, alertChannelId: val }))}
+                  placeholder={t('antiraid.selectAlertChannel') || 'Seleccionar canal de avisos...'}
+                />
+              </div>
+            </div>
+
+            <hr className="border-slate-800" />
+
+            {/* Auto-Lockdown on Raid */}
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h4 className="text-sm font-semibold text-white">
+                  {t('antiraid.lockdownOnRaid') || 'Bloqueo Temporal Automático (*Lockdown*)'}
+                </h4>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {t('antiraid.lockdownOnRaidHelp') ||
+                    'Revoca automáticamente el permiso de enviar mensajes para @everyone en canales de texto mientras el ataque esté activo.'}
+                </p>
+              </div>
+
+              <Toggle
+                enabled={antiRaidConfig.lockdownOnRaid}
+                onChange={(val) => setAntiRaidConfig((prev) => ({ ...prev, lockdownOnRaid: val }))}
+              />
+            </div>
+
+            {/* Save Button */}
+            <div className="pt-4 flex justify-end">
+              <button
+                type="button"
+                onClick={handleSaveAntiRaid}
+                disabled={isSavingAntiRaid}
+                className="inline-flex items-center gap-2 px-6 py-2.5 bg-discord-blurple hover:bg-discord-blurple/90 disabled:opacity-50 text-white text-sm font-semibold rounded-lg shadow transition-colors cursor-pointer"
+              >
+                {isSavingAntiRaid ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Save className="w-4 h-4" />
+                )}
+                <span>{isSavingAntiRaid ? t('common.saving') : (t('antiraid.saveSettingsBtn') || 'Guardar Escudo Anti-Raid')}</span>
               </button>
             </div>
           </div>

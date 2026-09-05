@@ -54,7 +54,8 @@
     "applications": "Staff Applications",
     "embeds": "Embed Creator",
     "music": "Live Music",
-    "automations": "Automations"
+    "automations": "Automations",
+    "snapshots": "Backups & Snapshots"
   },
   "landing": {
     "heroTitle": "Powerful Community Management for Discord",
@@ -294,11 +295,11 @@
     "title": "Ticket System",
     "subtitle": "Build and deploy interactive support panels to serve your community.",
     "panelStatusActive": "Active Ticket Panel",
-    "panelStatusInactive": "No Panel Published",
+    "panelStatusInactive": "No Published Panel",
     "panelActiveIn": "Published in",
     "panelNotPublishedDesc": "Customize the options below and click Publish to send it to Discord.",
     "viewInDiscord": "View in Discord",
-    "deletePanel": "Unpublish Panel",
+    "deletePanel": "Delete Panel",
     "confirmDeletePanel": "Are you sure you want to delete the active ticket panel?",
     "publishSuccess": "Ticket panel successfully published to Discord!",
     "deleteSuccess": "Ticket panel unpublished and deleted.",
@@ -323,10 +324,10 @@
     "unmanageableRoleWarning": "Warning: The selected staff role is above TitanBot in Discord hierarchy. Place the bot role higher to ensure proper channel permissions.",
     "maxTickets": "Max Tickets Per User",
     "maxTicketsHelp": "Maximum concurrent open tickets allowed per user (1-10).",
-    "dmOnClose": "Send DM on Close",
-    "dmOnCloseHelp": "Send a direct message transcript/notification to the user when their ticket is closed.",
-    "publishPanelButton": "Publish Panel to Discord",
-    "updatePanelButton": "Update Panel in Discord",
+    "dmOnClose": "Notify via DM on close",
+    "dmOnCloseHelp": "Sends a direct message to the user when their ticket is closed.",
+    "publishPanelButton": "Publish Panel on Discord",
+    "updatePanelButton": "Update Panel on Discord",
     "previewTitle": "Ticket Panel Preview",
     "embedTitle": "Support Ticket System",
     "errors": {
@@ -335,7 +336,16 @@
       "publishFailed": "Failed to publish ticket panel.",
       "deleteFailed": "Failed to delete ticket panel."
     },
-    "panelPlaceholder": "Create Ticket"
+    "panelPlaceholder": "Create Ticket",
+    "subtabs": {
+      "panel": "Panel Settings",
+      "transcripts": "Transcripts History"
+    },
+    "panelActiveDescription": "The panel is active in #{{channel}}. Members can open tickets by clicking the button.",
+    "panelInactiveDescription": "You haven't published a ticket panel in any Discord channel yet.",
+    "goToDiscord": "View on Discord",
+    "contentSection": "Panel Message",
+    "contentSectionHelp": "Customize the text and button that members will interact with."
   },
   "leveling": {
     "title": "Leveling & Gamification",
@@ -487,7 +497,8 @@
     "tabs": {
       "lookup": "Member Lookup",
       "cases": "Server Cases",
-      "autoPunish": "Auto-Punish Rules"
+      "autoPunish": "Auto-Punish Rules",
+      "antiRaid": "Anti-Raid Shield"
     },
     "memberLookup": {
       "title": "Member Disciplinary Lookup",
@@ -975,6 +986,124 @@
       "channelRequired": "Please select a valid channel",
       "fieldsRequired": "Please complete required name and channel",
       "triggerRequired": "Please enter a trigger word or phrase"
+    }
+  },
+  "transcripts": {
+    "creator": "Creator",
+    "closedBy": "Closed by",
+    "messages": "Messages",
+    "copyLink": "Copy Web Link",
+    "share": "Share",
+    "downloadHtml": "Download HTML",
+    "download": "Download",
+    "noMessages": "No messages recorded in this ticket.",
+    "searchPlaceholder": "Search by ticket #, creator, or reason...",
+    "noTranscripts": "No transcripts recorded",
+    "noTranscriptsDesc": "When tickets are closed, they will appear here with their full history.",
+    "ticket": "Ticket",
+    "reason": "Reason",
+    "viewModal": "View Transcript",
+    "loadError": "Failed to load transcript",
+    "linkCopied": "Link copied to clipboard"
+  },
+  "antiraid": {
+    "title": "Anti-Raid Shield & Panic Lockdown",
+    "description": "Detects massive join bursts and coordinated bot attacks to protect your community instantly.",
+    "lockdownActive": "EMERGENCY LOCKDOWN ACTIVE",
+    "lockdownInactive": "Server Normal Status",
+    "lockdownActiveDesc": "Sending messages in text channels is blocked for @everyone.",
+    "lockdownInactiveDesc": "Channels and chat permissions are operating normally without panic restrictions.",
+    "liftLockdownBtn": "Lift Lockdown",
+    "panicLockdownBtn": "Panic Lockdown",
+    "configSection": "Shield Parameters",
+    "configSectionHelp": "Configure sensitivity, time window, and system penalties.",
+    "toggleLabel": "Enable Shield",
+    "joinThreshold": "Join Threshold",
+    "joinThresholdHelp": "Number of users who must join in the window to trigger a raid alert.",
+    "windowSeconds": "Time Window",
+    "windowSecondsHelp": "Seconds in which the join burst is evaluated.",
+    "minAccountAgeHours": "Minimum Account Age",
+    "minAccountAgeHoursHelp": "Minimum account creation hours (0 = Disabled, 24h = 1 day).",
+    "action": "Action on Raid",
+    "actions": {
+      "quarantine": "Quarantine (Role)",
+      "kick": "Kick Member",
+      "ban": "Ban Member"
+    },
+    "quarantineRole": "Quarantine Role",
+    "selectQuarantineRole": "Select quarantine role...",
+    "alertChannel": "Alert Channel",
+    "selectAlertChannel": "Select alert channel...",
+    "lockdownOnRaid": "Automatic Temporary Lockdown",
+    "lockdownOnRaidHelp": "Automatically revokes @everyone message permissions in text channels during an active attack.",
+    "saveSettingsBtn": "Save Anti-Raid Shield",
+    "success": {
+      "saved": "Anti-Raid settings saved successfully.",
+      "lockdownEnabled": "Emergency lockdown enabled across server channels!",
+      "lockdownDisabled": "Emergency lockdown lifted!"
+    },
+    "errors": {
+      "saveFailed": "Error saving Anti-Raid settings.",
+      "lockdownFailed": "Error changing server lockdown state."
+    }
+  },
+  "snapshots": {
+    "title": "Backups & Server Snapshots",
+    "description": "Create full backups of your server architecture (roles, categories, channels, and permissions) and restore them anytime.",
+    "importBtn": "Import JSON",
+    "createBtn": "New Snapshot",
+    "safeSyncTitle": "Safe Sync Mode (Recommended)",
+    "safeSyncDesc": "Restores and synchronizes missing roles, categories, and channels while preserving existing ones. Ideal for recovering accidentally deleted channels.",
+    "fullReplaceTitle": "Full Replace Mode",
+    "fullReplaceDesc": "Reconstructs the exact hierarchy of the backup by removing channels or roles not present in the snapshot. Requires strict confirmation.",
+    "loading": "Loading server snapshots...",
+    "emptyTitle": "No snapshots saved yet",
+    "emptyDesc": "Save a backup now to protect your channels, roles, and permissions against accidental deletions or raids.",
+    "createFirst": "Create First Snapshot",
+    "roles": "roles",
+    "categories": "categories",
+    "channels": "channels",
+    "createdBy": "By",
+    "downloadJson": "Download JSON",
+    "restoreBtn": "Restore",
+    "modalCreateTitle": "Create New Snapshot",
+    "modalSnapshotName": "Snapshot Name",
+    "modalIncludedElements": "Included backup elements:",
+    "creating": "Capturing...",
+    "confirmCreate": "Create Backup",
+    "modalImportTitle": "Import JSON Backup",
+    "modalImportDesc": "Upload a .json file previously exported from TitanBot to save it to this server's snapshot list.",
+    "modalImportSelect": "Click to select JSON file",
+    "importing": "Saving...",
+    "confirmImport": "Import Snapshot",
+    "modalRestoreTitle": "Restore Snapshot",
+    "modalRestoreWarning": "Restoring a snapshot will modify server roles and channels on Discord. Ensure the bot has Administrator permissions and high role hierarchy.",
+    "selectMode": "Select Restoration Mode:",
+    "safeSyncOption": "Safe Sync (Recommended / Additive)",
+    "safeSyncOptionDesc": "Creates missing roles and channels and syncs permissions without deleting any existing channels or roles on the server.",
+    "fullReplaceOption": "Full Replace (Complete Rebuild)",
+    "fullReplaceOptionDesc": "Deletes channels and roles that are not in the snapshot to replicate the exact saved layout.",
+    "confirmReplacePrompt": "Type \"CONFIRMAR\" in uppercase to authorize the deletion of channels and roles:",
+    "restoring": "Restoring server...",
+    "executeRestore": "Start Restore",
+    "restoreSuccessTitle": "Restoration Completed Successfully!",
+    "restoreSuccessDesc": "Server architecture has been synchronized according to the snapshot.",
+    "modalDeleteTitle": "Delete Snapshot?",
+    "modalDeleteDesc": "This action will delete snapshot \"{{name}}\" from TitanBot's database. It will not affect your Discord server channels.",
+    "success": {
+      "created": "Snapshot created successfully!",
+      "imported": "Backup imported successfully!",
+      "restored": "Server restored successfully!",
+      "deleted": "Snapshot deleted."
+    },
+    "errors": {
+      "loadFailed": "Failed to load server snapshots.",
+      "createFailed": "Failed to create snapshot.",
+      "exportFailed": "Failed to export backup file.",
+      "invalidFileType": "Please select a valid .json file.",
+      "importFailed": "Failed to import snapshot.",
+      "restoreFailed": "Failed to restore snapshot.",
+      "deleteFailed": "Failed to delete snapshot."
     }
   }
 }

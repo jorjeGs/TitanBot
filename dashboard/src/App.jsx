@@ -23,6 +23,7 @@ import { BirthdaysTab } from './pages/manage/BirthdaysTab';
 import { ApplicationsTab } from './pages/manage/ApplicationsTab';
 import { EmbedCreatorTab } from './pages/manage/EmbedCreatorTab';
 import { MusicTab } from './pages/manage/MusicTab';
+import { SnapshotsTab } from './pages/manage/SnapshotsTab';
 
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
@@ -57,6 +58,7 @@ export function App() {
             <Route path="tickets" element={<TicketsTab />} />
             <Route path="commands" element={<CommandsTab />} />
             <Route path="verification" element={<VerificationTab />} />
+            <Route path="snapshots" element={<SnapshotsTab />} />
           </Route>
 
           {/* Fallback */}

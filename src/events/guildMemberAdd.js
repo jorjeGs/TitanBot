@@ -6,6 +6,7 @@ import { formatWelcomeMessage } from '../utils/welcome.js';
 import { logEvent, EVENT_TYPES } from '../services/loggingService.js';
 import { getServerCounters, updateCounter } from '../services/serverstatsService.js';
 import { setBirthday as dbSetBirthday } from '../utils/database.js';
+import { handleMemberJoin } from '../services/security/antiRaidService.js';
 import { logger } from '../utils/logger.js';
 
 export default {
@@ -16,6 +17,18 @@ export default {
     try {
         const { guild, user } = member;
         
+        // Anti-Raid Shield inspection
+        const raidResult = await handleMemberJoin(member).catch((err) => {
+            logger.warn('Anti-Raid check failed in guildMemberAdd:', err);
+            return null;
+        });
+
+        // Abort welcome and auto-roles if member was kicked or banned by anti-raid
+        if (raidResult?.raidDetected && (raidResult.action === 'kick' || raidResult.action === 'ban')) {
+            logger.info(`Anti-Raid intercepted member ${member.id} in guild ${guild.id}, aborting join pipeline.`);
+            return;
+        }
+
         const config = await getGuildConfig(member.client, guild.id);
         
         const welcomeConfig = await getWelcomeConfig(member.client, guild.id);
