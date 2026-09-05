@@ -81,6 +81,30 @@ export const LevelingConfigSchema = z
   })
   .optional();
 
+export const EconomyConfigSchema = z
+  .object({
+    currencyName: z.string().min(1).max(32).default('coins'),
+    currencySymbol: z.string().min(1).max(10).default('🪙'),
+    startingBalance: z.number().int().min(0).max(1000000).default(100),
+    dailyAmount: z.number().int().min(1).max(1000000).default(1000),
+    workMin: z.number().int().min(1).max(100000).default(50),
+    workMax: z.number().int().min(1).max(100000).default(250),
+    premiumRoleId: z.string().nullable().optional(),
+  })
+  .optional();
+
+export const JoinToCreateConfigSchema = z
+  .object({
+    enabled: z.boolean().default(false),
+    triggerChannels: z.array(z.string()).default([]),
+    categoryId: z.string().nullable().optional(),
+    channelNameTemplate: z.string().min(1).max(100).default("{username}'s Room"),
+    userLimit: z.number().int().min(0).max(99).default(0),
+    bitrate: z.number().int().min(8000).max(384000).default(64000),
+    temporaryChannels: z.record(z.any()).default({}),
+  })
+  .optional();
+
 export const GuildConfigSchema = z
   .object({
     locale: z.enum(['auto', 'en-US', 'es-419', 'de']).default('auto'),
@@ -103,7 +127,9 @@ export const GuildConfigSchema = z
     ticketLogging: TicketLoggingSchema.optional(),
     enableLogging: z.boolean().optional(),
     verification: VerificationConfigSchema,
-    leveling: LevelingConfigSchema
+    leveling: LevelingConfigSchema,
+    economy: EconomyConfigSchema,
+    joinToCreate: JoinToCreateConfigSchema
   })
   .passthrough();
 

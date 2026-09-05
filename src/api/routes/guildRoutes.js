@@ -23,6 +23,19 @@ import {
   getLevelingSettings,
   updateLevelingSettings,
 } from '../controllers/levelingController.js';
+import {
+  getEconomySettings,
+  updateEconomySettings,
+} from '../controllers/economyController.js';
+import {
+  getServerstatsSettings,
+  setupCounters,
+  deleteCounters,
+} from '../controllers/serverstatsController.js';
+import {
+  getJoinToCreateSettings,
+  updateJoinToCreateSettings,
+} from '../controllers/jointocreateController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 
@@ -47,5 +60,12 @@ router.post('/:guildId/tickets/publish', verifyAuth, checkGuildPermissions, publ
 router.delete('/:guildId/tickets/panel', verifyAuth, checkGuildPermissions, deleteTicketPanel);
 router.get('/:guildId/leveling', verifyAuth, checkGuildPermissions, getLevelingSettings);
 router.patch('/:guildId/leveling', verifyAuth, checkGuildPermissions, updateLevelingSettings);
+router.get('/:guildId/economy', verifyAuth, checkGuildPermissions, getEconomySettings);
+router.patch('/:guildId/economy', verifyAuth, checkGuildPermissions, updateEconomySettings);
+router.get('/:guildId/serverstats', verifyAuth, checkGuildPermissions, getServerstatsSettings);
+router.post('/:guildId/serverstats/setup', verifyAuth, checkGuildPermissions, setupCounters);
+router.delete('/:guildId/serverstats', verifyAuth, checkGuildPermissions, deleteCounters);
+router.get('/:guildId/jointocreate', verifyAuth, checkGuildPermissions, getJoinToCreateSettings);
+router.patch('/:guildId/jointocreate', verifyAuth, checkGuildPermissions, updateJoinToCreateSettings);
 
 export default router;

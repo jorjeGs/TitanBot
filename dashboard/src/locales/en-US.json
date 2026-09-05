@@ -34,7 +34,10 @@
     "switchServer": "Switch Server",
     "language": "Language",
     "tickets": "Ticket System",
-    "leveling": "Levels & XP"
+    "leveling": "Levels & XP",
+    "economy": "Economy & Shop",
+    "serverstats": "Server Stats",
+    "jointocreate": "Temporary Voice Rooms"
   },
   "landing": {
     "heroTitle": "Powerful Community Management for Discord",
@@ -332,6 +335,87 @@
       "noRole": "Please select a role for the reward.",
       "roleHierarchy": "The selected role is higher than TitanBot in the hierarchy.",
       "saveFailed": "Failed to save leveling settings."
+    }
+  },
+  "economy": {
+    "title": "Economy & Shop System",
+    "subtitle": "Customize server currency, daily command rewards, and shop purchase roles.",
+    "currencySectionTitle": "Currency & Coin Configuration",
+    "currencyName": "Currency Name",
+    "currencyNameHelp": "The display name for your server currency in embeds.",
+    "currencySymbol": "Symbol / Emoji",
+    "currencySymbolHelp": "Emoji or symbol that will accompany currency amounts.",
+    "startingBalance": "Starting Balance for New Members",
+    "startingBalanceHelp": "Initial wallet balance given when running their first economy command.",
+    "rewardsSectionTitle": "Rewards & Earnings",
+    "dailyAmount": "Daily Reward (/daily)",
+    "dailyAmountHelp": "Amount granted to users every 24 hours.",
+    "workMin": "Minimum Work Payout (/work)",
+    "workMax": "Maximum Work Payout (/work)",
+    "shopSectionTitle": "Premium Shop Role",
+    "premiumRole": "Role Granted for Shop Purchase",
+    "premiumRoleHelp": "Role automatically granted when a member purchases the Premium item in /shop.",
+    "saveButton": "Save Economy Settings",
+    "saveSuccess": "Economy settings saved successfully!",
+    "leaderboardTitle": "Richest Server Members (Top 10)",
+    "emptyLeaderboard": "No economy records yet. Running /daily or /work will populate the leaderboard.",
+    "previewTitle": "Economy Preview (/balance)",
+    "errors": {
+      "invalidWorkRange": "Minimum work payout cannot exceed maximum work payout.",
+      "roleHierarchy": "The selected shop role is higher than TitanBot in the hierarchy.",
+      "saveFailed": "Failed to save economy settings."
+    }
+  },
+  "serverstats": {
+    "title": "Server Statistics (ServerStats)",
+    "subtitle": "Display real-time member, human, and bot counts via locked voice channels.",
+    "totalMembers": "Total Members",
+    "humanMembers": "Human Users",
+    "botMembers": "Integrated Bots",
+    "configTitle": "Counter Provisioning",
+    "category": "Parent Category (Optional)",
+    "categoryHelp": "Category where counter channels will be placed. If left empty, an automatic \"📊 Server Stats\" category is created.",
+    "selectCounters": "Select counters to deploy:",
+    "membersCounter": "Total Members (Humans + Bots)",
+    "humansCounter": "Human Members Only",
+    "botsCounter": "Integrated Bots Only",
+    "setupButton": "Create Counter Channels",
+    "syncButton": "Sync / Update Counters",
+    "deleteButton": "Delete Counters",
+    "confirmDelete": "Are you sure you want to delete all server stats channels?",
+    "setupSuccess": "Counter channels created successfully in Discord!",
+    "deleteSuccess": "Server stats channels deleted successfully.",
+    "activeCounters": "Active Counter Channels",
+    "noCounters": "No counter channels created yet. Click \"Create Counter Channels\" above to deploy them.",
+    "previewTitle": "Discord Channel Preview",
+    "errors": {
+      "noTypeSelected": "Please select at least one counter type.",
+      "setupFailed": "Failed to provision counter channels in Discord.",
+      "deleteFailed": "Failed to delete counter channels."
+    }
+  },
+  "jointocreate": {
+    "title": "Temporary Voice Rooms (Join-to-Create)",
+    "subtitle": "Allow users to automatically generate private temporary voice rooms upon joining a trigger channel.",
+    "systemStatus": "Join-to-Create System Status",
+    "enableJtc": "Enable Dynamic Room Creation",
+    "enableJtcHelp": "Automatically create temporary voice rooms when members enter the trigger channel.",
+    "channelsTitle": "Channels & Placement",
+    "triggerChannel": "Trigger Voice Channel *",
+    "triggerChannelHelp": "The voice channel members must join to generate their own room.",
+    "category": "Target Category (Optional)",
+    "categoryHelp": "Discord category where newly created temporary rooms will be placed.",
+    "roomSettingsTitle": "Spawned Room Settings",
+    "template": "Channel Name Template",
+    "templateHelp": "Available variables: {username} (user name), {displayName} (server nickname).",
+    "userLimit": "User Limit per Room",
+    "userLimitHelp": "0 means unlimited members.",
+    "bitrate": "Audio Quality (Bitrate)",
+    "saveButton": "Save Join-to-Create Settings",
+    "saveSuccess": "Join-to-Create settings saved successfully!",
+    "previewTitle": "Temporary Rooms Preview",
+    "errors": {
+      "saveFailed": "Failed to save Join-to-Create settings."
     }
   }
 }

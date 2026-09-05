@@ -34,7 +34,10 @@
     "switchServer": "Server wechseln",
     "language": "Sprache",
     "tickets": "Ticketsystem",
-    "leveling": "Level & XP"
+    "leveling": "Level & XP",
+    "economy": "Wirtschaft & Shop",
+    "serverstats": "Server-Statistiken",
+    "jointocreate": "Temporäre Sprachkanäle"
   },
   "landing": {
     "heroTitle": "Leistungsstarke Community-Verwaltung für Discord",
@@ -332,6 +335,87 @@
       "noRole": "Bitte wähle eine Rolle für die Belohnung aus.",
       "roleHierarchy": "Die ausgewählte Rolle steht in der Hierarchie über TitanBot.",
       "saveFailed": "Fehler beim Speichern der Level-Einstellungen."
+    }
+  },
+  "economy": {
+    "title": "Wirtschafts- und Shop-System",
+    "subtitle": "Passe die Serverwährung, tägliche Belohnungen und Shop-Rollen an.",
+    "currencySectionTitle": "Währungs-Konfiguration",
+    "currencyName": "Währungsname",
+    "currencyNameHelp": "Der Anzeigename der Währung in Embeds.",
+    "currencySymbol": "Symbol / Emoji",
+    "currencySymbolHelp": "Emoji oder Symbol für Beträge.",
+    "startingBalance": "Startguthaben für neue Mitglieder",
+    "startingBalanceHelp": "Betrag, mit dem Nutzer bei der ersten wirtschaftlichen Interaktion starten.",
+    "rewardsSectionTitle": "Belohnungen und Einnahmen",
+    "dailyAmount": "Tägliche Belohnung (/daily)",
+    "dailyAmountHelp": "Alle 24 Stunden vergebener Betrag.",
+    "workMin": "Mindestauszahlung Arbeit (/work)",
+    "workMax": "Höchstauszahlung Arbeit (/work)",
+    "shopSectionTitle": "Premium-Shoprolle",
+    "premiumRole": "Rolle für Shop-Kauf",
+    "premiumRoleHelp": "Rolle, die beim Kauf des Premium-Artikels in /shop vergeben wird.",
+    "saveButton": "Wirtschaftseinstellungen speichern",
+    "saveSuccess": "Wirtschaftseinstellungen erfolgreich gespeichert!",
+    "leaderboardTitle": "Reichste Server-Mitglieder (Top 10)",
+    "emptyLeaderboard": "Noch keine Wirtschaftsdaten vorhanden.",
+    "previewTitle": "Wirtschafts-Vorschau (/balance)",
+    "errors": {
+      "invalidWorkRange": "Die Mindestauszahlung darf die Höchstauszahlung nicht überschreiten.",
+      "roleHierarchy": "Die ausgewählte Shop-Rolle steht in der Hierarchie über TitanBot.",
+      "saveFailed": "Fehler beim Speichern der Wirtschaftseinstellungen."
+    }
+  },
+  "serverstats": {
+    "title": "Server-Statistiken (ServerStats)",
+    "subtitle": "Zeige Mitglieder-, Nutzer- und Bot-Zahlen in Echtzeit über gesperrte Sprachkanäle an.",
+    "totalMembers": "Mitglieder insgesamt",
+    "humanMembers": "Menschliche Nutzer",
+    "botMembers": "Integrierte Bots",
+    "configTitle": "Zähler-Bereitstellung",
+    "category": "Übergeordnete Kategorie (Optional)",
+    "categoryHelp": "Kategorie für Zählerkanäle. Falls leer, wird automatisch \"📊 Server Stats\" erstellt.",
+    "selectCounters": "Zu erstellende Zähler auswählen:",
+    "membersCounter": "Gesamte Mitglieder (Menschen + Bots)",
+    "humansCounter": "Nur menschliche Nutzer",
+    "botsCounter": "Nur integrierte Bots",
+    "setupButton": "Zählerkanäle erstellen",
+    "syncButton": "Zähler synchronisieren / aktualisieren",
+    "deleteButton": "Zähler löschen",
+    "confirmDelete": "Möchtest du wirklich alle Zählerkanäle löschen?",
+    "setupSuccess": "Zählerkanäle erfolgreich in Discord erstellt!",
+    "deleteSuccess": "Zählerkanäle erfolgreich gelöscht.",
+    "activeCounters": "Aktive Zählerkanäle",
+    "noCounters": "Noch keine Zählerkanäle eingerichtet.",
+    "previewTitle": "Discord-Kanalvorschau",
+    "errors": {
+      "noTypeSelected": "Bitte wähle mindestens einen Zählertyp aus.",
+      "setupFailed": "Fehler beim Erstellen der Zählerkanäle in Discord.",
+      "deleteFailed": "Fehler beim Löschen der Zählerkanäle."
+    }
+  },
+  "jointocreate": {
+    "title": "Temporäre Sprachkanäle (Join-to-Create)",
+    "subtitle": "Ermöglicht Nutzern das automatische Erstellen privater Sprachräume beim Betreten eines Auslöser-Kanals.",
+    "systemStatus": "Status des Join-to-Create-Systems",
+    "enableJtc": "Dynamische Raum-Erstellung aktivieren",
+    "enableJtcHelp": "Erstellt automatisch temporäre Sprachräume, wenn Mitglieder den Auslöser-Kanal betreten.",
+    "channelsTitle": "Kanäle & Platzierung",
+    "triggerChannel": "Auslöser-Sprachkanal *",
+    "triggerChannelHelp": "Der Sprachkanal, dem Mitglieder beitreten müssen, um einen Raum zu erstellen.",
+    "category": "Ziel-Kategorie (Optional)",
+    "categoryHelp": "Discord-Kategorie, in der erstellte temporäre Räume abgelegt werden.",
+    "roomSettingsTitle": "Raumeinstellungen",
+    "template": "Kanalnamen-Vorlage",
+    "templateHelp": "Verfügbare Variablen: {username} (Benutzername), {displayName} (Server-Spitzname).",
+    "userLimit": "Benutzerlimit pro Raum",
+    "userLimitHelp": "0 bedeutet unbegrenzt.",
+    "bitrate": "Audioqualität (Bitrate)",
+    "saveButton": "Join-to-Create-Einstellungen speichern",
+    "saveSuccess": "Join-to-Create-Einstellungen erfolgreich gespeichert!",
+    "previewTitle": "Vorschau temporärer Räume",
+    "errors": {
+      "saveFailed": "Fehler beim Speichern der Join-to-Create-Einstellungen."
     }
   }
 }

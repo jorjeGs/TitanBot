@@ -34,7 +34,10 @@
     "switchServer": "Cambiar Servidor",
     "language": "Idioma",
     "tickets": "Sistema de Tickets",
-    "leveling": "Niveles y XP"
+    "leveling": "Niveles y XP",
+    "economy": "Economía y Tienda",
+    "serverstats": "Estadísticas del Servidor",
+    "jointocreate": "Salas de Voz Temporales"
   },
   "landing": {
     "heroTitle": "Gestión Potente de Comunidades para Discord",
@@ -332,6 +335,87 @@
       "noRole": "Por favor selecciona un rol para la recompensa.",
       "roleHierarchy": "El rol seleccionado está por encima de TitanBot en la jerarquía.",
       "saveFailed": "Error al guardar los ajustes de niveles."
+    }
+  },
+  "economy": {
+    "title": "Sistema de Economía y Tienda",
+    "subtitle": "Configura la moneda personalizada de tu servidor, recompensas de comandos diarios y roles de compra.",
+    "currencySectionTitle": "Configuración de Moneda y Divisa",
+    "currencyName": "Nombre de la Moneda",
+    "currencyNameHelp": "El nombre con el que se identificará la divisa en los embeds.",
+    "currencySymbol": "Símbolo / Emoji",
+    "currencySymbolHelp": "Emoji o símbolo que acompañará a las cifras monetarias.",
+    "startingBalance": "Balance Inicial para Nuevos Miembros",
+    "startingBalanceHelp": "Cantidad con la que empezarán los usuarios al usar su primer comando económico.",
+    "rewardsSectionTitle": "Recompensas y Ganancias",
+    "dailyAmount": "Recompensa Diaria (/daily)",
+    "dailyAmountHelp": "Cantidad otorgada a los usuarios cada 24 horas.",
+    "workMin": "Pago Mínimo de Trabajo (/work)",
+    "workMax": "Pago Máximo de Trabajo (/work)",
+    "shopSectionTitle": "Rol Premium de la Tienda",
+    "premiumRole": "Rol Otorgado al Comprar en Tienda",
+    "premiumRoleHelp": "Rol que se entregará automáticamente cuando un miembro adquiera el artículo Premium en /shop.",
+    "saveButton": "Guardar Ajustes de Economía",
+    "saveSuccess": "¡Ajustes de economía guardados exitosamente!",
+    "leaderboardTitle": "Mayores Fortunas del Servidor (Top 10)",
+    "emptyLeaderboard": "No hay registros de economía aún. El uso de comandos como /daily o /work llenará la tabla.",
+    "previewTitle": "Vista Previa de Economía (/balance)",
+    "errors": {
+      "invalidWorkRange": "El pago mínimo de trabajo no puede superar el máximo.",
+      "roleHierarchy": "El rol seleccionado para la tienda está por encima de TitanBot en la jerarquía.",
+      "saveFailed": "Error al guardar los ajustes de economía."
+    }
+  },
+  "serverstats": {
+    "title": "Estadísticas del Servidor (ServerStats)",
+    "subtitle": "Muestra el recuento de miembros, humanos y bots en tiempo real mediante canales de voz bloqueados.",
+    "totalMembers": "Miembros Totales",
+    "humanMembers": "Usuarios Humanos",
+    "botMembers": "Bots Integrados",
+    "configTitle": "Aprovisionamiento de Contadores",
+    "category": "Categoría Contenedora (Opcional)",
+    "categoryHelp": "Categoría donde se crearán los canales contadores. Si se deja vacía, se creará una categoría automática \"📊 Server Stats\".",
+    "selectCounters": "Selecciona los contadores a desplegar:",
+    "membersCounter": "Miembros Totales (Humanos + Bots)",
+    "humansCounter": "Usuarios Humanos Solamente",
+    "botsCounter": "Bots Integrados Solamente",
+    "setupButton": "Crear Canales de Estadísticas",
+    "syncButton": "Sincronizar / Actualizar",
+    "deleteButton": "Eliminar Contadores",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar todos los canales de estadísticas del servidor?",
+    "setupSuccess": "¡Canales de estadísticas creados exitosamente en Discord!",
+    "deleteSuccess": "Canales de estadísticas eliminados correctamente.",
+    "activeCounters": "Canales Contadores Activos",
+    "noCounters": "No hay canales contadores creados. Haz clic en \"Crear Canales de Estadísticas\" arriba para desplegarlos.",
+    "previewTitle": "Vista Previa en Canales de Discord",
+    "errors": {
+      "noTypeSelected": "Por favor selecciona al menos un tipo de contador.",
+      "setupFailed": "Error al aprovisionar los contadores en Discord.",
+      "deleteFailed": "Error al eliminar los contadores."
+    }
+  },
+  "jointocreate": {
+    "title": "Salas de Voz Temporales (Join-to-Create)",
+    "subtitle": "Permite a los usuarios crear automáticamente sus propios canales de voz privados al entrar a un canal disparador.",
+    "systemStatus": "Estado del Sistema Join-to-Create",
+    "enableJtc": "Activar Creación Dinámica de Salas",
+    "enableJtcHelp": "Crea automáticamente salas privadas temporales cuando los miembros entran al canal disparador.",
+    "channelsTitle": "Canales y Ubicación",
+    "triggerChannel": "Canal de Voz Disparador *",
+    "triggerChannelHelp": "El canal de voz al que los usuarios deben unirse para crear su propia sala.",
+    "category": "Categoría Contenedora (Opcional)",
+    "categoryHelp": "Categoría de Discord donde se ubicarán las salas temporales creadas.",
+    "roomSettingsTitle": "Personalización de Salas Creadas",
+    "template": "Plantilla de Nombre del Canal",
+    "templateHelp": "Variables disponibles: {username} (nombre de usuario), {displayName} (apodo en el servidor).",
+    "userLimit": "Límite de Usuarios por Sala",
+    "userLimitHelp": "0 significa sin límite de miembros.",
+    "bitrate": "Calidad de Audio (Bitrate)",
+    "saveButton": "Guardar Ajustes de Join-to-Create",
+    "saveSuccess": "¡Configuración de Join-to-Create guardada exitosamente!",
+    "previewTitle": "Vista Previa de Salas Temporales",
+    "errors": {
+      "saveFailed": "Error al guardar los ajustes de Join-to-Create."
     }
   }
 }

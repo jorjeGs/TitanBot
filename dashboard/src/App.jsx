@@ -13,6 +13,9 @@ import { CommandsTab } from './pages/manage/CommandsTab';
 import { VerificationTab } from './pages/manage/VerificationTab';
 import { TicketsTab } from './pages/manage/TicketsTab';
 import { LevelingTab } from './pages/manage/LevelingTab';
+import { EconomyTab } from './pages/manage/EconomyTab';
+import { ServerStatsTab } from './pages/manage/ServerStatsTab';
+import { JoinToCreateTab } from './pages/manage/JoinToCreateTab';
 
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
@@ -33,6 +36,9 @@ export function App() {
             <Route path="welcome" element={<WelcomeTab />} />
             <Route path="roles" element={<RolesTab />} />
             <Route path="leveling" element={<LevelingTab />} />
+            <Route path="economy" element={<EconomyTab />} />
+            <Route path="serverstats" element={<ServerStatsTab />} />
+            <Route path="jointocreate" element={<JoinToCreateTab />} />
             <Route path="logging" element={<LoggingTab />} />
             <Route path="tickets" element={<TicketsTab />} />
             <Route path="commands" element={<CommandsTab />} />

@@ -1022,7 +1022,7 @@ export async function getJoinToCreateConfig(client, guildId) {
     const key = getJoinToCreateConfigKey(guildId);
     try {
         const config = await client.db.get(key, {});
-        const unwrapped = unwrapReplitData(config);
+        const unwrapped = unwrapReplitData(config) || {};
         
         return {
             enabled: unwrapped.enabled || false,

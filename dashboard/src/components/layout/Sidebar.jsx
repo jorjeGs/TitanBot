@@ -11,6 +11,9 @@ import {
   ShieldCheck,
   Ticket,
   Trophy,
+  Coins,
+  BarChart2,
+  Mic,
   ChevronLeft,
   Users,
 } from 'lucide-react';
@@ -24,9 +27,12 @@ export function Sidebar() {
     { to: `/manage/${guildId}/general`, label: t('nav.general'), icon: Sliders },
     { to: `/manage/${guildId}/welcome`, label: t('nav.welcome'), icon: Sparkles },
     { to: `/manage/${guildId}/roles`, label: t('nav.roles'), icon: KeyRound },
+    { to: `/manage/${guildId}/leveling`, label: t('nav.leveling') || 'Niveles y XP', icon: Trophy },
+    { to: `/manage/${guildId}/economy`, label: t('nav.economy') || 'Economía y Tienda', icon: Coins },
+    { to: `/manage/${guildId}/serverstats`, label: t('nav.serverstats') || 'Estadísticas del Servidor', icon: BarChart2 },
+    { to: `/manage/${guildId}/jointocreate`, label: t('nav.jointocreate') || 'Salas de Voz Temporales', icon: Mic },
     { to: `/manage/${guildId}/logging`, label: t('nav.logging'), icon: ScrollText },
     { to: `/manage/${guildId}/tickets`, label: t('nav.tickets') || 'Tickets', icon: Ticket },
-    { to: `/manage/${guildId}/leveling`, label: t('nav.leveling') || 'Niveles y XP', icon: Trophy },
     { to: `/manage/${guildId}/commands`, label: t('nav.commands'), icon: Terminal },
     { to: `/manage/${guildId}/verification`, label: t('nav.verification'), icon: ShieldCheck },
   ];

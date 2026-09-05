@@ -989,6 +989,240 @@ describe('API Routes Integration Tests', () => {
     assert.deepStrictEqual(data.leveling.ignoredChannels, [testChannelId]);
   });
 
+  it('GET /api/guilds/:guildId/economy returns economy settings and leaderboard', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/economy`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok(data.economy);
+    assert.strictEqual(typeof data.economy.currencyName, 'string');
+    assert.strictEqual(typeof data.economy.startingBalance, 'number');
+    assert.ok(Array.isArray(data.leaderboard));
+  });
+
+  it('PATCH /api/guilds/:guildId/economy rejects inverted work range with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/economy`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        workMin: 500,
+        workMax: 100, // min > max
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('PATCH /api/guilds/:guildId/economy rejects unmanageable premium role with 422', async () => {
+    const testGuildId = '123456789012345678';
+    const testRoleId = '123456789012345680';
+
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 2; // Lower than role position 5
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/economy`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        premiumRoleId: testRoleId,
+      }),
+    });
+
+    assert.strictEqual(res.status, 422);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'HierarchyError');
+  });
+
+  it('PATCH /api/guilds/:guildId/economy updates settings and persists premiumRoleId', async () => {
+    const testGuildId = '123456789012345678';
+    const testRoleId = '123456789012345680';
+
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 20;
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/economy`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        currencyName: 'gemas',
+        currencySymbol: '💎',
+        startingBalance: 250,
+        dailyAmount: 1500,
+        workMin: 75,
+        workMax: 300,
+        premiumRoleId: testRoleId,
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.economy.currencyName, 'gemas');
+    assert.strictEqual(data.economy.currencySymbol, '💎');
+    assert.strictEqual(data.economy.startingBalance, 250);
+    assert.strictEqual(data.economy.dailyAmount, 1500);
+    assert.strictEqual(data.economy.premiumRoleId, testRoleId);
+  });
+
+  it('GET /api/guilds/:guildId/serverstats returns counters and guild stats', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/serverstats`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok(Array.isArray(data.counters));
+    assert.ok(data.stats);
+    assert.strictEqual(typeof data.stats.totalCount, 'number');
+  });
+
+  it('POST & DELETE /api/guilds/:guildId/serverstats lifecycle', async () => {
+    const testGuildId = '123456789012345678';
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 20;
+
+    if (!guild.channels.create) {
+      guild.channels.create = async ({ name, type }) => {
+        const id = 'stat-ch-' + Math.random().toString(36).substring(2, 7);
+        const ch = {
+          id,
+          name,
+          type,
+          delete: async () => {
+            guild.channels.cache.delete(id);
+          },
+        };
+        guild.channels.cache.set(id, ch);
+        return ch;
+      };
+    }
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const postRes = await fetch(`${baseUrl}/guilds/${testGuildId}/serverstats/setup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        types: ['members', 'bots'],
+      }),
+    });
+
+    assert.strictEqual(postRes.status, 200);
+    const postData = await postRes.json();
+    assert.strictEqual(postData.success, true);
+    assert.ok(postData.counters.length >= 2);
+
+    const delRes = await fetch(`${baseUrl}/guilds/${testGuildId}/serverstats`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(delRes.status, 200);
+    const delData = await delRes.json();
+    assert.strictEqual(delData.success, true);
+
+    const getRes = await fetch(`${baseUrl}/guilds/${testGuildId}/serverstats`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+    const getData = await getRes.json();
+    assert.strictEqual(getData.counters.length, 0);
+  });
+
+  it('GET /api/guilds/:guildId/jointocreate returns JTC configuration', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/jointocreate`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok(data.joinToCreate);
+    assert.strictEqual(typeof data.joinToCreate.enabled, 'boolean');
+    assert.strictEqual(typeof data.joinToCreate.channelNameTemplate, 'string');
+  });
+
+  it('PATCH /api/guilds/:guildId/jointocreate rejects invalid template with 400', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/jointocreate`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelNameTemplate: '{invalid_placeholder_xyz}',
+      }),
+    });
+
+    assert.strictEqual(res.status, 400);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'ValidationError');
+  });
+
+  it('PATCH /api/guilds/:guildId/jointocreate updates settings successfully', async () => {
+    const testGuildId = '123456789012345678';
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/jointocreate`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        enabled: true,
+        channelNameTemplate: '{username} Room',
+        userLimit: 8,
+        bitrate: 128000,
+      }),
+    });
+
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.strictEqual(data.joinToCreate.enabled, true);
+    assert.strictEqual(data.joinToCreate.channelNameTemplate, '{username} Room');
+    assert.strictEqual(data.joinToCreate.userLimit, 8);
+    assert.strictEqual(data.joinToCreate.bitrate, 128000);
+  });
+
   it('GET / serves the dashboard index.html when dist exists', async () => {
     const res = await fetch(`${rootUrl}/`);
     assert.strictEqual(res.status, 200);

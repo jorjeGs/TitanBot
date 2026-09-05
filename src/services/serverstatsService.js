@@ -69,18 +69,26 @@ export function getCounterActionMessage(action, values = {}) {
 }
 
 export async function getGuildCounterStats(guild) {
-  let memberCollection = guild.members.cache;
+  let memberCollection = guild.members?.cache;
 
-  try {
-    memberCollection = await guild.members.fetch();
-  } catch (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      logger.debug(`Failed to fetch all guild members for ${guild.id}, using cache only`, error);
+  if (typeof guild.members?.fetch === 'function') {
+    try {
+      memberCollection = await guild.members.fetch();
+    } catch (error) {
+      if (process.env.NODE_ENV !== 'production') {
+        logger.debug(`Failed to fetch all guild members for ${guild.id}, using cache only`, error);
+      }
     }
   }
 
-  const botCount = memberCollection.filter((member) => member.user.bot).size;
-  const totalCount = typeof guild.memberCount === 'number' ? guild.memberCount : memberCollection.size;
+  const memberList = Array.isArray(memberCollection)
+    ? memberCollection
+    : memberCollection?.values
+    ? Array.from(memberCollection.values())
+    : [];
+
+  const botCount = memberList.filter((member) => member?.user?.bot).length;
+  const totalCount = typeof guild.memberCount === 'number' ? guild.memberCount : memberList.length;
   const humanCount = Math.max(totalCount - botCount, 0);
 
   return {
