@@ -7,6 +7,7 @@ import { GuildSelector } from './pages/GuildSelector';
 import { DashboardLayout } from './pages/manage/DashboardLayout';
 import { GeneralTab } from './pages/manage/GeneralTab';
 import { WelcomeTab } from './pages/manage/WelcomeTab';
+import { RolesTab } from './pages/manage/RolesTab';
 import { LoggingTab } from './pages/manage/LoggingTab';
 import { CommandsTab } from './pages/manage/CommandsTab';
 import { VerificationTab } from './pages/manage/VerificationTab';
@@ -28,6 +29,7 @@ export function App() {
             <Route index element={<Navigate to="general" replace />} />
             <Route path="general" element={<GeneralTab />} />
             <Route path="welcome" element={<WelcomeTab />} />
+            <Route path="roles" element={<RolesTab />} />
             <Route path="logging" element={<LoggingTab />} />
             <Route path="commands" element={<CommandsTab />} />
             <Route path="verification" element={<VerificationTab />} />

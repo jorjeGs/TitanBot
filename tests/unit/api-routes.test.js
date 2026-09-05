@@ -92,6 +92,17 @@ describe('API Routes Integration Tests', () => {
                       isTextBased: () => true,
                       isDMBased: () => false,
                       isThread: () => false,
+                      permissionsFor: () => ({ has: () => true }),
+                      send: async () => ({
+                        id: '112233445566778899',
+                        delete: async () => {},
+                      }),
+                      messages: {
+                        fetch: async () => ({
+                          id: '112233445566778899',
+                          delete: async () => {},
+                        }),
+                      },
                     },
                   ],
                 ]),
@@ -134,6 +145,14 @@ describe('API Routes Integration Tests', () => {
         set: async (key, val) => {
           store.set(key, val);
           return true;
+        },
+        delete: async (key) => {
+          store.delete(key);
+          return true;
+        },
+        list: async (prefix) => {
+          const keys = Array.from(store.keys());
+          return prefix ? keys.filter((k) => k.startsWith(prefix)) : keys;
         },
       },
     };
@@ -402,6 +421,157 @@ describe('API Routes Integration Tests', () => {
     assert.strictEqual(data.config.disabledCommands.ping, true);
     assert.strictEqual(data.config.disabledCommands.roll, false);
     assert.strictEqual(data.config.disabledCategories.Fun, true);
+  });
+
+  it('POST /api/guilds/:guildId/reactroles rejects role above bot hierarchy with 422', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const testRoleId = '123456789012345680';
+
+    mockClient.guilds.cache.set(testGuildId, {
+      id: testGuildId,
+      name: 'Reaction Role Server',
+      memberCount: 10,
+      ownerId: 'admin-user-id',
+      channels: {
+        cache: new Map([
+          [
+            testChannelId,
+            {
+              id: testChannelId,
+              name: 'roles-channel',
+              type: 0,
+              permissionsFor: () => ({ has: () => true }),
+              send: async () => ({
+                id: '112233445566778899',
+                delete: async () => {},
+              }),
+              messages: {
+                fetch: async () => ({
+                  id: '112233445566778899',
+                  delete: async () => {},
+                }),
+              },
+            },
+          ],
+        ]),
+      },
+      roles: {
+        cache: new Map([
+          [
+            testRoleId,
+            {
+              id: testRoleId,
+              name: 'Gamer',
+              hexColor: '#00ff00',
+              position: 5,
+              managed: false,
+              permissions: { has: () => false },
+            },
+          ],
+        ]),
+      },
+      members: {
+        cache: new Map([
+          [
+            'admin-user-id',
+            {
+              id: 'admin-user-id',
+              permissions: { has: () => true },
+            },
+          ],
+        ]),
+        me: {
+          roles: { highest: { position: 3 } }, // lower than role position 5
+          permissions: { has: () => true },
+        },
+      },
+    });
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+    const res = await fetch(`${baseUrl}/guilds/${testGuildId}/reactroles`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: testChannelId,
+        title: 'Roles de Test',
+        description: 'Test description',
+        roleIds: [testRoleId],
+      }),
+    });
+
+    assert.strictEqual(res.status, 422);
+    const data = await res.json();
+    assert.strictEqual(data.error, 'HierarchyError');
+  });
+
+  it('POST, GET, and DELETE /api/guilds/:guildId/reactroles lifecycle', async () => {
+    const testGuildId = '123456789012345678';
+    const testChannelId = '123456789012345679';
+    const testRoleId = '123456789012345680';
+
+    const guild = mockClient.guilds.cache.get(testGuildId);
+    guild.members.me.roles.highest.position = 10; // higher than role position 5
+
+    const token = createSessionToken({ id: 'admin-user-id' });
+
+    // 1. Create panel
+    const createRes = await fetch(`${baseUrl}/guilds/${testGuildId}/reactroles`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: testChannelId,
+        title: 'Notificaciones',
+        description: 'Elige tus notificaciones',
+        roleIds: [testRoleId],
+      }),
+    });
+
+    assert.strictEqual(createRes.status, 200);
+    const createData = await createRes.json();
+    assert.strictEqual(createData.success, true);
+    assert.strictEqual(createData.panel.messageId, '112233445566778899');
+    assert.strictEqual(createData.panel.roles[0].name, 'Gamer');
+
+    // 2. Get panels list
+    const getRes = await fetch(`${baseUrl}/guilds/${testGuildId}/reactroles`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(getRes.status, 200);
+    const getData = await getRes.json();
+    assert.strictEqual(getData.success, true);
+    assert.ok(getData.panels.length > 0);
+    assert.strictEqual(getData.panels[0].messageId, '112233445566778899');
+
+    // 3. Delete panel
+    const delRes = await fetch(`${baseUrl}/guilds/${testGuildId}/reactroles/112233445566778899`, {
+      method: 'DELETE',
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+
+    assert.strictEqual(delRes.status, 200);
+    const delData = await delRes.json();
+    assert.strictEqual(delData.success, true);
+
+    // 4. Verify list is empty
+    const verifyRes = await fetch(`${baseUrl}/guilds/${testGuildId}/reactroles`, {
+      headers: {
+        Cookie: `titanbot_session=${token}`,
+      },
+    });
+    const verifyData = await verifyRes.json();
+    assert.strictEqual(verifyData.panels.length, 0);
   });
 
   it('GET / serves the dashboard index.html when dist exists', async () => {

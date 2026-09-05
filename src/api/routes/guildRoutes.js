@@ -8,6 +8,11 @@ import {
   updateGuildConfigHandler,
 } from '../controllers/guildController.js';
 import { updateGuildCommands } from '../controllers/commandController.js';
+import {
+  getGuildReactionRoles,
+  createGuildReactionRole,
+  deleteGuildReactionRole,
+} from '../controllers/reactRoleController.js';
 import { verifyAuth } from '../middlewares/verifyAuth.js';
 import { checkGuildPermissions } from '../middlewares/checkGuildPermissions.js';
 
@@ -23,5 +28,8 @@ router.get('/:guildId/roles', verifyAuth, checkGuildPermissions, getGuildRoles);
 router.get('/:guildId/config', verifyAuth, checkGuildPermissions, getGuildConfigHandler);
 router.patch('/:guildId/config', verifyAuth, checkGuildPermissions, updateGuildConfigHandler);
 router.patch('/:guildId/commands', verifyAuth, checkGuildPermissions, updateGuildCommands);
+router.get('/:guildId/reactroles', verifyAuth, checkGuildPermissions, getGuildReactionRoles);
+router.post('/:guildId/reactroles', verifyAuth, checkGuildPermissions, createGuildReactionRole);
+router.delete('/:guildId/reactroles/:messageId', verifyAuth, checkGuildPermissions, deleteGuildReactionRole);
 
 export default router;

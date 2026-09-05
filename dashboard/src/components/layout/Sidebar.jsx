@@ -5,6 +5,7 @@ import { useGuild } from '../../contexts/GuildContext';
 import {
   Sliders,
   Sparkles,
+  KeyRound,
   ScrollText,
   Terminal,
   ShieldCheck,
@@ -20,6 +21,7 @@ export function Sidebar() {
   const navItems = [
     { to: `/manage/${guildId}/general`, label: t('nav.general'), icon: Sliders },
     { to: `/manage/${guildId}/welcome`, label: t('nav.welcome'), icon: Sparkles },
+    { to: `/manage/${guildId}/roles`, label: t('nav.roles'), icon: KeyRound },
     { to: `/manage/${guildId}/logging`, label: t('nav.logging'), icon: ScrollText },
     { to: `/manage/${guildId}/commands`, label: t('nav.commands'), icon: Terminal },
     { to: `/manage/${guildId}/verification`, label: t('nav.verification'), icon: ShieldCheck },
