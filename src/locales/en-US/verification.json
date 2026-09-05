@@ -1,5 +1,28 @@
 {
   "verified": "You have been successfully verified! Welcome to the server.",
-  "already_verified": "You are already verified in this server.",
-  "setup_success": "Verification panel created in {channel}."
+  "already_verified": "You are already verified and have access to all server channels.",
+  "setup_success": "Verification panel created in {channel}.",
+  "success_title": "Verification Successful! ✅",
+  "success_desc": "You have been verified and given the **{roleName}** role!\n\nYou now have access to all server channels and features. Welcome! 🎉",
+  "command_success_desc": "You have been verified and given the **{roleName}** role! Welcome to the server! 🎉",
+  "already_verified_title": "Already Verified",
+  "panel_title": "Server Verification",
+  "default_message": "Click the button below to verify yourself and gain access to the server.",
+  "default_button": "Verify",
+  "setup_updated_title": "Verification System Updated",
+  "setup_updated_desc": "Channel: {channel}\nVerified Role: {role}\nButton Text: {buttonText}",
+  "not_verified_title": "Not Verified",
+  "not_verified_desc": "{tag} does not currently have the verified role.",
+  "remove_success_title": "Verification Removed",
+  "remove_success_desc": "Verification removed from {tag}.",
+  "errors": {
+    "guild_only": "This action can only be used in a server.",
+    "perm_manage_server": "You need the **Manage Server** permission to use this verification subcommand.",
+    "bot_member_not_found": "I could not verify my permissions in this server. Please try again in a moment.",
+    "missing_channel_perms": "I need **View Channel**, **Send Messages**, and **Embed Links** in the verification channel.",
+    "missing_manage_roles": "I need the 'Manage Roles' permission to give verified roles.",
+    "invalid_role": "Please choose a normal assignable role (not @everyone or an integration-managed role).",
+    "role_hierarchy": "The verified role must be below my highest role in the server role hierarchy.",
+    "conflicting_onboarding": "You cannot enable the verification system while **AutoVerify** or **AutoRole** is configured. Disable those first."
+  }
 }

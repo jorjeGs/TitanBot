@@ -7,6 +7,7 @@ import { getColor, botConfig } from '../config/bot.js';
 import { getEndedGiveaways, markGiveawayEnded } from '../utils/database.js';
 import { checkRateLimit, getRateLimitStatus } from '../utils/rateLimiter.js';
 import { logEvent, EVENT_TYPES } from './loggingService.js';
+import { t } from '../utils/i18n/index.js';
 
 const GIVEAWAY_CONFIG = botConfig.giveaways || {};
 const GIVEAWAY_INTERACTION_COOLDOWN = 1000;
@@ -132,30 +133,31 @@ export function validateWinnerCount(winnerCount) {
     }
 }
 
-export function createGiveawayEmbed(giveaway, status, winners = []) {
+export function createGiveawayEmbed(giveaway, status, winners = [], target = null) {
     try {
         const statusEmoji = status === 'ended' ? '🎉' : status === 'reroll' ? '🔄' : '🎉';
         const isEnded = status === 'ended' || status === 'reroll';
         const color = isEnded ? getColor('giveaway.ended') : getColor('giveaway.active');
+        const effectiveTarget = target || giveaway?.guildId || null;
         
         const embed = new EmbedBuilder()
             .setTitle(`${statusEmoji} ${giveaway.prize}`)
-            .setDescription('React with the button below to enter!')
+            .setDescription(t('giveaway.embed.react_to_enter', {}, effectiveTarget))
             .setColor(color)
             .addFields(
-                { name: '👤 Hosted by', value: `<@${giveaway.hostId}>`, inline: true },
-                { name: '🏆 Winners', value: giveaway.winnerCount.toString(), inline: true },
-                { name: '👥 Entries', value: giveaway.participants?.length?.toString() || '0', inline: true }
+                { name: t('giveaway.embed.hosted_by', {}, effectiveTarget), value: `<@${giveaway.hostId}>`, inline: true },
+                { name: t('giveaway.embed.winners', {}, effectiveTarget), value: giveaway.winnerCount.toString(), inline: true },
+                { name: t('giveaway.embed.entries', {}, effectiveTarget), value: giveaway.participants?.length?.toString() || '0', inline: true }
             );
 
         if (isEnded) {
             const winnerDisplay = winners.length > 0 
                 ? winners.map(id => `<@${id}>`).join(', ')
-                : 'No valid entries';
-            embed.addFields({ name: '🎯 Winners', value: winnerDisplay, inline: false });
+                : t('giveaway.embed.no_valid_entries', {}, effectiveTarget);
+            embed.addFields({ name: t('giveaway.embed.winners_field', {}, effectiveTarget), value: winnerDisplay, inline: false });
         } else {
             const endTime = giveaway.endsAt || giveaway.endTime;
-            embed.addFields({ name: '⏰ Ends', value: `<t:${Math.floor(endTime / 1000)}:R>`, inline: false });
+            embed.addFields({ name: t('giveaway.embed.ends', {}, effectiveTarget), value: `<t:${Math.floor(endTime / 1000)}:R>`, inline: false });
         }
 
         embed.setTimestamp();
@@ -172,7 +174,7 @@ export function createGiveawayEmbed(giveaway, status, winners = []) {
     }
 }
 
-export function createGiveawayButtons(ended = false) {
+export function createGiveawayButtons(ended = false, target = null) {
     try {
         const row = new ActionRowBuilder();
 
@@ -180,12 +182,12 @@ export function createGiveawayButtons(ended = false) {
             row.addComponents(
                 new ButtonBuilder()
                     .setCustomId('giveaway_reroll')
-                    .setLabel('🎲 Reroll')
+                    .setLabel(t('giveaway.buttons.reroll', {}, target))
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(false),
                 new ButtonBuilder()
                     .setCustomId('giveaway_view')
-                    .setLabel('👁️ View Winners')
+                    .setLabel(t('giveaway.buttons.view_winners', {}, target))
                     .setStyle(ButtonStyle.Primary)
                     .setDisabled(false)
             );
@@ -193,12 +195,12 @@ export function createGiveawayButtons(ended = false) {
             row.addComponents(
                 new ButtonBuilder()
                     .setCustomId('giveaway_join')
-                    .setLabel('🎉 Join')
+                    .setLabel(t('giveaway.buttons.join', {}, target))
                     .setStyle(ButtonStyle.Primary)
                     .setDisabled(false),
                 new ButtonBuilder()
                     .setCustomId('giveaway_end')
-                    .setLabel('🛑 End')
+                    .setLabel(t('giveaway.buttons.end', {}, target))
                     .setStyle(ButtonStyle.Danger)
                     .setDisabled(false)
             );

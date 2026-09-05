@@ -1,5 +1,28 @@
 {
   "verified": "Du wurdest erfolgreich verifiziert! Willkommen auf dem Server.",
-  "already_verified": "Du bist auf diesem Server bereits verifiziert.",
-  "setup_success": "Verifizierungs-Panel in {channel} erstellt."
+  "already_verified": "Du bist bereits verifiziert und hast Zugriff auf alle Kanäle des Servers.",
+  "setup_success": "Verifizierungs-Panel in {channel} erstellt.",
+  "success_title": "Verifizierung erfolgreich! ✅",
+  "success_desc": "Du wurdest verifiziert und hast die Rolle **{roleName}** erhalten!\n\nDu hast jetzt Zugriff auf alle Kanäle und Funktionen. Willkommen! 🎉",
+  "command_success_desc": "Du wurdest verifiziert und hast die Rolle **{roleName}** erhalten! Willkommen auf dem Server! 🎉",
+  "already_verified_title": "Bereits verifiziert",
+  "panel_title": "Server-Verifizierung",
+  "default_message": "Klicke auf den Button unten, um dich zu verifizieren und Zugriff auf den Server zu erhalten.",
+  "default_button": "Verifizieren",
+  "setup_updated_title": "Verifizierungssystem aktualisiert",
+  "setup_updated_desc": "Kanal: {channel}\nVerifizierte Rolle: {role}\nButton-Text: {buttonText}",
+  "not_verified_title": "Nicht verifiziert",
+  "not_verified_desc": "{tag} besitzt derzeit nicht die verifizierte Rolle.",
+  "remove_success_title": "Verifizierung entfernt",
+  "remove_success_desc": "Verifizierung von {tag} wurde entfernt.",
+  "errors": {
+    "guild_only": "Diese Aktion kann nur in einem Server ausgeführt werden.",
+    "perm_manage_server": "Du benötigst die Berechtigung **Server verwalten**, um diesen Verifizierungs-Befehl zu nutzen.",
+    "bot_member_not_found": "Ich konnte meine Berechtigungen auf diesem Server nicht überprüfen. Bitte versuche es gleich erneut.",
+    "missing_channel_perms": "Ich benötige **Kanäle anzeigen**, **Nachrichten senden** und **Links einbetten** im Verifizierungskanal.",
+    "missing_manage_roles": "Ich benötige die Berechtigung **Rollen verwalten**, um verifizierte Rollen zuzuweisen.",
+    "invalid_role": "Bitte wähle eine normale zuweisbare Rolle (nicht @everyone oder eine integrationsverwaltete Rolle).",
+    "role_hierarchy": "Die verifizierte Rolle muss in der Rollenhierarchie unter meiner höchsten Rolle liegen.",
+    "conflicting_onboarding": "Du kannst das Verifizierungssystem nicht aktivieren, solange **AutoVerify** oder **AutoRole** konfiguriert sind. Deaktiviere diese zuerst."
+  }
 }

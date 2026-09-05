@@ -1,5 +1,27 @@
 {
-  "setup_success": "Reaktionsrollen-Panel in {channel} erstellt!",
+  "setup_success": "Reaktionsrollen-Panel in {channel} erstellt!\n\n{url}",
   "dashboard_title": "Reaktionsrollen-Dashboard",
-  "deleted": "Reaktionsrollen-Panel gelöscht."
+  "deleted": "Reaktionsrollen-Panel gelöscht.",
+  "panel": {
+    "placeholder": "Wähle deine Rollen",
+    "option_desc": "Rolle {role} hinzufügen/entfernen",
+    "available_roles": "Verfügbare Rollen",
+    "footer": "Wähle Rollen aus dem Dropdown-Menü unten"
+  },
+  "menu": {
+    "not_active": "❌ Diese Reaktionsrollen-Nachricht ist nicht mehr aktiv.",
+    "updated_title": "🎭 **Rollen erfolgreich aktualisiert!**\n\n",
+    "added": "✅ **Hinzugefügt:** {roles}\n",
+    "removed": "❌ **Entfernt:** {roles}\n",
+    "no_changes": "Es wurden keine Änderungen an deinen Rollen vorgenommen.",
+    "skipped": "\n⚠️ **Übersprungen:** {count} Rolle(n) (Berechtigungsprobleme)"
+  },
+  "errors": {
+    "guild_only": "Dieses Reaktionsrollen-Menü kann nur in einem Server verwendet werden.",
+    "channel_type": "Bitte wähle einen Text- oder Ankündigungskanal.",
+    "bot_no_manage_roles": "Ich benötige die Berechtigung \"Rollen verwalten\", um Reaktionsrollen einzurichten.",
+    "bot_no_send_messages": "Ich habe keine Berechtigung, Nachrichten in {channel} zu senden.",
+    "panel_limit": "Dein Server hat das Maximum von 5 Reaktionsrollen-Panels erreicht. Lösche ein bestehendes Panel, um ein neues zu erstellen.",
+    "no_valid_roles": "Du musst mindestens eine gültige Rolle angeben."
+  }
 }

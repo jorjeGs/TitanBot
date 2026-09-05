@@ -4,13 +4,14 @@ import { verifyUser } from '../services/verificationService.js';
 import { handleInteractionError, replyUserError, ErrorTypes } from '../utils/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import { InteractionHelper } from '../utils/interactionHelper.js';
+import { t } from '../utils/i18n/index.js';
 
 export async function handleVerificationButton(interaction, client) {
     try {
         await InteractionHelper.safeDefer(interaction, { flags: MessageFlags.Ephemeral });
 
         if (!interaction.guild) {
-            return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: 'This button can only be used in a server.' });
+            return await replyUserError(interaction, { type: ErrorTypes.UNKNOWN, message: t('verification.errors.guild_only', interaction) });
         }
 
         const guild = interaction.guild;
@@ -28,7 +29,7 @@ export async function handleVerificationButton(interaction, client) {
         });
 
         if (result.status === 'already_verified') {
-            return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: 'You are already verified and have access to all server channels.' });
+            return await replyUserError(interaction, { type: ErrorTypes.VALIDATION, message: t('verification.already_verified', interaction) });
         }
 
         logger.info('User verified via button', {
@@ -39,8 +40,8 @@ export async function handleVerificationButton(interaction, client) {
 
         await InteractionHelper.safeEditReply(interaction, {
             embeds: [successEmbed(
-                "✅ Verification Successful!",
-                `You have been verified and given the **${result.roleName}** role!\n\nYou now have access to all server channels and features. Welcome! 🎉`
+                t('verification.success_title', interaction),
+                t('verification.success_desc', { roleName: result.roleName }, interaction)
             )],
         });
 

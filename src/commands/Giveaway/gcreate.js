@@ -12,7 +12,7 @@ import {
 } from '../../services/giveawayService.js';
 import { logEvent, EVENT_TYPES } from '../../services/loggingService.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
-
+import { t } from '../../utils/i18n/index.js';
 import { botConfig } from '../../config/bot.js';
 
 const GIVEAWAY_MIN_WINNERS = botConfig.giveaways?.minimumWinners ?? 1;
@@ -61,7 +61,7 @@ export default {
             throw new TitanBotError(
                 'Giveaway command used outside guild',
                 ErrorTypes.VALIDATION,
-                'This command can only be used in a server.',
+                t('giveaway.errors.guild_only', {}, interaction),
                 { userId: interaction.user.id }
             );
         }
@@ -70,7 +70,7 @@ export default {
             throw new TitanBotError(
                 'User lacks ManageGuild permission',
                 ErrorTypes.PERMISSION,
-                "You need the 'Manage Server' permission to start a giveaway.",
+                t('giveaway.errors.perm_denied', {}, interaction),
                 { userId: interaction.user.id, guildId: interaction.guildId }
             );
         }
@@ -90,7 +90,7 @@ export default {
             throw new TitanBotError(
                 'Target channel is not text-based',
                 ErrorTypes.VALIDATION,
-                'The channel must be a text channel.',
+                t('giveaway.errors.text_channel_only', {}, interaction),
                 { channelId: targetChannel.id, channelType: targetChannel.type }
             );
         }
@@ -112,11 +112,11 @@ export default {
             createdAt: new Date().toISOString()
         };
 
-        const embed = createGiveawayEmbed(initialGiveawayData, "active");
-        const row = createGiveawayButtons(false);
+        const embed = createGiveawayEmbed(initialGiveawayData, "active", [], interaction);
+        const row = createGiveawayButtons(false, interaction);
 
         const giveawayMessage = await targetChannel.send({
-            content: "🎉 **NEW GIVEAWAY** 🎉",
+            content: t('giveaway.banner_new', {}, interaction),
             embeds: [embed],
             components: [row],
         });
@@ -174,8 +174,8 @@ export default {
         await InteractionHelper.safeReply(interaction, {
             embeds: [
                 successEmbed(
-                    `Giveaway Started! 🎉`,
-                    `A new giveaway for **${prizeName}** has been started in ${targetChannel} and will end in **${durationString}**.`,
+                    t('giveaway.create.started_title', {}, interaction),
+                    t('giveaway.create.started_desc', { prize: prizeName, channel: targetChannel.toString(), duration: durationString }, interaction),
                 ),
             ],
             flags: MessageFlags.Ephemeral,

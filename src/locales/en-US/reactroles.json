@@ -1,5 +1,27 @@
 {
-  "setup_success": "Reaction role panel created in {channel}!",
+  "setup_success": "Reaction role panel created in {channel}!\n\n{url}",
   "dashboard_title": "Reaction Roles Dashboard",
-  "deleted": "Reaction role panel deleted."
+  "deleted": "Reaction role panel deleted.",
+  "panel": {
+    "placeholder": "Select your roles",
+    "option_desc": "Add/remove the {role} role",
+    "available_roles": "Available Roles",
+    "footer": "Select roles from the dropdown menu below"
+  },
+  "menu": {
+    "not_active": "❌ This reaction role message is no longer active.",
+    "updated_title": "🎭 **Roles updated successfully!**\n\n",
+    "added": "✅ **Added:** {roles}\n",
+    "removed": "❌ **Removed:** {roles}\n",
+    "no_changes": "No changes were made to your roles.",
+    "skipped": "\n⚠️ **Skipped:** {count} role(s) (permission issues)"
+  },
+  "errors": {
+    "guild_only": "This reaction role menu can only be used inside a server.",
+    "channel_type": "Please select a text or announcement channel.",
+    "bot_no_manage_roles": "I need the \"Manage Roles\" permission to set up reaction roles.",
+    "bot_no_send_messages": "I don't have permission to send messages in {channel}.",
+    "panel_limit": "Your guild has reached the maximum of 5 reaction role panels. Delete an existing panel to create a new one.",
+    "no_valid_roles": "You must provide at least one valid role."
+  }
 }

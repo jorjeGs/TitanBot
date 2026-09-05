@@ -388,6 +388,71 @@ test('i18n: Complete 100 Commands & 21 Domains Coverage', async (tContext) => {
         assert.equal(deMenu.embeds[0].data.fields[0].name, 'Befehle');
         assert.ok(deMenu.embeds[0].data.fields[0].value.includes('interaktives Gewinnspiel'));
     });
+
+    await tContext.test('giveaway embeds and buttons are localized in all supported languages', async () => {
+        const { createGiveawayEmbed, createGiveawayButtons } = await import('../../src/services/giveawayService.js');
+        const dummyGiveaway = {
+            prize: 'Nitro',
+            hostId: '123456789',
+            winnerCount: 1,
+            endTime: Date.now() + 60000,
+            participants: ['123', '456']
+        };
+
+        const esEmbed = createGiveawayEmbed(dummyGiveaway, 'active', [], 'es-419');
+        assert.ok(esEmbed.data.description.includes('participar'));
+        assert.ok(esEmbed.data.fields.some(f => f.name.includes('Creado por')));
+        assert.ok(esEmbed.data.fields.some(f => f.name.includes('Ganadores')));
+        assert.ok(esEmbed.data.fields.some(f => f.name.includes('Entradas')));
+
+        const esButtons = createGiveawayButtons(false, 'es-419');
+        assert.ok(esButtons.components[0].data.label.includes('Participar'));
+        assert.ok(esButtons.components[1].data.label.includes('Finalizar'));
+
+        const deButtons = createGiveawayButtons(false, 'de');
+        assert.ok(deButtons.components[0].data.label.includes('Teilnehmen'));
+        assert.ok(deButtons.components[1].data.label.includes('Beenden'));
+    });
+
+    await tContext.test('ticket controls and strings are localized in all supported languages', async () => {
+        const { buildTicketControlRow } = await import('../../src/services/ticket.js');
+        
+        const esRow = buildTicketControlRow('es-419');
+        const esLabels = esRow.components.map(c => c.data.label);
+        assert.ok(esLabels.includes('Cerrar'));
+        assert.ok(esLabels.includes('Reclamar'));
+
+        const deRow = buildTicketControlRow('de');
+        const deLabels = deRow.components.map(c => c.data.label);
+        assert.ok(deLabels.includes('Schließen'));
+        assert.ok(deLabels.includes('Übernehmen'));
+
+        assert.equal(t('ticket.panel.default_title', {}, 'es-419'), 'Tickets de Soporte');
+        assert.equal(t('ticket.panel.default_title', {}, 'de'), 'Support-Tickets');
+    });
+
+    await tContext.test('verification strings are localized in all supported languages', () => {
+        assert.equal(t('verification.default_button', {}, 'es-419'), 'Verificarme');
+        assert.equal(t('verification.default_button', {}, 'de'), 'Verifizieren');
+        assert.equal(t('verification.panel_title', {}, 'es-419'), 'Verificación del Servidor');
+        assert.equal(t('verification.panel_title', {}, 'de'), 'Server-Verifizierung');
+    });
+
+    await tContext.test('reaction roles strings are localized in all supported languages', () => {
+        assert.equal(t('reactroles.panel.placeholder', {}, 'es-419'), 'Selecciona tus roles');
+        assert.equal(t('reactroles.panel.placeholder', {}, 'de'), 'Wähle deine Rollen');
+        assert.equal(t('reactroles.dashboard_title', {}, 'es-419'), 'Panel de Roles por Reacción');
+        assert.equal(t('reactroles.dashboard_title', {}, 'de'), 'Reaktionsrollen-Dashboard');
+    });
+
+    await tContext.test('jointocreate strings are localized in all supported languages', () => {
+        assert.equal(t('jointocreate.config_title', {}, 'es-419'), 'Configuración de Join to Create');
+        assert.equal(t('jointocreate.config_title', {}, 'de'), 'Join-to-Create-Konfiguration');
+        assert.equal(t('jointocreate.btn_name_template', {}, 'es-419'), '📝 Plantilla de Nombre');
+        assert.equal(t('jointocreate.btn_name_template', {}, 'de'), '📝 Namensvorlage');
+        assert.equal(t('jointocreate.btn_remove_channel', {}, 'de'), '🗑️ Kanal entfernen');
+    });
 });
+
 
 

@@ -1,6 +1,76 @@
 {
-  "created": "Gewinnspiel für **{prize}** in {channel} gestartet!",
-  "ended": "Gewinnspiel für **{prize}** beendet! Glückwunsch an: {winners}",
+  "created": "Gewinnspiel gestartet für **{prize}** in {channel}!",
+  "ended": "Gewinnspiel beendet für **{prize}**! Glückwunsch an: {winners}",
   "rerolled": "Neue(r) Gewinner ermittelt: {winners}",
-  "deleted": "Gewinnspiel erfolgreich gelöscht."
+  "deleted": "Gewinnspiel erfolgreich gelöscht.",
+  "banner_new": "🎉 **NEUES GEWINNSPIEL** 🎉",
+  "banner_ended": "🎉 **GEWINNSPIEL BEENDET** 🎉",
+  "banner_rerolled": "🔄 **GEWINNSPIEL NEU AUSGELOST** 🔄",
+  "embed": {
+    "react_to_enter": "Klicke auf den Button unten, um teilzunehmen!",
+    "hosted_by": "👤 Veranstaltet von",
+    "winners": "🏆 Gewinner",
+    "entries": "👥 Einträge",
+    "ends": "⏰ Endet",
+    "winners_field": "🎯 Gewinner",
+    "no_valid_entries": "Keine gültigen Teilnehmer"
+  },
+  "buttons": {
+    "join": "🎉 Teilnehmen",
+    "end": "🛑 Beenden",
+    "reroll": "🎲 Neu auslosen",
+    "view_winners": "👁️ Gewinner anzeigen"
+  },
+  "create": {
+    "started_title": "Gewinnspiel gestartet! 🎉",
+    "started_desc": "Ein neues Gewinnspiel für **{prize}** wurde in {channel} gestartet und endet in **{duration}**."
+  },
+  "join": {
+    "already_entered": "Du nimmst bereits an diesem Gewinnspiel teil! 🎉",
+    "success_title": "Erfolg! Du nimmst am Gewinnspiel teil! 🎉",
+    "success_desc": "Viel Glück! Es gibt jetzt {count} Teilnehmer."
+  },
+  "end": {
+    "success_title": "Gewinnspiel beendet ✅",
+    "success_desc": "Das Gewinnspiel für **{prize}** in {channel} wurde erfolgreich beendet. Es wurden {winnersCount} Gewinner aus {entriesCount} Teilnehmern ausgewählt.",
+    "button_success": "Das Gewinnspiel wurde beendet und es wurden {count} Gewinner ausgewählt!",
+    "channel_congrats": "🎉 HERZLICHEN GLÜCKWUNSCH {winners}! Du hast das Gewinnspiel für **{prize}** gewonnen! Kontaktiere den Veranstalter <@{hostId}>, um deinen Preis einzufordern.",
+    "channel_no_winners": "Das Gewinnspiel für **{prize}** wurde ohne gültige Teilnehmer beendet.",
+    "already_ended": "Dieses Gewinnspiel wurde bereits beendet."
+  },
+  "reroll": {
+    "success_title": "Gewinnspiel neu ausgelost ✅",
+    "success_desc": "Das Gewinnspiel für **{prize}** in {channel} wurde erfolgreich neu ausgelost. {winnersCount} neue(r) Gewinner ausgewählt.",
+    "channel_announcement": "🔄 **NEUE GEWINNER** 🔄 Neue Gewinner für **{prize}**: {winners}!",
+    "channel_congrats": "🔄 **NEUE GEWINNER** 🔄 HERZLICHEN GLÜCKWUNSCH {winners}! Ihr seid die neuen Gewinner für das **{prize}** Gewinnspiel! Bitte kontaktiert den Gastgeber <@{hostId}>, um euren Preis einzufordern.",
+    "channel_not_found_desc": "Die neuen Gewinner wurden ausgewählt und in der Datenbank gespeichert. Kanal für die Ankündigung konnte nicht gefunden werden.",
+    "msg_not_found_desc": "Die neuen Gewinner wurden in {channel} angekündigt. (Originalnachricht nicht gefunden).",
+    "no_participants": "Keine Teilnehmer zum Neuauslosen vorhanden.",
+    "still_active": "Dieses Gewinnspiel ist noch aktiv. Bitte beende es zuerst."
+  },
+  "view": {
+    "title": "Gewinner für {prize} 🎉",
+    "not_ended": "Dieses Gewinnspiel ist noch nicht beendet, daher sind keine Gewinner verfügbar.",
+    "no_winners": "Für dieses Gewinnspiel wurden keine gültigen Gewinner ermittelt."
+  },
+  "delete": {
+    "title": "Gewinnspiel gelöscht",
+    "success": "Das Gewinnspiel für **{prize}** wurde erfolgreich gelöscht {statusMsg}. {winnerStatusMsg}",
+    "msg_deleted": "und die Nachricht wurde aus #{channel} gelöscht",
+    "msg_not_found": "aber die Nachricht war bereits gelöscht oder der Kanal nicht zugänglich.",
+    "winners_selected": "Für dieses Gewinnspiel wurden bereits {count} Gewinner ermittelt.",
+    "ended_no_winners": "Dieses Gewinnspiel endete ohne gültige Gewinner.",
+    "no_winner_picked": "Vor dem Löschen wurde kein Gewinner ermittelt."
+  },
+  "errors": {
+    "guild_only": "Dieser Befehl kann nur in einem Server verwendet werden.",
+    "button_guild_only": "Dieser Button kann nur in einem Server verwendet werden.",
+    "perm_denied": "Du benötigst die Berechtigung **Server verwalten**, um Gewinnspiele zu verwalten.",
+    "text_channel_only": "Der Kanal muss ein Textkanal sein.",
+    "not_found": "Kein Gewinnspiel mit dieser Nachrichten-ID gefunden.",
+    "channel_not_found": "Der Kanal des Gewinnspiels konnte nicht gefunden werden.",
+    "message_not_found": "Die Gewinnspiel-Nachricht konnte nicht gefunden werden.",
+    "not_enough_entries": "Nicht genügend Teilnehmer für die gewünschte Anzahl an Gewinnern.",
+    "rate_limited": "Bitte warte einen Moment, bevor du erneut mit diesem Gewinnspiel interagierst."
+  }
 }

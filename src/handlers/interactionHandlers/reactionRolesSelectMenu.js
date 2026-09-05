@@ -5,6 +5,7 @@ import { handleInteractionError, createError, ErrorTypes } from '../../utils/err
 import { getColor } from '../../config/bot.js';
 import { logEvent, EVENT_TYPES } from '../../services/loggingService.js';
 import { getReactionRoleMessage } from '../../services/reactionRoleService.js';
+import { t } from '../../utils/i18n/index.js';
 
 export async function handleReactionRolesSelectMenu(interaction, client) {
     try {
@@ -15,7 +16,7 @@ export async function handleReactionRolesSelectMenu(interaction, client) {
             throw createError(
                 'Reaction role interaction used outside a guild context',
                 ErrorTypes.VALIDATION,
-                'This reaction role menu can only be used inside a server.',
+                t('reactroles.errors.guild_only', interaction),
                 { userId: interaction.user.id }
             );
         }
@@ -29,7 +30,7 @@ export async function handleReactionRolesSelectMenu(interaction, client) {
             return interaction.editReply({
                 embeds: [
                     new EmbedBuilder()
-                        .setDescription('❌ This reaction role message is no longer active.')
+                        .setDescription(t('reactroles.menu.not_active', interaction))
                         .setColor(getColor('error'))
                 ]
             });
@@ -135,22 +136,22 @@ export async function handleReactionRolesSelectMenu(interaction, client) {
             }
         }
 
-        let description = '🎭 **Roles updated successfully!**\n\n';
+        let description = t('reactroles.menu.updated_title', interaction);
 
         if (addedRoles.length > 0) {
-            description += `✅ **Added:** ${addedRoles.map(name => `**${name}**`).join(', ')}\n`;
+            description += t('reactroles.menu.added', { roles: addedRoles.map(name => `**${name}**`).join(', ') }, interaction);
         }
 
         if (removedRoles.length > 0) {
-            description += `❌ **Removed:** ${removedRoles.map(name => `**${name}**`).join(', ')}\n`;
+            description += t('reactroles.menu.removed', { roles: removedRoles.map(name => `**${name}**`).join(', ') }, interaction);
         }
 
         if (addedRoles.length === 0 && removedRoles.length === 0) {
-            description += 'No changes were made to your roles.';
+            description += t('reactroles.menu.no_changes', interaction);
         }
 
         if (skippedRoles.length > 0) {
-            description += `\n⚠️ **Skipped:** ${skippedRoles.length} role${skippedRoles.length !== 1 ? 's' : ''} (permission issues)`;
+            description += t('reactroles.menu.skipped', { count: skippedRoles.length }, interaction);
         }
 
         const responseEmbed = new EmbedBuilder()

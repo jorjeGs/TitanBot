@@ -2,5 +2,75 @@
   "created": "Giveaway started for **{prize}** in {channel}!",
   "ended": "Giveaway ended for **{prize}**! Congratulations to: {winners}",
   "rerolled": "New winner(s) drawn: {winners}",
-  "deleted": "Giveaway successfully deleted."
+  "deleted": "Giveaway successfully deleted.",
+  "banner_new": "🎉 **NEW GIVEAWAY** 🎉",
+  "banner_ended": "🎉 **GIVEAWAY ENDED** 🎉",
+  "banner_rerolled": "🔄 **GIVEAWAY REROLL** 🔄",
+  "embed": {
+    "react_to_enter": "React with the button below to enter!",
+    "hosted_by": "👤 Hosted by",
+    "winners": "🏆 Winners",
+    "entries": "👥 Entries",
+    "ends": "⏰ Ends",
+    "winners_field": "🎯 Winners",
+    "no_valid_entries": "No valid entries"
+  },
+  "buttons": {
+    "join": "🎉 Join",
+    "end": "🛑 End",
+    "reroll": "🎲 Reroll",
+    "view_winners": "👁️ View Winners"
+  },
+  "create": {
+    "started_title": "Giveaway Started! 🎉",
+    "started_desc": "A new giveaway for **{prize}** has been started in {channel} and will end in **{duration}**."
+  },
+  "join": {
+    "already_entered": "You have already entered this giveaway! 🎉",
+    "success_title": "Success! You have entered the giveaway! 🎉",
+    "success_desc": "Good luck! There are now {count} entry/entries."
+  },
+  "end": {
+    "success_title": "Giveaway Ended ✅",
+    "success_desc": "Successfully ended the giveaway for **{prize}** in {channel}. Selected {winnersCount} winner(s) from {entriesCount} entries.",
+    "button_success": "The giveaway has been ended and {count} winner(s) have been selected!",
+    "channel_congrats": "🎉 CONGRATULATIONS {winners}! You won the **{prize}** giveaway! Please contact the host <@{hostId}> to claim your prize.",
+    "channel_no_winners": "The giveaway for **{prize}** has ended with no valid entries.",
+    "already_ended": "This giveaway has already ended."
+  },
+  "reroll": {
+    "success_title": "Giveaway Rerolled ✅",
+    "success_desc": "Successfully rerolled the giveaway for **{prize}** in {channel}. Selected {winnersCount} new winner(s).",
+    "channel_announcement": "🔄 **GIVEAWAY REROLL** 🔄 New winners for **{prize}**: {winners}!",
+    "channel_congrats": "🔄 **REROLL WINNERS** 🔄 CONGRATULATIONS {winners}! You are the new winner(s) for the **{prize}** giveaway! Please contact the host <@{hostId}> to claim your prize.",
+    "channel_not_found_desc": "The new winners have been selected and saved to the database. Could not find channel to announce.",
+    "msg_not_found_desc": "The new winners have been announced in {channel}. (Original message not found).",
+    "no_participants": "There are no entries to reroll from.",
+    "still_active": "This giveaway has not ended yet. Please end it first."
+  },
+  "view": {
+    "title": "Winners for {prize} 🎉",
+    "not_ended": "This giveaway has not ended yet, so winners are not available.",
+    "no_winners": "No valid winners were selected for this giveaway."
+  },
+  "delete": {
+    "title": "Giveaway Deleted",
+    "success": "Successfully deleted the giveaway for **{prize}** {statusMsg}. {winnerStatusMsg}",
+    "msg_deleted": "and the message was deleted from #{channel}",
+    "msg_not_found": "but the message was already deleted or the channel was inaccessible.",
+    "winners_selected": "This giveaway already had {count} winner(s) selected.",
+    "ended_no_winners": "This giveaway was ended with no valid winners.",
+    "no_winner_picked": "No winner was picked before deletion."
+  },
+  "errors": {
+    "guild_only": "This command can only be used in a server.",
+    "button_guild_only": "This button can only be used in a server.",
+    "perm_denied": "You need the 'Manage Server' permission to manage giveaways.",
+    "text_channel_only": "The channel must be a text channel.",
+    "not_found": "No giveaway was found with that message ID.",
+    "channel_not_found": "Could not find the channel where the giveaway was hosted.",
+    "message_not_found": "Could not find the giveaway message.",
+    "not_enough_entries": "Not enough entries to pick the required number of winners.",
+    "rate_limited": "Please wait a moment before interacting with this giveaway again."
+  }
 }

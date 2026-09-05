@@ -1,5 +1,27 @@
 {
-  "setup_success": "¡Panel de roles por reacción creado en {channel}!",
+  "setup_success": "¡Panel de roles por reacción creado en {channel}!\n\n{url}",
   "dashboard_title": "Panel de Roles por Reacción",
-  "deleted": "Panel de roles por reacción eliminado."
+  "deleted": "Panel de roles por reacción eliminado.",
+  "panel": {
+    "placeholder": "Selecciona tus roles",
+    "option_desc": "Añadir/quitar el rol {role}",
+    "available_roles": "Roles Disponibles",
+    "footer": "Selecciona los roles en el menú desplegable de abajo"
+  },
+  "menu": {
+    "not_active": "❌ Este mensaje de roles por reacción ya no está activo.",
+    "updated_title": "🎭 **¡Roles actualizados correctamente!**\n\n",
+    "added": "✅ **Añadidos:** {roles}\n",
+    "removed": "❌ **Removidos:** {roles}\n",
+    "no_changes": "No se realizaron cambios en tus roles.",
+    "skipped": "\n⚠️ **Omitidos:** {count} rol(es) (problemas de permisos)"
+  },
+  "errors": {
+    "guild_only": "Este menú de roles por reacción solo se puede usar dentro de un servidor.",
+    "channel_type": "Por favor selecciona un canal de texto o de anuncios.",
+    "bot_no_manage_roles": "Necesito el permiso \"Gestionar Roles\" para configurar roles por reacción.",
+    "bot_no_send_messages": "No tengo permisos para enviar mensajes en {channel}.",
+    "panel_limit": "Tu servidor ha alcanzado el máximo de 5 paneles de roles por reacción. Elimina uno existente para crear uno nuevo.",
+    "no_valid_roles": "Debes proporcionar al menos un rol válido."
+  }
 }

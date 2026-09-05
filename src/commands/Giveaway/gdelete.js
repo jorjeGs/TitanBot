@@ -4,8 +4,9 @@ import { logger } from '../../utils/logger.js';
 import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
 import { getGuildGiveaways, deleteGiveaway } from '../../utils/giveaways.js';
 import { logEvent, EVENT_TYPES } from '../../services/loggingService.js';
-
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
+
 export default {
     data: new SlashCommandBuilder()
         .setName("gdelete")
@@ -25,7 +26,7 @@ export default {
             throw new TitanBotError(
                 'Giveaway command used outside guild',
                 ErrorTypes.VALIDATION,
-                'This command can only be used in a server.',
+                t('giveaway.errors.guild_only', interaction),
                 { userId: interaction.user.id }
             );
         }
@@ -34,7 +35,7 @@ export default {
             throw new TitanBotError(
                 'User lacks ManageGuild permission',
                 ErrorTypes.PERMISSION,
-                "You need the 'Manage Server' permission to delete a giveaway.",
+                t('giveaway.errors.perm_denied', interaction),
                 { userId: interaction.user.id, guildId: interaction.guildId }
             );
         }
@@ -47,7 +48,7 @@ export default {
             throw new TitanBotError(
                 'Invalid message ID format',
                 ErrorTypes.VALIDATION,
-                'Please provide a valid message ID.',
+                t('giveaway.errors.not_found', interaction),
                 { providedId: messageId }
             );
         }
@@ -59,7 +60,7 @@ export default {
             throw new TitanBotError(
                 `Giveaway not found: ${messageId}`,
                 ErrorTypes.VALIDATION,
-                "No giveaway was found with that message ID.",
+                t('giveaway.errors.not_found', interaction),
                 { messageId, guildId: interaction.guildId }
             );
         }
@@ -134,18 +135,18 @@ export default {
         }
 
         const statusMsg = deletedMessage
-            ? `and the message was deleted from #${channelName}`
-            : `but the message was already deleted or the channel was inaccessible.`;
+            ? t('giveaway.delete.msg_deleted', interaction, { channel: channelName })
+            : t('giveaway.delete.msg_not_found', interaction);
 
         const winnerIds = Array.isArray(giveaway.winnerIds) ? giveaway.winnerIds : [];
         const hasWinners = winnerIds.length > 0;
         const wasEnded = giveaway.ended === true || giveaway.isEnded === true || hasWinners;
 
         const winnerStatusMsg = hasWinners
-            ? `This giveaway already had ${winnerIds.length} winner(s) selected.`
+            ? t('giveaway.delete.winners_selected', interaction, { count: winnerIds.length })
             : wasEnded
-                ? 'This giveaway was ended with no valid winners.'
-                : 'No winner was picked before deletion.';
+                ? t('giveaway.delete.ended_no_winners', interaction)
+                : t('giveaway.delete.no_winner_picked', interaction);
 
         logger.info(`Giveaway deleted: ${messageId} in ${channelName}`);
 
@@ -179,8 +180,12 @@ export default {
         return InteractionHelper.safeReply(interaction, {
             embeds: [
                 successEmbed(
-                    "Giveaway Deleted",
-                    `Successfully deleted the giveaway for **${giveaway.prize}** ${statusMsg}. ${winnerStatusMsg}`,
+                    t('giveaway.delete.title', interaction),
+                    t('giveaway.delete.success', interaction, {
+                        prize: giveaway.prize,
+                        statusMsg,
+                        winnerStatusMsg,
+                    }),
                 ),
             ],
             flags: MessageFlags.Ephemeral,

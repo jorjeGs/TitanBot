@@ -7,6 +7,7 @@ import { removeVerification, verifyUser } from '../../services/verificationServi
 import { logger } from '../../utils/logger.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
 import { getWelcomeConfig } from '../../utils/database.js';
+import { t } from '../../utils/i18n/index.js';
 import verificationDashboard from './modules/verification_dashboard.js';
 
 export default {
@@ -71,7 +72,7 @@ export default {
                 throw createError(
                     'Missing ManageGuild permission for verification admin subcommand',
                     ErrorTypes.PERMISSION,
-                    'You need the **Manage Server** permission to use this verification subcommand.',
+                    t('verification.errors.perm_manage_server', interaction),
                     { subcommand, requiredPermission: 'ManageGuild', userId: interaction.user.id }
                 );
             }
@@ -100,15 +101,15 @@ export default {
 async function handleSetup(interaction, guild, client) {
     const verificationChannel = interaction.options.getChannel("verification_channel");
     const verifiedRole = interaction.options.getRole("verified_role");
-    const message = interaction.options.getString("message") || botConfig.verification.defaultMessage;
-    const buttonText = interaction.options.getString("button_text") || botConfig.verification.defaultButtonText;
+    const message = interaction.options.getString("message") || t('verification.default_message', interaction);
+    const buttonText = interaction.options.getString("button_text") || t('verification.default_button', interaction);
     const botMember = guild.members.me;
 
     if (!botMember) {
         throw createError(
             'Bot member not found in guild cache',
             ErrorTypes.CONFIGURATION,
-            'I could not verify my permissions in this server. Please try again in a moment.',
+            t('verification.errors.bot_member_not_found', interaction),
             { guildId: guild.id }
         );
     }
@@ -126,7 +127,7 @@ async function handleSetup(interaction, guild, client) {
         throw createError(
             `Missing channel permissions: ${missingChannelPerms.join(', ')}`,
             ErrorTypes.PERMISSION,
-            'I need **View Channel**, **Send Messages**, and **Embed Links** in the verification channel.',
+            t('verification.errors.missing_channel_perms', interaction),
             { missingPermissions: missingChannelPerms, channel: verificationChannel.id }
         );
     }
@@ -135,7 +136,7 @@ async function handleSetup(interaction, guild, client) {
         throw createError(
             "Missing ManageRoles permission",
             ErrorTypes.PERMISSION,
-            "I need the 'Manage Roles' permission to give verified roles.",
+            t('verification.errors.missing_manage_roles', interaction),
             { missingPermission: "ManageRoles" }
         );
     }
@@ -144,7 +145,7 @@ async function handleSetup(interaction, guild, client) {
         throw createError(
             'Invalid verified role selected',
             ErrorTypes.VALIDATION,
-            'Please choose a normal assignable role (not @everyone or an integration-managed role).',
+            t('verification.errors.invalid_role', interaction),
             { roleId: verifiedRole.id, managed: verifiedRole.managed }
         );
     }
@@ -154,7 +155,7 @@ async function handleSetup(interaction, guild, client) {
         throw createError(
             "Role hierarchy error",
             ErrorTypes.PERMISSION,
-            "The verified role must be below my highest role in the server role hierarchy.",
+            t('verification.errors.role_hierarchy', interaction),
             { rolePosition: verifiedRole.position, botRolePosition: botRole.position }
         );
     }
@@ -168,7 +169,7 @@ async function handleSetup(interaction, guild, client) {
         throw createError(
             'Verification setup blocked by conflicting onboarding system',
             ErrorTypes.CONFIGURATION,
-            'You cannot enable the verification system while **AutoVerify** or **AutoRole** is configured. Disable those first.',
+            t('verification.errors.conflicting_onboarding', interaction),
             {
                 guildId: guild.id,
                 hasAutoVerifyEnabled,
@@ -182,7 +183,7 @@ async function handleSetup(interaction, guild, client) {
     await InteractionHelper.safeDefer(interaction);
 
     const verifyEmbed = createEmbed({
-        title: "Server Verification",
+        title: t('verification.panel_title', interaction),
         description: message,
         color: getColor('success')
     });
@@ -213,12 +214,12 @@ async function handleSetup(interaction, guild, client) {
 
     await InteractionHelper.safeEditReply(interaction, {
         embeds: [successEmbed(
-            'Verification System Updated',
-            [
-                `Channel: ${verificationChannel}`,
-                `Verified Role: ${verifiedRole}`,
-                `Button Text: ${buttonText}`
-            ].join('\n')
+            t('verification.setup_updated_title', interaction),
+            t('verification.setup_updated_desc', {
+                channel: verificationChannel.toString(),
+                role: verifiedRole.toString(),
+                buttonText
+            }, interaction)
         )]
     });
 }
@@ -233,7 +234,10 @@ async function handleRemove(interaction, guild, client) {
 
     if (result.status === 'not_verified') {
         return await InteractionHelper.safeReply(interaction, {
-            embeds: [infoEmbed('Not Verified', `${targetUser.tag} does not currently have the verified role.`)],
+            embeds: [infoEmbed(
+                t('verification.not_verified_title', interaction),
+                t('verification.not_verified_desc', { tag: targetUser.tag }, interaction)
+            )],
             flags: MessageFlags.Ephemeral
         });
     }
@@ -245,6 +249,9 @@ async function handleRemove(interaction, guild, client) {
     });
 
     return await InteractionHelper.safeReply(interaction, {
-        embeds: [successEmbed('Verification Removed', `Verification removed from ${targetUser.tag}.`)]
+        embeds: [successEmbed(
+            t('verification.remove_success_title', interaction),
+            t('verification.remove_success_desc', { tag: targetUser.tag }, interaction)
+        )]
     });
 }

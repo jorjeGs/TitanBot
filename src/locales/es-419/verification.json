@@ -1,5 +1,28 @@
 {
-  "verified": "¡Te has verificado con éxito! Bienvenido al servidor.",
-  "already_verified": "Ya estás verificado en este servidor.",
-  "setup_success": "Panel de verificación creado en {channel}."
+  "verified": "¡Has sido verificado con éxito! Bienvenido al servidor.",
+  "already_verified": "Ya estás verificado y tienes acceso a todos los canales del servidor.",
+  "setup_success": "Panel de verificación creado en {channel}.",
+  "success_title": "¡Verificación Exitosa! ✅",
+  "success_desc": "¡Has sido verificado y se te ha otorgado el rol **{roleName}**!\n\nAhora tienes acceso a todos los canales y funciones del servidor. ¡Bienvenido! 🎉",
+  "command_success_desc": "¡Has sido verificado y se te ha otorgado el rol **{roleName}**! ¡Bienvenido al servidor! 🎉",
+  "already_verified_title": "Ya Estás Verificado",
+  "panel_title": "Verificación del Servidor",
+  "default_message": "Haz clic en el botón de abajo para verificarte y obtener acceso al servidor.",
+  "default_button": "Verificarme",
+  "setup_updated_title": "Sistema de Verificación Actualizado",
+  "setup_updated_desc": "Canal: {channel}\nRol de Verificado: {role}\nTexto del Botón: {buttonText}",
+  "not_verified_title": "No Verificado",
+  "not_verified_desc": "{tag} actualmente no tiene el rol de verificado.",
+  "remove_success_title": "Verificación Removida",
+  "remove_success_desc": "Se removió la verificación de {tag}.",
+  "errors": {
+    "guild_only": "Esta acción solo se puede usar en un servidor.",
+    "perm_manage_server": "Necesitas el permiso **Gestionar Servidor** para usar este subcomando de verificación.",
+    "bot_member_not_found": "No pude verificar mis permisos en este servidor. Inténtalo de nuevo en un momento.",
+    "missing_channel_perms": "Necesito los permisos **Ver Canal**, **Enviar Mensajes** e **Insertar Enlaces** en el canal de verificación.",
+    "missing_manage_roles": "Necesito el permiso **Gestionar Roles** para otorgar roles de verificación.",
+    "invalid_role": "Por favor elige un rol asignable normal (no @everyone ni un rol administrado por integraciones).",
+    "role_hierarchy": "El rol de verificado debe estar por debajo de mi rol más alto en la jerarquía del servidor.",
+    "conflicting_onboarding": "No puedes habilitar el sistema de verificación mientras **AutoVerify** o **AutoRole** estén configurados. Desactívalos primero."
+  }
 }

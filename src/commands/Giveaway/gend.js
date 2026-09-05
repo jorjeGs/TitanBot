@@ -10,6 +10,7 @@ import {
 } from '../../services/giveawayService.js';
 import { logEvent, EVENT_TYPES } from '../../services/loggingService.js';
 import { InteractionHelper } from '../../utils/interactionHelper.js';
+import { t } from '../../utils/i18n/index.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -30,7 +31,7 @@ export default {
             throw new TitanBotError(
                 'Giveaway command used outside guild',
                 ErrorTypes.VALIDATION,
-                'This command can only be used in a server.',
+                t('giveaway.errors.guild_only', {}, interaction),
                 { userId: interaction.user.id }
             );
         }
@@ -39,7 +40,7 @@ export default {
             throw new TitanBotError(
                 'User lacks ManageGuild permission',
                 ErrorTypes.PERMISSION,
-                "You need the 'Manage Server' permission to end a giveaway.",
+                t('giveaway.errors.perm_denied', {}, interaction),
                 { userId: interaction.user.id, guildId: interaction.guildId }
             );
         }
@@ -64,7 +65,7 @@ export default {
             throw new TitanBotError(
                 `Giveaway not found: ${messageId}`,
                 ErrorTypes.VALIDATION,
-                "No giveaway was found with that message ID in the database.",
+                t('giveaway.errors.not_found', {}, interaction),
                 { messageId, guildId: interaction.guildId }
             );
         }
@@ -90,7 +91,7 @@ export default {
             throw new TitanBotError(
                 `Channel not found: ${updatedGiveaway.channelId}`,
                 ErrorTypes.VALIDATION,
-                "Could not find the channel where the giveaway was hosted. The giveaway state has been updated.",
+                t('giveaway.errors.channel_not_found', {}, interaction),
                 { channelId: updatedGiveaway.channelId, messageId }
             );
         }
@@ -106,7 +107,7 @@ export default {
             throw new TitanBotError(
                 `Message not found: ${messageId}`,
                 ErrorTypes.VALIDATION,
-                "Could not find the giveaway message. The giveaway state has been updated.",
+                t('giveaway.errors.message_not_found', {}, interaction),
                 { messageId, channelId: updatedGiveaway.channelId }
             );
         }
@@ -117,11 +118,11 @@ export default {
             updatedGiveaway,
         );
 
-        const newEmbed = createGiveawayEmbed(updatedGiveaway, "ended", winners);
-        const newRow = createGiveawayButtons(true);
+        const newEmbed = createGiveawayEmbed(updatedGiveaway, "ended", winners, interaction);
+        const newRow = createGiveawayButtons(true, interaction);
 
         await message.edit({
-            content: "🎉 **GIVEAWAY ENDED** 🎉",
+            content: t('giveaway.banner_ended', {}, interaction),
             embeds: [newEmbed],
             components: [newRow],
         });
@@ -131,7 +132,11 @@ export default {
                 .map((id) => `<@${id}>`)
                 .join(",");
             const winnerPingMsg = await channel.send({
-                content: `🎉 CONGRATULATIONS ${winnerMentions}! You won the **${updatedGiveaway.prize}** giveaway! Please contact the host <@${updatedGiveaway.hostId}> to claim your prize.`,
+                content: t('giveaway.end.channel_congrats', {
+                    winners: winnerMentions,
+                    prize: updatedGiveaway.prize,
+                    hostId: updatedGiveaway.hostId,
+                }, interaction),
             });
             updatedGiveaway.winnerPingMessageId = winnerPingMsg.id;
             await saveGiveaway(interaction.client, interaction.guildId, updatedGiveaway);
@@ -171,7 +176,7 @@ export default {
             }
         } else {
             await channel.send({
-                content: `The giveaway for **${updatedGiveaway.prize}** has ended with no valid entries.`,
+                content: t('giveaway.end.channel_no_winners', { prize: updatedGiveaway.prize }, interaction),
             });
             logger.info(`Giveaway ended with no winners: ${messageId}`);
         }
@@ -181,8 +186,13 @@ export default {
         return InteractionHelper.safeReply(interaction, {
             embeds: [
                 successEmbed(
-                    "Giveaway Ended ✅",
-                    `Successfully ended the giveaway for **${updatedGiveaway.prize}** in ${channel}. Selected ${winners.length} winner(s) from ${endResult.participantCount} entries.`,
+                    t('giveaway.end.success_title', {}, interaction),
+                    t('giveaway.end.success_desc', {
+                        prize: updatedGiveaway.prize,
+                        channel: channel.toString(),
+                        winnersCount: winners.length,
+                        entriesCount: endResult.participantCount,
+                    }, interaction),
                 ),
             ],
             flags: MessageFlags.Ephemeral,

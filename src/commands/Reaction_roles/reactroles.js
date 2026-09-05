@@ -12,6 +12,7 @@ import {
 } from '../../utils/panelStatus.js';
 import { startDashboardSession } from '../../utils/dashboardSession.js';
 import { getReactionRoleKey } from '../../utils/database/keys.js';
+import { t } from '../../utils/i18n/index.js';
 
 const DASHBOARD_EPHEMERAL = MessageFlags.Ephemeral;
 const SELECT_OPTION_LABEL_LIMIT = 100;
@@ -259,13 +260,13 @@ async function handleSetup(interaction) {
     const row = new ActionRowBuilder().addComponents(
         new StringSelectMenuBuilder()
             .setCustomId('reaction_roles')
-            .setPlaceholder('Select your roles')
+            .setPlaceholder(t('reactroles.panel.placeholder', interaction))
             .setMinValues(0)
             .setMaxValues(roles.length)
             .addOptions(
                 roles.map(role => ({
                     label: truncateText(role.name, SELECT_OPTION_LABEL_LIMIT),
-                    description: truncateText(`Add/remove the ${role.name} role`, SELECT_OPTION_DESCRIPTION_LIMIT),
+                    description: truncateText(t('reactroles.panel.option_desc', { role: role.name }, interaction), SELECT_OPTION_DESCRIPTION_LIMIT),
                     value: role.id,
                     emoji: '🎭'
                 }))
@@ -277,10 +278,10 @@ async function handleSetup(interaction) {
         .setDescription(description)
         .setColor(getColor('info'))
         .addFields({
-            name: 'Available Roles',
+            name: t('reactroles.panel.available_roles', interaction),
             value: roles.map(role => `• ${role}`).join('\n')
         })
-        .setFooter({ text: 'Select roles from the dropdown menu below' });
+        .setFooter({ text: t('reactroles.panel.footer', interaction) });
 
     const message = await channel.send({
         embeds: [panelEmbed],
@@ -348,7 +349,10 @@ async function handleSetup(interaction) {
     }
 
     await InteractionHelper.safeEditReply(interaction, {
-        embeds: [successEmbed('Success', `✅ Reaction role panel created in ${channel}!\n\n${message.url}`)]
+        embeds: [successEmbed(
+            t('common.success', interaction) || 'Success',
+            t('reactroles.setup_success', { channel: channel.toString(), url: message.url }, interaction)
+        )]
     });
 }
 

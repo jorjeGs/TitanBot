@@ -2,5 +2,75 @@
   "created": "¡Sorteo iniciado por **{prize}** en {channel}!",
   "ended": "¡Sorteo finalizado por **{prize}**! Felicitaciones a: {winners}",
   "rerolled": "Nuevo(s) ganador(es) seleccionado(s): {winners}",
-  "deleted": "Sorteo eliminado correctamente."
+  "deleted": "Sorteo eliminado correctamente.",
+  "banner_new": "🎉 **NUEVO SORTEO** 🎉",
+  "banner_ended": "🎉 **SORTEO FINALIZADO** 🎉",
+  "banner_rerolled": "🔄 **SORTEO RESORTEADO** 🔄",
+  "embed": {
+    "react_to_enter": "¡Haz clic en el botón de abajo para participar!",
+    "hosted_by": "👤 Creado por",
+    "winners": "🏆 Ganadores",
+    "entries": "👥 Entradas",
+    "ends": "⏰ Termina",
+    "winners_field": "🎯 Ganadores",
+    "no_valid_entries": "Sin participantes válidos"
+  },
+  "buttons": {
+    "join": "🎉 Participar",
+    "end": "🛑 Finalizar",
+    "reroll": "🎲 Resortear",
+    "view_winners": "👁️ Ver Ganadores"
+  },
+  "create": {
+    "started_title": "¡Sorteo Iniciado! 🎉",
+    "started_desc": "Un nuevo sorteo por **{prize}** ha comenzado en {channel} y terminará en **{duration}**."
+  },
+  "join": {
+    "already_entered": "¡Ya estás participando en este sorteo! 🎉",
+    "success_title": "¡Éxito! ¡Has entrado al sorteo! 🎉",
+    "success_desc": "¡Buena suerte! Ahora hay {count} participante(s)."
+  },
+  "end": {
+    "success_title": "Sorteo Finalizado ✅",
+    "success_desc": "Se finalizó con éxito el sorteo por **{prize}** en {channel}. Se seleccionaron {winnersCount} ganador(es) entre {entriesCount} participante(s).",
+    "button_success": "¡El sorteo ha finalizado y se seleccionaron {count} ganador(es)!",
+    "channel_congrats": "🎉 ¡FELICITACIONES {winners}! ¡Ganaste el sorteo por **{prize}**! Contacta al organizador <@{hostId}> para reclamar tu premio.",
+    "channel_no_winners": "El sorteo por **{prize}** ha finalizado sin participantes válidos.",
+    "already_ended": "Este sorteo ya ha finalizado."
+  },
+  "reroll": {
+    "success_title": "Sorteo Resorteado ✅",
+    "success_desc": "Se volvió a sortear correctamente el sorteo de **{prize}** en {channel}. Se seleccionaron {winnersCount} nuevo(s) ganador(es).",
+    "channel_announcement": "🔄 **NUEVOS GANADORES** 🔄 ¡Nuevos ganadores para **{prize}**: {winners}!",
+    "channel_congrats": "🔄 **NUEVOS GANADORES** 🔄 ¡FELICIDADES {winners}! ¡Son los nuevos ganadores del sorteo de **{prize}**! Contacten al anfitrión <@{hostId}> para reclamar su premio.",
+    "channel_not_found_desc": "Los nuevos ganadores han sido seleccionados y guardados en la base de datos. No se encontró el canal para anunciarlos.",
+    "msg_not_found_desc": "Los nuevos ganadores han sido anunciados en {channel}. (No se encontró el mensaje original).",
+    "no_participants": "No hay participantes para resortear.",
+    "still_active": "Este sorteo aún no ha terminado. Por favor finalízalo primero."
+  },
+  "view": {
+    "title": "Ganadores de {prize} 🎉",
+    "not_ended": "Este sorteo aún no ha finalizado, por lo que los ganadores no están disponibles.",
+    "no_winners": "No se seleccionaron ganadores válidos para este sorteo."
+  },
+  "delete": {
+    "title": "Sorteo Eliminado",
+    "success": "Se eliminó correctamente el sorteo por **{prize}** {statusMsg}. {winnerStatusMsg}",
+    "msg_deleted": "y el mensaje fue eliminado de #{channel}",
+    "msg_not_found": "pero el mensaje ya había sido eliminado o el canal era inaccesible.",
+    "winners_selected": "Este sorteo ya tenía {count} ganador(es) seleccionado(s).",
+    "ended_no_winners": "Este sorteo finalizó sin ganadores válidos.",
+    "no_winner_picked": "No se seleccionó ningún ganador antes de la eliminación."
+  },
+  "errors": {
+    "guild_only": "Este comando solo se puede usar en un servidor.",
+    "button_guild_only": "Este botón solo se puede usar en un servidor.",
+    "perm_denied": "Necesitas el permiso de **Gestionar Servidor** para administrar sorteos.",
+    "text_channel_only": "El canal debe ser un canal de texto.",
+    "not_found": "No se encontró ningún sorteo con ese ID de mensaje.",
+    "channel_not_found": "No se pudo encontrar el canal donde se alojaba el sorteo.",
+    "message_not_found": "No se pudo encontrar el mensaje del sorteo.",
+    "not_enough_entries": "No hay suficientes participantes para elegir el número requerido de ganadores.",
+    "rate_limited": "Espera un momento antes de volver a interactuar con este sorteo."
+  }
 }
