@@ -28,15 +28,17 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = () => {
-    window.location.href = '/api/auth/login';
+    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+    window.location.href = `${base}/api/auth/login`;
   };
 
   const logout = async () => {
+    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
     try {
       await apiFetch('/auth/logout', { method: 'POST' });
     } finally {
       setUser(null);
-      window.location.href = '/';
+      window.location.href = `${base || '/'}`;
     }
   };
 

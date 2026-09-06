@@ -258,7 +258,8 @@ export function TicketsTab() {
   };
 
   const handleCopyPublicLink = (item) => {
-    const url = `${window.location.origin}/api/transcripts/${item.id}?token=${item.viewToken}`;
+    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+    const url = `${window.location.origin}${base}/api/transcripts/${item.id}?token=${item.viewToken}`;
     navigator.clipboard.writeText(url);
     setCopiedId(item.id);
     setTimeout(() => setCopiedId(null), 2000);

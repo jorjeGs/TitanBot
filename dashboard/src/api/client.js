@@ -2,7 +2,9 @@
  * Universal fetch wrapper for TitanBot REST API with credentials and error handling.
  */
 export async function apiFetch(endpoint, options = {}) {
-  const url = endpoint.startsWith('/') ? `/api${endpoint}` : `/api/${endpoint}`;
+  const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = `${base}/api${cleanEndpoint}`;
 
   const defaultHeaders = {
     'Accept': 'application/json',
@@ -24,7 +26,7 @@ export async function apiFetch(endpoint, options = {}) {
 
   if (response.status === 401 && !endpoint.includes('/auth/me')) {
     // Session expired, redirect to home page
-    window.location.href = '/?error=session_expired';
+    window.location.href = `${base || ''}/?error=session_expired`;
     throw new Error('Unauthorized');
   }
 

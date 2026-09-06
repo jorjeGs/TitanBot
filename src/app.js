@@ -168,9 +168,11 @@ class TitanBot extends Client {
     app.use(express.urlencoded({ extended: false }));
 
     // REST API for Web Dashboard
-    app.use('/api', createApiRouter(this));
+    const apiRouter = createApiRouter(this);
+    app.use('/api', apiRouter);
+    app.use('/discordbot/api', apiRouter);
 
-    app.get('/health', (req, res) => {
+    const handleHealth = (req, res) => {
       const dbStatus = this.db?.getStatus?.() || { isDegraded: 'unknown' };
       const status = {
         status: 'healthy',
@@ -183,9 +185,12 @@ class TitanBot extends Client {
         }
       };
       res.status(200).json(status);
-    });
+    };
 
-    app.get('/ready', (req, res) => {
+    app.get('/health', handleHealth);
+    app.get('/discordbot/health', handleHealth);
+
+    const handleReady = (req, res) => {
       const dbStatus = this.db?.getStatus?.() || { isDegraded: true, connectionType: 'none' };
       const isReady = this.isReady() && !dbStatus.isDegraded;
 
@@ -214,15 +219,26 @@ class TitanBot extends Client {
         reason: !this.isReady() ? 'Bot not Ready' : 'Database degraded',
         metrics,
       });
-    });
+    };
+
+    app.get('/ready', handleReady);
+    app.get('/discordbot/ready', handleReady);
 
     // Serve dashboard static assets & SPA fallback
     const distPath = path.resolve('dashboard/dist');
     if (fs.existsSync(distPath)) {
       app.use(express.static(distPath));
+      app.use('/discordbot', express.static(distPath));
 
       app.use((req, res, next) => {
-        if (req.path.startsWith('/api') || req.path === '/health' || req.path === '/ready') {
+        if (
+          req.path.startsWith('/api') ||
+          req.path.startsWith('/discordbot/api') ||
+          req.path === '/health' ||
+          req.path === '/ready' ||
+          req.path === '/discordbot/health' ||
+          req.path === '/discordbot/ready'
+        ) {
           return next();
         }
         res.sendFile(path.join(distPath, 'index.html'));

@@ -18,7 +18,8 @@ export function GuildSelector() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      window.location.href = '/api/auth/login';
+      const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+      window.location.href = `${base}/api/auth/login`;
       return;
     }
 

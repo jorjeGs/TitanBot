@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
+  base: process.env.VITE_BASE_PATH || '/discordbot/',
   plugins: [react()],
   server: {
     port: 5173,
@@ -9,6 +10,11 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
+      },
+      '/discordbot/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/discordbot/, ''),
       },
     },
   },

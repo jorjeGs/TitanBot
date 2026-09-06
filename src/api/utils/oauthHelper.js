@@ -19,7 +19,8 @@ export function generateOAuthState() {
  */
 export function getOAuthUrl(state, redirectUri) {
   const clientId = config.bot?.clientId || process.env.CLIENT_ID;
-  const callbackUrl = redirectUri || `${config.dashboard?.url || 'http://localhost:3000'}/api/auth/callback`;
+  const dashboardBase = (config.dashboard?.url || 'http://localhost:3000').replace(/\/$/, '');
+  const callbackUrl = redirectUri || `${dashboardBase}/api/auth/callback`;
 
   const params = new URLSearchParams({
     client_id: clientId,
@@ -42,7 +43,8 @@ export function getOAuthUrl(state, redirectUri) {
 export async function exchangeCodeForTokens(code, redirectUri) {
   const clientId = config.bot?.clientId || process.env.CLIENT_ID;
   const clientSecret = config.dashboard?.clientSecret || process.env.CLIENT_SECRET;
-  const callbackUrl = redirectUri || `${config.dashboard?.url || 'http://localhost:3000'}/api/auth/callback`;
+  const dashboardBase = (config.dashboard?.url || 'http://localhost:3000').replace(/\/$/, '');
+  const callbackUrl = redirectUri || `${dashboardBase}/api/auth/callback`;
 
   if (!clientSecret) {
     throw new Error('CLIENT_SECRET is not configured in environment variables');

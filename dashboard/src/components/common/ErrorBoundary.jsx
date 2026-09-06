@@ -21,7 +21,8 @@ export class ErrorBoundary extends React.Component {
   };
 
   handleGoHome = () => {
-    window.location.href = '/';
+    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+    window.location.href = `${base || '/'}`;
   };
 
   render() {

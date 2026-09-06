@@ -10,6 +10,26 @@ function isConnectionSecure(req) {
   return false;
 }
 
+function getBasePath(req) {
+  if (process.env.DASHBOARD_BASE_PATH) {
+    return process.env.DASHBOARD_BASE_PATH.replace(/\/$/, '');
+  }
+  if (process.env.DASHBOARD_URL) {
+    try {
+      const url = new URL(process.env.DASHBOARD_URL);
+      const path = url.pathname.replace(/\/$/, '');
+      if (path) return path;
+    } catch {
+      // ignore
+    }
+  }
+  const forwardedPrefix = req?.headers?.['x-forwarded-prefix'];
+  if (forwardedPrefix) {
+    return forwardedPrefix.replace(/\/$/, '');
+  }
+  return '';
+}
+
 /**
  * Initiates the Discord OAuth2 authorization flow.
  */
@@ -45,17 +65,18 @@ export function login(req, res) {
 export async function callback(req, res) {
   const { code, state, error } = req.query;
   const storedState = req.cookies?.oauth_state;
+  const basePath = getBasePath(req);
 
   res.clearCookie('oauth_state', { path: '/' });
 
   if (error) {
     logger.warn('OAuth callback returned error from Discord:', error);
-    return res.redirect('/?error=' + encodeURIComponent(error));
+    return res.redirect(`${basePath}/?error=` + encodeURIComponent(error));
   }
 
   if (!code || !state || !storedState || state !== storedState) {
     logger.warn('OAuth state mismatch or missing parameters');
-    return res.redirect('/?error=invalid_state');
+    return res.redirect(`${basePath}/?error=invalid_state`);
   }
 
   try {
@@ -81,10 +102,10 @@ export async function callback(req, res) {
       path: '/',
     });
 
-    return res.redirect('/servers');
+    return res.redirect(`${basePath}/servers`);
   } catch (err) {
     logger.error('OAuth callback failed to complete:', err);
-    return res.redirect('/?error=' + encodeURIComponent('auth_failed'));
+    return res.redirect(`${basePath}/?error=` + encodeURIComponent('auth_failed'));
   }
 }
 

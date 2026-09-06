@@ -19,8 +19,9 @@ export function TranscriptModal({ isOpen, onClose, transcript, guildId }) {
 
   if (!isOpen || !transcript) return null;
 
-  const publicUrl = `${window.location.origin}/api/transcripts/${transcript.id}?token=${transcript.viewToken}`;
-  const downloadUrl = `/api/guilds/${guildId}/transcripts/${transcript.id}/download`;
+  const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+  const publicUrl = `${window.location.origin}${base}/api/transcripts/${transcript.id}?token=${transcript.viewToken}`;
+  const downloadUrl = `${base}/api/guilds/${guildId}/transcripts/${transcript.id}/download`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(publicUrl);

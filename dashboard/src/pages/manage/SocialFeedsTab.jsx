@@ -259,7 +259,8 @@ export default function SocialFeedsTab() {
 
   const copyWebhookUrl = (feedId, token) => {
     const origin = window.location.origin;
-    const url = `${origin}/api/guilds/${guildId}/socialfeeds/webhooks/incoming/${feedId}?token=${token}`;
+    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+    const url = `${origin}${base}/api/guilds/${guildId}/socialfeeds/webhooks/incoming/${feedId}?token=${token}`;
     navigator.clipboard.writeText(url);
     setCopiedToken(true);
     setTimeout(() => setCopiedToken(false), 2000);
