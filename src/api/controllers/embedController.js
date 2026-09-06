@@ -277,3 +277,39 @@ export async function deleteEmbedTemplateHandler(req, res) {
     });
   }
 }
+
+/**
+ * POST /api/guilds/:guildId/embeds/send-interactive
+ * Sends an interactive embed with Discord buttons to a channel and records an audit event.
+ */
+export async function sendInteractiveEmbedHandler(req, res) {
+  try {
+    const { guildId } = req.params;
+    const { sendInteractiveEmbed } = await import('../../services/embed/interactiveEmbedService.js');
+    const { logAuditEvent } = await import('../../services/audit/auditLogService.js');
+
+    const result = await sendInteractiveEmbed(req.client, guildId, req.body);
+
+    const buttonCount = Array.isArray(req.body.buttons) ? req.body.buttons.length : 0;
+    const channelName = req.body.targetChannelId;
+
+    await logAuditEvent({
+      guildId,
+      user: req.user,
+      action: 'EMBED_INTERACTIVE_SEND',
+      category: 'embeds',
+      details: `Envió embed interactivo con ${buttonCount} botón(es) al canal <#${channelName}>.`,
+      metadata: { channelId: channelName, buttonCount, messageId: result.messageId },
+      ip: req.ip,
+    });
+
+    return res.json(result);
+  } catch (error) {
+    logger.error('Error sending interactive embed:', error);
+    return res.status(error.message.includes('Validation') ? 400 : 500).json({
+      success: false,
+      error: error.name || 'SendInteractiveEmbedError',
+      message: error.message || 'Failed to dispatch interactive embed.',
+    });
+  }
+}

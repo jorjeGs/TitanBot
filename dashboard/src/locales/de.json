@@ -57,7 +57,8 @@
     "automations": "Automatisierungen",
     "snapshots": "Backups & Snapshots",
     "socialFeeds": "Social Feeds & Benachrichtigungen",
-    "aiAssistant": "KI-Assistent"
+    "aiAssistant": "KI-Assistent",
+    "auditLogs": "Mitarbeiter-Audit"
   },
   "landing": {
     "heroTitle": "Leistungsstarke Community-Verwaltung für Discord",
@@ -834,7 +835,19 @@
     "errorSelectChannel": "Du musst einen Zielkanal auswählen.",
     "errorNoContent": "Das Embed muss mindestens einen Titel, eine Beschreibung, ein Feld oder ein Bild enthalten.",
     "errorLimitExceeded": "Das Zeichenlimit für Discord-Embeds liegt bei 6.000 Zeichen.",
-    "resetTooltip": "Alle Felder zurücksetzen"
+    "resetTooltip": "Alle Felder zurücksetzen",
+    "interactiveButtonsTitle": "Interaktive Schaltflächen (Message Components)",
+    "interactiveButtonsDesc": "Fügen Sie interaktive Schaltflächen hinzu, mit denen Mitglieder Rollen zuweisen, Tickets öffnen oder Links besuchen können.",
+    "addButton": "Schaltfläche hinzufügen",
+    "noButtons": "Noch keine interaktiven Schaltflächen hinzugefügt.",
+    "addFirstButton": "Erste Schaltfläche hinzufügen",
+    "btnLabel": "Beschriftung",
+    "btnStyle": "Stil",
+    "btnEmoji": "Emoji (Optional)",
+    "btnAction": "Aktion",
+    "btnRole": "Zuzuweisende Rolle",
+    "btnUrl": "Ziel-URL",
+    "btnCustomMessage": "Private Antwort"
   },
   "music": {
     "title": "Live-Musikplayer",
@@ -1201,6 +1214,30 @@
         "impact": "Derzeit werden öffentliche SSL-Knoten verwendet, bei denen vorübergehende Trennungen auftreten können.",
         "action": "Lavalink-Knotenliste anzeigen"
       }
+    }
+  },
+  "auditLogs": {
+    "title": "Mitarbeiter-Audit-Protokolle",
+    "subtitle": "Chronologischer Verlauf von Konfigurationsänderungen, Backups, Automatisierungen und Moderationsaktionen aus dem Web-Dashboard.",
+    "refresh": "Protokolle aktualisieren",
+    "searchPlaceholder": "Nach Mitarbeiter, Aktion oder Details suchen...",
+    "emptyTitle": "Noch keine Audit-Protokolle vorhanden",
+    "emptySubtitle": "Administrative Aktionen über das Dashboard (Einstellungen, Automatisierungen, Backups usw.) werden hier protokolliert.",
+    "viewDetails": "Metadaten anzeigen",
+    "modalTitle": "Audit-Ereignisdetails",
+    "metadataHeader": "Ereigniskontext & Metadaten",
+    "totalCount": "Gesamt: {{count}} Ereignis(se)",
+    "categories": {
+      "all": "Alle Kategorien",
+      "general": "Allgemeine Einstellungen",
+      "automations": "Automatisierungen",
+      "snapshots": "Snapshots & Backups",
+      "security": "Sicherheit & Anti-Raid",
+      "social": "Netzwerke & Benachrichtigungen",
+      "ai": "KI-Assistent",
+      "embeds": "Embed-Editor",
+      "moderation": "Moderation",
+      "tickets": "Tickets"
     }
   }
 }

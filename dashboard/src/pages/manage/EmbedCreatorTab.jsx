@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useGuild } from '../../contexts/GuildContext';
 import { apiFetch } from '../../api/client';
 import { ChannelSelect } from '../../components/common/ChannelSelect';
+import { RoleSelect } from '../../components/common/RoleSelect';
 import { EmbedPreview } from '../../components/preview/EmbedPreview';
 import {
   Send,
@@ -26,6 +27,7 @@ import {
   X,
   Loader2,
   Bookmark,
+  MousePointerClick,
 } from 'lucide-react';
 
 const COLOR_SWATCHES = [
@@ -42,7 +44,7 @@ const COLOR_SWATCHES = [
 export function EmbedCreatorTab() {
   const { t } = useTranslation();
   const { guildId } = useParams();
-  const { channels, currentGuild } = useGuild();
+  const { channels, currentGuild, roles } = useGuild();
 
   // Channel & Sending
   const [targetChannelId, setTargetChannelId] = useState('');
@@ -62,6 +64,32 @@ export function EmbedCreatorTab() {
   const [image, setImage] = useState('');
   const [timestamp, setTimestamp] = useState(true);
   const [fields, setFields] = useState([]);
+  const [buttons, setButtons] = useState([]);
+
+  // Button helpers
+  const handleAddButton = () => {
+    if (buttons.length >= 25) return;
+    const newBtn = {
+      id: `btn_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+      style: 'primary',
+      label: `Botón ${buttons.length + 1}`,
+      emoji: '',
+      actionType: 'toggle_role',
+      roleId: '',
+      url: '',
+      customMessage: '',
+      disabled: false,
+    };
+    setButtons([...buttons, newBtn]);
+  };
+
+  const handleUpdateButton = (id, key, val) => {
+    setButtons(buttons.map((b) => (b.id === id ? { ...b, [key]: val } : b)));
+  };
+
+  const handleRemoveButton = (id) => {
+    setButtons(buttons.filter((b) => b.id !== id));
+  };
 
   // Modals & Extras
   const [showJsonModal, setShowJsonModal] = useState(false);
@@ -415,45 +443,86 @@ export function EmbedCreatorTab() {
     setNotification(null);
 
     try {
-      const payload = {
-        channelId: targetChannelId,
-        title: title.trim() || null,
-        description: description.trim() || null,
-        color: color || null,
-        author: authorName.trim()
-          ? {
-              name: authorName.trim(),
-              iconUrl: authorIconUrl.trim() || null,
-              url: authorUrl.trim() || null,
-            }
-          : null,
-        footer: footerText.trim()
-          ? {
-              text: footerText.trim(),
-              iconUrl: footerIconUrl.trim() || null,
-            }
-          : null,
-        thumbnail: thumbnail.trim() || null,
-        image: image.trim() || null,
-        timestamp,
-        fields: fields.map((f) => ({
-          name: f.name.trim(),
-          value: f.value.trim(),
-          inline: Boolean(f.inline),
-        })),
-      };
+      let res;
+      if (buttons && buttons.length > 0) {
+        const interactivePayload = {
+          targetChannelId,
+          content: '',
+          embed: {
+            title: title.trim() || undefined,
+            description: description.trim() || undefined,
+            color: color || '#5865F2',
+            fields: fields.map((f) => ({
+              name: f.name.trim(),
+              value: f.value.trim(),
+              inline: Boolean(f.inline),
+            })),
+            imageUrl: image.trim() || undefined,
+            thumbnailUrl: thumbnail.trim() || undefined,
+            footerText: footerText.trim() || undefined,
+            footerIconUrl: footerIconUrl.trim() || undefined,
+            authorName: authorName.trim() || undefined,
+            authorIconUrl: authorIconUrl.trim() || undefined,
+            timestamp,
+          },
+          buttons: buttons.map((b) => ({
+            id: b.id,
+            style: b.style || 'primary',
+            label: b.label.trim() || 'Botón',
+            emoji: b.emoji?.trim() || undefined,
+            actionType: b.actionType || 'toggle_role',
+            roleId: b.roleId || '',
+            url: b.url || '',
+            customMessage: b.customMessage || '',
+            disabled: Boolean(b.disabled),
+          })),
+        };
 
-      const res = await apiFetch(`/guilds/${guildId}/embeds/send`, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
+        res = await apiFetch(`/guilds/${guildId}/embeds/send-interactive`, {
+          method: 'POST',
+          body: JSON.stringify(interactivePayload),
+        });
+      } else {
+        const payload = {
+          channelId: targetChannelId,
+          title: title.trim() || null,
+          description: description.trim() || null,
+          color: color || null,
+          author: authorName.trim()
+            ? {
+                name: authorName.trim(),
+                iconUrl: authorIconUrl.trim() || null,
+                url: authorUrl.trim() || null,
+              }
+            : null,
+          footer: footerText.trim()
+            ? {
+                text: footerText.trim(),
+                iconUrl: footerIconUrl.trim() || null,
+              }
+            : null,
+          thumbnail: thumbnail.trim() || null,
+          image: image.trim() || null,
+          timestamp,
+          fields: fields.map((f) => ({
+            name: f.name.trim(),
+            value: f.value.trim(),
+            inline: Boolean(f.inline),
+          })),
+        };
+
+        res = await apiFetch(`/guilds/${guildId}/embeds/send`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+      }
 
       if (res.success) {
         setNotification({
           type: 'success',
           message: t('embeds.sendSuccess', '¡Embed publicado exitosamente en Discord!'),
-          messageUrl: res.messageUrl,
-          channelName: res.channelName,
+          messageUrl: res.messageUrl || res.url,
+          channelName: res.channelName || targetChannelId,
         });
       }
     } catch (err) {
@@ -983,6 +1052,212 @@ export function EmbedCreatorTab() {
               </div>
             )}
           </div>
+
+          {/* Interactive Components & Buttons Section */}
+          <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <MousePointerClick className="w-4 h-4 text-discord-blurple" />
+                <h3 className="font-semibold text-white text-sm">
+                  {t('embeds.interactiveButtonsTitle', 'Botones Interactivos (Message Components)')}
+                </h3>
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-discord-blurple/20 text-discord-blurple border border-discord-blurple/30">
+                  {buttons.length} / 25
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleAddButton}
+                disabled={buttons.length >= 25}
+                className="px-3 py-1 rounded-lg bg-discord-blurple hover:bg-discord-blurple/80 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold flex items-center gap-1 shadow transition"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>{t('embeds.addButton', 'Añadir Botón')}</span>
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-400">
+              {t(
+                'embeds.interactiveButtonsDesc',
+                'Añade botones interactivos que permiten a los miembros asignarse roles, abrir tickets o visitar enlaces al hacer clic.'
+              )}
+            </p>
+
+            {buttons.length === 0 ? (
+              <div className="text-center py-6 border border-dashed border-slate-800 rounded-xl">
+                <MousePointerClick className="w-8 h-8 text-slate-600 mx-auto mb-2" />
+                <p className="text-xs text-slate-500">
+                  {t('embeds.noButtons', 'No has añadido botones interactivos aún.')}
+                </p>
+                <button
+                  type="button"
+                  onClick={handleAddButton}
+                  className="mt-2 text-xs text-discord-blurple hover:underline font-semibold"
+                >
+                  + {t('embeds.addFirstButton', 'Añadir primer botón')}
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {buttons.map((btn, index) => (
+                  <div
+                    key={btn.id}
+                    className="p-3.5 bg-slate-900/70 border border-slate-800 rounded-xl space-y-3"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono font-bold text-slate-400">
+                          #{index + 1}
+                        </span>
+                        <span className="text-xs font-bold text-white truncate max-w-[140px]">
+                          {btn.label || 'Botón sin texto'}
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveButton(btn.id)}
+                        className="p-1 text-slate-400 hover:text-red-400 transition"
+                        title={t('common.delete', 'Eliminar botón')}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      {/* Label */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                          {t('embeds.btnLabel', 'Texto')}
+                        </label>
+                        <input
+                          type="text"
+                          value={btn.label}
+                          onChange={(e) => handleUpdateButton(btn.id, 'label', e.target.value)}
+                          maxLength={80}
+                          placeholder="Verificar / Unirse"
+                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                        />
+                      </div>
+
+                      {/* Style */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                          {t('embeds.btnStyle', 'Estilo')}
+                        </label>
+                        <select
+                          value={btn.style}
+                          onChange={(e) => handleUpdateButton(btn.id, 'style', e.target.value)}
+                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                        >
+                          <option value="primary">Blurple (Primario)</option>
+                          <option value="secondary">Gris (Secundario)</option>
+                          <option value="success">Verde (Éxito)</option>
+                          <option value="danger">Rojo (Peligro)</option>
+                          <option value="link">Enlace (URL)</option>
+                        </select>
+                      </div>
+
+                      {/* Emoji */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                          {t('embeds.btnEmoji', 'Emoji (Opcional)')}
+                        </label>
+                        <input
+                          type="text"
+                          value={btn.emoji || ''}
+                          onChange={(e) => handleUpdateButton(btn.id, 'emoji', e.target.value)}
+                          maxLength={10}
+                          placeholder="🎮, 🎟️, 🔔"
+                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Action Selector & Param */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 border-t border-slate-800/60">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                          {t('embeds.btnAction', 'Acción')}
+                        </label>
+                        <select
+                          value={btn.actionType}
+                          onChange={(e) => handleUpdateButton(btn.id, 'actionType', e.target.value)}
+                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                        >
+                          <option value="toggle_role">Asignar / Quitar Rol</option>
+                          <option value="open_ticket">Abrir Ticket de Soporte</option>
+                          <option value="link">Abrir Enlace Web</option>
+                          <option value="ephemeral_message">Mensaje Privado (Ephemeral)</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        {btn.actionType === 'toggle_role' && (
+                          <div>
+                            <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                              {t('embeds.btnRole', 'Rol a Asignar')}
+                            </label>
+                            <select
+                              value={btn.roleId || ''}
+                              onChange={(e) => handleUpdateButton(btn.id, 'roleId', e.target.value)}
+                              className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                            >
+                              <option value="">Selecciona un rol...</option>
+                              {roles &&
+                                roles.map((r) => (
+                                  <option key={r.id} value={r.id}>
+                                    @{r.name}
+                                  </option>
+                                ))}
+                            </select>
+                          </div>
+                        )}
+
+                        {btn.actionType === 'link' && (
+                          <div>
+                            <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                              {t('embeds.btnUrl', 'URL de Destino')}
+                            </label>
+                            <input
+                              type="url"
+                              value={btn.url || ''}
+                              onChange={(e) => handleUpdateButton(btn.id, 'url', e.target.value)}
+                              placeholder="https://..."
+                              className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                            />
+                          </div>
+                        )}
+
+                        {btn.actionType === 'ephemeral_message' && (
+                          <div>
+                            <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                              {t('embeds.btnCustomMessage', 'Respuesta Privada')}
+                            </label>
+                            <input
+                              type="text"
+                              value={btn.customMessage || ''}
+                              onChange={(e) => handleUpdateButton(btn.id, 'customMessage', e.target.value)}
+                              placeholder="¡Gracias por interactuar!"
+                              maxLength={500}
+                              className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                            />
+                          </div>
+                        )}
+
+                        {btn.actionType === 'open_ticket' && (
+                          <div className="text-[11px] text-slate-400 pt-5">
+                            ✨ Creará automáticamente un canal de ticket privado para el usuario.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right Column: Live Discord Mockup & Character Stats */}
@@ -1022,6 +1297,7 @@ export function EmbedCreatorTab() {
             image={image}
             timestamp={timestamp}
             fields={fields}
+            buttons={buttons}
           />
         </div>
       </div>

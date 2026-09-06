@@ -55,6 +55,7 @@ export function Sidebar() {
     { to: `/manage/${guildId}/snapshots`, label: t('nav.snapshots') || 'Copias y Respaldos', icon: Archive },
     { to: `/manage/${guildId}/socialfeeds`, label: t('nav.socialFeeds') || 'Notificaciones & Redes', icon: Radio },
     { to: `/manage/${guildId}/aiassistant`, label: t('nav.aiAssistant') || 'Asistente IA', icon: Bot },
+    { to: `/manage/${guildId}/auditlogs`, label: t('nav.auditLogs') || 'Auditoría del Staff', icon: ClipboardList },
   ];
 
   return (

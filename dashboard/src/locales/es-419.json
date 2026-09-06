@@ -57,7 +57,8 @@
     "automations": "Automatizaciones",
     "snapshots": "Copias y Respaldos",
     "socialFeeds": "Notificaciones & Redes",
-    "aiAssistant": "Asistente IA"
+    "aiAssistant": "Asistente IA",
+    "auditLogs": "Auditoría del Staff"
   },
   "landing": {
     "heroTitle": "Gestión Potente de Comunidades para Discord",
@@ -834,7 +835,19 @@
     "errorSelectChannel": "Debes seleccionar un canal de destino.",
     "errorNoContent": "El embed debe contener al menos un título, descripción, autor, campo o imagen.",
     "errorLimitExceeded": "El límite total de caracteres de un embed en Discord es 6,000.",
-    "resetTooltip": "Limpiar todos los campos"
+    "resetTooltip": "Limpiar todos los campos",
+    "interactiveButtonsTitle": "Botones Interactivos (Message Components)",
+    "interactiveButtonsDesc": "Añade botones interactivos que permiten a los miembros asignarse roles, abrir tickets o visitar enlaces al hacer clic.",
+    "addButton": "Añadir Botón",
+    "noButtons": "No has añadido botones interactivos aún.",
+    "addFirstButton": "Añadir primer botón",
+    "btnLabel": "Texto",
+    "btnStyle": "Estilo",
+    "btnEmoji": "Emoji (Opcional)",
+    "btnAction": "Acción",
+    "btnRole": "Rol a Asignar",
+    "btnUrl": "URL de Destino",
+    "btnCustomMessage": "Respuesta Privada"
   },
   "music": {
     "title": "Reproductor de Música en Vivo",
@@ -1201,6 +1214,30 @@
         "impact": "Actualmente utilizando nodos públicos SSL que pueden experimentar interrupciones temporales.",
         "action": "Ver lista de nodos Lavalink"
       }
+    }
+  },
+  "auditLogs": {
+    "title": "Registro de Auditoría del Staff",
+    "subtitle": "Historial cronológico de cambios de configuración, respaldos, automatizaciones y acciones de moderación realizadas en el panel web.",
+    "refresh": "Actualizar Registros",
+    "searchPlaceholder": "Buscar por staff, acción o detalles...",
+    "emptyTitle": "No hay registros de auditoría aún",
+    "emptySubtitle": "Las acciones administrativas ejecutadas desde el Dashboard (cambios de configuración, automatizaciones, respaldos, etc.) quedarán registradas aquí.",
+    "viewDetails": "Ver metadatos",
+    "modalTitle": "Detalle del Evento de Auditoría",
+    "metadataHeader": "Metadatos y Contexto del Evento",
+    "totalCount": "Total: {{count}} evento(s)",
+    "categories": {
+      "all": "Todas las Categorías",
+      "general": "Configuración General",
+      "automations": "Automatizaciones",
+      "snapshots": "Copias & Respaldos",
+      "security": "Seguridad & Anti-Raid",
+      "social": "Redes & Notificaciones",
+      "ai": "Asistente IA",
+      "embeds": "Creador de Embeds",
+      "moderation": "Moderación",
+      "tickets": "Tickets"
     }
   }
 }

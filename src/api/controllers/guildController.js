@@ -359,6 +359,21 @@ export async function updateGuildConfigHandler(req, res) {
       });
     }
 
+    const changedKeys = Object.keys(sanitized);
+    import('../../services/audit/auditLogService.js')
+      .then(({ logAuditEvent }) =>
+        logAuditEvent({
+          guildId,
+          user: req.user,
+          action: 'CONFIG_UPDATE',
+          category: 'general',
+          details: `Actualizó configuración del servidor: ${changedKeys.join(', ')}`,
+          metadata: { fields: changedKeys },
+          ip: req.ip,
+        })
+      )
+      .catch(() => {});
+
     return res.json({
       success: true,
       config: updated,

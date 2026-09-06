@@ -697,6 +697,75 @@ export function normalizeEconomyData(raw, defaults = {}) {
   return parsed.success ? parsed.data : { ...defaults, ...base };
 }
 
+// ---------------------------------------------------------------------------
+// Dashboard Audit Log Schemas (Feature B)
+// ---------------------------------------------------------------------------
+
+export const DashboardAuditLogItemSchema = z.object({
+  id: z.string().min(1),
+  guildId: z.string().min(1, 'Guild ID is required'),
+  userId: z.string().min(1, 'User ID is required'),
+  userTag: z.string().default('Staff Member'),
+  userAvatar: z.string().nullable().optional().default(null),
+  action: z.string().min(1).max(100),
+  category: z.enum([
+    'general',
+    'automations',
+    'security',
+    'social',
+    'ai',
+    'snapshots',
+    'moderation',
+    'tickets',
+    'music',
+    'embeds',
+    'system',
+  ]).default('general'),
+  details: z.string().max(1000).default(''),
+  metadata: z.record(z.any()).optional().default({}),
+  ip: z.string().optional().default(''),
+  timestamp: z.string().default(() => new Date().toISOString()),
+});
+
+// ---------------------------------------------------------------------------
+// Interactive Embed & Components Schemas (Feature C)
+// ---------------------------------------------------------------------------
+
+export const InteractiveButtonComponentSchema = z.object({
+  id: z.string().min(1),
+  style: z.enum(['primary', 'secondary', 'success', 'danger', 'link']).default('primary'),
+  label: z.string().min(1).max(80),
+  emoji: z.string().max(30).optional().default(''),
+  actionType: z.enum(['toggle_role', 'open_ticket', 'link', 'ephemeral_message']).default('toggle_role'),
+  roleId: z.string().optional().default(''),
+  url: z.string().url().optional().or(z.literal('')).default(''),
+  customMessage: z.string().max(500).optional().default(''),
+  disabled: z.boolean().optional().default(false),
+});
+
+export const InteractiveEmbedPayloadSchema = z.object({
+  targetChannelId: z.string().min(1, 'Target channel ID is required'),
+  content: z.string().max(2000).optional().default(''),
+  embed: z.object({
+    title: z.string().max(256).optional().default(''),
+    description: z.string().max(4096).optional().default(''),
+    color: z.string().or(z.number()).optional().default('#5865F2'),
+    fields: z.array(z.object({
+      name: z.string().max(256),
+      value: z.string().max(1024),
+      inline: z.boolean().optional().default(false),
+    })).optional().default([]),
+    imageUrl: z.string().url().optional().or(z.literal('')).default(''),
+    thumbnailUrl: z.string().url().optional().or(z.literal('')).default(''),
+    footerText: z.string().max(2048).optional().default(''),
+    footerIconUrl: z.string().url().optional().or(z.literal('')).default(''),
+    authorName: z.string().max(256).optional().default(''),
+    authorIconUrl: z.string().url().optional().or(z.literal('')).default(''),
+    timestamp: z.boolean().optional().default(false),
+  }).default({}),
+  buttons: z.array(InteractiveButtonComponentSchema).max(25).optional().default([]),
+});
+
 export function validateGuildConfigOrThrow(rawConfig, context = {}) {
   const normalized = normalizeGuildConfig(rawConfig);
   const parsed = GuildConfigSchema.safeParse(normalized);

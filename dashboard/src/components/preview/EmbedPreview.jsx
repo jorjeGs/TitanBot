@@ -12,6 +12,7 @@ export function EmbedPreview({
   image = '',
   timestamp = false,
   fields = [],
+  buttons = [],
 }) {
   const { t } = useTranslation();
 
@@ -201,6 +202,32 @@ export function EmbedPreview({
                   {footer?.text && <span>{footer.text}</span>}
                   {footer?.text && timestamp && <span className="opacity-60">•</span>}
                   {timestamp && <span>{formattedDate}</span>}
+                </div>
+              )}
+
+              {/* Interactive Buttons Preview */}
+              {Array.isArray(buttons) && buttons.length > 0 && (
+                <div className="pt-3 border-t border-slate-700/50 flex flex-wrap gap-2">
+                  {buttons.map((btn, idx) => {
+                    let bg = 'bg-[#5865F2] hover:bg-[#4752C4] text-white';
+                    if (btn.style === 'secondary') bg = 'bg-[#4E5058] hover:bg-[#6D6F78] text-white';
+                    if (btn.style === 'success') bg = 'bg-[#248046] hover:bg-[#1A6334] text-white';
+                    if (btn.style === 'danger') bg = 'bg-[#DA373C] hover:bg-[#A12828] text-white';
+                    if (btn.style === 'link') bg = 'bg-[#4E5058] hover:bg-[#6D6F78] text-white';
+
+                    return (
+                      <div
+                        key={btn.id || idx}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold shadow select-none ${bg} ${btn.disabled ? 'opacity-50' : ''}`}
+                      >
+                        {btn.emoji && <span className="text-sm">{btn.emoji}</span>}
+                        <span>{btn.label || 'Botón'}</span>
+                        {(btn.style === 'link' || btn.actionType === 'link') && (
+                          <ExternalLink className="w-3 h-3 ml-0.5 opacity-80" />
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>

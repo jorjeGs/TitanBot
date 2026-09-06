@@ -64,10 +64,15 @@ import {
 } from '../controllers/applicationController.js';
 import {
   sendEmbedHandler,
+  sendInteractiveEmbedHandler,
   getEmbedTemplatesHandler,
   saveEmbedTemplateHandler,
   deleteEmbedTemplateHandler,
 } from '../controllers/embedController.js';
+import {
+  getGuildAuditLogsHandler,
+  clearGuildAuditLogsHandler,
+} from '../controllers/auditLogController.js';
 import {
   getMusicStatusHandler,
   executeMusicActionHandler,
@@ -182,6 +187,7 @@ router.delete('/:guildId/applications/:appId', verifyAuth, checkGuildPermissions
 
 // Embed builder subroutes protected by checkGuildPermissions
 router.post('/:guildId/embeds/send', verifyAuth, checkGuildPermissions, sendEmbedHandler);
+router.post('/:guildId/embeds/send-interactive', verifyAuth, checkGuildPermissions, sendInteractiveEmbedHandler);
 router.get('/:guildId/embeds/templates', verifyAuth, checkGuildPermissions, getEmbedTemplatesHandler);
 router.post('/:guildId/embeds/templates', verifyAuth, checkGuildPermissions, saveEmbedTemplateHandler);
 router.delete('/:guildId/embeds/templates/:templateId', verifyAuth, checkGuildPermissions, deleteEmbedTemplateHandler);
@@ -239,6 +245,10 @@ router.patch('/:guildId/aiassistant', verifyAuth, checkGuildPermissions, updateA
 router.post('/:guildId/aiassistant/test', verifyAuth, checkGuildPermissions, testAiPrompt);
 router.post('/:guildId/aiassistant/knowledge', verifyAuth, checkGuildPermissions, saveKnowledgeItem);
 router.delete('/:guildId/aiassistant/knowledge/:id', verifyAuth, checkGuildPermissions, deleteKnowledgeItem);
+
+// Dashboard Audit Logs subroutes
+router.get('/:guildId/audit-logs', verifyAuth, checkModerationAccess, getGuildAuditLogsHandler);
+router.delete('/:guildId/audit-logs', verifyAuth, checkGuildPermissions, clearGuildAuditLogsHandler);
 
 export default router;
 

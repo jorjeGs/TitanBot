@@ -57,7 +57,8 @@
     "automations": "Automations",
     "snapshots": "Backups & Snapshots",
     "socialFeeds": "Social Feeds & Alerts",
-    "aiAssistant": "AI Assistant"
+    "aiAssistant": "AI Assistant",
+    "auditLogs": "Staff Audit Logs"
   },
   "landing": {
     "heroTitle": "Powerful Community Management for Discord",
@@ -834,7 +835,19 @@
     "errorSelectChannel": "You must select a destination channel.",
     "errorNoContent": "Embed must contain at least a title, description, author, field, or image.",
     "errorLimitExceeded": "Discord's total embed character limit is 6,000.",
-    "resetTooltip": "Reset all fields"
+    "resetTooltip": "Reset all fields",
+    "interactiveButtonsTitle": "Interactive Buttons (Message Components)",
+    "interactiveButtonsDesc": "Add interactive buttons that allow members to assign roles, open tickets, or visit links on click.",
+    "addButton": "Add Button",
+    "noButtons": "No interactive buttons added yet.",
+    "addFirstButton": "Add first button",
+    "btnLabel": "Label",
+    "btnStyle": "Style",
+    "btnEmoji": "Emoji (Optional)",
+    "btnAction": "Action",
+    "btnRole": "Role to Assign",
+    "btnUrl": "Target URL",
+    "btnCustomMessage": "Private Response"
   },
   "music": {
     "title": "Live Music Player",
@@ -1201,6 +1214,30 @@
         "impact": "Currently using free public SSL nodes which may experience temporary disconnections.",
         "action": "View Lavalink nodes list"
       }
+    }
+  },
+  "auditLogs": {
+    "title": "Staff Audit Logs",
+    "subtitle": "Chronological history of configuration changes, backups, automations, and moderation actions executed from the web dashboard.",
+    "refresh": "Refresh Logs",
+    "searchPlaceholder": "Search by staff, action, or details...",
+    "emptyTitle": "No audit logs recorded yet",
+    "emptySubtitle": "Administrative actions performed from the Dashboard (settings changes, automations, backups, etc.) will be logged here.",
+    "viewDetails": "View metadata",
+    "modalTitle": "Audit Event Details",
+    "metadataHeader": "Event Context & Metadata",
+    "totalCount": "Total: {{count}} event(s)",
+    "categories": {
+      "all": "All Categories",
+      "general": "General Settings",
+      "automations": "Automations",
+      "snapshots": "Snapshots & Backups",
+      "security": "Security & Anti-Raid",
+      "social": "Social & Alerts",
+      "ai": "AI Assistant",
+      "embeds": "Embed Creator",
+      "moderation": "Moderation",
+      "tickets": "Tickets"
     }
   }
 }
