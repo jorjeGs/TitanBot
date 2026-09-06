@@ -1173,5 +1173,34 @@
     "kbSaved": "Knowledge item saved",
     "kbDeleteConfirm": "Delete this item from the knowledge base?",
     "kbDeleted": "Item deleted successfully"
+  },
+  "envWarnings": {
+    "title": "Pending Environment Variables & API Keys",
+    "pendingBadge": "pending",
+    "subtitle": "TitanBot detected that some optional or integration credentials are missing in your environment (.env):",
+    "expand": "Expand details",
+    "collapse": "Minimize warnings",
+    "copyKey": "Copy variable name",
+    "howToFix": "To configure them, add them to your .env file on the server and restart the bot.",
+    "items": {
+      "gemini": {
+        "title": "Community AI Assistant (Google Gemini)",
+        "desc": "Required for the bot to reason and answer member queries using server rules and FAQ.",
+        "impact": "The assistant cannot respond in Discord or in the Dashboard Playground until GEMINI_API_KEY is configured.",
+        "action": "Get free on Google AI Studio"
+      },
+      "twitch": {
+        "title": "Twitch Live Stream Alerts (Social Feeds)",
+        "desc": "Required to verify live streams using the official Twitch Helix API.",
+        "impact": "Twitch live stream alerts cannot authenticate without TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET.",
+        "action": "Create app on Twitch Developer Console"
+      },
+      "lavalink": {
+        "title": "Dedicated Music Nodes (Lavalink v4)",
+        "desc": "Optional: Dedicated or private nodes to prevent disconnects or SSL issues from public nodes.",
+        "impact": "Currently using free public SSL nodes which may experience temporary disconnections.",
+        "action": "View Lavalink nodes list"
+      }
+    }
   }
 }

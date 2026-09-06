@@ -2399,4 +2399,14 @@ describe('API Routes Integration Tests', () => {
     const text = await res.text();
     assert.ok(text.includes('<div id="root">') || text.includes('TitanBot Dashboard'));
   });
+
+  it('GET /api/system/env-warnings returns system environment diagnostics', async () => {
+    const res = await fetch(`${baseUrl}/system/env-warnings`);
+    assert.strictEqual(res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok(Array.isArray(data.warnings));
+    assert.ok(typeof data.warningCount === 'number');
+    assert.ok(typeof data.allConfigured === 'boolean');
+  });
 });

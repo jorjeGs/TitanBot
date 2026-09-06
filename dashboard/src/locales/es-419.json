@@ -1173,5 +1173,34 @@
     "kbSaved": "Elemento de conocimiento guardado",
     "kbDeleteConfirm": "¿Eliminar este elemento de la base de conocimiento?",
     "kbDeleted": "Elemento eliminado con éxito"
+  },
+  "envWarnings": {
+    "title": "Variables de Entorno & API Keys Pendientes",
+    "pendingBadge": "pendientes",
+    "subtitle": "TitanBot ha detectado que faltan algunas credenciales opcionales o de integración en el entorno (.env):",
+    "expand": "Expandir detalles",
+    "collapse": "Minimizar advertencias",
+    "copyKey": "Copiar nombre de variable",
+    "howToFix": "Para configurarlas, añádelas a tu archivo .env en el servidor y reinicia el bot.",
+    "items": {
+      "gemini": {
+        "title": "Asistente IA para la Comunidad (Google Gemini)",
+        "desc": "Requerida para que el bot razone y responda consultas con normas y FAQ del servidor.",
+        "impact": "El asistente no podrá responder en Discord ni en el Playground hasta configurar GEMINI_API_KEY.",
+        "action": "Obtener gratis en Google AI Studio"
+      },
+      "twitch": {
+        "title": "Alertas de Twitch en Vivo (Social Feeds)",
+        "desc": "Requeridas para verificar transmisiones en directo mediante la API oficial Helix.",
+        "impact": "Las alertas de directos de Twitch no podrán autenticarse sin TWITCH_CLIENT_ID y TWITCH_CLIENT_SECRET.",
+        "action": "Crear app en Twitch Developer Console"
+      },
+      "lavalink": {
+        "title": "Nodos Dedicados de Música (Lavalink v4)",
+        "desc": "Opcional: Nodos propios o privados para evitar saturación o caídas de nodos públicos gratuitos.",
+        "impact": "Actualmente utilizando nodos públicos SSL que pueden experimentar interrupciones temporales.",
+        "action": "Ver lista de nodos Lavalink"
+      }
+    }
   }
 }

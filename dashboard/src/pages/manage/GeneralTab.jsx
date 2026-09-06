@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGuild } from '../../contexts/GuildContext';
 import { RoleSelect } from '../../components/common/RoleSelect';
+import { EnvWarningsBanner } from '../../components/common/EnvWarningsBanner';
 import { Globe, Terminal, Shield, Wrench } from 'lucide-react';
 
 export function GeneralTab() {
@@ -24,6 +25,9 @@ export function GeneralTab() {
         <h1 className="text-2xl font-bold text-white tracking-tight">{t('general.title')}</h1>
         <p className="text-sm text-slate-400 mt-1">{t('general.subtitle')}</p>
       </div>
+
+      {/* System Environment & API Keys Warning Banner */}
+      <EnvWarningsBanner />
 
       {/* Card: Bot Language & Prefix */}
       <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6">

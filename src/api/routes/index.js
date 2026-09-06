@@ -3,6 +3,7 @@ import authRoutes from './authRoutes.js';
 import guildRoutes from './guildRoutes.js';
 import commandRoutes from './commandRoutes.js';
 import { getPublicTranscript } from '../controllers/transcriptsController.js';
+import { getSystemEnvWarnings } from '../controllers/systemController.js';
 import { apiRateLimiter } from '../middlewares/rateLimiter.js';
 
 /**
@@ -23,6 +24,7 @@ export function createApiRouter(client) {
   router.use('/guilds', guildRoutes);
   router.use('/commands', commandRoutes);
   router.get('/transcripts/:id', apiRateLimiter, getPublicTranscript);
+  router.get('/system/env-warnings', apiRateLimiter, getSystemEnvWarnings);
 
   return router;
 }

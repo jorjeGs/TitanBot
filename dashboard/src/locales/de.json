@@ -1173,5 +1173,34 @@
     "kbSaved": "Wissenselement gespeichert",
     "kbDeleteConfirm": "Dieses Element aus der Wissensdatenbank löschen?",
     "kbDeleted": "Element erfolgreich gelöscht"
+  },
+  "envWarnings": {
+    "title": "Ausstehende Umgebungsvariablen & API-Keys",
+    "pendingBadge": "ausstehend",
+    "subtitle": "TitanBot hat festgestellt, dass optionale oder Integrations-Anmeldedaten in der Umgebung (.env) fehlen:",
+    "expand": "Details erweitern",
+    "collapse": "Warnungen minimieren",
+    "copyKey": "Variablenname kopieren",
+    "howToFix": "Fügen Sie diese Ihrer .env-Datei auf dem Server hinzu und starten Sie den Bot neu.",
+    "items": {
+      "gemini": {
+        "title": "Community-KI-Assistent (Google Gemini)",
+        "desc": "Erforderlich, damit der Bot Fragen von Mitgliedern anhand von Serverregeln und FAQ beantworten kann.",
+        "impact": "Der Assistent kann in Discord oder im Dashboard erst nach Konfiguration von GEMINI_API_KEY antworten.",
+        "action": "Kostenlos in Google AI Studio abrufen"
+      },
+      "twitch": {
+        "title": "Twitch-Livestream-Benachrichtigungen (Social Feeds)",
+        "desc": "Erforderlich, um Livestreams über die offizielle Twitch Helix-API abzufragen.",
+        "impact": "Twitch-Livestream-Warnungen können ohne TWITCH_CLIENT_ID und TWITCH_CLIENT_SECRET nicht authentifiziert werden.",
+        "action": "App in Twitch Developer Console erstellen"
+      },
+      "lavalink": {
+        "title": "Dedizierte Musik-Knoten (Lavalink v4)",
+        "desc": "Optional: Eigene oder private Knoten, um Trennungen von kostenlosen öffentlichen Knoten zu vermeiden.",
+        "impact": "Derzeit werden öffentliche SSL-Knoten verwendet, bei denen vorübergehende Trennungen auftreten können.",
+        "action": "Lavalink-Knotenliste anzeigen"
+      }
+    }
   }
 }

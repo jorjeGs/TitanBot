@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { apiFetch } from '../api/client';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, Server, Plus, Settings, ExternalLink } from 'lucide-react';
+import { EnvWarningsBanner } from '../components/common/EnvWarningsBanner';
 
 export function GuildSelector() {
   const { t } = useTranslation();
@@ -70,6 +71,9 @@ export function GuildSelector() {
           {error}
         </div>
       )}
+
+      {/* System Environment & Keys Warning Banner */}
+      <EnvWarningsBanner className="mb-8" />
 
       {/* Grid */}
       {loading ? (
