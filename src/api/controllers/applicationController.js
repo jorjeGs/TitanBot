@@ -31,21 +31,67 @@ export async function getApplicationData(req, res) {
 
     const rawApplications = await getApplications(req.client, guildId, filterOptions);
 
+    const uncachedIds = [
+      ...new Set(
+        rawApplications
+          .map((app) => app?.userId)
+          .filter((id) => id && !guild?.members?.cache?.has(id))
+      ),
+    ];
+
+    if (uncachedIds.length > 0 && typeof guild?.members?.fetch === 'function') {
+      try {
+        if (uncachedIds.length === 1) {
+          await guild.members.fetch(uncachedIds[0]).catch(() => null);
+        } else {
+          await guild.members.fetch({ user: uncachedIds }).catch(async () => {
+            await Promise.allSettled(
+              uncachedIds.map((id) => guild.members.fetch(id).catch(() => null))
+            );
+          });
+        }
+      } catch {
+        // ignore fetch failures
+      }
+    }
+
+    const stillUncached = [
+      ...new Set(
+        rawApplications
+          .map((app) => app?.userId)
+          .filter(
+            (id) =>
+              id &&
+              !guild?.members?.cache?.has(id) &&
+              typeof req.client?.users?.fetch === 'function'
+          )
+      ),
+    ];
+    if (stillUncached.length > 0) {
+      await Promise.allSettled(
+        stillUncached.map((id) => req.client.users.fetch(id).catch(() => null))
+      );
+    }
+
     const applications = [];
     for (const app of rawApplications) {
       if (!app || !app.id) continue;
 
       const member = guild?.members?.cache?.get(app.userId);
+      const user = member?.user || req.client?.users?.cache?.get(app.userId);
 
       applications.push({
         ...app,
-        username: member?.user?.username || `User-${app.userId?.slice(-4)}`,
+        username: user?.username || `User-${app.userId?.slice(-4)}`,
         displayName:
           member?.displayName ||
-          member?.user?.globalName ||
-          member?.user?.username ||
+          user?.globalName ||
+          user?.username ||
           `User-${app.userId?.slice(-4)}`,
-        avatar: member?.user?.displayAvatarURL?.({ size: 64 }) || null,
+        avatar:
+          member?.displayAvatarURL?.({ size: 64 }) ||
+          user?.displayAvatarURL?.({ size: 64 }) ||
+          null,
       });
     }
 

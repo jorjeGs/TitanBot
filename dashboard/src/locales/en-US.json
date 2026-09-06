@@ -32,7 +32,10 @@
     "inactive": "Inactive",
     "delete": "Delete",
     "moveUp": "Move up",
-    "moveDown": "Move down"
+    "moveDown": "Move down",
+    "saveChanges": "Save Changes",
+    "deleting": "Deleting...",
+    "actions": "Actions"
   },
   "nav": {
     "general": "General Settings",
@@ -348,7 +351,17 @@
     "panelInactiveDescription": "You haven't published a ticket panel in any Discord channel yet.",
     "goToDiscord": "View on Discord",
     "contentSection": "Panel Message",
-    "contentSectionHelp": "Customize the text and button that members will interact with."
+    "contentSectionHelp": "Customize the text and button that members will interact with.",
+    "tabs": {
+      "panel": "Panel Configuration",
+      "transcripts": "Transcripts History"
+    },
+    "selectChannelPlaceholder": "Select a channel for the ticket panel...",
+    "organizationSection": "Destination Channels & Categories",
+    "organizationSectionHelp": "Organize where support ticket channels will be created and moved.",
+    "openCategory": "Category for open tickets (optional)",
+    "selectCategoryPlaceholder": "Select category...",
+    "permissionsSection": "Support Permissions & Rules"
   },
   "leveling": {
     "title": "Leveling & Gamification",
@@ -465,7 +478,20 @@
     "subtabs": {
       "insights": "Insights & Analytics",
       "counters": "Counter Channels"
-    }
+    },
+    "humans": "Human Members",
+    "bots": "Integrated Bots",
+    "channelConfig": "Counter Channels Configuration",
+    "channelConfigHelp": "Choose which counters to create in your Discord server and where to organize them.",
+    "typeMembers": "Total Members",
+    "typeHumans": "Humans Only",
+    "typeBots": "Bots Only",
+    "categoryLabel": "Parent Category (Optional)",
+    "categoryAuto": "✨ Create \"📊 Server Stats\" category automatically",
+    "activeChannels": "Active Counter Channels",
+    "noCountersActive": "No active counter channels. Click \"Create Counter Channels\" to deploy them.",
+    "deleteCounters": "Delete Counters",
+    "applyCounters": "Create Counter Channels"
   },
   "jointocreate": {
     "title": "Temporary Voice Rooms (Join-to-Create)",
@@ -699,6 +725,20 @@
     "errors": {
       "saveFailed": "Failed to save configuration.",
       "deleteFailed": "Failed to delete record."
+    },
+    "months": {
+      "1": "January",
+      "2": "February",
+      "3": "March",
+      "4": "April",
+      "5": "May",
+      "6": "June",
+      "7": "July",
+      "8": "August",
+      "9": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
     }
   },
   "applications": {
@@ -768,7 +808,8 @@
     "approveAndAssign": "Approve and Assign Role",
     "approveModalTitle": "Approve Application",
     "denyModalTitle": "Deny Application",
-    "deleteQuestionTooltip": "Delete question"
+    "deleteQuestionTooltip": "Delete question",
+    "decision": "Decision"
   },
   "embeds": {
     "title": "Embed Creator (WYSIWYG)",
@@ -890,12 +931,13 @@
     "cmdQueue": "Inspect and manage the upcoming tracks queue.",
     "actions": {
       "pauseSuccess": "Playback paused successfully.",
-      "resumeSuccess": "Playback resumed.",
+      "resumeSuccess": "Playback resumed successfully.",
       "skipSuccess": "Track skipped successfully.",
-      "stopSuccess": "Playback stopped and session disconnected.",
-      "volumeSuccess": "Volume level adjusted.",
-      "shuffleSuccess": "Queue tracks shuffled.",
-      "loopSuccess": "Loop mode updated."
+      "stopSuccess": "Playback stopped.",
+      "volumeSuccess": "Volume adjusted.",
+      "shuffleSuccess": "Queue shuffled successfully.",
+      "loopSuccess": "Loop mode updated.",
+      "seekSuccess": "Position updated."
     }
   },
   "errorBoundary": {
@@ -1023,7 +1065,12 @@
     "reason": "Reason",
     "viewModal": "View Transcript",
     "loadError": "Failed to load transcript",
-    "linkCopied": "Link copied to clipboard"
+    "linkCopied": "Link copied to clipboard",
+    "confirmDelete": "Are you sure you want to permanently delete this ticket transcript?",
+    "deleteSuccess": "Transcript deleted successfully.",
+    "noTranscriptsHelp": "When support tickets are closed in Discord, a full transcript will appear here.",
+    "date": "Date",
+    "view": "View Transcript"
   },
   "antiraid": {
     "title": "Anti-Raid Shield & Panic Lockdown",
@@ -1064,7 +1111,17 @@
     "errors": {
       "saveFailed": "Error saving Anti-Raid settings.",
       "lockdownFailed": "Error changing server lockdown state."
-    }
+    },
+    "tabTitle": "Anti-Raid Shield",
+    "shieldTitle": "Anti-Raid Shield & Panic Lockdown",
+    "shieldDescription": "Detects mass join bursts and coordinated bot attacks to protect your server immediately.",
+    "confirmLockdown": "Are you sure you want to enable emergency lockdown? No members will be able to send messages in text channels.",
+    "confirmUnlock": "Do you want to lift the emergency lockdown and restore normal permissions?",
+    "saveSuccess": "Anti-Raid Shield settings saved successfully!",
+    "saveError": "Failed to save Anti-Raid Shield settings.",
+    "lockdownActivated": "Emergency lockdown activated across server channels!",
+    "lockdownLifted": "Emergency lockdown lifted successfully!",
+    "lastRaidDetected": "Last raid detected:"
   },
   "snapshots": {
     "title": "Backups & Server Snapshots",
@@ -1238,6 +1295,22 @@
       "embeds": "Embed Creator",
       "moderation": "Moderation",
       "tickets": "Tickets"
+    }
+  },
+  "birthday": {
+    "months": {
+      "1": "January",
+      "2": "February",
+      "3": "March",
+      "4": "April",
+      "5": "May",
+      "6": "June",
+      "7": "July",
+      "8": "August",
+      "9": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
     }
   }
 }

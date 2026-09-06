@@ -32,7 +32,10 @@
     "inactive": "Inaktiv",
     "delete": "Löschen",
     "moveUp": "Nach oben",
-    "moveDown": "Nach unten"
+    "moveDown": "Nach unten",
+    "saveChanges": "Änderungen speichern",
+    "deleting": "Löschen...",
+    "actions": "Aktionen"
   },
   "nav": {
     "general": "Allgemeine Einstellungen",
@@ -348,7 +351,17 @@
     "panelInactiveDescription": "Du hast noch kein Ticket-Panel in einem Discord-Kanal veröffentlicht.",
     "goToDiscord": "Auf Discord ansehen",
     "contentSection": "Panel-Nachricht",
-    "contentSectionHelp": "Passe den Text und die Schaltfläche an, mit denen Benutzer interagieren."
+    "contentSectionHelp": "Passe den Text und die Schaltfläche an, mit denen Benutzer interagieren.",
+    "tabs": {
+      "panel": "Panel-Konfiguration",
+      "transcripts": "Transkripte-Verlauf"
+    },
+    "selectChannelPlaceholder": "Kanal für das Ticket-Panel auswählen...",
+    "organizationSection": "Zielkanäle & Kategorien",
+    "organizationSectionHelp": "Verwalte Support-Kanal-Kategorien.",
+    "openCategory": "Kategorie für offene Tickets (optional)",
+    "selectCategoryPlaceholder": "Kategorie auswählen...",
+    "permissionsSection": "Support-Berechtigungen & Regeln"
   },
   "leveling": {
     "title": "Levelsystem & Gamification",
@@ -465,7 +478,20 @@
     "subtabs": {
       "insights": "Insights & Analysen",
       "counters": "Zähler-Kanäle"
-    }
+    },
+    "humans": "Menschliche Mitglieder",
+    "bots": "Integrierte Bots",
+    "channelConfig": "Zählerkanal-Konfiguration",
+    "channelConfigHelp": "Wähle Zählerkanäle und deren Kategorie.",
+    "typeMembers": "Gesamtmitglieder",
+    "typeHumans": "Nur Menschen",
+    "typeBots": "Nur Bots",
+    "categoryLabel": "Übergeordnete Kategorie (Optional)",
+    "categoryAuto": "✨ Automatische Kategorie \"📊 Server-Statistiken\" erstellen",
+    "activeChannels": "Aktive Zählerkanäle",
+    "noCountersActive": "Keine Zählerkanäle vorhanden. Klicke auf \"Zählerkanäle erstellen\".",
+    "deleteCounters": "Zähler löschen",
+    "applyCounters": "Zählerkanäle erstellen"
   },
   "jointocreate": {
     "title": "Temporäre Sprachkanäle (Join-to-Create)",
@@ -699,6 +725,20 @@
     "errors": {
       "saveFailed": "Fehler beim Speichern der Konfiguration.",
       "deleteFailed": "Fehler beim Löschen des Eintrags."
+    },
+    "months": {
+      "1": "Januar",
+      "2": "Februar",
+      "3": "März",
+      "4": "April",
+      "5": "Mai",
+      "6": "Juni",
+      "7": "Juli",
+      "8": "August",
+      "9": "September",
+      "10": "Oktober",
+      "11": "November",
+      "12": "Dezember"
     }
   },
   "applications": {
@@ -768,7 +808,8 @@
     "approveAndAssign": "Genehmigen und Rolle zuweisen",
     "approveModalTitle": "Bewerbung genehmigen",
     "denyModalTitle": "Bewerbung ablehnen",
-    "deleteQuestionTooltip": "Frage löschen"
+    "deleteQuestionTooltip": "Frage löschen",
+    "decision": "Entscheidung"
   },
   "embeds": {
     "title": "Embed-Ersteller (WYSIWYG)",
@@ -890,12 +931,13 @@
     "cmdQueue": "Überprüfe und verwalte die anstehenden Titel in Discord.",
     "actions": {
       "pauseSuccess": "Wiedergabe erfolgreich pausiert.",
-      "resumeSuccess": "Wiedergabe fortgesetzt.",
+      "resumeSuccess": "Wiedergabe erfolgreich fortgesetzt.",
       "skipSuccess": "Titel erfolgreich übersprungen.",
-      "stopSuccess": "Wiedergabe gestoppt und Sitzung beendet.",
-      "volumeSuccess": "Lautstärke aktualisiert.",
+      "stopSuccess": "Wiedergabe gestoppt.",
+      "volumeSuccess": "Lautstärke angepasst.",
       "shuffleSuccess": "Warteschlange gemischt.",
-      "loopSuccess": "Schleifenmodus aktualisiert."
+      "loopSuccess": "Wiederholungsmodus aktualisiert.",
+      "seekSuccess": "Position aktualisiert."
     }
   },
   "errorBoundary": {
@@ -1023,7 +1065,12 @@
     "reason": "Grund",
     "viewModal": "Transkript ansehen",
     "loadError": "Fehler beim Laden des Transkripts",
-    "linkCopied": "Link in die Zwischenablage kopiert"
+    "linkCopied": "Link in die Zwischenablage kopiert",
+    "confirmDelete": "Möchtest du dieses Ticket-Transkript wirklich dauerhaft löschen?",
+    "deleteSuccess": "Transkript erfolgreich gelöscht.",
+    "noTranscriptsHelp": "Geschlossene Tickets werden hier als vollständiges Transkript angezeigt.",
+    "date": "Datum",
+    "view": "Transkript anzeigen"
   },
   "antiraid": {
     "title": "Anti-Raid-Schutz & Notfall-Sperrung",
@@ -1064,7 +1111,17 @@
     "errors": {
       "saveFailed": "Fehler beim Speichern der Anti-Raid-Einstellungen.",
       "lockdownFailed": "Fehler beim Ändern des Server-Sperrstatus."
-    }
+    },
+    "tabTitle": "Anti-Raid-Schild",
+    "shieldTitle": "Anti-Raid-Schild & Notfall-Sperre",
+    "shieldDescription": "Erkennt Massenbeitritte und koordinierte Bot-Angriffe zum sofortigen Schutz deiner Community.",
+    "confirmLockdown": "Möchtest du die Notfall-Sperre wirklich aktivieren? Niemand kann in Textkanälen Nachrichten senden.",
+    "confirmUnlock": "Möchtest du die Notfall-Sperre aufheben und normale Berechtigungen wiederherstellen?",
+    "saveSuccess": "Anti-Raid-Einstellungen erfolgreich gespeichert!",
+    "saveError": "Fehler beim Speichern der Anti-Raid-Einstellungen.",
+    "lockdownActivated": "Notfall-Sperre auf dem Server aktiviert!",
+    "lockdownLifted": "Notfall-Sperre erfolgreich aufgehoben!",
+    "lastRaidDetected": "Letzter Angriff erkannt:"
   },
   "snapshots": {
     "title": "Sicherungen & Server-Snapshots",
@@ -1238,6 +1295,22 @@
       "embeds": "Embed-Editor",
       "moderation": "Moderation",
       "tickets": "Tickets"
+    }
+  },
+  "birthday": {
+    "months": {
+      "1": "Januar",
+      "2": "Februar",
+      "3": "März",
+      "4": "April",
+      "5": "Mai",
+      "6": "Juni",
+      "7": "Juli",
+      "8": "August",
+      "9": "September",
+      "10": "Oktober",
+      "11": "November",
+      "12": "Dezember"
     }
   }
 }

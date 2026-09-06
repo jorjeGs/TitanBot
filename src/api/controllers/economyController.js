@@ -50,12 +50,28 @@ export async function getEconomySettings(req, res) {
           results.sort((a, b) => b.netWorth - a.netWorth);
 
           const top10 = results.slice(0, 10);
+          const uncachedTop = top10.filter((item) => !guild.members?.cache?.has(item.userId));
+          if (uncachedTop.length > 0 && typeof guild.members?.fetch === 'function') {
+            await Promise.allSettled(
+              uncachedTop.map((item) => guild.members.fetch(item.userId).catch(() => null))
+            );
+          }
+          const stillUncachedTop = top10.filter(
+            (item) => !guild.members?.cache?.has(item.userId) && typeof req.client?.users?.fetch === 'function'
+          );
+          if (stillUncachedTop.length > 0) {
+            await Promise.allSettled(
+              stillUncachedTop.map((item) => req.client.users.fetch(item.userId).catch(() => null))
+            );
+          }
+
           leaderboard = top10.map((item) => {
             const member = guild.members?.cache?.get(item.userId);
+            const user = member?.user || req.client?.users?.cache?.get(item.userId);
             return {
               userId: item.userId,
-              username: member?.user?.username || `User ${item.userId.slice(-4)}`,
-              displayName: member?.displayName || member?.user?.username || `User ${item.userId.slice(-4)}`,
+              username: user?.username || `User ${item.userId.slice(-4)}`,
+              displayName: member?.displayName || user?.globalName || user?.username || `User ${item.userId.slice(-4)}`,
               wallet: item.wallet,
               bank: item.bank,
               netWorth: item.netWorth,

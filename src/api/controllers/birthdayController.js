@@ -34,12 +34,42 @@ export async function getBirthdays(req, res) {
     const config = await getGuildConfig(req.client, guildId);
     const rawBirthdays = (await getGuildBirthdays(req.client, guildId)) || {};
 
+    const uncachedIds = Object.keys(rawBirthdays).filter(
+      (id) => !guild?.members?.cache?.has(id)
+    );
+
+    if (uncachedIds.length > 0 && typeof guild?.members?.fetch === 'function') {
+      try {
+        if (uncachedIds.length === 1) {
+          await guild.members.fetch(uncachedIds[0]).catch(() => null);
+        } else {
+          await guild.members.fetch({ user: uncachedIds }).catch(async () => {
+            await Promise.allSettled(
+              uncachedIds.map((id) => guild.members.fetch(id).catch(() => null))
+            );
+          });
+        }
+      } catch {
+        // ignore fetch failures
+      }
+    }
+
+    const stillUncached = Object.keys(rawBirthdays).filter(
+      (id) => !guild?.members?.cache?.has(id) && typeof req.client?.users?.fetch === 'function'
+    );
+    if (stillUncached.length > 0) {
+      await Promise.allSettled(
+        stillUncached.map((id) => req.client.users.fetch(id).catch(() => null))
+      );
+    }
+
     const birthdaysList = [];
 
     for (const [userId, data] of Object.entries(rawBirthdays)) {
       if (!data || !data.month || !data.day) continue;
 
       const member = guild?.members?.cache?.get(userId);
+      const user = member?.user || req.client?.users?.cache?.get(userId);
       const daysUntil = calculateDaysUntil(data.month, data.day);
 
       birthdaysList.push({
@@ -47,13 +77,16 @@ export async function getBirthdays(req, res) {
         month: data.month,
         day: data.day,
         monthName: getMonthName(data.month),
-        username: member?.user?.username || `User-${userId.slice(-4)}`,
+        username: user?.username || `User-${userId.slice(-4)}`,
         displayName:
           member?.displayName ||
-          member?.user?.globalName ||
-          member?.user?.username ||
+          user?.globalName ||
+          user?.username ||
           `User-${userId.slice(-4)}`,
-        avatar: member?.user?.displayAvatarURL?.({ size: 64 }) || null,
+        avatar:
+          member?.displayAvatarURL?.({ size: 64 }) ||
+          user?.displayAvatarURL?.({ size: 64 }) ||
+          null,
         daysUntil,
         isToday: daysUntil === 0,
       });

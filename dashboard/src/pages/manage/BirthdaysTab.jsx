@@ -402,7 +402,7 @@ export function BirthdaysTab() {
             {MONTHS.map((m) => {
               const count = monthCounts[m.id] || 0;
               const isSelected = selectedMonth === m.id;
-              const monthLabel = t(`birthday.months.${m.id}`) || m.key.slice(0, 3);
+              const monthLabel = t(`birthdays.months.${m.id}`, { defaultValue: t(`birthday.months.${m.id}`, { defaultValue: m.key }) });
 
               return (
                 <button
@@ -453,7 +453,7 @@ export function BirthdaysTab() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredBirthdays.map((b) => {
               const isDeleting = deletingId === b.userId;
-              const localizedMonth = t(`birthday.months.${b.month}`) || b.monthName;
+              const localizedMonth = t(`birthdays.months.${b.month}`, { defaultValue: t(`birthday.months.${b.month}`, { defaultValue: b.monthName }) });
 
               return (
                 <div

@@ -32,7 +32,10 @@
     "inactive": "Inactivo",
     "delete": "Eliminar",
     "moveUp": "Subir",
-    "moveDown": "Bajar"
+    "moveDown": "Bajar",
+    "saveChanges": "Guardar Cambios",
+    "deleting": "Eliminando...",
+    "actions": "Acciones"
   },
   "nav": {
     "general": "Ajustes Generales",
@@ -348,7 +351,17 @@
     "panelInactiveDescription": "Aún no has publicado un panel de tickets en ningún canal de Discord.",
     "goToDiscord": "Ver en Discord",
     "contentSection": "Mensaje del Panel",
-    "contentSectionHelp": "Personaliza el texto y el botón con el que interactuarán los usuarios."
+    "contentSectionHelp": "Personaliza el texto y el botón con el que interactuarán los usuarios.",
+    "tabs": {
+      "panel": "Configuración del Panel",
+      "transcripts": "Historial de Transcripciones"
+    },
+    "selectChannelPlaceholder": "Selecciona un canal para publicar el panel...",
+    "organizationSection": "Canales y Categorías de Destino",
+    "organizationSectionHelp": "Organiza dónde se crearán y moverán los canales de soporte.",
+    "openCategory": "Categoría para tickets abiertos (opcional)",
+    "selectCategoryPlaceholder": "Seleccionar categoría...",
+    "permissionsSection": "Reglas y Permisos de Soporte"
   },
   "leveling": {
     "title": "Niveles y Gamificación",
@@ -465,7 +478,20 @@
     "subtabs": {
       "insights": "Analíticas y Crecimiento",
       "counters": "Canales Contadores"
-    }
+    },
+    "humans": "Usuarios Humanos",
+    "bots": "Bots Integrados",
+    "channelConfig": "Configuración de Contadores",
+    "channelConfigHelp": "Elige qué contadores deseas crear en tu servidor de Discord y en qué categoría organizarlos.",
+    "typeMembers": "Miembros Totales",
+    "typeHumans": "Solo Humanos",
+    "typeBots": "Solo Bots",
+    "categoryLabel": "Categoría Contenedora (Opcional)",
+    "categoryAuto": "✨ Crear categoría \"📊 Estadísticas\" automáticamente",
+    "activeChannels": "Canales Contadores Activos",
+    "noCountersActive": "No hay canales contadores creados. Haz clic en \"Crear Canales de Estadísticas\" para desplegarlos.",
+    "deleteCounters": "Eliminar Contadores",
+    "applyCounters": "Crear Canales de Estadísticas"
   },
   "jointocreate": {
     "title": "Salas de Voz Temporales (Join-to-Create)",
@@ -699,6 +725,20 @@
     "errors": {
       "saveFailed": "Error al guardar la configuración.",
       "deleteFailed": "Error al eliminar el registro."
+    },
+    "months": {
+      "1": "Enero",
+      "2": "Febrero",
+      "3": "Marzo",
+      "4": "Abril",
+      "5": "Mayo",
+      "6": "Junio",
+      "7": "Julio",
+      "8": "Agosto",
+      "9": "Septiembre",
+      "10": "Octubre",
+      "11": "Noviembre",
+      "12": "Diciembre"
     }
   },
   "applications": {
@@ -768,7 +808,8 @@
     "approveAndAssign": "Aprobar y Asignar Rol",
     "approveModalTitle": "Aprobar Postulación",
     "denyModalTitle": "Denegar Postulación",
-    "deleteQuestionTooltip": "Eliminar pregunta"
+    "deleteQuestionTooltip": "Eliminar pregunta",
+    "decision": "Resolución"
   },
   "embeds": {
     "title": "Creador de Embeds (WYSIWYG)",
@@ -890,12 +931,13 @@
     "cmdQueue": "Consulta y gestiona las canciones en cola desde Discord.",
     "actions": {
       "pauseSuccess": "Reproducción pausada correctamente.",
-      "resumeSuccess": "Reproducción reanudada.",
-      "skipSuccess": "Canción saltada exitosamente.",
-      "stopSuccess": "Reproducción detenida y sesión cerrada.",
-      "volumeSuccess": "Volumen actualizado.",
-      "shuffleSuccess": "Cola de reproducción mezclada.",
-      "loopSuccess": "Modo de bucle actualizado."
+      "resumeSuccess": "Reproducción reanudada correctamente.",
+      "skipSuccess": "Pista saltada correctamente.",
+      "stopSuccess": "Reproducción detenida.",
+      "volumeSuccess": "Volumen ajustado.",
+      "shuffleSuccess": "Cola mezclada aleatoriamente.",
+      "loopSuccess": "Modo de bucle actualizado.",
+      "seekSuccess": "Posición actualizada."
     }
   },
   "errorBoundary": {
@@ -1023,7 +1065,12 @@
     "reason": "Motivo",
     "viewModal": "Ver Transcripción",
     "loadError": "Error al cargar la transcripción",
-    "linkCopied": "Enlace copiado al portapapeles"
+    "linkCopied": "Enlace copiado al portapapeles",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar permanentemente esta transcripción de ticket?",
+    "deleteSuccess": "Transcripción eliminada correctamente.",
+    "noTranscriptsHelp": "Cuando los tickets de soporte sean cerrados en Discord, se generará una transcripción completa aquí.",
+    "date": "Fecha",
+    "view": "Ver Transcripción"
   },
   "antiraid": {
     "title": "Escudo Anti-Raid y Bloqueo de Emergencia",
@@ -1064,7 +1111,17 @@
     "errors": {
       "saveFailed": "Error al guardar los ajustes de Anti-Raid.",
       "lockdownFailed": "Error al modificar el estado de bloqueo del servidor."
-    }
+    },
+    "tabTitle": "Escudo Anti-Raid",
+    "shieldTitle": "Escudo Anti-Raid y Bloqueo de Emergencia",
+    "shieldDescription": "Detecta ráfagas masivas de ingresos y ataques coordinados de bots para proteger tu comunidad al instante.",
+    "confirmLockdown": "¿Estás seguro de que deseas activar el bloqueo de emergencia? Ningún usuario podrá enviar mensajes en canales de texto.",
+    "confirmUnlock": "¿Deseas levantar el bloqueo de emergencia y restaurar los permisos normales?",
+    "saveSuccess": "¡Configuración del Escudo Anti-Raid guardada correctamente!",
+    "saveError": "Error al guardar los ajustes del Escudo Anti-Raid.",
+    "lockdownActivated": "¡Bloqueo de emergencia activado en los canales del servidor!",
+    "lockdownLifted": "¡Bloqueo de emergencia levantado con éxito!",
+    "lastRaidDetected": "Último ataque detectado:"
   },
   "snapshots": {
     "title": "Copias de Seguridad e Instantáneas",
@@ -1238,6 +1295,22 @@
       "embeds": "Creador de Embeds",
       "moderation": "Moderación",
       "tickets": "Tickets"
+    }
+  },
+  "birthday": {
+    "months": {
+      "1": "Enero",
+      "2": "Febrero",
+      "3": "Marzo",
+      "4": "Abril",
+      "5": "Mayo",
+      "6": "Junio",
+      "7": "Julio",
+      "8": "Agosto",
+      "9": "Septiembre",
+      "10": "Octubre",
+      "11": "Noviembre",
+      "12": "Diciembre"
     }
   }
 }
