@@ -394,9 +394,10 @@ export default function AiAssistantTab() {
                   onChange={(e) => setConfig({ ...config, model: e.target.value })}
                   className="w-full bg-discord-dark border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-discord-blurple transition-colors"
                 >
-                  <option value="gemini-2.0-flash">Google Gemini 2.0 Flash (Recomendado)</option>
-                  <option value="gemini-1.5-flash">Google Gemini 1.5 Flash</option>
-                  <option value="gemini-1.5-pro">Google Gemini 1.5 Pro</option>
+                  <option value="gemini-3.5-flash-lite">Google Gemini 3.5 Flash Lite (Recomendado)</option>
+                  <option value="gemini-3.1-flash-lite">Google Gemini 3.1 Flash Lite</option>
+                  <option value="gemini-3.6-flash">Google Gemini 3.6 Flash</option>
+                  <option value="gemini-2.0-flash">Google Gemini (Compatibilidad / Auto-actualizado)</option>
                 </select>
               </div>
 

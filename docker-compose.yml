@@ -21,6 +21,7 @@ services:
       - AUTO_MIGRATE=true
       - LOG_LEVEL=${LOG_LEVEL:-warn}
       - LAVALINK_NODES_FILE=lavalink/nodes.json
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - PORT=3000
       - WEB_HOST=0.0.0.0
     ports:

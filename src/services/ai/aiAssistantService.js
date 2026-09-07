@@ -68,25 +68,37 @@ export function assembleSystemPrompt(aiConfig = {}, guild = {}) {
   return context;
 }
 
+const MODEL_MAPPING = {
+  'gemini-2.0-flash': 'gemini-3.5-flash-lite',
+  'gemini-1.5-flash': 'gemini-3.5-flash-lite',
+  'gemini-1.5-pro': 'gemini-3.1-flash-lite',
+  'gemini-2.5-flash': 'gemini-3.5-flash-lite',
+  'gemini-2.5-flash-lite': 'gemini-3.5-flash-lite',
+};
+
 /**
  * Call Google Gemini API
  */
 export async function callGeminiApi({
   apiKey,
-  model = 'gemini-2.0-flash',
+  model = 'gemini-3.5-flash-lite',
   systemInstruction,
   userMessage,
   maxOutputTokens = 500,
   temperature = 0.7,
 }) {
-  const resolvedApiKey = apiKey || process.env.GEMINI_API_KEY;
+  const resolvedApiKey = (apiKey !== undefined ? apiKey : process.env.GEMINI_API_KEY)?.trim();
 
   if (!resolvedApiKey) {
     logger.warn('GEMINI_API_KEY is not configured in environment or guild settings');
     return '🤖 **TitanBot AI:** El asistente inteligente no tiene una clave de API configurada en este momento. Por favor, solicita a un administrador del servidor que agregue la clave de Google Gemini en la configuración.';
   }
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${resolvedApiKey}`;
+  const primaryModel = MODEL_MAPPING[model] || model || 'gemini-3.5-flash-lite';
+  const modelsToTry = [primaryModel];
+  if (primaryModel !== 'gemini-3.1-flash-lite') {
+    modelsToTry.push('gemini-3.1-flash-lite');
+  }
 
   const payload = {
     contents: [
@@ -104,29 +116,50 @@ export async function callGeminiApi({
     },
   };
 
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-    signal: AbortSignal.timeout(15000), // 15s timeout
-  });
+  let lastError;
+  for (const currentModel of modelsToTry) {
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(currentModel)}:generateContent?key=${resolvedApiKey}`;
 
-  if (!response.ok) {
-    const errorText = await response.text().catch(() => '');
-    logger.error(`Gemini API error (Status ${response.status}):`, errorText);
-    throw new Error(`Gemini API error: ${response.statusText} (${response.status})`);
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(15000), // 15s timeout
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => '');
+        logger.warn(`Gemini API returned status ${response.status} for model ${currentModel}: ${errorText}`);
+
+        // If model unavailable (404) or high demand (503), retry with fallback model if available
+        if ((response.status === 404 || response.status === 503) && currentModel !== modelsToTry[modelsToTry.length - 1]) {
+          continue;
+        }
+        throw new Error(`Gemini API error: ${response.statusText} (${response.status})`);
+      }
+
+      const data = await response.json();
+      const candidate = data?.candidates?.[0];
+      const responseText = candidate?.content?.parts?.[0]?.text;
+
+      if (!responseText) {
+        logger.warn('Empty or filtered response received from Gemini API');
+        return '🤖 No pude generar una respuesta en este momento. Por favor formula tu pregunta de otra manera.';
+      }
+
+      return responseText.trim();
+    } catch (err) {
+      lastError = err;
+      if (currentModel !== modelsToTry[modelsToTry.length - 1]) {
+        continue;
+      }
+      logger.error('Gemini API request failed:', err);
+      throw err;
+    }
   }
 
-  const data = await response.json();
-  const candidate = data?.candidates?.[0];
-  const responseText = candidate?.content?.parts?.[0]?.text;
-
-  if (!responseText) {
-    logger.warn('Empty or filtered response received from Gemini API');
-    return '🤖 No pude generar una respuesta en este momento. Por favor formula tu pregunta de otra manera.';
-  }
-
-  return responseText.trim();
+  throw lastError || new Error('Gemini API call failed');
 }
 
 /**
