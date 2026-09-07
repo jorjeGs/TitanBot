@@ -107,9 +107,11 @@ export async function callGeminiApi({
         parts: [{ text: userMessage }],
       },
     ],
-    systemInstruction: {
-      parts: [{ text: systemInstruction }],
-    },
+    ...(systemInstruction?.trim() ? {
+      systemInstruction: {
+        parts: [{ text: systemInstruction.trim() }],
+      },
+    } : {}),
     generationConfig: {
       temperature: Math.max(0, Math.min(1, temperature)),
       maxOutputTokens: Math.max(50, Math.min(2048, maxOutputTokens)),
