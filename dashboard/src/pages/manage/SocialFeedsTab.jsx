@@ -97,7 +97,7 @@ const VARIABLE_TAGS = [
 export default function SocialFeedsTab() {
   const { t } = useTranslation();
   const { guildId } = useParams();
-  const { currentGuild } = useGuild();
+  const { currentGuild, channels: contextChannels = [], roles: contextRoles = [] } = useGuild() || {};
 
   const [loading, setLoading] = useState(true);
   const [feeds, setFeeds] = useState([]);
@@ -141,14 +141,27 @@ export default function SocialFeedsTab() {
       ]);
 
       setFeeds(feedsRes.data?.feeds || []);
-      setChannels(channelsRes.channels?.filter((c) => c.type === 0 || c.type === 5) || []);
-      setRoles(rolesRes.roles || []);
+      const validChannels = (channelsRes.channels && channelsRes.channels.length > 0)
+        ? channelsRes.channels.filter((c) => c.type === 0 || c.type === 5 || !c.type)
+        : (contextChannels.filter((c) => c.type === 0 || c.type === 5 || !c.type));
+      setChannels(validChannels);
+      setRoles(rolesRes.roles?.length ? rolesRes.roles : contextRoles);
     } catch (err) {
       showNotification('error', err.message || 'Error al cargar las alertas sociales');
     } finally {
       setLoading(false);
     }
   };
+
+  // Sync with context if already loaded by layout
+  useEffect(() => {
+    if (contextChannels && contextChannels.length > 0 && channels.length === 0) {
+      setChannels(contextChannels.filter((c) => c.type === 0 || c.type === 5 || !c.type));
+    }
+    if (contextRoles && contextRoles.length > 0 && roles.length === 0) {
+      setRoles(contextRoles);
+    }
+  }, [contextChannels, contextRoles, channels.length, roles.length]);
 
   useEffect(() => {
     if (guildId) {
@@ -718,11 +731,15 @@ export default function SocialFeedsTab() {
                     onChange={(e) => setFormData({ ...formData, targetChannelId: e.target.value })}
                     className="w-full bg-discord-dark border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-discord-blurple transition-colors"
                   >
-                    {channels.map((channel) => (
-                      <option key={channel.id} value={channel.id}>
-                        #{channel.name}
-                      </option>
-                    ))}
+                    {channels.length === 0 ? (
+                      <option value="">No hay canales disponibles</option>
+                    ) : (
+                      channels.map((channel) => (
+                        <option key={channel.id} value={channel.id}>
+                          #{channel.name}
+                        </option>
+                      ))
+                    )}
                   </select>
                 </div>
 

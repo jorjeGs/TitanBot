@@ -682,7 +682,7 @@ export function EmbedCreatorTab() {
                   {t('embeds.channelLabel', 'Canal de Destino')} <span className="text-red-400">*</span>
                 </label>
                 <ChannelSelect
-                  channels={channels || []}
+                  channels={(channels || []).filter((c) => c.type === 0 || c.type === 5 || !c.type)}
                   value={targetChannelId}
                   onChange={setTargetChannelId}
                   placeholder={t('embeds.selectChannelPlaceholder', 'Seleccionar canal de texto o anuncios...')}

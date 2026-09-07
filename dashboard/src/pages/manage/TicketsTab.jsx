@@ -64,7 +64,7 @@ export function TicketsTab() {
   const [copiedId, setCopiedId] = useState(null);
 
   // Filter text-only channels vs category channels
-  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === undefined);
+  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === 5 || c.type === undefined);
   const categoryChannels = (channels || []).filter((c) => c.type === 4);
 
   const fetchTicketSettings = async () => {

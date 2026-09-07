@@ -53,7 +53,7 @@ export function LevelingTab() {
   const [newRewardRoleId, setNewRewardRoleId] = useState('');
 
   // Filter text channels for announcements
-  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === undefined);
+  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === 5 || c.type === undefined);
 
   const fetchLevelingData = async () => {
     try {

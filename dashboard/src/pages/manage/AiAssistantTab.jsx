@@ -49,7 +49,7 @@ const SYSTEM_PROMPT_PRESETS = [
 export default function AiAssistantTab() {
   const { t } = useTranslation();
   const { guildId } = useParams();
-  const { currentGuild } = useGuild();
+  const { currentGuild, channels: contextChannels = [], roles: contextRoles = [] } = useGuild() || {};
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -114,14 +114,27 @@ export default function AiAssistantTab() {
         }));
       }
 
-      setChannels(channelsRes.channels?.filter((c) => c.type === 0 || c.type === 5) || []);
-      setRoles(rolesRes.roles || []);
+      const validChannels = (channelsRes.channels && channelsRes.channels.length > 0)
+        ? channelsRes.channels.filter((c) => c.type === 0 || c.type === 5 || !c.type)
+        : (contextChannels.filter((c) => c.type === 0 || c.type === 5 || !c.type));
+      setChannels(validChannels);
+      setRoles(rolesRes.roles?.length ? rolesRes.roles : contextRoles);
     } catch (err) {
       showNotification('error', err.message || 'Error al cargar el asistente IA');
     } finally {
       setLoading(false);
     }
   };
+
+  // Sync with context if already loaded by layout
+  useEffect(() => {
+    if (contextChannels && contextChannels.length > 0 && channels.length === 0) {
+      setChannels(contextChannels.filter((c) => c.type === 0 || c.type === 5 || !c.type));
+    }
+    if (contextRoles && contextRoles.length > 0 && roles.length === 0) {
+      setRoles(contextRoles);
+    }
+  }, [contextChannels, contextRoles, channels.length, roles.length]);
 
   useEffect(() => {
     if (guildId) {

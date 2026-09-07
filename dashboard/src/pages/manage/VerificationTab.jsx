@@ -61,7 +61,8 @@ export function VerificationTab() {
     draftConfig.autoRole || (Array.isArray(draftConfig.autoRoles) && draftConfig.autoRoles.length > 0)
   );
 
-  const selectedChannel = channels.find((c) => c.id === verification.channelId);
+  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === 5 || !c.type);
+  const selectedChannel = (channels || []).find((c) => c.id === verification.channelId);
 
   const handlePublishPanel = async () => {
     setNotification(null);
@@ -247,7 +248,7 @@ export function VerificationTab() {
             <ChannelSelect
               label={t('verification.channel')}
               helpText={t('verification.channelHelp')}
-              channels={channels}
+              channels={textChannels}
               value={verification.channelId}
               onChange={(val) => updateVerificationField('channelId', val)}
               disabled={!isEnabled}

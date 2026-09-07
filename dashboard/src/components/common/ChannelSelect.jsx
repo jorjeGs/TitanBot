@@ -2,7 +2,7 @@ import React from 'react';
 import { Hash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-export function ChannelSelect({ channels, value, onChange, label, helpText, disabled = false }) {
+export function ChannelSelect({ channels, value, onChange, label, helpText, disabled = false, placeholder }) {
   const { t } = useTranslation();
 
   return (
@@ -18,12 +18,15 @@ export function ChannelSelect({ channels, value, onChange, label, helpText, disa
           disabled={disabled}
           className="w-full pl-9 pr-8 py-2.5 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition-colors disabled:opacity-50 appearance-none"
         >
-          <option value="">-- {t('common.none')} --</option>
-          {channels.map((channel) => (
-            <option key={channel.id} value={channel.id}>
-              {channel.name}
-            </option>
-          ))}
+          <option value="">{placeholder ? `-- ${placeholder} --` : `-- ${t('common.none')} --`}</option>
+          {(channels || []).map((channel) => {
+            const prefix = channel.type === 2 ? '🔊 ' : channel.type === 4 ? '📁 ' : channel.type === 5 ? '📢 ' : '# ';
+            return (
+              <option key={channel.id} value={channel.id}>
+                {prefix}{channel.name}
+              </option>
+            );
+          })}
         </select>
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
           <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">

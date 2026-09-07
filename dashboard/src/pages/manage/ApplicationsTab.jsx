@@ -62,7 +62,7 @@ export function ApplicationsTab() {
   const [cooldownHours, setCooldownHours] = useState(24);
 
   // Filter text channels
-  const textChannels = (channels || []).filter((c) => c.type === 0 || !c.type);
+  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === 5 || !c.type);
 
   const fetchAppData = async () => {
     try {

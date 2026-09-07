@@ -1182,7 +1182,7 @@ export function ModerationTab() {
                   {t('antiraid.alertChannel') || 'Canal de Alertas'}
                 </label>
                 <ChannelSelect
-                  channels={(channels || []).filter((c) => c.type === 0 || c.type === undefined)}
+                  channels={(channels || []).filter((c) => c.type === 0 || c.type === 5 || c.type === undefined)}
                   value={antiRaidConfig.alertChannelId}
                   onChange={(val) => setAntiRaidConfig((prev) => ({ ...prev, alertChannelId: val }))}
                   placeholder={t('antiraid.selectAlertChannel') || 'Seleccionar canal de avisos...'}

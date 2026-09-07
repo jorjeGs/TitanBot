@@ -55,7 +55,7 @@ export function GiveawaysTab() {
   }, []);
 
   // Filter text channels
-  const textChannels = (channels || []).filter((c) => c.type === 0 || !c.type);
+  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === 5 || !c.type);
 
   // Set default channel when channels load
   useEffect(() => {

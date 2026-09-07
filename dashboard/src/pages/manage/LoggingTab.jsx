@@ -35,7 +35,7 @@ export function LoggingTab() {
 
   // Filter text-only channels for logging destinations
   const textChannels = (channels || []).filter(
-    (c) => c.type === 0 || c.type === undefined
+    (c) => c.type === 0 || c.type === 5 || c.type === undefined
   );
 
   const setLoggingEnabled = (val) => {

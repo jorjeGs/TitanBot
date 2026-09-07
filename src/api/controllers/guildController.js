@@ -108,14 +108,12 @@ export function getGuildChannels(req, res) {
   const channels = channelList
     .filter((c) => {
       if (c.isDMBased?.() || c.isThread?.()) return false;
-      const isText = typeof c.isTextBased === 'function' ? c.isTextBased() : (c.type === 0);
-      const isCategory = c.type === 4;
-      return isText || isCategory;
+      return true;
     })
     .map((c) => ({
       id: c.id,
       name: c.name,
-      type: typeof c.type === 'number' ? c.type : (c.isTextBased?.() ? 0 : 0),
+      type: typeof c.type === 'number' ? c.type : (c.isVoiceBased?.() ? 2 : (c.isTextBased?.() ? 0 : 0)),
       position: c.position || 0,
       parentId: c.parentId || null,
     }))

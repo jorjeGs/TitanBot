@@ -35,8 +35,9 @@ export function WelcomeTab() {
   if (!draftConfig) return null;
 
   // Selected Channels
-  const selectedWelcomeChannel = channels.find((c) => c.id === draftConfig.welcomeChannel);
-  const selectedGoodbyeChannel = channels.find((c) => c.id === draftConfig.goodbyeChannelId);
+  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === 5 || !c.type);
+  const selectedWelcomeChannel = (channels || []).find((c) => c.id === draftConfig.welcomeChannel);
+  const selectedGoodbyeChannel = (channels || []).find((c) => c.id === draftConfig.goodbyeChannelId);
 
   // Welcome settings
   const welcomeEnabled = draftConfig.welcomeEnabled !== false;
@@ -204,7 +205,7 @@ export function WelcomeTab() {
                 <ChannelSelect
                   label={t('welcome.channel')}
                   helpText={t('welcome.channelHelp')}
-                  channels={channels}
+                  channels={textChannels}
                   value={draftConfig.welcomeChannel}
                   onChange={(val) => updateDraft('welcomeChannel', val)}
                 />
@@ -422,7 +423,7 @@ export function WelcomeTab() {
                 <ChannelSelect
                   label={t('welcome.goodbyeChannel', 'Canal de despedidas')}
                   helpText={t('welcome.goodbyeChannelHelp', 'Canal donde se publicará cuando un miembro salga.')}
-                  channels={channels}
+                  channels={textChannels}
                   value={draftConfig.goodbyeChannelId}
                   onChange={(val) => updateDraft('goodbyeChannelId', val)}
                 />

@@ -157,7 +157,8 @@ export function RolesTab() {
     }
   };
 
-  const selectedChannel = channels.find((c) => c.id === channelId);
+  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === 5 || !c.type);
+  const selectedChannel = (channels || []).find((c) => c.id === channelId);
 
   return (
     <div className="space-y-8">
@@ -216,7 +217,7 @@ export function RolesTab() {
             <ChannelSelect
               label={t('roles.channel')}
               helpText={t('roles.channelHelp')}
-              channels={channels}
+              channels={textChannels}
               value={channelId}
               onChange={(val) => setChannelId(val)}
             />

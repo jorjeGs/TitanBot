@@ -61,7 +61,7 @@ export function BirthdaysTab() {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Filter text channels
-  const textChannels = (channels || []).filter((c) => c.type === 0 || !c.type);
+  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === 5 || !c.type);
 
   const fetchBirthdaysData = async () => {
     try {
