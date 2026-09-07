@@ -123,7 +123,8 @@ export function SnapshotsTab() {
   // Handler: Download JSON export
   const handleExportJson = async (snapshot) => {
     try {
-      const res = await fetch(`/api/guilds/${guildId}/snapshots/${snapshot.id}/export`, {
+      const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+      const res = await fetch(`${base}/api/guilds/${guildId}/snapshots/${snapshot.id}/export`, {
         credentials: 'include',
       });
       if (!res.ok) throw new Error('Failed to export snapshot');

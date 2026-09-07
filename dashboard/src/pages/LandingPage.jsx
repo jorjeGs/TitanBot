@@ -10,7 +10,8 @@ export function LandingPage() {
   const [stats, setStats] = useState({ guildCount: 0, commandCount: 100, isOnline: true });
 
   useEffect(() => {
-    fetch('/ready')
+    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+    fetch(`${base}/ready`)
       .then((res) => res.json())
       .then((data) => {
         if (data.metrics) {

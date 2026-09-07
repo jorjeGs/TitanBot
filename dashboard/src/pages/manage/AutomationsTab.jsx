@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useGuild } from '../../contexts/GuildContext';
+import { apiFetch } from '../../api/client';
 import {
   Zap,
   Pin,
@@ -42,6 +44,7 @@ const VARIABLE_PILLS = [
 export default function AutomationsTab() {
   const { guildId } = useParams();
   const { t } = useTranslation();
+  const { channels: contextChannels = [], roles: contextRoles = [] } = useGuild() || {};
 
   // Active Sub-tab
   const [subTab, setSubTab] = useState('sticky'); // 'sticky' | 'scheduled' | 'autoresponder'
@@ -108,30 +111,48 @@ export default function AutomationsTab() {
     setTimeout(() => setToast(null), 4000);
   };
 
-  // Fetch all initial data
+  // Helper to extract text channels (type 0=Text, 5=Announcement, or text-based)
+  const filterTextChannels = (channelList) => {
+    return (channelList || []).filter(
+      (c) => c.type === 0 || c.type === 5 || c.type === 'GUILD_TEXT' || c.type === 'GUILD_ANNOUNCEMENT' || (!c.type && c.name)
+    );
+  };
+
+  // Fetch all initial data using universal apiFetch
   useEffect(() => {
     async function loadData() {
       try {
         setLoading(true);
         const [autoRes, chRes, rlRes] = await Promise.all([
-          fetch(`/api/guilds/${guildId}/automations`, { credentials: 'include' }).then((r) => r.json()),
-          fetch(`/api/guilds/${guildId}/channels`, { credentials: 'include' }).then((r) => r.json()),
-          fetch(`/api/guilds/${guildId}/roles`, { credentials: 'include' }).then((r) => r.json()),
+          apiFetch(`/guilds/${guildId}/automations`).catch(() => ({ success: false })),
+          contextChannels && contextChannels.length > 0
+            ? Promise.resolve({ success: true, channels: contextChannels })
+            : apiFetch(`/guilds/${guildId}/channels`).catch(() => ({ success: false, channels: [] })),
+          contextRoles && contextRoles.length > 0
+            ? Promise.resolve({ success: true, roles: contextRoles })
+            : apiFetch(`/guilds/${guildId}/roles`).catch(() => ({ success: false, roles: [] })),
         ]);
 
-        if (autoRes.success) {
+        if (autoRes?.success && autoRes.data) {
           setStickyList(autoRes.data.stickyMessages || []);
           setScheduledList(autoRes.data.scheduledMessages || []);
           setAutoResponders(autoRes.data.autoResponders || []);
         }
 
-        const validChannels = (chRes.data || []).filter((c) => c.type === 0 || c.type === 'GUILD_TEXT');
+        const rawChannels = (chRes?.channels && chRes.channels.length > 0)
+          ? chRes.channels
+          : ((chRes?.data && chRes.data.length > 0) ? chRes.data : (contextChannels || []));
+        const validChannels = filterTextChannels(rawChannels);
         setChannels(validChannels);
-        setRoles(rlRes.data || []);
+
+        const rawRoles = (rlRes?.roles && rlRes.roles.length > 0)
+          ? rlRes.roles
+          : ((rlRes?.data && rlRes.data.length > 0) ? rlRes.data : (contextRoles || []));
+        setRoles(rawRoles);
 
         if (validChannels.length > 0) {
-          setEditingSticky((prev) => ({ ...prev, channelId: validChannels[0].id }));
-          setEditingScheduled((prev) => ({ ...prev, channelId: validChannels[0].id }));
+          setEditingSticky((prev) => ({ ...prev, channelId: prev.channelId || validChannels[0].id }));
+          setEditingScheduled((prev) => ({ ...prev, channelId: prev.channelId || validChannels[0].id }));
         }
       } catch (err) {
         showToast(t('automations.errors.loadFailed', 'Error al cargar datos de automatizaciones'), 'error');
@@ -145,16 +166,24 @@ export default function AutomationsTab() {
     }
   }, [guildId]);
 
+  // Sync with contextChannels if loaded subsequently by DashboardLayout
+  useEffect(() => {
+    if (contextChannels && contextChannels.length > 0) {
+      const validChannels = filterTextChannels(contextChannels);
+      setChannels((prev) => (prev.length === 0 ? validChannels : prev));
+      setEditingSticky((prev) => ({ ...prev, channelId: prev.channelId || validChannels[0]?.id || '' }));
+      setEditingScheduled((prev) => ({ ...prev, channelId: prev.channelId || validChannels[0]?.id || '' }));
+    }
+  }, [contextChannels]);
+
   // Handler to toggle Sticky message on/off
   const toggleStickyEnabled = async (item) => {
     const updated = { ...item, enabled: !item.enabled };
     try {
-      const res = await fetch(`/api/guilds/${guildId}/automations/sticky`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/sticky`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(updated),
-      }).then((r) => r.json());
+        body: updated,
+      });
 
       if (res.success) {
         setStickyList((prev) => prev.map((s) => (s.id === item.id ? updated : s)));
@@ -169,10 +198,9 @@ export default function AutomationsTab() {
   const deleteSticky = async (id) => {
     if (!window.confirm(t('automations.confirmDelete', '¿Deseas eliminar esta automatización?'))) return;
     try {
-      const res = await fetch(`/api/guilds/${guildId}/automations/sticky/${id}`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/sticky/${id}`, {
         method: 'DELETE',
-        credentials: 'include',
-      }).then((r) => r.json());
+      });
 
       if (res.success) {
         setStickyList((prev) => prev.filter((s) => s.id !== id));
@@ -191,12 +219,10 @@ export default function AutomationsTab() {
     }
     try {
       setSaving(true);
-      const res = await fetch(`/api/guilds/${guildId}/automations/sticky`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/sticky`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(editingSticky),
-      }).then((r) => r.json());
+        body: editingSticky,
+      });
 
       if (res.success) {
         setStickyList((prev) => {
@@ -213,8 +239,8 @@ export default function AutomationsTab() {
       } else {
         showToast(res.error || t('automations.errors.saveFailed', 'Error al guardar'), 'error');
       }
-    } catch {
-      showToast(t('automations.errors.saveFailed', 'Error al guardar'), 'error');
+    } catch (err) {
+      showToast(err.message || t('automations.errors.saveFailed', 'Error al guardar'), 'error');
     } finally {
       setSaving(false);
     }
@@ -224,12 +250,10 @@ export default function AutomationsTab() {
   const toggleScheduledEnabled = async (item) => {
     const updated = { ...item, enabled: !item.enabled };
     try {
-      const res = await fetch(`/api/guilds/${guildId}/automations/scheduled`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/scheduled`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(updated),
-      }).then((r) => r.json());
+        body: updated,
+      });
 
       if (res.success) {
         setScheduledList((prev) => prev.map((s) => (s.id === item.id ? updated : s)));
@@ -244,10 +268,9 @@ export default function AutomationsTab() {
   const deleteScheduled = async (id) => {
     if (!window.confirm(t('automations.confirmDelete', '¿Deseas eliminar este aviso?'))) return;
     try {
-      const res = await fetch(`/api/guilds/${guildId}/automations/scheduled/${id}`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/scheduled/${id}`, {
         method: 'DELETE',
-        credentials: 'include',
-      }).then((r) => r.json());
+      });
 
       if (res.success) {
         setScheduledList((prev) => prev.filter((s) => s.id !== id));
@@ -261,18 +284,17 @@ export default function AutomationsTab() {
   // Test trigger Scheduled message now
   const triggerScheduledNow = async (id) => {
     try {
-      const res = await fetch(`/api/guilds/${guildId}/automations/scheduled/${id}/trigger`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/scheduled/${id}/trigger`, {
         method: 'POST',
-        credentials: 'include',
-      }).then((r) => r.json());
+      });
 
       if (res.success) {
         showToast(t('automations.success.dispatched', '¡Aviso enviado a Discord con éxito!'));
       } else {
         showToast(res.error || t('automations.errors.dispatchFailed', 'Error al enviar aviso'), 'error');
       }
-    } catch {
-      showToast(t('automations.errors.dispatchFailed', 'Error al enviar aviso'), 'error');
+    } catch (err) {
+      showToast(err.message || t('automations.errors.dispatchFailed', 'Error al enviar aviso'), 'error');
     }
   };
 
@@ -284,12 +306,10 @@ export default function AutomationsTab() {
     }
     try {
       setSaving(true);
-      const res = await fetch(`/api/guilds/${guildId}/automations/scheduled`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/scheduled`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(editingScheduled),
-      }).then((r) => r.json());
+        body: editingScheduled,
+      });
 
       if (res.success) {
         setScheduledList((prev) => {
@@ -306,8 +326,8 @@ export default function AutomationsTab() {
       } else {
         showToast(res.error || t('automations.errors.saveFailed', 'Error al guardar'), 'error');
       }
-    } catch {
-      showToast(t('automations.errors.saveFailed', 'Error al guardar'), 'error');
+    } catch (err) {
+      showToast(err.message || t('automations.errors.saveFailed', 'Error al guardar'), 'error');
     } finally {
       setSaving(false);
     }
@@ -317,12 +337,10 @@ export default function AutomationsTab() {
   const toggleArEnabled = async (item) => {
     const updated = { ...item, enabled: !item.enabled };
     try {
-      const res = await fetch(`/api/guilds/${guildId}/automations/auto-responders`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/auto-responders`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(updated),
-      }).then((r) => r.json());
+        body: updated,
+      });
 
       if (res.success) {
         setAutoResponders((prev) => prev.map((s) => (s.id === item.id ? updated : s)));
@@ -337,10 +355,9 @@ export default function AutomationsTab() {
   const deleteAr = async (id) => {
     if (!window.confirm(t('automations.confirmDelete', '¿Deseas eliminar este disparador?'))) return;
     try {
-      const res = await fetch(`/api/guilds/${guildId}/automations/auto-responders/${id}`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/auto-responders/${id}`, {
         method: 'DELETE',
-        credentials: 'include',
-      }).then((r) => r.json());
+      });
 
       if (res.success) {
         setAutoResponders((prev) => prev.filter((s) => s.id !== id));
@@ -359,12 +376,10 @@ export default function AutomationsTab() {
     }
     try {
       setSaving(true);
-      const res = await fetch(`/api/guilds/${guildId}/automations/auto-responders`, {
+      const res = await apiFetch(`/guilds/${guildId}/automations/auto-responders`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(editingAr),
-      }).then((r) => r.json());
+        body: editingAr,
+      });
 
       if (res.success) {
         setAutoResponders((prev) => {
@@ -381,8 +396,8 @@ export default function AutomationsTab() {
       } else {
         showToast(res.error || t('automations.errors.saveFailed', 'Error al guardar'), 'error');
       }
-    } catch {
-      showToast(t('automations.errors.saveFailed', 'Error al guardar'), 'error');
+    } catch (err) {
+      showToast(err.message || t('automations.errors.saveFailed', 'Error al guardar'), 'error');
     } finally {
       setSaving(false);
     }
@@ -892,11 +907,15 @@ export default function AutomationsTab() {
                     onChange={(e) => setEditingSticky({ ...editingSticky, channelId: e.target.value })}
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500"
                   >
-                    {channels.map((ch) => (
-                      <option key={ch.id} value={ch.id}>
-                        #{ch.name}
-                      </option>
-                    ))}
+                    {channels.length === 0 ? (
+                      <option value="">{t('common.noChannels', 'No hay canales disponibles')}</option>
+                    ) : (
+                      channels.map((ch) => (
+                        <option key={ch.id} value={ch.id}>
+                          #{ch.name}
+                        </option>
+                      ))
+                    )}
                   </select>
                 </div>
 
@@ -1160,11 +1179,15 @@ export default function AutomationsTab() {
                     onChange={(e) => setEditingScheduled({ ...editingScheduled, channelId: e.target.value })}
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500"
                   >
-                    {channels.map((ch) => (
-                      <option key={ch.id} value={ch.id}>
-                        #{ch.name}
-                      </option>
-                    ))}
+                    {channels.length === 0 ? (
+                      <option value="">{t('common.noChannels', 'No hay canales disponibles')}</option>
+                    ) : (
+                      channels.map((ch) => (
+                        <option key={ch.id} value={ch.id}>
+                          #{ch.name}
+                        </option>
+                      ))
+                    )}
                   </select>
                 </div>
 
