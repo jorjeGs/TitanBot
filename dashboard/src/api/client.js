@@ -10,9 +10,11 @@ export async function apiFetch(endpoint, options = {}) {
     'Accept': 'application/json',
   };
 
-  if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
+  if (options.body && !(options.body instanceof FormData)) {
     defaultHeaders['Content-Type'] = 'application/json';
-    options.body = JSON.stringify(options.body);
+    if (typeof options.body === 'object') {
+      options.body = JSON.stringify(options.body);
+    }
   }
 
   const response = await fetch(url, {
@@ -33,7 +35,38 @@ export async function apiFetch(endpoint, options = {}) {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(data.message || data.error || `HTTP ${response.status}`);
+    let errorMsg = data.message || data.error || `HTTP ${response.status}`;
+
+    // If message contains raw Zod json or debug dump, convert to readable text
+    if (typeof errorMsg === 'string') {
+      if (errorMsg.startsWith('Validation failed: [')) {
+        try {
+          const raw = errorMsg.replace(/^Validation failed:\s*/, '');
+          const issues = JSON.parse(raw);
+          if (Array.isArray(issues) && issues.length > 0) {
+            errorMsg = issues.map((iss) => {
+              const field = iss.path?.length > 0 ? `El campo "${iss.path.join('.')}"` : 'El formulario';
+              return `${field}: ${iss.message === 'Required' ? 'es obligatorio' : iss.message}`;
+            }).join('. ');
+          }
+        } catch {}
+      } else if (errorMsg === 'Required') {
+        errorMsg = 'Faltan campos obligatorios en el formulario.';
+      }
+    }
+
+    // If issues array was returned directly in JSON payload
+    if (Array.isArray(data.issues) && data.issues.length > 0) {
+      errorMsg = data.issues.map((iss) => {
+        const field = iss.path?.length > 0 ? `"${iss.path.join('.')}"` : 'Formulario';
+        return `${field}: ${iss.message === 'Required' ? 'es obligatorio' : iss.message}`;
+      }).join(' • ');
+    }
+
+    const err = new Error(errorMsg);
+    err.status = response.status;
+    err.data = data;
+    throw err;
   }
 
   return data;

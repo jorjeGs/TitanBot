@@ -7,7 +7,7 @@ import {
 } from 'discord.js';
 import { db } from '../../utils/database/wrapper.js';
 import { logger } from '../../utils/logger.js';
-import { InteractiveEmbedPayloadSchema } from '../../utils/schemas.js';
+import { InteractiveEmbedPayloadSchema, formatZodError } from '../../utils/schemas.js';
 
 /**
  * Maps string button styles to Discord.js ButtonStyle enum
@@ -179,30 +179,36 @@ export function buildDiscordEmbed(embedData = {}) {
 export async function sendInteractiveEmbed(client, guildId, payload) {
   const parsed = InteractiveEmbedPayloadSchema.safeParse(payload);
   if (!parsed.success) {
-    throw new Error(`Validation failed: ${parsed.error.message}`);
+    const errorMsg = formatZodError(parsed.error);
+    const err = new Error(errorMsg);
+    err.name = 'ValidationError';
+    err.issues = parsed.error.issues;
+    throw err;
   }
 
   const { targetChannelId, content, embed: rawEmbed, buttons } = parsed.data;
 
   const guild = client.guilds.cache.get(guildId);
   if (!guild) {
-    throw new Error('Guild not found or bot is not in the guild');
+    throw new Error('No se encontró el servidor o TitanBot no es miembro del mismo.');
   }
 
   const channel = guild.channels.cache.get(targetChannelId) || (await guild.channels.fetch(targetChannelId).catch(() => null));
   if (!channel) {
-    throw new Error('Target channel not found in this guild');
+    throw new Error('El canal de destino seleccionado no existe o no es accesible.');
   }
 
   // Check bot permissions in target channel
   const botMember = guild.members.me || (await guild.members.fetchMe().catch(() => null));
   if (botMember && channel.permissionsFor) {
     const permissions = channel.permissionsFor(botMember);
-    if (!permissions.has(PermissionFlagsBits.SendMessages)) {
-      throw new Error('Bot lacks SendMessages permission in target channel');
-    }
-    if (!permissions.has(PermissionFlagsBits.EmbedLinks)) {
-      throw new Error('Bot lacks EmbedLinks permission in target channel');
+    const missing = [];
+    if (!permissions.has(PermissionFlagsBits.ViewChannel)) missing.push('Ver canal');
+    if (!permissions.has(PermissionFlagsBits.SendMessages)) missing.push('Enviar mensajes');
+    if (!permissions.has(PermissionFlagsBits.EmbedLinks)) missing.push('Incrustar enlaces');
+
+    if (missing.length > 0) {
+      throw new Error(`TitanBot no tiene los permisos necesarios en #${channel.name || targetChannelId}: ${missing.join(', ')}. Por favor asigna estos permisos al rol del bot en ese canal.`);
     }
   }
 

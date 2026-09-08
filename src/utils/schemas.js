@@ -792,3 +792,75 @@ export function validateGuildConfigOrThrow(rawConfig, context = {}) {
     }
   );
 }
+
+/**
+ * Formats Zod validation errors into user-friendly Spanish messages for the dashboard and API clients.
+ */
+export function formatZodError(zodError) {
+  if (!zodError) return 'Error de validación desconocido.';
+  const issues = Array.isArray(zodError.issues) ? zodError.issues : [];
+  if (issues.length === 0) return zodError.message || 'Error de validación.';
+
+  const fieldLabels = {
+    targetChannelId: 'Canal de destino',
+    channelId: 'Canal de destino',
+    title: 'Título del embed',
+    description: 'Descripción del embed',
+    name: 'Nombre de la plantilla',
+    color: 'Color del embed',
+    fields: 'Campos del embed',
+    buttons: 'Botones interactivos',
+    embed: 'Contenido del embed',
+    imageUrl: 'URL de imagen',
+    thumbnailUrl: 'URL de miniatura',
+    footerText: 'Pie de página',
+    footerIconUrl: 'Icono del pie de página',
+    authorName: 'Nombre del autor',
+    authorIconUrl: 'Icono del autor',
+    url: 'Enlace (URL)',
+    label: 'Texto del botón',
+    roleId: 'Rol asignado al botón',
+    actionType: 'Acción del botón',
+  };
+
+  const messages = issues.map((issue) => {
+    // If root object was undefined / missing
+    if (!issue.path || issue.path.length === 0) {
+      if (issue.code === 'invalid_type' && (issue.received === 'undefined' || issue.received === 'null')) {
+        return 'No se recibieron datos en el formulario (cuerpo de la petición vacío).';
+      }
+      return issue.message && issue.message !== 'Required' ? issue.message : 'Los datos del formulario son requeridos.';
+    }
+
+    const fieldKey = issue.path[issue.path.length - 1];
+    const fieldName = fieldLabels[fieldKey] || (typeof fieldKey === 'string' ? `"${fieldKey}"` : 'El campo');
+
+    if (issue.code === 'invalid_type') {
+      if (issue.received === 'undefined' || issue.received === 'null') {
+        return `${fieldName} es obligatorio.`;
+      }
+      return `${fieldName} tiene un formato no válido.`;
+    }
+
+    if (issue.code === 'invalid_string' && issue.validation === 'url') {
+      return `${fieldName} debe ser una URL válida (ej. https://...).`;
+    }
+
+    if (issue.code === 'too_small') {
+      return `${fieldName} no puede estar vacío.`;
+    }
+
+    if (issue.code === 'too_big') {
+      return `${fieldName} supera el límite de caracteres permitido.`;
+    }
+
+    if (issue.message && issue.message !== 'Required') {
+      return `${fieldName}: ${issue.message}`;
+    }
+
+    return `${fieldName} es obligatorio o tiene datos incorrectos.`;
+  });
+
+  return messages.join(' • ');
+}
+

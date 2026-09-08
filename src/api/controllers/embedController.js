@@ -1,5 +1,5 @@
 import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
-import { SendEmbedSchema, SaveEmbedTemplateSchema } from '../../utils/schemas.js';
+import { SendEmbedSchema, SaveEmbedTemplateSchema, formatZodError } from '../../utils/schemas.js';
 import { getColor } from '../../config/bot.js';
 import { logger } from '../../utils/logger.js';
 
@@ -35,7 +35,7 @@ export async function sendEmbedHandler(req, res) {
       return res.status(404).json({
         success: false,
         error: 'GuildNotFound',
-        message: 'Guild not found or TitanBot is not present.',
+        message: 'No se encontró el servidor o TitanBot no es miembro del mismo.',
       });
     }
 
@@ -44,7 +44,7 @@ export async function sendEmbedHandler(req, res) {
       return res.status(400).json({
         success: false,
         error: 'ValidationError',
-        message: parsed.error.issues[0]?.message || 'Invalid embed data.',
+        message: formatZodError(parsed.error),
         issues: parsed.error.issues,
       });
     }
@@ -71,7 +71,7 @@ export async function sendEmbedHandler(req, res) {
       return res.status(404).json({
         success: false,
         error: 'ChannelNotFound',
-        message: 'The selected channel could not be found in this server.',
+        message: 'El canal seleccionado no existe o no fue encontrado en este servidor.',
       });
     }
 
@@ -79,7 +79,7 @@ export async function sendEmbedHandler(req, res) {
       return res.status(400).json({
         success: false,
         error: 'ValidationError',
-        message: 'Target channel must be a text-based channel.',
+        message: 'El canal de destino debe ser un canal de texto.',
       });
     }
 
@@ -93,10 +93,16 @@ export async function sendEmbedHandler(req, res) {
       if (!perms.has(PermissionFlagsBits.EmbedLinks)) missing.push('EmbedLinks');
 
       if (missing.length > 0) {
+        const permNames = {
+          ViewChannel: 'Ver canal',
+          SendMessages: 'Enviar mensajes',
+          EmbedLinks: 'Incrustar enlaces',
+        };
+        const missingLabels = missing.map((m) => permNames[m] || m).join(', ');
         return res.status(422).json({
           success: false,
           error: 'ChannelPermissionError',
-          message: `TitanBot lacks required permissions in #${targetChannel.name || channelId}: ${missing.join(', ')}.`,
+          message: `TitanBot no tiene los permisos necesarios en #${targetChannel.name || channelId}: ${missingLabels}. Por favor asigna estos permisos al rol del bot.`,
           missingPermissions: missing,
         });
       }
@@ -200,7 +206,7 @@ export async function saveEmbedTemplateHandler(req, res) {
       return res.status(400).json({
         success: false,
         error: 'ValidationError',
-        message: parsed.error.issues[0]?.message || 'Invalid template data.',
+        message: formatZodError(parsed.error),
         issues: parsed.error.issues,
       });
     }
@@ -210,7 +216,7 @@ export async function saveEmbedTemplateHandler(req, res) {
       return res.status(500).json({
         success: false,
         error: 'DatabaseUnavailable',
-        message: 'Database is not available.',
+        message: 'La base de datos no está disponible actualmente.',
       });
     }
 
@@ -237,7 +243,7 @@ export async function saveEmbedTemplateHandler(req, res) {
     return res.status(500).json({
       success: false,
       error: 'InternalError',
-      message: 'Failed to save embed template.',
+      message: error.message || 'Error al guardar la plantilla del embed.',
     });
   }
 }
@@ -254,7 +260,7 @@ export async function deleteEmbedTemplateHandler(req, res) {
       return res.status(500).json({
         success: false,
         error: 'DatabaseUnavailable',
-        message: 'Database is not available.',
+        message: 'La base de datos no está disponible actualmente.',
       });
     }
 
@@ -273,7 +279,7 @@ export async function deleteEmbedTemplateHandler(req, res) {
     return res.status(500).json({
       success: false,
       error: 'InternalError',
-      message: 'Failed to delete embed template.',
+      message: 'Error al eliminar la plantilla.',
     });
   }
 }
@@ -306,10 +312,11 @@ export async function sendInteractiveEmbedHandler(req, res) {
     return res.json(result);
   } catch (error) {
     logger.error('Error sending interactive embed:', error);
-    return res.status(error.message.includes('Validation') ? 400 : 500).json({
+    const isValidation = error.name === 'ValidationError' || error.message?.includes('obligatorio') || error.message?.includes('permisos') || error.message?.includes('canal');
+    return res.status(isValidation ? 400 : 500).json({
       success: false,
       error: error.name || 'SendInteractiveEmbedError',
-      message: error.message || 'Failed to dispatch interactive embed.',
+      message: error.message || 'Error al enviar el embed interactivo a Discord.',
     });
   }
 }

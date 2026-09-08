@@ -349,28 +349,88 @@ export function EmbedCreatorTab() {
     }
   };
 
+  // Helper to translate and format error messages into friendly Spanish text
+  const getFriendlyErrorMessage = (err, fallbackText) => {
+    if (!err) return fallbackText;
+    const msg = typeof err === 'string' ? err : err.message || '';
+    if (!msg || msg === 'Required') {
+      return t('embeds.errorRequiredFields', 'Faltan campos obligatorios en el diseño del embed.');
+    }
+    if (msg.includes('Target channel ID is required') || msg.includes('channelId')) {
+      return t('embeds.errorSelectChannel', 'Debes seleccionar un canal de destino.');
+    }
+    if (msg.includes('Target channel not found') || msg.includes('no fue encontrado') || msg.includes('no existe')) {
+      return t('embeds.errorChannelNotFound', 'El canal seleccionado no existe o no es accesible para TitanBot.');
+    }
+    if (msg.includes('permisos') || msg.includes('permission') || msg.includes('ChannelPermissionError')) {
+      return msg;
+    }
+    if (msg.includes('at least a title') || msg.includes('debe contener al menos')) {
+      return t('embeds.errorNoContent', 'El embed debe contener al menos un título, descripción, autor, campo o imagen.');
+    }
+    if (msg.includes('EmbedLinks')) {
+      return 'TitanBot no tiene permiso para incrustar enlaces (Embed Links) en ese canal. Revisa los permisos del rol del bot.';
+    }
+    if (msg.includes('SendMessages')) {
+      return 'TitanBot no tiene permiso para enviar mensajes en ese canal. Revisa los permisos del rol del bot.';
+    }
+    return msg || fallbackText;
+  };
+
   // Save as Custom Template
   const handleSaveTemplate = async (e) => {
     e.preventDefault();
-    if (!newTemplateName.trim()) return;
+    const name = newTemplateName.trim();
+    if (!name) {
+      setNotification({
+        type: 'error',
+        message: t('embeds.errorTemplateNameEmpty', 'Debes ingresar un nombre para la plantilla.'),
+      });
+      return;
+    }
+    if (!hasContent) {
+      setNotification({
+        type: 'error',
+        message: t('embeds.errorNoContent', 'El embed debe contener al menos un título, descripción, autor, campo o imagen antes de guardarlo como plantilla.'),
+      });
+      return;
+    }
+
     setSavingTemplate(true);
+    setNotification(null);
     try {
       const embedPayload = {
-        title: title || null,
-        description: description || null,
+        title: title.trim() || null,
+        description: description.trim() || null,
         color: color || null,
-        author: authorName ? { name: authorName, iconUrl: authorIconUrl || null, url: authorUrl || null } : null,
-        footer: footerText ? { text: footerText, iconUrl: footerIconUrl || null } : null,
-        thumbnail: thumbnail || null,
-        image: image || null,
-        timestamp,
-        fields,
+        author: authorName.trim()
+          ? {
+              name: authorName.trim(),
+              iconUrl: authorIconUrl.trim() || null,
+              url: authorUrl.trim() || null,
+            }
+          : null,
+        footer: footerText.trim()
+          ? {
+              text: footerText.trim(),
+              iconUrl: footerIconUrl.trim() || null,
+            }
+          : null,
+        thumbnail: thumbnail.trim() || null,
+        image: image.trim() || null,
+        timestamp: Boolean(timestamp),
+        fields: fields.map((f) => ({
+          name: f.name.trim(),
+          value: f.value.trim(),
+          inline: Boolean(f.inline),
+        })),
       };
 
       const res = await apiFetch(`/guilds/${guildId}/embeds/templates`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: newTemplateName.trim(),
+          name,
           embed: embedPayload,
         }),
       });
@@ -386,7 +446,7 @@ export function EmbedCreatorTab() {
     } catch (err) {
       setNotification({
         type: 'error',
-        message: err.message || t('embeds.templateSaveError', 'Error al guardar la plantilla.'),
+        message: getFriendlyErrorMessage(err, t('embeds.templateSaveError', 'Error al guardar la plantilla.')),
       });
     } finally {
       setSavingTemplate(false);
@@ -428,7 +488,7 @@ export function EmbedCreatorTab() {
     } catch (err) {
       setNotification({
         type: 'error',
-        message: err.message || 'Error al eliminar la plantilla.',
+        message: getFriendlyErrorMessage(err, t('embeds.templateDeleteError', 'Error al eliminar la plantilla.')),
       });
     }
   };
@@ -500,6 +560,7 @@ export function EmbedCreatorTab() {
 
         res = await apiFetch(`/guilds/${guildId}/embeds/send-interactive`, {
           method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(interactivePayload),
         });
       } else {
@@ -533,6 +594,7 @@ export function EmbedCreatorTab() {
 
         res = await apiFetch(`/guilds/${guildId}/embeds/send`, {
           method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
       }
@@ -548,7 +610,7 @@ export function EmbedCreatorTab() {
     } catch (err) {
       setNotification({
         type: 'error',
-        message: err.message || t('embeds.sendError', 'Error al enviar el embed a Discord.'),
+        message: getFriendlyErrorMessage(err, t('embeds.sendError', 'Error al enviar el embed a Discord.')),
       });
     } finally {
       setSending(false);
