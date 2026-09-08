@@ -3,6 +3,7 @@ import {
   getJoinToCreateConfig,
   saveJoinToCreateConfig,
 } from '../../utils/database.js';
+import { updateGuildConfig } from '../../services/config/guildConfig.js';
 import {
   validateChannelNameTemplate,
   validateUserLimit,
@@ -102,6 +103,9 @@ export async function updateJoinToCreateSettings(req, res) {
     }
 
     await saveJoinToCreateConfig(req.client, guildId, parsed.data);
+    await updateGuildConfig(req.client, guildId, { joinToCreate: parsed.data }).catch((err) => {
+      logger.debug('Non-critical: Failed to sync joinToCreate into guildConfig:', err?.message);
+    });
     logger.info(`Join-to-Create config updated for guild ${guildId}`);
 
     return res.json({

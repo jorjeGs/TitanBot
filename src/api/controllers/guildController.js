@@ -1,6 +1,6 @@
 import { fetchDiscordUserGuilds } from '../utils/oauthHelper.js';
 import { getGuildConfig, patchGuildConfig } from '../../services/config/guildConfig.js';
-import { updateWelcomeConfig } from '../../utils/database.js';
+import { getWelcomeConfig, updateWelcomeConfig } from '../../utils/database.js';
 import { isBotOwner } from '../../config/bot.js';
 import config from '../../config/application.js';
 import { logger } from '../../utils/logger.js';
@@ -175,10 +175,45 @@ export async function getGuildConfigHandler(req, res) {
   try {
     const { guildId } = req.params;
     const guildConfig = await getGuildConfig(req.client, guildId);
+    const welcomeConfig = await getWelcomeConfig(req.client, guildId).catch(() => null);
+
+    const mergedConfig = {
+      ...guildConfig,
+      welcomeEnabled: guildConfig.welcomeEnabled !== undefined ? guildConfig.welcomeEnabled : (welcomeConfig ? Boolean(welcomeConfig.enabled) : true),
+      welcomeChannel: guildConfig.welcomeChannel ?? welcomeConfig?.channelId ?? null,
+      welcomeMessage: guildConfig.welcomeMessage || welcomeConfig?.welcomeMessage || 'Welcome {user} to {server}!',
+      welcomeType: guildConfig.welcomeType || welcomeConfig?.welcomeType || 'text',
+      welcomeEmbed: guildConfig.welcomeEmbed || welcomeConfig?.welcomeEmbed || {
+        title: '🎉 Welcome to the Server!',
+        description: guildConfig.welcomeMessage || welcomeConfig?.welcomeMessage || 'Welcome {user} to {server}!',
+        color: '#5865F2',
+        footer: `Welcome to ${req.guild?.name || 'Server'}`,
+        image: '',
+        thumbnail: true,
+      },
+      welcomePing: guildConfig.welcomePing !== undefined ? guildConfig.welcomePing : Boolean(welcomeConfig?.welcomePing),
+      goodbyeEnabled: guildConfig.goodbyeEnabled !== undefined ? guildConfig.goodbyeEnabled : Boolean(welcomeConfig?.goodbyeEnabled),
+      goodbyeChannelId: guildConfig.goodbyeChannelId ?? welcomeConfig?.goodbyeChannelId ?? null,
+      leaveMessage: guildConfig.leaveMessage || welcomeConfig?.leaveMessage || '{user} has left the server.',
+      leaveType: guildConfig.leaveType || welcomeConfig?.leaveType || 'text',
+      leaveEmbed: guildConfig.leaveEmbed || welcomeConfig?.leaveEmbed || {
+        title: '👋 Farewell!',
+        description: guildConfig.leaveMessage || welcomeConfig?.leaveMessage || '{user} has left the server.',
+        color: '#ED4245',
+        footer: `Goodbye from ${req.guild?.name || 'Server'}`,
+        image: '',
+        thumbnail: true,
+      },
+      goodbyePing: guildConfig.goodbyePing !== undefined ? guildConfig.goodbyePing : Boolean(welcomeConfig?.goodbyePing),
+      autoRoleDelay: guildConfig.autoRoleDelay ?? welcomeConfig?.autoRoleDelay ?? 0,
+      autoRoles: Array.isArray(guildConfig.autoRoles) && guildConfig.autoRoles.length > 0
+        ? guildConfig.autoRoles
+        : (Array.isArray(welcomeConfig?.roleIds) && welcomeConfig.roleIds.length > 0 ? welcomeConfig.roleIds : (guildConfig.autoRole ? [guildConfig.autoRole] : [])),
+    };
 
     return res.json({
       success: true,
-      config: guildConfig,
+      config: mergedConfig,
     });
   } catch (error) {
     logger.error(`Failed to get config for guild ${req.params.guildId}:`, error);
@@ -246,11 +281,111 @@ export async function updateGuildConfigHandler(req, res) {
     }
 
     // Validate snowflakes or null
-    const snowflakeFields = ['welcomeChannel', 'adminRole', 'modRole', 'birthdayChannelId'];
+    const snowflakeFields = [
+      'welcomeChannel',
+      'goodbyeChannelId',
+      'adminRole',
+      'modRole',
+      'birthdayChannelId',
+      'birthdayRoleId',
+      'premiumRoleId',
+      'reportChannelId',
+    ];
     for (const field of snowflakeFields) {
       if (patch[field] !== undefined) {
         sanitized[field] = patch[field] ? String(patch[field]).trim() : null;
       }
+    }
+
+    // Validate welcome toggles and formats
+    if (patch.welcomeEnabled !== undefined) {
+      sanitized.welcomeEnabled = Boolean(patch.welcomeEnabled);
+    }
+
+    if (patch.welcomeType !== undefined) {
+      sanitized.welcomeType = patch.welcomeType === 'embed' ? 'embed' : 'text';
+    }
+
+    if (patch.welcomeEmbed && typeof patch.welcomeEmbed === 'object') {
+      let cleanImage = '';
+      if (typeof patch.welcomeEmbed.image === 'string') {
+        const trimmed = patch.welcomeEmbed.image.trim();
+        if (trimmed) {
+          try {
+            const parsedUrl = new URL(trimmed);
+            if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+              cleanImage = trimmed;
+            }
+          } catch {}
+        }
+      }
+
+      sanitized.welcomeEmbed = {
+        title: typeof patch.welcomeEmbed.title === 'string' ? patch.welcomeEmbed.title.slice(0, 256) : '🎉 Welcome to the Server!',
+        description: typeof patch.welcomeEmbed.description === 'string' ? patch.welcomeEmbed.description.slice(0, 4096) : (patch.welcomeMessage || ''),
+        color: typeof patch.welcomeEmbed.color === 'string' && /^#[0-9A-Fa-f]{6}$/.test(patch.welcomeEmbed.color) ? patch.welcomeEmbed.color : '#5865F2',
+        footer: typeof patch.welcomeEmbed.footer === 'string' ? patch.welcomeEmbed.footer.slice(0, 2048) : '',
+        image: cleanImage,
+        thumbnail: patch.welcomeEmbed.thumbnail !== undefined ? Boolean(patch.welcomeEmbed.thumbnail) : true,
+      };
+    }
+
+    if (patch.welcomePing !== undefined) {
+      sanitized.welcomePing = Boolean(patch.welcomePing);
+    }
+
+    if (patch.autoRoleDelay !== undefined) {
+      const parsedDelay = parseInt(patch.autoRoleDelay, 10);
+      sanitized.autoRoleDelay = isNaN(parsedDelay) ? 0 : Math.max(0, Math.min(300, parsedDelay));
+    }
+
+    // Validate goodbye toggles and formats
+    if (patch.goodbyeEnabled !== undefined) {
+      sanitized.goodbyeEnabled = Boolean(patch.goodbyeEnabled);
+    }
+
+    if (patch.leaveType !== undefined) {
+      sanitized.leaveType = patch.leaveType === 'embed' ? 'embed' : 'text';
+    }
+
+    if (patch.leaveMessage !== undefined) {
+      sanitized.leaveMessage = typeof patch.leaveMessage === 'string' ? patch.leaveMessage.slice(0, 2000) : '';
+    }
+
+    if (patch.leaveEmbed && typeof patch.leaveEmbed === 'object') {
+      let cleanImage = '';
+      if (typeof patch.leaveEmbed.image === 'string') {
+        const trimmed = patch.leaveEmbed.image.trim();
+        if (trimmed) {
+          try {
+            const parsedUrl = new URL(trimmed);
+            if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+              cleanImage = trimmed;
+            }
+          } catch {}
+        }
+      }
+
+      sanitized.leaveEmbed = {
+        title: typeof patch.leaveEmbed.title === 'string' ? patch.leaveEmbed.title.slice(0, 256) : '👋 Farewell!',
+        description: typeof patch.leaveEmbed.description === 'string' ? patch.leaveEmbed.description.slice(0, 4096) : (patch.leaveMessage || ''),
+        color: typeof patch.leaveEmbed.color === 'string' && /^#[0-9A-Fa-f]{6}$/.test(patch.leaveEmbed.color) ? patch.leaveEmbed.color : '#ED4245',
+        footer: typeof patch.leaveEmbed.footer === 'string' ? patch.leaveEmbed.footer.slice(0, 2048) : '',
+        image: cleanImage,
+        thumbnail: patch.leaveEmbed.thumbnail !== undefined ? Boolean(patch.leaveEmbed.thumbnail) : true,
+      };
+    }
+
+    if (patch.goodbyePing !== undefined) {
+      sanitized.goodbyePing = Boolean(patch.goodbyePing);
+    }
+
+    if (patch.dmOnClose !== undefined) {
+      sanitized.dmOnClose = Boolean(patch.dmOnClose);
+    }
+
+    if (patch.birthdayMessage !== undefined) {
+      sanitized.birthdayMessage = typeof patch.birthdayMessage === 'string' ? patch.birthdayMessage.slice(0, 1000) : null;
     }
 
     // Validate autoRoles (array of snowflakes) and sync autoRole
@@ -351,9 +486,26 @@ export async function updateGuildConfigHandler(req, res) {
 
     const updated = await patchGuildConfig(req.client, guildId, sanitized);
 
-    if (sanitized.autoRoles !== undefined) {
-      await updateWelcomeConfig(req.client, guildId, { roleIds: sanitized.autoRoles }).catch((err) => {
-        logger.debug('Non-critical: Failed to sync welcomeConfig roleIds:', err?.message);
+    // Sync all welcome and goodbye settings to welcomeConfig for bot event parity
+    const welcomeUpdates = {};
+    if (sanitized.welcomeEnabled !== undefined) welcomeUpdates.enabled = sanitized.welcomeEnabled;
+    if (sanitized.welcomeChannel !== undefined) welcomeUpdates.channelId = sanitized.welcomeChannel;
+    if (sanitized.welcomeMessage !== undefined) welcomeUpdates.welcomeMessage = sanitized.welcomeMessage;
+    if (sanitized.welcomeType !== undefined) welcomeUpdates.welcomeType = sanitized.welcomeType;
+    if (sanitized.welcomeEmbed !== undefined) welcomeUpdates.welcomeEmbed = sanitized.welcomeEmbed;
+    if (sanitized.welcomePing !== undefined) welcomeUpdates.welcomePing = sanitized.welcomePing;
+    if (sanitized.goodbyeEnabled !== undefined) welcomeUpdates.goodbyeEnabled = sanitized.goodbyeEnabled;
+    if (sanitized.goodbyeChannelId !== undefined) welcomeUpdates.goodbyeChannelId = sanitized.goodbyeChannelId;
+    if (sanitized.leaveMessage !== undefined) welcomeUpdates.leaveMessage = sanitized.leaveMessage;
+    if (sanitized.leaveType !== undefined) welcomeUpdates.leaveType = sanitized.leaveType;
+    if (sanitized.leaveEmbed !== undefined) welcomeUpdates.leaveEmbed = sanitized.leaveEmbed;
+    if (sanitized.goodbyePing !== undefined) welcomeUpdates.goodbyePing = sanitized.goodbyePing;
+    if (sanitized.autoRoles !== undefined) welcomeUpdates.roleIds = sanitized.autoRoles;
+    if (sanitized.autoRoleDelay !== undefined) welcomeUpdates.autoRoleDelay = sanitized.autoRoleDelay;
+
+    if (Object.keys(welcomeUpdates).length > 0) {
+      await updateWelcomeConfig(req.client, guildId, welcomeUpdates).catch((err) => {
+        logger.debug('Non-critical: Failed to sync welcomeConfig:', err?.message);
       });
     }
 

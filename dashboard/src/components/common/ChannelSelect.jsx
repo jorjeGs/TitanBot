@@ -1,16 +1,32 @@
 import React from 'react';
-import { Hash } from 'lucide-react';
+import { Hash, Volume2, Folder, Megaphone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export function ChannelSelect({ channels, value, onChange, label, helpText, disabled = false, placeholder }) {
   const { t } = useTranslation();
+
+  const selectedChannel = (channels || []).find((c) => c.id === value);
+
+  const renderIcon = () => {
+    if (!selectedChannel) return <Hash className="w-4 h-4 text-slate-400" />;
+    switch (selectedChannel.type) {
+      case 2:
+        return <Volume2 className="w-4 h-4 text-emerald-400" />;
+      case 4:
+        return <Folder className="w-4 h-4 text-amber-400" />;
+      case 5:
+        return <Megaphone className="w-4 h-4 text-discord-blurple" />;
+      default:
+        return <Hash className="w-4 h-4 text-slate-400" />;
+    }
+  };
 
   return (
     <div className="mb-4">
       {label && <label className="block text-sm font-medium text-slate-300 mb-1">{label}</label>}
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-          <Hash className="w-4 h-4" />
+          {renderIcon()}
         </div>
         <select
           value={value || ''}
@@ -20,7 +36,7 @@ export function ChannelSelect({ channels, value, onChange, label, helpText, disa
         >
           <option value="">{placeholder ? `-- ${placeholder} --` : `-- ${t('common.none')} --`}</option>
           {(channels || []).map((channel) => {
-            const prefix = channel.type === 2 ? '🔊 ' : channel.type === 4 ? '📁 ' : channel.type === 5 ? '📢 ' : '# ';
+            const prefix = channel.type === 2 ? '🔊 ' : channel.type === 4 ? '📁 ' : channel.type === 5 ? '📢 ' : '';
             return (
               <option key={channel.id} value={channel.id}>
                 {prefix}{channel.name}

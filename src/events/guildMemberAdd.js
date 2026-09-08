@@ -39,9 +39,11 @@ export default {
         
         const welcomeConfig = await getWelcomeConfig(member.client, guild.id);
         
-        const welcomeChannelId = welcomeConfig?.channelId;
+        const welcomeChannelId = welcomeConfig?.channelId || config?.welcomeChannel;
+        const isWelcomeEnabled = (welcomeConfig?.enabled ?? config?.welcomeEnabled) !== false;
+        const welcomeType = welcomeConfig?.welcomeType || config?.welcomeType || 'text';
 
-        if (welcomeConfig?.enabled && welcomeChannelId) {
+        if (isWelcomeEnabled && welcomeChannelId) {
             const channel = guild.channels.cache.get(welcomeChannelId);
             const me = guild.members.me;
             const permissions = channel?.isTextBased?.() && me ? channel.permissionsFor(me) : null;
@@ -50,43 +52,48 @@ export default {
             if (permissions?.has([PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages])) {
                 const formatData = { user, guild, member };
                 const welcomeMessage = formatWelcomeMessage(
-                    welcomeConfig.welcomeMessage || welcomeConfig.welcomeEmbed?.description || botConfig.welcome?.defaultWelcomeMessage || 'Welcome {user} to {server}!',
+                    welcomeConfig.welcomeMessage || config?.welcomeMessage || welcomeConfig.welcomeEmbed?.description || config?.welcomeEmbed?.description || botConfig.welcome?.defaultWelcomeMessage || 'Welcome {user} to {server}!',
                     formatData
                 );
 
-                const messageContent = welcomeConfig.welcomePing ? user.toString() : null;
+                const shouldPing = welcomeConfig.welcomePing ?? config?.welcomePing;
+                const messageContent = shouldPing ? user.toString() : null;
 
                 const embedTitle = formatWelcomeMessage(
-                    welcomeConfig.welcomeEmbed?.title || '🎉 Welcome!',
+                    welcomeConfig.welcomeEmbed?.title || config?.welcomeEmbed?.title || '🎉 Welcome!',
                     formatData
                 );
-                const embedFooter = welcomeConfig.welcomeEmbed?.footer
-                    ? formatWelcomeMessage(welcomeConfig.welcomeEmbed.footer, formatData)
+                const embedFooter = (welcomeConfig.welcomeEmbed?.footer || config?.welcomeEmbed?.footer)
+                    ? formatWelcomeMessage(welcomeConfig.welcomeEmbed?.footer || config?.welcomeEmbed?.footer, formatData)
                     : `Welcome to ${guild.name}!`;
 
                 const canEmbed = permissions.has(PermissionFlagsBits.EmbedLinks);
 
-                if (!canEmbed) {
+                if (!canEmbed || welcomeType === 'text') {
                     await channel.send({
-                        content: messageContent || welcomeMessage
+                        content: messageContent ? `${messageContent}\n${welcomeMessage}` : welcomeMessage
                     });
                 } else {
+                    const embedColor = welcomeConfig.welcomeEmbed?.color || config?.welcomeEmbed?.color || getColor('success');
                     const embed = new EmbedBuilder()
-                        .setColor(welcomeConfig.welcomeEmbed?.color || getColor('success'))
+                        .setColor(embedColor)
                         .setTitle(embedTitle)
                         .setDescription(welcomeMessage)
-                        .setThumbnail(user.displayAvatarURL())
-                        .addFields(
-                            { name: 'User', value: `${user.tag} (${user.id})`, inline: true },
-                            { name: 'Member Count', value: guild.memberCount.toString(), inline: true }
-                        )
                         .setTimestamp()
                         .setFooter({ text: embedFooter });
-                    
-                    if (welcomeConfig.welcomeImage) {
-                        embed.setImage(welcomeConfig.welcomeImage);
-                    } else if (welcomeConfig.welcomeEmbed?.image?.url) {
-                        embed.setImage(welcomeConfig.welcomeEmbed.image.url);
+
+                    const showThumbnail = (welcomeConfig.welcomeEmbed?.thumbnail ?? config?.welcomeEmbed?.thumbnail) !== false;
+                    if (showThumbnail) {
+                        embed.setThumbnail(user.displayAvatarURL());
+                    }
+
+                    const embedImage = typeof welcomeConfig.welcomeEmbed?.image === 'string' && welcomeConfig.welcomeEmbed.image
+                        ? welcomeConfig.welcomeEmbed.image
+                        : (typeof config?.welcomeEmbed?.image === 'string' && config.welcomeEmbed.image
+                            ? config.welcomeEmbed.image
+                            : (welcomeConfig.welcomeEmbed?.image?.url || welcomeConfig.welcomeImage));
+                    if (embedImage) {
+                        embed.setImage(embedImage);
                     }
                     
                     await channel.send({ 
@@ -105,7 +112,7 @@ export default {
         const uniqueRoleIds = Array.from(new Set(configuredRoleIds.filter(Boolean)));
 
         if (uniqueRoleIds.length > 0) {
-            const delay = welcomeConfig?.autoRoleDelay || 0;
+            const delay = welcomeConfig?.autoRoleDelay ?? config?.autoRoleDelay ?? 0;
             const assignRoles = async () => {
                 for (const rId of uniqueRoleIds) {
                     const role = guild.roles.cache.get(rId);
