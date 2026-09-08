@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -28,18 +28,21 @@ class TitanBot extends Client {
   constructor() {
     super({
       intents: [
-        
-        GatewayIntentBits.Guilds,                        
-        GatewayIntentBits.GuildMembers,                 
-
-        GatewayIntentBits.GuildMessages,                
-        GatewayIntentBits.GuildMessageReactions,        
-        GatewayIntentBits.MessageContent,               
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.MessageContent,
         GatewayIntentBits.DirectMessages,
-
-        GatewayIntentBits.GuildVoiceStates,             
-
-        GatewayIntentBits.GuildBans,                    
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildBans,
+      ],
+      partials: [
+        Partials.Message,
+        Partials.Channel,
+        Partials.Reaction,
+        Partials.User,
+        Partials.GuildMember,
       ],
     });
 

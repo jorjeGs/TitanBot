@@ -123,7 +123,7 @@ export async function getReactionRoleMessage(client, guildId, messageId) {
     }
 }
 
-export async function createReactionRoleMessage(client, guildId, channelId, messageId, roleIds) {
+export async function createReactionRoleMessage(client, guildId, channelId, messageId, roleIds, extraData = {}) {
     try {
         validateGuildId(guildId);
         validateMessageId(messageId);
@@ -155,7 +155,8 @@ export async function createReactionRoleMessage(client, guildId, channelId, mess
             );
         }
 
-        for (const roleId of roleIds) {
+        for (const roleItem of roleIds) {
+            const roleId = typeof roleItem === 'string' ? roleItem : (roleItem?.roleId || roleItem?.id);
             validateRoleId(roleId);
             await validateRoleSafety(client, guildId, roleId);
         }
@@ -165,13 +166,14 @@ export async function createReactionRoleMessage(client, guildId, channelId, mess
             channelId,
             messageId,
             roles: roleIds,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            ...extraData
         };
         
         const key = getReactionRoleKey(guildId, messageId);
         await client.db.set(key, reactionRoleData);
         
-        logger.info(`Created reaction role message ${messageId} in guild ${guildId} with ${roleIds.length} roles`);
+        logger.info(`Created reaction role message ${messageId} in guild ${guildId} with ${roleIds.length} roles (type: ${extraData.type || 'select_menu'})`);
         return reactionRoleData;
     } catch (error) {
         if (error.name === 'TitanBotError') {

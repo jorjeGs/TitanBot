@@ -17,7 +17,12 @@ import {
   Sparkles,
   Loader2,
   Hash,
+  Smile,
+  Square,
+  List,
 } from 'lucide-react';
+
+const SUGGESTED_EMOJIS = ['⭐', '🎮', '🏆', '📢', '🎨', '🎵', '🛡️', '⚡', '💎', '🔥', '👑', '🎉', '🚀', '💡', '🌟', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣'];
 
 export function RolesTab() {
   const { t } = useTranslation();
@@ -34,7 +39,9 @@ export function RolesTab() {
   const [channelId, setChannelId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [panelType, setPanelType] = useState('reactions'); // 'reactions' | 'select_menu' | 'buttons'
   const [selectedRoleIds, setSelectedRoleIds] = useState([]);
+  const [roleEmojis, setRoleEmojis] = useState({});
   const [roleSelectValue, setRoleSelectValue] = useState('');
   const [publishing, setPublishing] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -61,9 +68,16 @@ export function RolesTab() {
     fetchPanels();
   }, [guildId]);
 
-  // Derive full role objects for selected IDs
+  // Derive full role objects for selected IDs with emoji
   const selectedRoles = selectedRoleIds
-    .map((id) => roles.find((r) => r.id === id))
+    .map((id) => {
+      const r = roles.find((role) => role.id === id);
+      if (!r) return null;
+      return {
+        ...r,
+        emoji: roleEmojis[id] || '⭐',
+      };
+    })
     .filter(Boolean);
 
   // Available roles that haven't been selected yet
@@ -75,13 +89,31 @@ export function RolesTab() {
     if (!roleSelectValue) return;
     if (selectedRoleIds.length >= 25) return;
     if (!selectedRoleIds.includes(roleSelectValue)) {
+      const nextIndex = selectedRoleIds.length % SUGGESTED_EMOJIS.length;
+      const assignedEmoji = SUGGESTED_EMOJIS[nextIndex];
       setSelectedRoleIds((prev) => [...prev, roleSelectValue]);
+      setRoleEmojis((prev) => ({
+        ...prev,
+        [roleSelectValue]: prev[roleSelectValue] || assignedEmoji,
+      }));
     }
     setRoleSelectValue('');
   };
 
   const handleRemoveRole = (idToRemove) => {
     setSelectedRoleIds((prev) => prev.filter((id) => id !== idToRemove));
+    setRoleEmojis((prev) => {
+      const next = { ...prev };
+      delete next[idToRemove];
+      return next;
+    });
+  };
+
+  const handleEmojiChange = (roleId, emojiVal) => {
+    setRoleEmojis((prev) => ({
+      ...prev,
+      [roleId]: emojiVal,
+    }));
   };
 
   // Check if any selected role is unmanageable by the bot
@@ -116,6 +148,12 @@ export function RolesTab() {
           channelId,
           title: title.trim(),
           description: description.trim(),
+          type: panelType,
+          roles: selectedRoles.map((r) => ({
+            roleId: r.id,
+            emoji: r.emoji || '⭐',
+            name: r.name,
+          })),
           roleIds: selectedRoleIds,
         }),
       });
@@ -125,6 +163,7 @@ export function RolesTab() {
       setTitle('');
       setDescription('');
       setSelectedRoleIds([]);
+      setRoleEmojis({});
       // Refresh panels list
       await fetchPanels();
     } catch (err) {
@@ -211,6 +250,51 @@ export function RolesTab() {
               <h2 className="text-base font-semibold text-slate-100">
                 {t('roles.createPanel')}
               </h2>
+            </div>
+
+            {/* Panel Type Switcher */}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                {t('roles.panelType', 'Tipo de Panel')}
+              </label>
+              <div className="grid grid-cols-3 gap-2 p-1 bg-discord-dark/70 rounded-xl border border-slate-700/60">
+                <button
+                  type="button"
+                  onClick={() => setPanelType('reactions')}
+                  className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    panelType === 'reactions'
+                      ? 'bg-discord-blurple text-white shadow-md'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  }`}
+                >
+                  <Smile className="w-4 h-4 text-amber-300" />
+                  <span className="truncate">{t('roles.typeReactions', 'Reacciones')}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPanelType('select_menu')}
+                  className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    panelType === 'select_menu'
+                      ? 'bg-discord-blurple text-white shadow-md'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  }`}
+                >
+                  <List className="w-4 h-4 text-indigo-300" />
+                  <span className="truncate">{t('roles.typeSelectMenu', 'Menú')}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPanelType('buttons')}
+                  className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 py-2.5 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    panelType === 'buttons'
+                      ? 'bg-discord-blurple text-white shadow-md'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  }`}
+                >
+                  <Square className="w-4 h-4 text-emerald-300" />
+                  <span className="truncate">{t('roles.typeButtons', 'Botones')}</span>
+                </button>
+              </div>
             </div>
 
             {/* Target Channel */}
@@ -305,7 +389,13 @@ export function RolesTab() {
 
               {/* Selected Roles List */}
               {selectedRoles.length > 0 && (
-                <div className="space-y-2 mt-3 bg-discord-dark/50 border border-slate-800/80 rounded-xl p-3 max-h-60 overflow-y-auto">
+                <div className="space-y-2 mt-3 bg-discord-dark/50 border border-slate-800/80 rounded-xl p-3 max-h-72 overflow-y-auto">
+                  <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider pb-1 flex items-center justify-between">
+                    <span>{t('roles.assignedRoles', 'Roles agregados')}</span>
+                    <span className="text-[10px] text-slate-500 font-normal">
+                      {t('roles.emojiHint', 'Puedes personalizar el emoji de cada rol')}
+                    </span>
+                  </div>
                   {selectedRoles.map((role) => {
                     const isUnmanageable = role.canManage === false;
                     return (
@@ -317,9 +407,22 @@ export function RolesTab() {
                             : 'bg-discord-dark border-slate-700/40 text-slate-200'
                         }`}
                       >
-                        <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                          {/* Inline Emoji Input */}
+                          <div className="relative shrink-0">
+                            <input
+                              type="text"
+                              maxLength={32}
+                              value={role.emoji || ''}
+                              onChange={(e) => handleEmojiChange(role.id, e.target.value)}
+                              title={t('roles.changeEmoji', 'Cambiar emoji')}
+                              placeholder="⭐"
+                              className="w-10 h-8 text-center text-sm bg-discord-darker border border-slate-700/60 rounded-md text-slate-100 focus:outline-none focus:border-discord-blurple transition-colors"
+                            />
+                          </div>
+
                           <span
-                            className="w-3 h-3 rounded-full shrink-0 shadow-sm"
+                            className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm"
                             style={{
                               backgroundColor:
                                 role.color && role.color !== '#000000' && role.color !== '#99aab5'
@@ -341,7 +444,7 @@ export function RolesTab() {
                         <button
                           type="button"
                           onClick={() => handleRemoveRole(role.id)}
-                          className="text-slate-400 hover:text-rose-400 p-1 rounded transition-colors"
+                          className="text-slate-400 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-colors"
                           title={t('roles.removeRole')}
                         >
                           <X className="w-4 h-4" />
@@ -427,13 +530,33 @@ export function RolesTab() {
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="space-y-1">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <span className="font-semibold text-sm text-white">
                               {panel.title || 'Reaction Roles'}
                             </span>
                             <span className="inline-flex items-center gap-1 text-[11px] font-medium text-discord-blurple bg-discord-blurple/10 px-2 py-0.5 rounded">
                               <Hash className="w-3 h-3" />
                               {panel.channelName || panel.channelId}
+                            </span>
+                            <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/60">
+                              {panel.type === 'reactions' && (
+                                <>
+                                  <Smile className="w-3 h-3 text-amber-400" />
+                                  <span>{t('roles.typeBadgeReactions', 'Reacciones')}</span>
+                                </>
+                              )}
+                              {panel.type === 'buttons' && (
+                                <>
+                                  <Square className="w-3 h-3 text-emerald-400" />
+                                  <span>{t('roles.typeBadgeButtons', 'Botones')}</span>
+                                </>
+                              )}
+                              {(panel.type === 'select_menu' || !panel.type) && (
+                                <>
+                                  <List className="w-3 h-3 text-indigo-400" />
+                                  <span>{t('roles.typeBadgeSelectMenu', 'Menú')}</span>
+                                </>
+                              )}
                             </span>
                           </div>
                           {panel.description && (
@@ -498,6 +621,7 @@ export function RolesTab() {
                               key={r.id}
                               className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs bg-discord-dark text-slate-200 border border-slate-700/50"
                             >
+                              {r.emoji && <span className="text-xs">{r.emoji}</span>}
                               <span
                                 className="w-2 h-2 rounded-full shrink-0"
                                 style={{
@@ -528,6 +652,7 @@ export function RolesTab() {
             selectedRoles={selectedRoles}
             serverName={currentGuild?.name}
             channelName={selectedChannel?.name}
+            type={panelType}
           />
         </div>
       </div>
