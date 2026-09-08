@@ -454,6 +454,42 @@
     "sameChannel": "same-channel",
     "embedTitle": "Level Up!",
     "rewardUnlocked": "Reward unlocked",
+    "systemActive": "System Active",
+    "systemDisabled": "System Paused",
+    "unsavedChanges": "You have unsaved changes",
+    "tabs": {
+      "announcements": "Announcements",
+      "rates": "Rates & Anti-Spam",
+      "rewards": "Role Rewards",
+      "exclusions": "Exclusions",
+      "leaderboard": "Leaderboard"
+    },
+    "templates": {
+      "title": "Congratulation Templates:",
+      "classic": "Classic",
+      "gamer": "Gamer",
+      "rpg": "Epic RPG",
+      "minimal": "Minimal"
+    },
+    "variables": {
+      "title": "Clickable variables:",
+      "user": "User mention",
+      "level": "Level reached",
+      "xp": "Total XP",
+      "server": "Server name"
+    },
+    "previewTabs": {
+      "announcement": "Discord Message",
+      "roadmap": "Role Roadmap",
+      "rankCard": "Rank Card (/rank)"
+    },
+    "interactiveLevel": "Test level:",
+    "avgXpHint": "Estimated average: ~{{avg}} XP per message",
+    "cooldownPresets": "Quick presets:",
+    "noRoadmapRewards": "No role rewards configured yet. Add one in the Rewards tab.",
+    "roadmapStep": "Level {{level}}",
+    "nextReward": "Next reward",
+    "rankProgress": "Progress to next level",
     "errors": {
       "invalidLevel": "Please enter a valid level (minimum 1).",
       "noRole": "Please select a role for the reward.",

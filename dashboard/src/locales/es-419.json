@@ -454,6 +454,42 @@
     "sameChannel": "mismo-canal",
     "embedTitle": "¡Subida de Nivel!",
     "rewardUnlocked": "Recompensa desbloqueada",
+    "systemActive": "Sistema Activo",
+    "systemDisabled": "Sistema Pausado",
+    "unsavedChanges": "Tienes cambios sin guardar",
+    "tabs": {
+      "announcements": "Anuncios",
+      "rates": "Tasas & Anti-Spam",
+      "rewards": "Recompensas de Rol",
+      "exclusions": "Exclusiones",
+      "leaderboard": "Clasificación"
+    },
+    "templates": {
+      "title": "Plantillas de Felicitación:",
+      "classic": "Clásico",
+      "gamer": "Gamer",
+      "rpg": "RPG Épico",
+      "minimal": "Minimalista"
+    },
+    "variables": {
+      "title": "Variables clicables:",
+      "user": "Mención del usuario",
+      "level": "Nivel alcanzado",
+      "xp": "XP acumulada",
+      "server": "Nombre del servidor"
+    },
+    "previewTabs": {
+      "announcement": "Mensaje Discord",
+      "roadmap": "Hoja de Ruta",
+      "rankCard": "Tarjeta /rank"
+    },
+    "interactiveLevel": "Nivel de prueba:",
+    "avgXpHint": "Promedio estimado: ~{{avg}} XP por mensaje",
+    "cooldownPresets": "Tiempos rápidos:",
+    "noRoadmapRewards": "Aún no has configurado recompensas de rol. Añade una en la pestaña Recompensas.",
+    "roadmapStep": "Nivel {{level}}",
+    "nextReward": "Próxima recompensa",
+    "rankProgress": "Progreso al siguiente nivel",
     "errors": {
       "invalidLevel": "Por favor ingresa un nivel válido (mínimo 1).",
       "noRole": "Por favor selecciona un rol para la recompensa.",

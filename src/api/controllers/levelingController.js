@@ -66,7 +66,7 @@ export async function updateLevelingSettings(req, res) {
         return res.status(400).json({
           success: false,
           error: 'ValidationError',
-          message: 'Minimum XP must be less than or equal to maximum XP, and both must be positive.',
+          message: 'La XP mínima debe ser menor o igual a la XP máxima, y ambas deben ser números positivos mayores a 0.',
         });
       }
     }
@@ -78,7 +78,7 @@ export async function updateLevelingSettings(req, res) {
         return res.status(400).json({
           success: false,
           error: 'ValidationError',
-          message: 'Cooldown must be between 0 and 3600 seconds.',
+          message: 'El cooldown anti-spam debe ser un valor entre 0 y 3600 segundos.',
         });
       }
     }
@@ -90,7 +90,7 @@ export async function updateLevelingSettings(req, res) {
         return res.status(400).json({
           success: false,
           error: 'ValidationError',
-          message: 'XP multiplier must be between 0.1 and 10.',
+          message: 'El multiplicador de XP debe estar entre 0.1x y 10x.',
         });
       }
     }
@@ -102,7 +102,7 @@ export async function updateLevelingSettings(req, res) {
         return res.status(404).json({
           success: false,
           error: 'NotFound',
-          message: 'Level-up announcement channel not found in this server.',
+          message: 'El canal seleccionado para anuncios no existe en este servidor.',
         });
       }
     }
@@ -119,7 +119,7 @@ export async function updateLevelingSettings(req, res) {
           return res.status(404).json({
             success: false,
             error: 'NotFound',
-            message: `Role for level ${lvl} not found in this server.`,
+            message: `El rol para el nivel ${lvl} no existe en este servidor.`,
           });
         }
 
@@ -127,7 +127,7 @@ export async function updateLevelingSettings(req, res) {
           return res.status(422).json({
             success: false,
             error: 'HierarchyError',
-            message: `Role "${role.name}" for level ${lvl} is equal to or higher than TitanBot's highest role.`,
+            message: `El rol "${role.name}" para el nivel ${lvl} es igual o superior al rol más alto de TitanBot en la jerarquía del servidor.`,
           });
         }
       }
