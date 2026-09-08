@@ -171,7 +171,20 @@
     "modalSendButton": "Send Test Now",
     "sendingTest": "Sending test...",
     "testSuccess": "Test message sent successfully to #{{channel}} in Discord!",
-    "testError": "Failed to send test message to Discord."
+    "testError": "Failed to send test message to Discord.",
+    "translateTitle": "Smart AI Translation (Gemini)",
+    "translateHelp": "Automatically detects and translates the message for members without altering mentions or variables.",
+    "cardSectionTitle": "Welcome Banner Card",
+    "cardSectionGoodbyeTitle": "Goodbye Banner Card",
+    "cardSectionSubtitle": "Renders a custom graphical card with centered avatar, username, and greeting banner.",
+    "cardEnable": "Enable Graphic Banner Card",
+    "cardBackground": "Card Background Wallpaper (Image URL)",
+    "cardBackgroundPlaceholder": "https://example.com/background.png (Leave empty for sleek gradient)",
+    "cardBorderColor": "Avatar Ring Border Color",
+    "cardTitleLabel": "Top Header Title",
+    "cardTitlePlaceholder": "WELCOME!",
+    "cardSubtitleLabel": "Subtitle / Bottom Caption",
+    "cardSubtitlePlaceholder": "You are member #{memberCount}"
   },
   "logging": {
     "title": "Logs & Audit",

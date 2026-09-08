@@ -171,7 +171,20 @@
     "modalSendButton": "Enviar Prueba Ahora",
     "sendingTest": "Enviando prueba...",
     "testSuccess": "¡Mensaje de prueba enviado exitosamente a #{{channel}} en Discord!",
-    "testError": "Ocurrió un error al enviar el mensaje de prueba a Discord."
+    "testError": "Ocurrió un error al enviar el mensaje de prueba a Discord.",
+    "translateTitle": "Traducción Inteligente con IA (Gemini)",
+    "translateHelp": "Detecta automáticamente el idioma y traduce el mensaje en tiempo real sin alterar menciones ni variables.",
+    "cardSectionTitle": "Tarjeta Gráfica de Bienvenida",
+    "cardSectionGoodbyeTitle": "Tarjeta Gráfica de Despedida",
+    "cardSectionSubtitle": "Genera una imagen tipo pancarta con el avatar centrado, nombre y bienvenida estilo anime o personalizado.",
+    "cardEnable": "Activar Tarjeta Gráfica (Banner)",
+    "cardBackground": "Fondo de la Tarjeta (URL de Imagen)",
+    "cardBackgroundPlaceholder": "https://ejemplo.com/fondo.jpg (Opcional - dejar vacío para degradado)",
+    "cardBorderColor": "Color del Borde del Avatar",
+    "cardTitleLabel": "Título Superior (Pancarta)",
+    "cardTitlePlaceholder": "¡BIENVENIDO!",
+    "cardSubtitleLabel": "Subtítulo / Mensaje Inferior",
+    "cardSubtitlePlaceholder": "Eres el miembro #{memberCount}"
   },
   "logging": {
     "title": "Logs y Auditoría",

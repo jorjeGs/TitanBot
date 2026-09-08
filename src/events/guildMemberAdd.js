@@ -1,8 +1,10 @@
-import { Events, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { Events, EmbedBuilder, PermissionFlagsBits, AttachmentBuilder } from 'discord.js';
 import { getColor, botConfig } from '../config/bot.js';
 import { getGuildConfig } from '../services/config/guildConfig.js';
 import { getWelcomeConfig } from '../utils/database.js';
 import { formatWelcomeMessage } from '../utils/welcome.js';
+import { generateWelcomeCard } from '../services/image/welcomeCardService.js';
+import { translateWelcomeText } from '../services/translation/welcomeTranslator.js';
 import { logEvent, EVENT_TYPES } from '../services/loggingService.js';
 import { getServerCounters, updateCounter } from '../services/serverstatsService.js';
 import { setBirthday as dbSetBirthday } from '../utils/database.js';
@@ -51,10 +53,49 @@ export default {
             // join pipeline (auto-role, verification, logging, counters) must still run.
             if (permissions?.has([PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages])) {
                 const formatData = { user, guild, member };
-                const welcomeMessage = formatWelcomeMessage(
-                    welcomeConfig.welcomeMessage || config?.welcomeMessage || welcomeConfig.welcomeEmbed?.description || config?.welcomeEmbed?.description || botConfig.welcome?.defaultWelcomeMessage || 'Welcome {user} to {server}!',
-                    formatData
-                );
+
+                let rawWelcomeMessage = welcomeConfig.welcomeMessage
+                    || config?.welcomeMessage
+                    || welcomeConfig.welcomeEmbed?.description
+                    || config?.welcomeEmbed?.description
+                    || botConfig.welcome?.defaultWelcomeMessage
+                    || 'Welcome {user} to {server}!';
+
+                const shouldTranslate = (welcomeConfig.welcomeTranslate ?? config?.welcomeTranslate) === true;
+                if (shouldTranslate) {
+                    const targetLocale = config?.locale || 'es-419';
+                    rawWelcomeMessage = await translateWelcomeText({
+                        text: rawWelcomeMessage,
+                        targetLocale,
+                        guildConfig: config,
+                    });
+                }
+
+                const welcomeMessage = formatWelcomeMessage(rawWelcomeMessage, formatData);
+
+                // Card Generation
+                const cardConfig = welcomeConfig.welcomeCard || config?.welcomeCard || {};
+                let cardAttachment = null;
+                if (cardConfig.enabled) {
+                    try {
+                        const cardTitle = formatWelcomeMessage(cardConfig.title || '¡BIENVENIDO!', formatData);
+                        const cardSubtitle = formatWelcomeMessage(cardConfig.subtitle || 'Eres el miembro #{memberCount}', formatData);
+                        const avatarUrl = user.displayAvatarURL({ extension: 'png', size: 256 });
+                        const cardBuffer = await generateWelcomeCard({
+                            avatarUrl,
+                            username: user.username || user.tag || 'Usuario',
+                            title: cardTitle,
+                            subtitle: cardSubtitle,
+                            backgroundUrl: cardConfig.background || '',
+                            borderColor: cardConfig.borderColor || '#FFFFFF',
+                        });
+                        if (cardBuffer) {
+                            cardAttachment = new AttachmentBuilder(cardBuffer, { name: 'welcome-card.png' });
+                        }
+                    } catch (cardErr) {
+                        logger.warn('Failed to generate welcome card on member join:', cardErr?.message);
+                    }
+                }
 
                 const shouldPing = welcomeConfig.welcomePing ?? config?.welcomePing;
                 const messageContent = shouldPing ? user.toString() : null;
@@ -71,7 +112,8 @@ export default {
 
                 if (!canEmbed || welcomeType === 'text') {
                     await channel.send({
-                        content: messageContent ? `${messageContent}\n${welcomeMessage}` : welcomeMessage
+                        content: messageContent ? `${messageContent}\n${welcomeMessage}` : welcomeMessage,
+                        files: cardAttachment ? [cardAttachment] : []
                     });
                 } else {
                     const embedColor = welcomeConfig.welcomeEmbed?.color || config?.welcomeEmbed?.color || getColor('success');
@@ -87,18 +129,23 @@ export default {
                         embed.setThumbnail(user.displayAvatarURL());
                     }
 
-                    const embedImage = typeof welcomeConfig.welcomeEmbed?.image === 'string' && welcomeConfig.welcomeEmbed.image
-                        ? welcomeConfig.welcomeEmbed.image
-                        : (typeof config?.welcomeEmbed?.image === 'string' && config.welcomeEmbed.image
-                            ? config.welcomeEmbed.image
-                            : (welcomeConfig.welcomeEmbed?.image?.url || welcomeConfig.welcomeImage));
-                    if (embedImage) {
-                        embed.setImage(embedImage);
+                    if (cardAttachment) {
+                        embed.setImage('attachment://welcome-card.png');
+                    } else {
+                        const embedImage = typeof welcomeConfig.welcomeEmbed?.image === 'string' && welcomeConfig.welcomeEmbed.image
+                            ? welcomeConfig.welcomeEmbed.image
+                            : (typeof config?.welcomeEmbed?.image === 'string' && config.welcomeEmbed.image
+                                ? config.welcomeEmbed.image
+                                : (welcomeConfig.welcomeEmbed?.image?.url || welcomeConfig.welcomeImage));
+                        if (embedImage) {
+                            embed.setImage(embedImage);
+                        }
                     }
                     
                     await channel.send({ 
                         content: messageContent,
-                        embeds: [embed] 
+                        embeds: [embed],
+                        files: cardAttachment ? [cardAttachment] : []
                     });
                 }
             }

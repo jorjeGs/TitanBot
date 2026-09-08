@@ -1,6 +1,75 @@
-﻿import React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Bot, Hash, User, Users, Image as ImageIcon } from 'lucide-react';
+
+function WelcomeCardMock({ card, username = 'NuevoMiembro', isGoodbye = false, replacePlaceholders }) {
+  if (!card || !card.enabled) return null;
+
+  const title = replacePlaceholders(card.title || (isGoodbye ? '¡HASTA LUEGO!' : '¡BIENVENIDO!'));
+  const subtitle = replacePlaceholders(
+    card.subtitle || (isGoodbye ? '{username} ha salido del servidor' : 'Eres el miembro #{memberCount}')
+  );
+  const borderColor = card.borderColor || (isGoodbye ? '#ED4245' : '#FFFFFF');
+
+  return (
+    <div
+      className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl flex flex-col items-center justify-center p-4 text-center select-none w-full"
+      style={{
+        aspectRatio: '800 / 350',
+        backgroundImage: card.background ? `url(${card.background})` : 'linear-gradient(135deg, #1e1f2f 0%, #2b2d42 50%, #11121a 100%)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Dark Vignette Overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(10, 11, 16, 0.35) 0%, rgba(10, 11, 16, 0.55) 60%, rgba(10, 11, 16, 0.85) 100%)',
+        }}
+      />
+
+      {/* Decorative center radial glow if no custom background */}
+      {!card.background && (
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(88,101,242,0.18)_0%,transparent_70%)]" />
+      )}
+
+      <div className="relative z-10 flex flex-col items-center justify-center w-full space-y-1.5">
+        {/* Top Header Title */}
+        {title && (
+          <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] text-white/90 uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            {title}
+          </span>
+        )}
+
+        {/* Circular Avatar with Custom Border */}
+        <div
+          className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-discord-blurple shadow-2xl relative transition-transform"
+          style={{
+            border: `3.5px solid ${borderColor}`,
+            boxShadow: `0 0 16px ${borderColor}40, 0 6px 12px rgba(0,0,0,0.6)`,
+          }}
+        >
+          <User className="w-8 h-8 sm:w-9 sm:h-9 text-white" />
+        </div>
+
+        {/* Username */}
+        <div className="max-w-[92%] truncate">
+          <h3 className="text-base sm:text-lg font-extrabold text-white tracking-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+            {username}
+          </h3>
+        </div>
+
+        {/* Subtitle / Member counter */}
+        {subtitle && (
+          <p className="text-[11px] sm:text-xs font-semibold text-slate-200/95 max-w-[92%] truncate drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+            {subtitle}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export function WelcomePreview({
   mode = 'text',
@@ -10,6 +79,7 @@ export function WelcomePreview({
   channelName = '',
   isGoodbye = false,
   pingUser = false,
+  card = null,
 }) {
   const { t } = useTranslation();
 
@@ -93,18 +163,30 @@ export function WelcomePreview({
 
           {/* Mode 1: Plain Text */}
           {mode === 'text' && (
-            <div className="text-sm text-slate-200 whitespace-pre-line leading-relaxed">
-              {formattedTextMessage.split(new RegExp(`(${previewUser})`, 'g')).map((part, index) =>
-                part === previewUser ? (
-                  <span
-                    key={index}
-                    className="bg-discord-blurple/30 text-discord-blurple font-medium px-1 rounded hover:bg-discord-blurple hover:text-white transition-colors cursor-pointer"
-                  >
-                    {part}
-                  </span>
-                ) : (
-                  part
-                )
+            <div className="space-y-3">
+              <div className="text-sm text-slate-200 whitespace-pre-line leading-relaxed">
+                {formattedTextMessage.split(new RegExp(`(${previewUser})`, 'g')).map((part, index) =>
+                  part === previewUser ? (
+                    <span
+                      key={index}
+                      className="bg-discord-blurple/30 text-discord-blurple font-medium px-1 rounded hover:bg-discord-blurple hover:text-white transition-colors cursor-pointer"
+                    >
+                      {part}
+                    </span>
+                  ) : (
+                    part
+                  )
+                )}
+              </div>
+              {card?.enabled && (
+                <div className="pt-1">
+                  <WelcomeCardMock
+                    card={card}
+                    username="NuevoMiembro"
+                    isGoodbye={isGoodbye}
+                    replacePlaceholders={replacePlaceholders}
+                  />
+                </div>
               )}
             </div>
           )}
@@ -170,8 +252,17 @@ export function WelcomePreview({
                 </div>
               </div>
 
-              {/* Optional Banner Image */}
-              {embed?.image && (
+              {/* Graphic Banner Card or Image */}
+              {card?.enabled ? (
+                <div className="pt-1">
+                  <WelcomeCardMock
+                    card={card}
+                    username="NuevoMiembro"
+                    isGoodbye={isGoodbye}
+                    replacePlaceholders={replacePlaceholders}
+                  />
+                </div>
+              ) : embed?.image ? (
                 <div className="rounded-lg overflow-hidden border border-slate-700/40 max-h-48 bg-slate-800">
                   <img
                     src={embed.image}
@@ -182,7 +273,7 @@ export function WelcomePreview({
                     }}
                   />
                 </div>
-              )}
+              ) : null}
 
               {/* Embed Footer */}
               {embedFooter && (

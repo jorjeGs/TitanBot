@@ -1,8 +1,10 @@
-import { Events, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { Events, EmbedBuilder, PermissionFlagsBits, AttachmentBuilder } from 'discord.js';
 import { getColor, botConfig } from '../config/bot.js';
 import { getGuildConfig } from '../services/config/guildConfig.js';
 import { getWelcomeConfig, getUserApplications, deleteApplication } from '../utils/database.js';
 import { formatWelcomeMessage } from '../utils/welcome.js';
+import { generateWelcomeCard } from '../services/image/welcomeCardService.js';
+import { translateWelcomeText } from '../services/translation/welcomeTranslator.js';
 import { logEvent, EVENT_TYPES } from '../services/loggingService.js';
 import { getServerCounters, updateCounter } from '../services/serverstatsService.js';
 import { getGuildBirthdays, deleteBirthday } from '../utils/database.js';
@@ -40,10 +42,49 @@ export default {
                 }
 
                 const formatData = { user, guild, member };
-                const goodbyeMessage = formatWelcomeMessage(
-                    welcomeConfig.leaveMessage || config?.leaveMessage || welcomeConfig.leaveEmbed?.description || config?.leaveEmbed?.description || botConfig.welcome?.defaultGoodbyeMessage || '{user} has left the server.',
-                    formatData
-                );
+
+                let rawGoodbyeMessage = welcomeConfig.leaveMessage
+                    || config?.leaveMessage
+                    || welcomeConfig.leaveEmbed?.description
+                    || config?.leaveEmbed?.description
+                    || botConfig.welcome?.defaultGoodbyeMessage
+                    || '{user} has left the server.';
+
+                const shouldTranslate = (welcomeConfig.goodbyeTranslate ?? config?.goodbyeTranslate) === true;
+                if (shouldTranslate) {
+                    const targetLocale = config?.locale || 'es-419';
+                    rawGoodbyeMessage = await translateWelcomeText({
+                        text: rawGoodbyeMessage,
+                        targetLocale,
+                        guildConfig: config,
+                    });
+                }
+
+                const goodbyeMessage = formatWelcomeMessage(rawGoodbyeMessage, formatData);
+
+                // Card Generation for Leave
+                const cardConfig = welcomeConfig.leaveCard || config?.leaveCard || {};
+                let cardAttachment = null;
+                if (cardConfig.enabled) {
+                    try {
+                        const cardTitle = formatWelcomeMessage(cardConfig.title || '¡HASTA LUEGO!', formatData);
+                        const cardSubtitle = formatWelcomeMessage(cardConfig.subtitle || '{username} ha salido del servidor', formatData);
+                        const avatarUrl = user.displayAvatarURL({ extension: 'png', size: 256 });
+                        const cardBuffer = await generateWelcomeCard({
+                            avatarUrl,
+                            username: user.username || user.tag || 'Usuario',
+                            title: cardTitle,
+                            subtitle: cardSubtitle,
+                            backgroundUrl: cardConfig.background || '',
+                            borderColor: cardConfig.borderColor || '#ED4245',
+                        });
+                        if (cardBuffer) {
+                            cardAttachment = new AttachmentBuilder(cardBuffer, { name: 'leave-card.png' });
+                        }
+                    } catch (cardErr) {
+                        logger.warn('Failed to generate leave card on member remove:', cardErr?.message);
+                    }
+                }
 
                 const embedTitle = formatWelcomeMessage(
                     welcomeConfig.leaveEmbed?.title || config?.leaveEmbed?.title || '👋 Goodbye',
@@ -59,7 +100,8 @@ export default {
                 if (!canEmbed || leaveType === 'text') {
                     await channel.send({
                         content: shouldPing ? `<@${user.id}> ${goodbyeMessage}` : goodbyeMessage,
-                        allowedMentions: shouldPing ? { users: [user.id] } : { parse: [] }
+                        allowedMentions: shouldPing ? { users: [user.id] } : { parse: [] },
+                        files: cardAttachment ? [cardAttachment] : []
                     });
                 } else {
                     const embedColor = welcomeConfig.leaveEmbed?.color || config?.leaveEmbed?.color || getColor('error');
@@ -75,19 +117,24 @@ export default {
                         embed.setThumbnail(user.displayAvatarURL());
                     }
 
-                    const embedImage = typeof welcomeConfig.leaveEmbed?.image === 'string' && welcomeConfig.leaveEmbed.image
-                        ? welcomeConfig.leaveEmbed.image
-                        : (typeof config?.leaveEmbed?.image === 'string' && config.leaveEmbed.image
-                            ? config.leaveEmbed.image
-                            : welcomeConfig.leaveEmbed?.image?.url);
-                    if (embedImage) {
-                        embed.setImage(embedImage);
+                    if (cardAttachment) {
+                        embed.setImage('attachment://leave-card.png');
+                    } else {
+                        const embedImage = typeof welcomeConfig.leaveEmbed?.image === 'string' && welcomeConfig.leaveEmbed.image
+                            ? welcomeConfig.leaveEmbed.image
+                            : (typeof config?.leaveEmbed?.image === 'string' && config.leaveEmbed.image
+                                ? config.leaveEmbed.image
+                                : welcomeConfig.leaveEmbed?.image?.url);
+                        if (embedImage) {
+                            embed.setImage(embedImage);
+                        }
                     }
 
                     await channel.send({
                         content: shouldPing ? `<@${user.id}>` : undefined,
                         allowedMentions: shouldPing ? { users: [user.id] } : { parse: [] },
-                        embeds: [embed]
+                        embeds: [embed],
+                        files: cardAttachment ? [cardAttachment] : []
                     });
                 }
             }

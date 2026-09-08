@@ -4,9 +4,11 @@ import { getWelcomeConfig, updateWelcomeConfig } from '../../utils/database.js';
 import { isBotOwner } from '../../config/bot.js';
 import config from '../../config/application.js';
 import { logger } from '../../utils/logger.js';
-import { PermissionFlagsBits, EmbedBuilder } from 'discord.js';
+import { PermissionFlagsBits, EmbedBuilder, AttachmentBuilder } from 'discord.js';
 import { formatWelcomeMessage } from '../../utils/welcome.js';
 import { resolveEmbedColor } from './embedController.js';
+import { generateWelcomeCard } from '../../services/image/welcomeCardService.js';
+import { translateWelcomeText } from '../../services/translation/welcomeTranslator.js';
 
 const ADMIN_PERMISSION = 0x8n;
 const MANAGE_GUILD_PERMISSION = 0x20n;
@@ -195,8 +197,17 @@ export async function getGuildConfigHandler(req, res) {
         thumbnail: true,
       },
       welcomePing: guildConfig.welcomePing !== undefined ? guildConfig.welcomePing : Boolean(welcomeConfig?.welcomePing),
+      welcomeTranslate: Boolean(guildConfig.welcomeTranslate),
+      welcomeCard: guildConfig.welcomeCard || {
+        enabled: false,
+        background: '',
+        borderColor: '#FFFFFF',
+        title: '¡BIENVENIDO!',
+        subtitle: 'Eres el miembro #{memberCount}',
+      },
       goodbyeEnabled: guildConfig.goodbyeEnabled !== undefined ? guildConfig.goodbyeEnabled : Boolean(welcomeConfig?.goodbyeEnabled),
       goodbyeChannelId: guildConfig.goodbyeChannelId ?? welcomeConfig?.goodbyeChannelId ?? null,
+      goodbyeTranslate: Boolean(guildConfig.goodbyeTranslate),
       leaveMessage: guildConfig.leaveMessage || welcomeConfig?.leaveMessage || '{user} has left the server.',
       leaveType: guildConfig.leaveType || welcomeConfig?.leaveType || 'text',
       leaveEmbed: guildConfig.leaveEmbed || welcomeConfig?.leaveEmbed || {
@@ -206,6 +217,13 @@ export async function getGuildConfigHandler(req, res) {
         footer: `Goodbye from ${req.guild?.name || 'Server'}`,
         image: '',
         thumbnail: true,
+      },
+      leaveCard: guildConfig.leaveCard || {
+        enabled: false,
+        background: '',
+        borderColor: '#ED4245',
+        title: '¡HASTA LUEGO!',
+        subtitle: '{username} ha salido del servidor',
       },
       goodbyePing: guildConfig.goodbyePing !== undefined ? guildConfig.goodbyePing : Boolean(welcomeConfig?.goodbyePing),
       autoRoleDelay: guildConfig.autoRoleDelay ?? welcomeConfig?.autoRoleDelay ?? 0,
@@ -338,6 +356,29 @@ export async function updateGuildConfigHandler(req, res) {
       sanitized.welcomePing = Boolean(patch.welcomePing);
     }
 
+    if (patch.welcomeTranslate !== undefined) {
+      sanitized.welcomeTranslate = Boolean(patch.welcomeTranslate);
+    }
+
+    if (patch.welcomeCard && typeof patch.welcomeCard === 'object') {
+      let cleanBg = '';
+      if (typeof patch.welcomeCard.background === 'string') {
+        const trimmed = patch.welcomeCard.background.trim();
+        if (trimmed && /^https?:\/\//i.test(trimmed)) {
+          cleanBg = trimmed;
+        }
+      }
+      sanitized.welcomeCard = {
+        enabled: Boolean(patch.welcomeCard.enabled),
+        background: cleanBg,
+        borderColor: typeof patch.welcomeCard.borderColor === 'string' && /^#[0-9A-Fa-f]{6}$/.test(patch.welcomeCard.borderColor)
+          ? patch.welcomeCard.borderColor
+          : '#FFFFFF',
+        title: typeof patch.welcomeCard.title === 'string' ? patch.welcomeCard.title.slice(0, 100) : '¡BIENVENIDO!',
+        subtitle: typeof patch.welcomeCard.subtitle === 'string' ? patch.welcomeCard.subtitle.slice(0, 150) : 'Eres el miembro #{memberCount}',
+      };
+    }
+
     if (patch.autoRoleDelay !== undefined) {
       const parsedDelay = parseInt(patch.autoRoleDelay, 10);
       sanitized.autoRoleDelay = isNaN(parsedDelay) ? 0 : Math.max(0, Math.min(300, parsedDelay));
@@ -382,6 +423,29 @@ export async function updateGuildConfigHandler(req, res) {
 
     if (patch.goodbyePing !== undefined) {
       sanitized.goodbyePing = Boolean(patch.goodbyePing);
+    }
+
+    if (patch.goodbyeTranslate !== undefined) {
+      sanitized.goodbyeTranslate = Boolean(patch.goodbyeTranslate);
+    }
+
+    if (patch.leaveCard && typeof patch.leaveCard === 'object') {
+      let cleanBg = '';
+      if (typeof patch.leaveCard.background === 'string') {
+        const trimmed = patch.leaveCard.background.trim();
+        if (trimmed && /^https?:\/\//i.test(trimmed)) {
+          cleanBg = trimmed;
+        }
+      }
+      sanitized.leaveCard = {
+        enabled: Boolean(patch.leaveCard.enabled),
+        background: cleanBg,
+        borderColor: typeof patch.leaveCard.borderColor === 'string' && /^#[0-9A-Fa-f]{6}$/.test(patch.leaveCard.borderColor)
+          ? patch.leaveCard.borderColor
+          : '#ED4245',
+        title: typeof patch.leaveCard.title === 'string' ? patch.leaveCard.title.slice(0, 100) : '¡HASTA LUEGO!',
+        subtitle: typeof patch.leaveCard.subtitle === 'string' ? patch.leaveCard.subtitle.slice(0, 150) : '{username} ha salido del servidor',
+      };
     }
 
     if (patch.dmOnClose !== undefined) {
@@ -649,9 +713,60 @@ export async function testWelcomeMessageHandler(req, res) {
       ? Boolean(draftConfig?.goodbyePing ?? guildConfig?.goodbyePing ?? welcomeConfig?.goodbyePing)
       : Boolean(draftConfig?.welcomePing ?? guildConfig?.welcomePing ?? welcomeConfig?.welcomePing);
 
-    const formattedTextMessage = formatWelcomeMessage(rawTemplate, formatData);
+    const shouldTranslate = isGoodbye
+      ? Boolean(draftConfig?.goodbyeTranslate ?? guildConfig?.goodbyeTranslate)
+      : Boolean(draftConfig?.welcomeTranslate ?? guildConfig?.welcomeTranslate);
+
+    let templateToUse = rawTemplate;
+    if (shouldTranslate) {
+      const targetLocale = draftConfig?.locale || guildConfig?.locale || 'es-419';
+      templateToUse = await translateWelcomeText({
+        text: rawTemplate,
+        targetLocale,
+        guildConfig,
+      });
+    }
+
+    const formattedTextMessage = formatWelcomeMessage(templateToUse, formatData);
     const testBadge = `🧪 **[Prueba de ${isGoodbye ? 'Despedida' : 'Bienvenida'} — Dashboard]**`;
     const userMentionStr = typeof testUser?.toString === 'function' ? testUser.toString() : `<@${testUser?.id || '0'}>`;
+
+    // Dynamic Welcome / Goodbye Graphic Card generator
+    const cardConfig = isGoodbye
+      ? (draftConfig?.leaveCard || guildConfig?.leaveCard || {})
+      : (draftConfig?.welcomeCard || guildConfig?.welcomeCard || {});
+
+    let cardAttachment = null;
+    if (cardConfig.enabled) {
+      try {
+        const cardTitle = formatWelcomeMessage(
+          cardConfig.title || (isGoodbye ? '¡HASTA LUEGO!' : '¡BIENVENIDO!'),
+          formatData
+        );
+        const cardSubtitle = formatWelcomeMessage(
+          cardConfig.subtitle || (isGoodbye ? '{username} ha salido del servidor' : 'Eres el miembro #{memberCount}'),
+          formatData
+        );
+        const avatarUrl = typeof testUser?.displayAvatarURL === 'function'
+          ? testUser.displayAvatarURL({ extension: 'png', size: 256 })
+          : null;
+
+        const cardBuffer = await generateWelcomeCard({
+          avatarUrl,
+          username: testUser.username || testUser.tag || 'Usuario',
+          title: cardTitle,
+          subtitle: cardSubtitle,
+          backgroundUrl: cardConfig.background || '',
+          borderColor: cardConfig.borderColor || (isGoodbye ? '#ED4245' : '#FFFFFF'),
+        });
+
+        if (cardBuffer) {
+          cardAttachment = new AttachmentBuilder(cardBuffer, { name: 'welcome-card.png' });
+        }
+      } catch (cardErr) {
+        logger.warn('Failed to generate welcome card in test:', cardErr?.message);
+      }
+    }
 
     let sentMessage;
     if (mode === 'embed') {
@@ -668,7 +783,7 @@ export async function testWelcomeMessageHandler(req, res) {
         formatData
       );
       const embedDesc = formatWelcomeMessage(
-        embedConfig.description || rawTemplate,
+        embedConfig.description || templateToUse,
         formatData
       );
       const embedFooter = embedConfig.footer
@@ -691,14 +806,18 @@ export async function testWelcomeMessageHandler(req, res) {
         if (avatar) embed.setThumbnail(avatar);
       }
 
-      const cleanImage = typeof embedConfig.image === 'string' ? embedConfig.image.trim() : '';
-      if (cleanImage) {
-        try {
-          const u = new URL(cleanImage);
-          if (u.protocol === 'http:' || u.protocol === 'https:') {
-            embed.setImage(cleanImage);
-          }
-        } catch {}
+      if (cardAttachment) {
+        embed.setImage('attachment://welcome-card.png');
+      } else {
+        const cleanImage = typeof embedConfig.image === 'string' ? embedConfig.image.trim() : '';
+        if (cleanImage) {
+          try {
+            const u = new URL(cleanImage);
+            if (u.protocol === 'http:' || u.protocol === 'https:') {
+              embed.setImage(cleanImage);
+            }
+          } catch {}
+        }
       }
 
       const messageContent = shouldPing
@@ -708,11 +827,13 @@ export async function testWelcomeMessageHandler(req, res) {
       sentMessage = await channel.send({
         content: messageContent,
         embeds: [embed],
+        files: cardAttachment ? [cardAttachment] : [],
       });
     } else {
       const pingLine = shouldPing ? `${userMentionStr}\n` : '';
       sentMessage = await channel.send({
         content: `${testBadge}\n${pingLine}${formattedTextMessage}`.slice(0, 2000),
+        files: cardAttachment ? [cardAttachment] : [],
       });
     }
 
