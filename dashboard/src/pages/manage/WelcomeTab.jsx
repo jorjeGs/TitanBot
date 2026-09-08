@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useGuild } from '../../contexts/GuildContext';
 import { ChannelSelect } from '../../components/common/ChannelSelect';
 import { WelcomePreview } from '../../components/preview/WelcomePreview';
+import { apiFetch } from '../../api/client';
 import {
   Sparkles,
   MessageSquare,
@@ -14,6 +15,10 @@ import {
   LogOut,
   Palette,
   Clock,
+  FlaskConical,
+  Send,
+  Loader2,
+  CheckCircle2,
 } from 'lucide-react';
 
 const COLOR_SWATCHES = [
@@ -31,6 +36,11 @@ export function WelcomeTab() {
 
   const [activeSubTab, setActiveSubTab] = useState('welcome'); // 'welcome' | 'goodbye' | 'autoroles'
   const [selectedToAdd, setSelectedToAdd] = useState('');
+  const [isTestModalOpen, setIsTestModalOpen] = useState(false);
+  const [testType, setTestType] = useState('welcome'); // 'welcome' | 'goodbye'
+  const [testChannelId, setTestChannelId] = useState('');
+  const [isTesting, setIsTesting] = useState(false);
+  const [testFeedback, setTestFeedback] = useState(null);
 
   if (!draftConfig) return null;
 
@@ -120,6 +130,48 @@ export function WelcomeTab() {
       ...leaveEmbed,
       [field]: val,
     });
+  };
+
+  const handleOpenTestModal = () => {
+    setTestType(activeSubTab === 'goodbye' ? 'goodbye' : 'welcome');
+    const defaultTarget = draftConfig.testChannelId
+      || (activeSubTab === 'goodbye' ? draftConfig.goodbyeChannelId : draftConfig.welcomeChannel)
+      || textChannels[0]?.id
+      || '';
+    setTestChannelId(defaultTarget);
+    setTestFeedback(null);
+    setIsTestModalOpen(true);
+  };
+
+  const handleSendTest = async () => {
+    if (!testChannelId || !currentGuild?.id) return;
+    setIsTesting(true);
+    setTestFeedback(null);
+
+    try {
+      const res = await apiFetch(`/guilds/${currentGuild.id}/welcome/test`, {
+        method: 'POST',
+        body: {
+          channelId: testChannelId,
+          type: testType,
+          config: draftConfig,
+        },
+      });
+
+      setTestFeedback({
+        success: true,
+        message: t('welcome.testSuccess', '¡Mensaje de prueba enviado exitosamente a #{{channel}} en Discord!', {
+          channel: res.channelName || 'canal',
+        }),
+      });
+    } catch (err) {
+      setTestFeedback({
+        success: false,
+        message: err.message || t('welcome.testError', 'Ocurrió un error al enviar el mensaje de prueba a Discord.'),
+      });
+    } finally {
+      setIsTesting(false);
+    }
   };
 
   return (
@@ -698,6 +750,33 @@ export function WelcomeTab() {
 
         {/* Live Preview Right Column */}
         <div className="lg:col-span-5 sticky top-24 space-y-4">
+          {/* Test in Discord Simulator Card */}
+          <div className="flex items-center justify-between bg-discord-darker/90 border border-slate-800 rounded-xl p-3.5 shadow-md">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+                <FlaskConical className="w-4 h-4 text-indigo-400" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-xs font-semibold text-slate-100 block truncate">
+                  {t('welcome.testTitle', 'Simulador en Discord')}
+                </span>
+                <span className="text-[11px] text-slate-400 block truncate">
+                  {draftConfig.testChannelId
+                    ? t('welcome.usingTestChannel', 'Canal de pruebas vinculado')
+                    : t('welcome.noTestChannel', 'Envía una prueba real a Discord')}
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleOpenTestModal}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white text-xs font-semibold rounded-lg shadow-sm transition-all shrink-0 cursor-pointer"
+            >
+              <Send className="w-3.5 h-3.5" />
+              <span>{t('welcome.testButton', 'Probar en Discord')}</span>
+            </button>
+          </div>
+
           <WelcomePreview
             mode={activeSubTab === 'goodbye' ? leaveType : welcomeType}
             message={activeSubTab === 'goodbye' ? draftConfig.leaveMessage : draftConfig.welcomeMessage}
@@ -709,6 +788,150 @@ export function WelcomeTab() {
           />
         </div>
       </div>
+
+      {/* Test in Discord Modal */}
+      {isTestModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="bg-discord-darker border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            {/* Modal Header */}
+            <div className="p-5 border-b border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+                  <FlaskConical className="w-4 h-4 text-indigo-400" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">
+                    {t('welcome.modalTestTitle', 'Probar Mensaje en Discord')}
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    {t('welcome.modalTestSubtitle', 'Envía un mensaje de prueba al servidor con la configuración actual.')}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsTestModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-5 overflow-y-auto">
+              {/* Type Switcher */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                  {t('welcome.modalEventType', 'Tipo de Mensaje a Probar')}
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTestType('welcome');
+                      setTestFeedback(null);
+                    }}
+                    className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all cursor-pointer ${
+                      testType === 'welcome'
+                        ? 'bg-discord-blurple/20 border-discord-blurple text-white shadow-sm'
+                        : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <Sparkles className="w-4 h-4 text-discord-blurple" />
+                    <span>{t('welcome.tabWelcome', 'Bienvenida')}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTestType('goodbye');
+                      setTestFeedback(null);
+                    }}
+                    className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all cursor-pointer ${
+                      testType === 'goodbye'
+                        ? 'bg-rose-500/20 border-rose-500 text-white shadow-sm'
+                        : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    <LogOut className="w-4 h-4 text-rose-400" />
+                    <span>{t('welcome.tabGoodbye', 'Despedida')}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Destination Channel */}
+              <div className="space-y-2">
+                <ChannelSelect
+                  label={t('welcome.modalChannelLabel', 'Canal de Destino para la Prueba')}
+                  helpText={
+                    draftConfig.testChannelId && draftConfig.testChannelId === testChannelId
+                      ? t('welcome.isSandboxChannel', '✨ Este es el canal de pruebas configurado del bot.')
+                      : t('welcome.modalChannelHelp', 'Recomendamos usar un canal de pruebas privado para no alertar a los miembros.')
+                  }
+                  channels={textChannels}
+                  value={testChannelId}
+                  onChange={(val) => {
+                    setTestChannelId(val);
+                    setTestFeedback(null);
+                  }}
+                />
+              </div>
+
+              {/* Real-time Draft Notice */}
+              <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-300 text-xs leading-relaxed">
+                💡 {t('welcome.modalNotice', 'La prueba utilizará los textos, colores, imágenes y variables que tienes en pantalla en este momento, sin necesidad de guardar primero.')}
+              </div>
+
+              {/* Feedback Message */}
+              {testFeedback && (
+                <div
+                  className={`p-3 rounded-xl border text-xs flex items-start gap-2.5 ${
+                    testFeedback.success
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                      : 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+                  }`}
+                >
+                  {testFeedback.success ? (
+                    <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" />
+                  ) : (
+                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
+                  )}
+                  <span className="font-medium leading-relaxed">{testFeedback.message}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 bg-discord-dark/60 border-t border-slate-800 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setIsTestModalOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors cursor-pointer"
+              >
+                {t('common.close', 'Cerrar')}
+              </button>
+              <button
+                type="button"
+                onClick={handleSendTest}
+                disabled={!testChannelId || isTesting}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg shadow transition-all cursor-pointer"
+              >
+                {isTesting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>{t('welcome.sendingTest', 'Enviando prueba...')}</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>{t('welcome.modalSendButton', 'Enviar Prueba Ahora')}</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

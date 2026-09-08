@@ -2,14 +2,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGuild } from '../../contexts/GuildContext';
 import { RoleSelect } from '../../components/common/RoleSelect';
+import { ChannelSelect } from '../../components/common/ChannelSelect';
 import { EnvWarningsBanner } from '../../components/common/EnvWarningsBanner';
-import { Globe, Terminal, Shield, Wrench } from 'lucide-react';
+import { Globe, Terminal, Shield, Wrench, FlaskConical } from 'lucide-react';
 
 export function GeneralTab() {
   const { t } = useTranslation();
-  const { draftConfig, updateDraft, roles } = useGuild();
+  const { draftConfig, updateDraft, roles, channels } = useGuild();
 
   if (!draftConfig) return null;
+
+  const textChannels = (channels || []).filter((c) => c.type === 0 || c.type === 5 || !c.type);
 
   const localeOptions = [
     { value: 'auto', label: t('general.localeAuto') },
@@ -95,6 +98,30 @@ export function GeneralTab() {
             roles={roles}
             value={draftConfig.modRole}
             onChange={(val) => updateDraft('modRole', val)}
+          />
+        </div>
+      </div>
+
+      {/* Card: Sandbox / Test Channel */}
+      <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6">
+        <div className="flex items-center gap-2.5 pb-4 border-b border-slate-800">
+          <FlaskConical className="w-5 h-5 text-indigo-400" />
+          <h2 className="text-base font-semibold text-slate-100">
+            {t('general.testChannelTitle', 'Canal de Pruebas (Sandbox)')}
+          </h2>
+        </div>
+
+        <p className="text-xs text-slate-400 -mt-2 leading-relaxed">
+          {t('general.testChannelDescription', 'Canal de Discord donde el bot enviará mensajes simulados al usar el botón "Probar en Discord" en las distintas herramientas del panel. Esto evita enviar spam o notificaciones a tus usuarios reales durante las pruebas.')}
+        </p>
+
+        <div className="max-w-md">
+          <ChannelSelect
+            label={t('general.testChannel', 'Canal de pruebas predeterminado')}
+            helpText={t('general.testChannelHelp', 'Selecciona un canal exclusivo de pruebas o déjalo vacío para usar el canal configurado por cada módulo.')}
+            channels={textChannels}
+            value={draftConfig.testChannelId}
+            onChange={(val) => updateDraft('testChannelId', val)}
           />
         </div>
       </div>

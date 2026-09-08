@@ -6,6 +6,7 @@ import {
   getGuildRoles,
   getGuildConfigHandler,
   updateGuildConfigHandler,
+  testWelcomeMessageHandler,
 } from '../controllers/guildController.js';
 import { updateGuildCommands } from '../controllers/commandController.js';
 import {
@@ -141,6 +142,7 @@ router.get('/:guildId/channels', verifyAuth, checkGuildPermissions, getGuildChan
 router.get('/:guildId/roles', verifyAuth, checkGuildPermissions, getGuildRoles);
 router.get('/:guildId/config', verifyAuth, checkGuildPermissions, getGuildConfigHandler);
 router.patch('/:guildId/config', verifyAuth, checkGuildPermissions, updateGuildConfigHandler);
+router.post('/:guildId/welcome/test', verifyAuth, checkGuildPermissions, testWelcomeMessageHandler);
 router.patch('/:guildId/commands', verifyAuth, checkGuildPermissions, updateGuildCommands);
 router.get('/:guildId/reactroles', verifyAuth, checkGuildPermissions, getGuildReactionRoles);
 router.post('/:guildId/reactroles', verifyAuth, checkGuildPermissions, createGuildReactionRole);

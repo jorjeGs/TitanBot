@@ -103,7 +103,11 @@
     "adminRole": "Administrator Role",
     "adminRoleHelp": "Members with this role can run bot administrator commands.",
     "modRole": "Moderator Role",
-    "modRoleHelp": "Members with this role can execute moderation commands like /ban, /kick, and /timeout."
+    "modRoleHelp": "Members with this role can execute moderation commands like /ban, /kick, and /timeout.",
+    "testChannelTitle": "Test Channel (Sandbox)",
+    "testChannelDescription": "Discord channel where the bot sends simulated messages when using the \"Test in Discord\" button across panel features. This prevents spamming or pinging active members during testing.",
+    "testChannel": "Default Test Channel",
+    "testChannelHelp": "Select a dedicated sandbox channel or leave blank to use each module's configured channel."
   },
   "welcome": {
     "title": "Welcome & Auto-Role",
@@ -152,7 +156,22 @@
     "goodbyeChannelHelp": "Channel where departure notices will be sent.",
     "goodbyeMessage": "Farewell Message",
     "goodbyeMessageHelp": "Message when a member leaves the server.",
-    "previewGoodbyeTitle": "Farewell Preview"
+    "previewGoodbyeTitle": "Farewell Preview",
+    "testTitle": "Discord Simulator",
+    "testButton": "Test in Discord",
+    "usingTestChannel": "Linked test channel",
+    "noTestChannel": "Send a real test to Discord",
+    "modalTestTitle": "Test Message in Discord",
+    "modalTestSubtitle": "Send a simulated test message to your server using the current settings.",
+    "modalEventType": "Message Type to Test",
+    "modalChannelLabel": "Destination Channel for Test",
+    "modalChannelHelp": "We recommend using a private sandbox channel to avoid alerting members.",
+    "isSandboxChannel": "✨ This is the bot's configured sandbox test channel.",
+    "modalNotice": "The test will use the live texts, colors, images, and variables currently on your screen, without needing to save first.",
+    "modalSendButton": "Send Test Now",
+    "sendingTest": "Sending test...",
+    "testSuccess": "Test message sent successfully to #{{channel}} in Discord!",
+    "testError": "Failed to send test message to Discord."
   },
   "logging": {
     "title": "Logs & Audit",

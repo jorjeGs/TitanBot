@@ -103,7 +103,11 @@
     "adminRole": "Rol de Administrador",
     "adminRoleHelp": "Los miembros con este rol pueden ejecutar comandos de nivel administrador.",
     "modRole": "Rol de Moderador",
-    "modRoleHelp": "Los miembros con este rol pueden ejecutar comandos de moderación como /ban, /kick y /timeout."
+    "modRoleHelp": "Los miembros con este rol pueden ejecutar comandos de moderación como /ban, /kick y /timeout.",
+    "testChannelTitle": "Canal de Pruebas (Sandbox)",
+    "testChannelDescription": "Canal de Discord donde el bot enviará mensajes simulados al usar el botón \"Probar en Discord\" en las distintas herramientas del panel. Esto evita enviar spam o notificaciones a tus usuarios reales durante las pruebas.",
+    "testChannel": "Canal de pruebas predeterminado",
+    "testChannelHelp": "Selecciona un canal exclusivo de pruebas o déjalo vacío para usar el canal configurado por cada módulo."
   },
   "welcome": {
     "title": "Bienvenida y Rol Automático",
@@ -152,7 +156,22 @@
     "goodbyeChannelHelp": "Canal donde se publicará cuando un miembro salga.",
     "goodbyeMessage": "Mensaje de despedida",
     "goodbyeMessageHelp": "Mensaje cuando un miembro abandona el servidor.",
-    "previewGoodbyeTitle": "Vista Previa de Despedida"
+    "previewGoodbyeTitle": "Vista Previa de Despedida",
+    "testTitle": "Simulador en Discord",
+    "testButton": "Probar en Discord",
+    "usingTestChannel": "Canal de pruebas vinculado",
+    "noTestChannel": "Envía una prueba real a Discord",
+    "modalTestTitle": "Probar Mensaje en Discord",
+    "modalTestSubtitle": "Envía un mensaje de prueba al servidor con la configuración actual.",
+    "modalEventType": "Tipo de Mensaje a Probar",
+    "modalChannelLabel": "Canal de Destino para la Prueba",
+    "modalChannelHelp": "Recomendamos usar un canal de pruebas privado para no alertar a los miembros.",
+    "isSandboxChannel": "✨ Este es el canal de pruebas configurado del bot.",
+    "modalNotice": "La prueba utilizará los textos, colores, imágenes y variables que tienes en pantalla en este momento, sin necesidad de guardar primero.",
+    "modalSendButton": "Enviar Prueba Ahora",
+    "sendingTest": "Enviando prueba...",
+    "testSuccess": "¡Mensaje de prueba enviado exitosamente a #{{channel}} en Discord!",
+    "testError": "Ocurrió un error al enviar el mensaje de prueba a Discord."
   },
   "logging": {
     "title": "Logs y Auditoría",

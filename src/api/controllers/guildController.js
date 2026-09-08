@@ -4,7 +4,9 @@ import { getWelcomeConfig, updateWelcomeConfig } from '../../utils/database.js';
 import { isBotOwner } from '../../config/bot.js';
 import config from '../../config/application.js';
 import { logger } from '../../utils/logger.js';
-import { PermissionFlagsBits } from 'discord.js';
+import { PermissionFlagsBits, EmbedBuilder } from 'discord.js';
+import { formatWelcomeMessage } from '../../utils/welcome.js';
+import { resolveEmbedColor } from './embedController.js';
 
 const ADMIN_PERMISSION = 0x8n;
 const MANAGE_GUILD_PERMISSION = 0x20n;
@@ -181,6 +183,7 @@ export async function getGuildConfigHandler(req, res) {
       ...guildConfig,
       welcomeEnabled: guildConfig.welcomeEnabled !== undefined ? guildConfig.welcomeEnabled : (welcomeConfig ? Boolean(welcomeConfig.enabled) : true),
       welcomeChannel: guildConfig.welcomeChannel ?? welcomeConfig?.channelId ?? null,
+      testChannelId: guildConfig.testChannelId ?? null,
       welcomeMessage: guildConfig.welcomeMessage || welcomeConfig?.welcomeMessage || 'Welcome {user} to {server}!',
       welcomeType: guildConfig.welcomeType || welcomeConfig?.welcomeType || 'text',
       welcomeEmbed: guildConfig.welcomeEmbed || welcomeConfig?.welcomeEmbed || {
@@ -284,6 +287,7 @@ export async function updateGuildConfigHandler(req, res) {
     const snowflakeFields = [
       'welcomeChannel',
       'goodbyeChannelId',
+      'testChannelId',
       'adminRole',
       'modRole',
       'birthdayChannelId',
@@ -534,6 +538,197 @@ export async function updateGuildConfigHandler(req, res) {
       success: false,
       error: 'DatabaseError',
       message: 'Failed to save server configuration.',
+    });
+  }
+}
+
+/**
+ * POST /api/guilds/:guildId/welcome/test
+ * Dispatches a simulated welcome or goodbye message to Discord for preview & testing.
+ */
+export async function testWelcomeMessageHandler(req, res) {
+  try {
+    const { guildId } = req.params;
+    const guild = req.guild || req.client?.guilds?.cache?.get(guildId);
+
+    if (!guild) {
+      return res.status(404).json({
+        success: false,
+        error: 'GuildNotFound',
+        message: 'Servidor no encontrado o TitanBot no está presente.',
+      });
+    }
+
+    const { channelId, type = 'welcome', config: draftConfig } = req.body || {};
+    const isGoodbye = type === 'goodbye';
+
+    // Fetch existing stored configurations as fallbacks
+    const guildConfig = await getGuildConfig(req.client, guildId).catch(() => ({}));
+    const welcomeConfig = await getWelcomeConfig(req.client, guildId).catch(() => null);
+
+    // Resolve target channel:
+    // 1) Explicit channelId passed in request
+    // 2) Draft or stored testChannelId
+    // 3) Default goodbye/welcome channel from draft or storage
+    const targetChannelId = channelId
+      || draftConfig?.testChannelId
+      || guildConfig?.testChannelId
+      || (isGoodbye
+          ? (draftConfig?.goodbyeChannelId || guildConfig?.goodbyeChannelId || welcomeConfig?.goodbyeChannelId)
+          : (draftConfig?.welcomeChannel || guildConfig?.welcomeChannel || welcomeConfig?.channelId));
+
+    if (!targetChannelId) {
+      return res.status(400).json({
+        success: false,
+        error: 'ChannelNotSpecified',
+        message: 'No se encontró ningún canal de destino para enviar la prueba. Selecciona un canal o configura un Canal de Pruebas.',
+      });
+    }
+
+    const channel = guild.channels.cache.get(targetChannelId);
+    if (!channel || !channel.isTextBased?.()) {
+      return res.status(404).json({
+        success: false,
+        error: 'ChannelNotFound',
+        message: 'El canal seleccionado no existe o no es un canal de texto válido en este servidor.',
+      });
+    }
+
+    const me = guild.members?.me || {
+      id: req.client?.user?.id || 'bot',
+      user: req.client?.user || { id: 'bot', username: 'TitanBot' },
+    };
+    const permissions = typeof channel.permissionsFor === 'function'
+      ? channel.permissionsFor(me)
+      : { has: () => true };
+
+    if (!permissions || (typeof permissions.has === 'function' && !permissions.has([PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]))) {
+      return res.status(403).json({
+        success: false,
+        error: 'MissingPermissions',
+        message: `TitanBot no tiene permisos suficientes para ver o enviar mensajes en #${channel.name}.`,
+      });
+    }
+
+    // Resolve test member & user (prefer caller, fallback to bot itself)
+    const testMember = (req.user?.id && guild.members?.cache?.get?.(req.user.id)) || me;
+    const testUser = testMember?.user || (testMember ? {
+      id: testMember.id,
+      username: req.user?.username || 'User',
+      toString: () => `<@${testMember.id}>`,
+      displayAvatarURL: () => null,
+    } : (me?.user || { id: '0', username: 'User', toString: () => '<@0>', displayAvatarURL: () => null }));
+    const formatData = { user: testUser, guild, member: testMember };
+
+    // Resolve settings based on type
+    const mode = isGoodbye
+      ? (draftConfig?.leaveType || guildConfig?.leaveType || welcomeConfig?.leaveType || 'text')
+      : (draftConfig?.welcomeType || guildConfig?.welcomeType || welcomeConfig?.welcomeType || 'text');
+
+    const rawTemplate = isGoodbye
+      ? (draftConfig?.leaveMessage ?? guildConfig?.leaveMessage ?? welcomeConfig?.leaveMessage ?? '{user} has left the server.')
+      : (draftConfig?.welcomeMessage ?? guildConfig?.welcomeMessage ?? welcomeConfig?.welcomeMessage ?? 'Welcome {user} to {server}!');
+
+    const embedConfig = isGoodbye
+      ? (draftConfig?.leaveEmbed || guildConfig?.leaveEmbed || welcomeConfig?.leaveEmbed || {
+          title: '👋 Farewell!',
+          description: '{user} has left the server.',
+          color: '#ED4245',
+          footer: `Goodbye from ${guild.name}`,
+          thumbnail: true,
+        })
+      : (draftConfig?.welcomeEmbed || guildConfig?.welcomeEmbed || welcomeConfig?.welcomeEmbed || {
+          title: '🎉 Welcome to the Server!',
+          description: 'Welcome {user} to {server}!',
+          color: '#5865F2',
+          footer: `Welcome to ${guild.name}`,
+          thumbnail: true,
+        });
+
+    const shouldPing = isGoodbye
+      ? Boolean(draftConfig?.goodbyePing ?? guildConfig?.goodbyePing ?? welcomeConfig?.goodbyePing)
+      : Boolean(draftConfig?.welcomePing ?? guildConfig?.welcomePing ?? welcomeConfig?.welcomePing);
+
+    const formattedTextMessage = formatWelcomeMessage(rawTemplate, formatData);
+    const testBadge = `🧪 **[Prueba de ${isGoodbye ? 'Despedida' : 'Bienvenida'} — Dashboard]**`;
+    const userMentionStr = typeof testUser?.toString === 'function' ? testUser.toString() : `<@${testUser?.id || '0'}>`;
+
+    let sentMessage;
+    if (mode === 'embed') {
+      if (typeof permissions.has === 'function' && !permissions.has(PermissionFlagsBits.EmbedLinks)) {
+        return res.status(403).json({
+          success: false,
+          error: 'MissingPermissions',
+          message: `El modo Embed requiere el permiso "Insertar enlaces" (Embed Links) para TitanBot en #${channel.name}.`,
+        });
+      }
+
+      const embedTitle = formatWelcomeMessage(
+        embedConfig.title || (isGoodbye ? '👋 Farewell!' : '🎉 Welcome to the Server!'),
+        formatData
+      );
+      const embedDesc = formatWelcomeMessage(
+        embedConfig.description || rawTemplate,
+        formatData
+      );
+      const embedFooter = embedConfig.footer
+        ? formatWelcomeMessage(embedConfig.footer, formatData)
+        : (isGoodbye ? `Goodbye from ${guild.name}` : `Welcome to ${guild.name}`);
+
+      const embedColor = resolveEmbedColor(
+        embedConfig.color || (isGoodbye ? '#ED4245' : '#5865F2')
+      );
+
+      const embed = new EmbedBuilder()
+        .setColor(embedColor)
+        .setTitle(embedTitle ? embedTitle.slice(0, 256) : null)
+        .setDescription(embedDesc ? embedDesc.slice(0, 4096) : '')
+        .setTimestamp()
+        .setFooter({ text: `🧪 Prueba • ${embedFooter}`.slice(0, 2048) });
+
+      if (embedConfig.thumbnail !== false && typeof testUser?.displayAvatarURL === 'function') {
+        const avatar = testUser.displayAvatarURL();
+        if (avatar) embed.setThumbnail(avatar);
+      }
+
+      const cleanImage = typeof embedConfig.image === 'string' ? embedConfig.image.trim() : '';
+      if (cleanImage) {
+        try {
+          const u = new URL(cleanImage);
+          if (u.protocol === 'http:' || u.protocol === 'https:') {
+            embed.setImage(cleanImage);
+          }
+        } catch {}
+      }
+
+      const messageContent = shouldPing
+        ? `${testBadge}\n${userMentionStr}`
+        : testBadge;
+
+      sentMessage = await channel.send({
+        content: messageContent,
+        embeds: [embed],
+      });
+    } else {
+      const pingLine = shouldPing ? `${userMentionStr}\n` : '';
+      sentMessage = await channel.send({
+        content: `${testBadge}\n${pingLine}${formattedTextMessage}`.slice(0, 2000),
+      });
+    }
+
+    return res.json({
+      success: true,
+      channelId: channel.id,
+      channelName: channel.name,
+      messageId: sentMessage.id,
+      type: isGoodbye ? 'goodbye' : 'welcome',
+    });
+  } catch (error) {
+    logger.error('Failed to dispatch test welcome/goodbye message:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'DiscordSendError',
+      message: error?.message || 'Error al enviar el mensaje de prueba a Discord.',
     });
   }
 }

@@ -2409,4 +2409,83 @@ describe('API Routes Integration Tests', () => {
     assert.ok(typeof data.warningCount === 'number');
     assert.ok(typeof data.allConfigured === 'boolean');
   });
+
+  it('POST /api/guilds/:guildId/welcome/test dispatches test message to Discord channel', async () => {
+    const token = createSessionToken({
+      id: 'admin-user-id',
+      username: 'ServerAdmin',
+      discriminator: '0',
+    });
+
+    // 1. Text mode test
+    const resText = await fetch(`${baseUrl}/guilds/guild-123/welcome/test`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: 'ch-1',
+        type: 'welcome',
+        config: {
+          welcomeType: 'text',
+          welcomeMessage: 'Hello {user}, welcome to {server}!',
+          welcomePing: true,
+        },
+      }),
+    });
+
+    assert.strictEqual(resText.status, 200);
+    const dataText = await resText.json();
+    assert.strictEqual(dataText.success, true);
+    assert.strictEqual(dataText.channelId, 'ch-1');
+    assert.strictEqual(dataText.channelName, 'general');
+    assert.strictEqual(dataText.type, 'welcome');
+
+    // 2. Embed mode goodbye test
+    const resEmbed = await fetch(`${baseUrl}/guilds/guild-123/welcome/test`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: 'ch-1',
+        type: 'goodbye',
+        config: {
+          leaveType: 'embed',
+          leaveEmbed: {
+            title: 'Goodbye!',
+            description: '{user} has departed {server}.',
+            color: '#ED4245',
+          },
+        },
+      }),
+    });
+
+    assert.strictEqual(resEmbed.status, 200);
+    const dataEmbed = await resEmbed.json();
+    assert.strictEqual(dataEmbed.success, true);
+    assert.strictEqual(dataEmbed.type, 'goodbye');
+
+    // 3. Rejects missing channel
+    const resNoChannel = await fetch(`${baseUrl}/guilds/guild-123/welcome/test`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `titanbot_session=${token}`,
+      },
+      body: JSON.stringify({
+        channelId: '',
+        config: {
+          testChannelId: null,
+          welcomeChannel: null,
+        },
+      }),
+    });
+    assert.strictEqual(resNoChannel.status, 400);
+    const dataNoChannel = await resNoChannel.json();
+    assert.strictEqual(dataNoChannel.success, false);
+    assert.strictEqual(dataNoChannel.error, 'ChannelNotSpecified');
+  });
 });
