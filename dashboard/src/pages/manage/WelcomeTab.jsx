@@ -37,6 +37,8 @@ export function WelcomeTab() {
   const { currentGuild, draftConfig, updateDraft, channels, roles } = useGuild();
 
   const [activeSubTab, setActiveSubTab] = useState('welcome'); // 'welcome' | 'goodbye' | 'autoroles'
+  const [welcomeSection, setWelcomeSection] = useState('message'); // 'message' | 'card' | 'ai'
+  const [goodbyeSection, setGoodbyeSection] = useState('message'); // 'message' | 'card' | 'ai'
   const [selectedToAdd, setSelectedToAdd] = useState('');
   const [isTestModalOpen, setIsTestModalOpen] = useState(false);
   const [testType, setTestType] = useState('welcome'); // 'welcome' | 'goodbye'
@@ -267,9 +269,10 @@ export function WelcomeTab() {
         <div className="lg:col-span-7 space-y-6">
           {/* TAB 1: WELCOMES */}
           {activeSubTab === 'welcome' && (
-            <div className="space-y-6">
-              <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div className="space-y-4">
+              {/* Channel & Main Switch Card */}
+              <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                   <div className="flex items-center gap-2.5">
                     <MessageSquare className="w-5 h-5 text-discord-blurple" />
                     <h2 className="text-base font-semibold text-slate-100">
@@ -294,367 +297,445 @@ export function WelcomeTab() {
                   value={draftConfig.welcomeChannel}
                   onChange={(val) => updateDraft('welcomeChannel', val)}
                 />
+              </div>
 
-                {/* Format Toggle: Plain Text vs Discord Embed */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    {t('welcome.formatType', 'Formato del Mensaje')}
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => updateDraft('welcomeType', 'text')}
-                      className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all ${
-                        welcomeType === 'text'
-                          ? 'bg-discord-blurple/20 border-discord-blurple text-white shadow-sm'
-                          : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      <span>{t('welcome.formatText', 'Texto Plano')}</span>
-                    </button>
+              {/* Segmented Subsections Switcher */}
+              <div className="flex bg-discord-dark/80 p-1 rounded-xl border border-slate-800 gap-1 shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setWelcomeSection('message')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all ${
+                    welcomeSection === 'message'
+                      ? 'bg-discord-blurple text-white shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  }`}
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>{t('welcome.sectionMessage', 'Mensaje & Formato')}</span>
+                </button>
 
-                    <button
-                      type="button"
-                      onClick={() => updateDraft('welcomeType', 'embed')}
-                      className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all ${
-                        welcomeType === 'embed'
-                          ? 'bg-discord-blurple/20 border-discord-blurple text-white shadow-sm'
-                          : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <LayoutTemplate className="w-4 h-4" />
-                      <span>{t('welcome.formatEmbed', 'Embed Elegante')}</span>
-                    </button>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setWelcomeSection('card')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all relative ${
+                    welcomeSection === 'card'
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  }`}
+                >
+                  <ImageIcon className="w-3.5 h-3.5" />
+                  <span>{t('welcome.sectionCard', 'Tarjeta Gráfica (Banner)')}</span>
+                  {welcomeCard.enabled && (
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  )}
+                </button>
 
-                {/* Plain Text Mode */}
-                {welcomeType === 'text' && (
+                <button
+                  type="button"
+                  onClick={() => setWelcomeSection('ai')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all relative ${
+                    welcomeSection === 'ai'
+                      ? 'bg-purple-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>{t('welcome.sectionAi', 'IA & Ajustes')}</span>
+                  {draftConfig.welcomeTranslate && (
+                    <span className="w-2 h-2 rounded-full bg-purple-400" />
+                  )}
+                </button>
+              </div>
+
+              {/* Section 1: Message & Format */}
+              {welcomeSection === 'message' && (
+                <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5 animate-in fade-in duration-150">
+                  {/* Format Toggle: Plain Text vs Discord Embed */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1">
-                      {t('welcome.message')}
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      {t('welcome.formatType', 'Formato del Mensaje')}
                     </label>
-                    <textarea
-                      rows={4}
-                      maxLength={2000}
-                      value={draftConfig.welcomeMessage || 'Welcome {user} to {server}!'}
-                      onChange={(e) => updateDraft('welcomeMessage', e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition-colors resize-y leading-relaxed font-sans"
-                    />
-                  </div>
-                )}
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => updateDraft('welcomeType', 'text')}
+                        className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all ${
+                          welcomeType === 'text'
+                            ? 'bg-discord-blurple/20 border-discord-blurple text-white shadow-sm'
+                            : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        <MessageSquare className="w-4 h-4" />
+                        <span>{t('welcome.formatText', 'Texto Plano')}</span>
+                      </button>
 
-                {/* Embed Mode */}
-                {welcomeType === 'embed' && (
-                  <div className="space-y-4 pt-2 border-t border-slate-800">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                        {t('welcome.embedTitle', 'Título del Embed')}
-                      </label>
-                      <input
-                        type="text"
-                        maxLength={256}
-                        value={welcomeEmbed.title}
-                        onChange={(e) => updateWelcomeEmbedField('title', e.target.value)}
-                        className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple transition-colors"
-                      />
+                      <button
+                        type="button"
+                        onClick={() => updateDraft('welcomeType', 'embed')}
+                        className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all ${
+                          welcomeType === 'embed'
+                            ? 'bg-discord-blurple/20 border-discord-blurple text-white shadow-sm'
+                            : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        <LayoutTemplate className="w-4 h-4" />
+                        <span>{t('welcome.formatEmbed', 'Embed Elegante')}</span>
+                      </button>
                     </div>
+                  </div>
 
+                  {/* Plain Text Mode */}
+                  {welcomeType === 'text' && (
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                        {t('welcome.embedDescription', 'Descripción / Contenido')}
+                      <label className="block text-sm font-medium text-slate-300 mb-1">
+                        {t('welcome.message')}
                       </label>
                       <textarea
-                        rows={3}
-                        maxLength={4096}
-                        value={welcomeEmbed.description}
-                        onChange={(e) => updateWelcomeEmbedField('description', e.target.value)}
-                        className="w-full px-3.5 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple transition-colors resize-y"
+                        rows={4}
+                        maxLength={2000}
+                        value={draftConfig.welcomeMessage || 'Welcome {user} to {server}!'}
+                        onChange={(e) => updateDraft('welcomeMessage', e.target.value)}
+                        className="w-full px-3.5 py-2.5 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition-colors resize-y leading-relaxed font-sans"
                       />
                     </div>
+                  )}
 
-                    {/* Color Picker & Swatches */}
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                        <Palette className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{t('welcome.embedColor', 'Color del Embed')}</span>
-                      </label>
-                      <div className="flex flex-wrap items-center gap-2">
-                        {COLOR_SWATCHES.map((swatch) => (
-                          <button
-                            key={swatch.value}
-                            type="button"
-                            onClick={() => updateWelcomeEmbedField('color', swatch.value)}
-                            className={`w-7 h-7 rounded-lg border-2 transition-transform ${
-                              welcomeEmbed.color === swatch.value
-                                ? 'scale-110 border-white ring-2 ring-discord-blurple/50'
-                                : 'border-transparent hover:scale-105'
-                            }`}
-                            style={{ backgroundColor: swatch.value }}
-                            title={swatch.name}
-                          />
-                        ))}
-                        <input
-                          type="color"
-                          value={welcomeEmbed.color || '#5865F2'}
-                          onChange={(e) => updateWelcomeEmbedField('color', e.target.value)}
-                          className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Embed Mode */}
+                  {welcomeType === 'embed' && (
+                    <div className="space-y-4 pt-2 border-t border-slate-800">
                       <div>
                         <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                          {t('welcome.embedImage', 'Banner Grande (URL)')}
+                          {t('welcome.embedTitle', 'Título del Embed')}
+                        </label>
+                        <input
+                          type="text"
+                          maxLength={256}
+                          value={welcomeEmbed.title}
+                          onChange={(e) => updateWelcomeEmbedField('title', e.target.value)}
+                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple transition-colors"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                          {t('welcome.embedDescription', 'Descripción / Contenido')}
+                        </label>
+                        <textarea
+                          rows={3}
+                          maxLength={4096}
+                          value={welcomeEmbed.description}
+                          onChange={(e) => updateWelcomeEmbedField('description', e.target.value)}
+                          className="w-full px-3.5 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-discord-blurple transition-colors resize-y"
+                        />
+                      </div>
+
+                      {/* Color Picker & Swatches */}
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                          <Palette className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{t('welcome.embedColor', 'Color del Embed')}</span>
+                        </label>
+                        <div className="flex flex-wrap items-center gap-2">
+                          {COLOR_SWATCHES.map((swatch) => (
+                            <button
+                              key={swatch.value}
+                              type="button"
+                              onClick={() => updateWelcomeEmbedField('color', swatch.value)}
+                              className={`w-7 h-7 rounded-lg border-2 transition-transform ${
+                                welcomeEmbed.color === swatch.value
+                                  ? 'scale-110 border-white ring-2 ring-discord-blurple/50'
+                                  : 'border-transparent hover:scale-105'
+                              }`}
+                              style={{ backgroundColor: swatch.value }}
+                              title={swatch.name}
+                            />
+                          ))}
+                          <input
+                            type="color"
+                            value={welcomeEmbed.color || '#5865F2'}
+                            onChange={(e) => updateWelcomeEmbedField('color', e.target.value)}
+                            className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                          />
+                        </div>
+                      </div>
+
+                      {welcomeCard.enabled && (
+                        <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-start gap-2.5 text-indigo-300 text-xs">
+                          <ImageIcon className="w-4 h-4 shrink-0 mt-0.5 text-indigo-400" />
+                          <span>{t('welcome.cardBannerNotice', 'Nota: La Tarjeta Gráfica está activada y se enviará como el banner principal de este mensaje.')}</span>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            {t('welcome.embedImage', 'Banner Grande (URL)')}
+                            {welcomeCard.enabled && (
+                              <span className="text-[10px] text-slate-400 font-normal lowercase ml-1">
+                                (opcional si la tarjeta está activa)
+                              </span>
+                            )}
+                          </label>
+                          <input
+                            type="url"
+                            placeholder="https://ejemplo.com/banner.png"
+                            value={welcomeEmbed.image || ''}
+                            onChange={(e) => updateWelcomeEmbedField('image', e.target.value)}
+                            className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-discord-blurple"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            {t('welcome.embedFooter', 'Pie de Página (Footer)')}
+                          </label>
+                          <input
+                            type="text"
+                            maxLength={2048}
+                            value={welcomeEmbed.footer || ''}
+                            onChange={(e) => updateWelcomeEmbedField('footer', e.target.value)}
+                            className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-discord-blurple"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Variable Pills */}
+                  <div className="pt-3 border-t border-slate-800">
+                    <span className="text-xs text-slate-400 block mb-2 font-medium">
+                      {t('welcome.variablesTitle', 'Variables dinámicas (haz clic para insertar):')}
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {['{user}', '{username}', '{server}', '{memberCount}', '{user.id}'].map((token) => (
+                        <button
+                          key={token}
+                          type="button"
+                          onClick={() => {
+                            if (welcomeType === 'embed') {
+                              handleInsertPlaceholder(token, 'description', 'welcomeEmbed');
+                            } else {
+                              handleInsertPlaceholder(token, 'welcomeMessage');
+                            }
+                          }}
+                          className="px-2.5 py-1 bg-slate-800 hover:bg-discord-blurple/20 hover:text-discord-blurple text-xs font-mono text-slate-300 rounded-md border border-slate-700/60 transition-colors"
+                        >
+                          {token}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Section 2: Graphic Card */}
+              {welcomeSection === 'card' && (
+                <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5 animate-in fade-in duration-150">
+                  <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+                        <ImageIcon className="w-5 h-5 text-indigo-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-100">
+                          {t('welcome.cardSectionTitle', 'Tarjeta Gráfica de Bienvenida')}
+                        </h3>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {t('welcome.cardSectionSubtitle', 'Genera una imagen tipo pancarta con el avatar centrado, nombre y bienvenida personalizada.')}
+                        </p>
+                      </div>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(welcomeCard.enabled)}
+                        onChange={(e) => updateWelcomeCardField('enabled', e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                    </label>
+                  </div>
+
+                  {welcomeCard.enabled ? (
+                    <div className="space-y-4 pt-1">
+                      {/* Background Wallpaper URL */}
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                          {t('welcome.cardBackground', 'Fondo de la Tarjeta (URL de Imagen)')}
                         </label>
                         <input
                           type="url"
-                          placeholder="https://ejemplo.com/banner.png"
-                          value={welcomeEmbed.image || ''}
-                          onChange={(e) => updateWelcomeEmbedField('image', e.target.value)}
-                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-discord-blurple"
+                          placeholder={t('welcome.cardBackgroundPlaceholder', 'https://ejemplo.com/fondo.jpg (Opcional - dejar vacío para degradado)')}
+                          value={welcomeCard.background || ''}
+                          onChange={(e) => updateWelcomeCardField('background', e.target.value)}
+                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors"
                         />
                       </div>
 
+                      {/* Avatar Ring Border Color */}
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                          {t('welcome.embedFooter', 'Pie de Página (Footer)')}
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                          <Palette className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{t('welcome.cardBorderColor', 'Color del Borde del Avatar')}</span>
                         </label>
-                        <input
-                          type="text"
-                          maxLength={2048}
-                          value={welcomeEmbed.footer || ''}
-                          onChange={(e) => updateWelcomeEmbedField('footer', e.target.value)}
-                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-discord-blurple"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Variable Pills */}
-                <div className="pt-3 border-t border-slate-800">
-                  <span className="text-xs text-slate-400 block mb-2 font-medium">
-                    {t('welcome.variablesTitle', 'Variables dinámicas (haz clic para insertar):')}
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {['{user}', '{username}', '{server}', '{memberCount}', '{user.id}'].map((token) => (
-                      <button
-                        key={token}
-                        type="button"
-                        onClick={() => {
-                          if (welcomeType === 'embed') {
-                            handleInsertPlaceholder(token, 'description', 'welcomeEmbed');
-                          } else {
-                            handleInsertPlaceholder(token, 'welcomeMessage');
-                          }
-                        }}
-                        className="px-2.5 py-1 bg-slate-800 hover:bg-discord-blurple/20 hover:text-discord-blurple text-xs font-mono text-slate-300 rounded-md border border-slate-700/60 transition-colors"
-                      >
-                        {token}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* User Ping Toggle */}
-                <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span className="text-sm font-medium text-slate-200 block">
-                      {t('welcome.pingUser', 'Mencionar al usuario fuera del embed')}
-                    </span>
-                    <span className="text-xs text-slate-400">
-                      {t('welcome.pingUserHelp', 'Si está activo, enviará una mención directa para notificar al usuario.')}
-                    </span>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(draftConfig.welcomePing)}
-                      onChange={(e) => updateDraft('welcomePing', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-discord-blurple"></div>
-                  </label>
-                </div>
-              </div>
-
-              {/* AI Auto-Translation Toggle */}
-              <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
-                      <Languages className="w-5 h-5 text-purple-400" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-semibold text-slate-100">
-                          {t('welcome.translateTitle', 'Traducción Inteligente con IA (Gemini)')}
-                        </h3>
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                          GEMINI AI
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {t('welcome.translateHelp', 'Detecta automáticamente el idioma y traduce el mensaje en tiempo real sin alterar menciones ni variables.')}
-                      </p>
-                    </div>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(draftConfig.welcomeTranslate)}
-                      onChange={(e) => updateDraft('welcomeTranslate', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                  </label>
-                </div>
-              </div>
-
-              {/* Graphic Banner Card Section */}
-              <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
-                      <ImageIcon className="w-5 h-5 text-indigo-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-100">
-                        {t('welcome.cardSectionTitle', 'Tarjeta Gráfica de Bienvenida')}
-                      </h3>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {t('welcome.cardSectionSubtitle', 'Genera una imagen tipo pancarta con el avatar centrado, nombre y bienvenida estilo anime o personalizado.')}
-                      </p>
-                    </div>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(welcomeCard.enabled)}
-                      onChange={(e) => updateWelcomeCardField('enabled', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                  </label>
-                </div>
-
-                {welcomeCard.enabled && (
-                  <div className="space-y-4 pt-1">
-                    {/* Background Wallpaper URL */}
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                        {t('welcome.cardBackground', 'Fondo de la Tarjeta (URL de Imagen)')}
-                      </label>
-                      <input
-                        type="url"
-                        placeholder={t('welcome.cardBackgroundPlaceholder', 'https://ejemplo.com/fondo.jpg (Opcional - dejar vacío para degradado)')}
-                        value={welcomeCard.background || ''}
-                        onChange={(e) => updateWelcomeCardField('background', e.target.value)}
-                        className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors"
-                      />
-                    </div>
-
-                    {/* Avatar Ring Border Color */}
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                        <Palette className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{t('welcome.cardBorderColor', 'Color del Borde del Avatar')}</span>
-                      </label>
-                      <div className="flex flex-wrap items-center gap-2">
-                        {[
-                          { name: 'Blanco', value: '#FFFFFF' },
-                          { name: 'Blurple', value: '#5865F2' },
-                          { name: 'Dorado', value: '#FEE75C' },
-                          { name: 'Esmeralda', value: '#57F287' },
-                          { name: 'Fucsia', value: '#EB459E' },
-                          { name: 'Coral', value: '#ED4245' },
-                          { name: 'Cian', value: '#06B6D4' },
-                        ].map((swatch) => (
-                          <button
-                            key={swatch.value}
-                            type="button"
-                            onClick={() => updateWelcomeCardField('borderColor', swatch.value)}
-                            className={`w-7 h-7 rounded-lg border-2 transition-transform ${
-                              (welcomeCard.borderColor || '#FFFFFF').toUpperCase() === swatch.value.toUpperCase()
-                                ? 'scale-110 border-white ring-2 ring-indigo-500/50'
-                                : 'border-transparent hover:scale-105'
-                            }`}
-                            style={{ backgroundColor: swatch.value }}
-                            title={swatch.name}
+                        <div className="flex flex-wrap items-center gap-2">
+                          {[
+                            { name: 'Blanco', value: '#FFFFFF' },
+                            { name: 'Blurple', value: '#5865F2' },
+                            { name: 'Dorado', value: '#FEE75C' },
+                            { name: 'Esmeralda', value: '#57F287' },
+                            { name: 'Fucsia', value: '#EB459E' },
+                            { name: 'Coral', value: '#ED4245' },
+                            { name: 'Cian', value: '#06B6D4' },
+                          ].map((swatch) => (
+                            <button
+                              key={swatch.value}
+                              type="button"
+                              onClick={() => updateWelcomeCardField('borderColor', swatch.value)}
+                              className={`w-7 h-7 rounded-lg border-2 transition-transform ${
+                                (welcomeCard.borderColor || '#FFFFFF').toUpperCase() === swatch.value.toUpperCase()
+                                  ? 'scale-110 border-white ring-2 ring-indigo-500/50'
+                                  : 'border-transparent hover:scale-105'
+                              }`}
+                              style={{ backgroundColor: swatch.value }}
+                              title={swatch.name}
+                            />
+                          ))}
+                          <input
+                            type="color"
+                            value={welcomeCard.borderColor || '#FFFFFF'}
+                            onChange={(e) => updateWelcomeCardField('borderColor', e.target.value)}
+                            className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
                           />
-                        ))}
-                        <input
-                          type="color"
-                          value={welcomeCard.borderColor || '#FFFFFF'}
-                          onChange={(e) => updateWelcomeCardField('borderColor', e.target.value)}
-                          className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
-                        />
+                        </div>
+                      </div>
+
+                      {/* Title & Subtitle */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            {t('welcome.cardTitleLabel', 'Título Superior (Pancarta)')}
+                          </label>
+                          <input
+                            type="text"
+                            maxLength={100}
+                            placeholder={t('welcome.cardTitlePlaceholder', '¡BIENVENIDO!')}
+                            value={welcomeCard.title ?? '¡BIENVENIDO!'}
+                            onChange={(e) => updateWelcomeCardField('title', e.target.value)}
+                            className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-indigo-500"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            {t('welcome.cardSubtitleLabel', 'Subtítulo / Mensaje Inferior')}
+                          </label>
+                          <input
+                            type="text"
+                            maxLength={150}
+                            placeholder={t('welcome.cardSubtitlePlaceholder', 'Eres el miembro #{memberCount}')}
+                            value={welcomeCard.subtitle ?? 'Eres el miembro #{memberCount}'}
+                            onChange={(e) => updateWelcomeCardField('subtitle', e.target.value)}
+                            className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-indigo-500"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Variables Pills for Card */}
+                      <div className="pt-2 border-t border-slate-800">
+                        <span className="text-[11px] text-slate-400 block mb-1.5 font-medium">
+                          {t('welcome.variablesTitle', 'Variables dinámicas (haz clic para insertar en subtítulo):')}
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {['{username}', '{server}', '{memberCount}'].map((token) => (
+                            <button
+                              key={token}
+                              type="button"
+                              onClick={() => handleInsertPlaceholder(token, 'subtitle', 'welcomeCard')}
+                              className="px-2 py-0.5 bg-slate-800 hover:bg-indigo-500/20 hover:text-indigo-300 text-[11px] font-mono text-slate-300 rounded border border-slate-700/60 transition-colors"
+                            >
+                              {token}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     </div>
+                  ) : (
+                    <div className="py-6 text-center text-slate-400 text-xs space-y-2">
+                      <p>La tarjeta gráfica está desactivada.</p>
+                      <p className="text-slate-500 text-[11px]">
+                        Actívala arriba para generar una imagen personalizada con avatar, título y contador de miembros cada vez que alguien entre.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
 
-                    {/* Title & Subtitle */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Section 3: AI & Settings */}
+              {welcomeSection === 'ai' && (
+                <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6 animate-in fade-in duration-150">
+                  {/* AI Auto-Translation Toggle */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
+                        <Languages className="w-5 h-5 text-purple-400" />
+                      </div>
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                          {t('welcome.cardTitleLabel', 'Título Superior (Pancarta)')}
-                        </label>
-                        <input
-                          type="text"
-                          maxLength={100}
-                          placeholder={t('welcome.cardTitlePlaceholder', '¡BIENVENIDO!')}
-                          value={welcomeCard.title ?? '¡BIENVENIDO!'}
-                          onChange={(e) => updateWelcomeCardField('title', e.target.value)}
-                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-indigo-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                          {t('welcome.cardSubtitleLabel', 'Subtítulo / Mensaje Inferior')}
-                        </label>
-                        <input
-                          type="text"
-                          maxLength={150}
-                          placeholder={t('welcome.cardSubtitlePlaceholder', 'Eres el miembro #{memberCount}')}
-                          value={welcomeCard.subtitle ?? 'Eres el miembro #{memberCount}'}
-                          onChange={(e) => updateWelcomeCardField('subtitle', e.target.value)}
-                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-indigo-500"
-                        />
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-sm font-semibold text-slate-100">
+                            {t('welcome.translateTitle', 'Traducción Inteligente con IA (Gemini)')}
+                          </h3>
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                            GEMINI AI
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {t('welcome.translateHelp', 'Detecta automáticamente el idioma y traduce el mensaje en tiempo real sin alterar menciones ni variables.')}
+                        </p>
                       </div>
                     </div>
-
-                    {/* Variables Pills for Card */}
-                    <div className="pt-2 border-t border-slate-800">
-                      <span className="text-[11px] text-slate-400 block mb-1.5 font-medium">
-                        {t('welcome.variablesTitle', 'Variables dinámicas (haz clic para insertar en subtítulo):')}
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {['{username}', '{server}', '{memberCount}'].map((token) => (
-                          <button
-                            key={token}
-                            type="button"
-                            onClick={() => handleInsertPlaceholder(token, 'subtitle', 'welcomeCard')}
-                            className="px-2 py-0.5 bg-slate-800 hover:bg-indigo-500/20 hover:text-indigo-300 text-[11px] font-mono text-slate-300 rounded border border-slate-700/60 transition-colors"
-                          >
-                            {token}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(draftConfig.welcomeTranslate)}
+                        onChange={(e) => updateDraft('welcomeTranslate', e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
                   </div>
-                )}
-              </div>
+
+                  {/* User Ping Toggle */}
+                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                    <div>
+                      <span className="text-sm font-medium text-slate-200 block">
+                        {t('welcome.pingUser', 'Mencionar al usuario fuera del embed')}
+                      </span>
+                      <span className="text-xs text-slate-400">
+                        {t('welcome.pingUserHelp', 'Si está activo, enviará una mención directa para notificar al usuario.')}
+                      </span>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(draftConfig.welcomePing)}
+                        onChange={(e) => updateDraft('welcomePing', e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-discord-blurple"></div>
+                    </label>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
           {/* TAB 2: GOODBYE */}
           {activeSubTab === 'goodbye' && (
-            <div className="space-y-6">
-              <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div className="space-y-4">
+              {/* Channel & Main Switch Card */}
+              <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                   <div className="flex items-center gap-2.5">
                     <LogOut className="w-5 h-5 text-rose-400" />
                     <h2 className="text-base font-semibold text-slate-100">
@@ -679,330 +760,442 @@ export function WelcomeTab() {
                   value={draftConfig.goodbyeChannelId}
                   onChange={(val) => updateDraft('goodbyeChannelId', val)}
                 />
+              </div>
 
-                {/* Format Toggle */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    {t('welcome.formatType', 'Formato del Mensaje')}
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => updateDraft('leaveType', 'text')}
-                      className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all ${
-                        leaveType === 'text'
-                          ? 'bg-rose-500/20 border-rose-500 text-white shadow-sm'
-                          : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      <span>{t('welcome.formatText', 'Texto Plano')}</span>
-                    </button>
+              {/* Segmented Subsections Switcher */}
+              <div className="flex bg-discord-dark/80 p-1 rounded-xl border border-slate-800 gap-1 shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => setGoodbyeSection('message')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all ${
+                    goodbyeSection === 'message'
+                      ? 'bg-rose-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  }`}
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>{t('welcome.sectionMessage', 'Mensaje & Formato')}</span>
+                </button>
 
-                    <button
-                      type="button"
-                      onClick={() => updateDraft('leaveType', 'embed')}
-                      className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all ${
-                        leaveType === 'embed'
-                          ? 'bg-rose-500/20 border-rose-500 text-white shadow-sm'
-                          : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      <LayoutTemplate className="w-4 h-4" />
-                      <span>{t('welcome.formatEmbed', 'Embed Elegante')}</span>
-                    </button>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setGoodbyeSection('card')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all relative ${
+                    goodbyeSection === 'card'
+                      ? 'bg-rose-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  }`}
+                >
+                  <ImageIcon className="w-3.5 h-3.5" />
+                  <span>{t('welcome.sectionCard', 'Tarjeta Gráfica (Banner)')}</span>
+                  {leaveCard.enabled && (
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  )}
+                </button>
 
-                {/* Plain Text Mode */}
-                {leaveType === 'text' && (
+                <button
+                  type="button"
+                  onClick={() => setGoodbyeSection('ai')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all relative ${
+                    goodbyeSection === 'ai'
+                      ? 'bg-purple-600 text-white shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>{t('welcome.sectionAi', 'IA & Ajustes')}</span>
+                  {draftConfig.goodbyeTranslate && (
+                    <span className="w-2 h-2 rounded-full bg-purple-400" />
+                  )}
+                </button>
+              </div>
+
+              {/* Section 1: Message & Format */}
+              {goodbyeSection === 'message' && (
+                <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5 animate-in fade-in duration-150">
+                  {/* Format Toggle */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-1">
-                      {t('welcome.goodbyeMessage', 'Mensaje de despedida')}
+                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                      {t('welcome.formatType', 'Formato del Mensaje')}
                     </label>
-                    <textarea
-                      rows={4}
-                      maxLength={2000}
-                      value={draftConfig.leaveMessage || '{user} has left the server.'}
-                      onChange={(e) => updateDraft('leaveMessage', e.target.value)}
-                      className="w-full px-3.5 py-2.5 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-rose-500 transition-colors resize-y leading-relaxed font-sans"
-                    />
-                  </div>
-                )}
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => updateDraft('leaveType', 'text')}
+                        className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all ${
+                          leaveType === 'text'
+                            ? 'bg-rose-500/20 border-rose-500 text-white shadow-sm'
+                            : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        <MessageSquare className="w-4 h-4" />
+                        <span>{t('welcome.formatText', 'Texto Plano')}</span>
+                      </button>
 
-                {/* Embed Mode */}
-                {leaveType === 'embed' && (
-                  <div className="space-y-4 pt-2 border-t border-slate-800">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                        {t('welcome.embedTitle', 'Título del Embed')}
-                      </label>
-                      <input
-                        type="text"
-                        maxLength={256}
-                        value={leaveEmbed.title}
-                        onChange={(e) => updateLeaveEmbedField('title', e.target.value)}
-                        className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-rose-500 transition-colors"
-                      />
+                      <button
+                        type="button"
+                        onClick={() => updateDraft('leaveType', 'embed')}
+                        className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all ${
+                          leaveType === 'embed'
+                            ? 'bg-rose-500/20 border-rose-500 text-white shadow-sm'
+                            : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:text-slate-200'
+                        }`}
+                      >
+                        <LayoutTemplate className="w-4 h-4" />
+                        <span>{t('welcome.formatEmbed', 'Embed Elegante')}</span>
+                      </button>
                     </div>
+                  </div>
 
+                  {/* Plain Text Mode */}
+                  {leaveType === 'text' && (
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                        {t('welcome.embedDescription', 'Descripción / Contenido')}
+                      <label className="block text-sm font-medium text-slate-300 mb-1">
+                        {t('welcome.goodbyeMessage', 'Mensaje de despedida')}
                       </label>
                       <textarea
-                        rows={3}
-                        maxLength={4096}
-                        value={leaveEmbed.description}
-                        onChange={(e) => updateLeaveEmbedField('description', e.target.value)}
-                        className="w-full px-3.5 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-rose-500 transition-colors resize-y"
+                        rows={4}
+                        maxLength={2000}
+                        value={draftConfig.leaveMessage || '{user} has left the server.'}
+                        onChange={(e) => updateDraft('leaveMessage', e.target.value)}
+                        className="w-full px-3.5 py-2.5 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-colors resize-y leading-relaxed font-sans"
                       />
                     </div>
+                  )}
 
-                    {/* Color Swatches */}
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                        <Palette className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{t('welcome.embedColor', 'Color del Embed')}</span>
-                      </label>
-                      <div className="flex flex-wrap items-center gap-2">
-                        {COLOR_SWATCHES.map((swatch) => (
-                          <button
-                            key={swatch.value}
-                            type="button"
-                            onClick={() => updateLeaveEmbedField('color', swatch.value)}
-                            className={`w-7 h-7 rounded-lg border-2 transition-transform ${
-                              leaveEmbed.color === swatch.value
-                                ? 'scale-110 border-white ring-2 ring-rose-500/50'
-                                : 'border-transparent hover:scale-105'
-                            }`}
-                            style={{ backgroundColor: swatch.value }}
-                            title={swatch.name}
-                          />
-                        ))}
+                  {/* Embed Mode */}
+                  {leaveType === 'embed' && (
+                    <div className="space-y-4 pt-2 border-t border-slate-800">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                          {t('welcome.embedTitle', 'Título del Embed')}
+                        </label>
                         <input
-                          type="color"
-                          value={leaveEmbed.color || '#ED4245'}
-                          onChange={(e) => updateLeaveEmbedField('color', e.target.value)}
-                          className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                          type="text"
+                          maxLength={256}
+                          value={leaveEmbed.title}
+                          onChange={(e) => updateLeaveEmbedField('title', e.target.value)}
+                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-rose-500 transition-colors"
                         />
                       </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                          {t('welcome.embedDescription', 'Descripción / Contenido')}
+                        </label>
+                        <textarea
+                          rows={3}
+                          maxLength={4096}
+                          value={leaveEmbed.description}
+                          onChange={(e) => updateLeaveEmbedField('description', e.target.value)}
+                          className="w-full px-3.5 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-sm text-slate-100 focus:outline-none focus:border-rose-500 transition-colors resize-y"
+                        />
+                      </div>
+
+                      {/* Color Picker & Swatches */}
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                          <Palette className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{t('welcome.embedColor', 'Color del Embed')}</span>
+                        </label>
+                        <div className="flex flex-wrap items-center gap-2">
+                          {[
+                            { name: 'Coral Red', value: '#ED4245' },
+                            { name: 'Blurple', value: '#5865F2' },
+                            { name: 'Gold', value: '#FEE75C' },
+                            { name: 'Emerald', value: '#57F287' },
+                            { name: 'Fuchsia', value: '#EB459E' },
+                            { name: 'Dark Slate', value: '#2b2d31' },
+                          ].map((swatch) => (
+                            <button
+                              key={swatch.value}
+                              type="button"
+                              onClick={() => updateLeaveEmbedField('color', swatch.value)}
+                              className={`w-7 h-7 rounded-lg border-2 transition-transform ${
+                                leaveEmbed.color === swatch.value
+                                  ? 'scale-110 border-white ring-2 ring-rose-500/50'
+                                  : 'border-transparent hover:scale-105'
+                              }`}
+                              style={{ backgroundColor: swatch.value }}
+                              title={swatch.name}
+                            />
+                          ))}
+                          <input
+                            type="color"
+                            value={leaveEmbed.color || '#ED4245'}
+                            onChange={(e) => updateLeaveEmbedField('color', e.target.value)}
+                            className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                          />
+                        </div>
+                      </div>
+
+                      {leaveCard.enabled && (
+                        <div className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-start gap-2.5 text-rose-300 text-xs">
+                          <ImageIcon className="w-4 h-4 shrink-0 mt-0.5 text-rose-400" />
+                          <span>{t('welcome.cardBannerNotice', 'Nota: La Tarjeta Gráfica está activada y se enviará como el banner principal de este mensaje.')}</span>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            {t('welcome.embedImage', 'Banner Grande (URL)')}
+                            {leaveCard.enabled && (
+                              <span className="text-[10px] text-slate-400 font-normal lowercase ml-1">
+                                (opcional si la tarjeta está activa)
+                              </span>
+                            )}
+                          </label>
+                          <input
+                            type="url"
+                            placeholder="https://ejemplo.com/banner.png"
+                            value={leaveEmbed.image || ''}
+                            onChange={(e) => updateLeaveEmbedField('image', e.target.value)}
+                            className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-rose-500"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            {t('welcome.embedFooter', 'Pie de Página (Footer)')}
+                          </label>
+                          <input
+                            type="text"
+                            maxLength={2048}
+                            value={leaveEmbed.footer || ''}
+                            onChange={(e) => updateLeaveEmbedField('footer', e.target.value)}
+                            className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-rose-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Variable Pills */}
+                  <div className="pt-3 border-t border-slate-800">
+                    <span className="text-xs text-slate-400 block mb-2 font-medium">
+                      {t('welcome.variablesTitle', 'Variables dinámicas (haz clic para insertar):')}
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {['{user}', '{username}', '{server}', '{memberCount}'].map((token) => (
+                        <button
+                          key={token}
+                          type="button"
+                          onClick={() => {
+                            if (leaveType === 'embed') {
+                              handleInsertPlaceholder(token, 'description', 'leaveEmbed');
+                            } else {
+                              handleInsertPlaceholder(token, 'leaveMessage');
+                            }
+                          }}
+                          className="px-2.5 py-1 bg-slate-800 hover:bg-rose-500/20 hover:text-rose-400 text-xs font-mono text-slate-300 rounded-md border border-slate-700/60 transition-colors"
+                        >
+                          {token}
+                        </button>
+                      ))}
                     </div>
                   </div>
-                )}
-
-                {/* Variable Pills */}
-                <div className="pt-3 border-t border-slate-800">
-                  <span className="text-xs text-slate-400 block mb-2 font-medium">
-                    {t('welcome.variablesTitle', 'Variables dinámicas (haz clic para insertar):')}
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {['{user}', '{username}', '{server}', '{memberCount}'].map((token) => (
-                      <button
-                        key={token}
-                        type="button"
-                        onClick={() => {
-                          if (leaveType === 'embed') {
-                            handleInsertPlaceholder(token, 'description', 'leaveEmbed');
-                          } else {
-                            handleInsertPlaceholder(token, 'leaveMessage');
-                          }
-                        }}
-                        className="px-2.5 py-1 bg-slate-800 hover:bg-rose-500/20 hover:text-rose-400 text-xs font-mono text-slate-300 rounded-md border border-slate-700/60 transition-colors"
-                      >
-                        {token}
-                      </button>
-                    ))}
-                  </div>
                 </div>
+              )}
 
-                {/* Goodbye Ping Toggle */}
-                <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span className="text-sm font-medium text-slate-200 block">
-                      {t('welcome.pingUser', 'Mencionar al usuario fuera del embed')}
-                    </span>
-                    <span className="text-xs text-slate-400">
-                      {t('welcome.pingUserHelp', 'Si está activo, enviará una mención directa para notificar al usuario.')}
-                    </span>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(draftConfig.goodbyePing)}
-                      onChange={(e) => updateDraft('goodbyePing', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-500"></div>
-                  </label>
-                </div>
-              </div>
-
-              {/* AI Auto-Translation Toggle */}
-              <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
-                      <Languages className="w-5 h-5 text-purple-400" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
+              {/* Section 2: Graphic Card */}
+              {goodbyeSection === 'card' && (
+                <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5 animate-in fade-in duration-150">
+                  <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0">
+                        <ImageIcon className="w-5 h-5 text-rose-400" />
+                      </div>
+                      <div>
                         <h3 className="text-sm font-semibold text-slate-100">
-                          {t('welcome.translateTitle', 'Traducción Inteligente con IA (Gemini)')}
+                          {t('welcome.cardSectionGoodbyeTitle', 'Tarjeta Gráfica de Despedida')}
                         </h3>
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                          GEMINI AI
-                        </span>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {t('welcome.cardSectionSubtitle', 'Genera una imagen tipo pancarta con el avatar centrado, nombre y despedida personalizada.')}
+                        </p>
                       </div>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {t('welcome.translateHelp', 'Detecta automáticamente el idioma y traduce el mensaje en tiempo real sin alterar menciones ni variables.')}
-                      </p>
                     </div>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(draftConfig.goodbyeTranslate)}
-                      onChange={(e) => updateDraft('goodbyeTranslate', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                  </label>
-                </div>
-              </div>
-
-              {/* Graphic Banner Card Section */}
-              <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-5">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0">
-                      <ImageIcon className="w-5 h-5 text-rose-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-slate-100">
-                        {t('welcome.cardSectionGoodbyeTitle', 'Tarjeta Gráfica de Despedida')}
-                      </h3>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {t('welcome.cardSectionSubtitle', 'Genera una imagen tipo pancarta con el avatar centrado, nombre y despedida personalizada.')}
-                      </p>
-                    </div>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                    <input
-                      type="checkbox"
-                      checked={Boolean(leaveCard.enabled)}
-                      onChange={(e) => updateLeaveCardField('enabled', e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
-                  </label>
-                </div>
-
-                {leaveCard.enabled && (
-                  <div className="space-y-4 pt-1">
-                    {/* Background Wallpaper URL */}
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                        {t('welcome.cardBackground', 'Fondo de la Tarjeta (URL de Imagen)')}
-                      </label>
+                    <label className="relative inline-flex items-center cursor-pointer shrink-0">
                       <input
-                        type="url"
-                        placeholder={t('welcome.cardBackgroundPlaceholder', 'https://ejemplo.com/fondo.jpg (Opcional - dejar vacío para degradado)')}
-                        value={leaveCard.background || ''}
-                        onChange={(e) => updateLeaveCardField('background', e.target.value)}
-                        className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-rose-500 transition-colors"
+                        type="checkbox"
+                        checked={Boolean(leaveCard.enabled)}
+                        onChange={(e) => updateLeaveCardField('enabled', e.target.checked)}
+                        className="sr-only peer"
                       />
-                    </div>
-
-                    {/* Avatar Ring Border Color */}
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                        <Palette className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{t('welcome.cardBorderColor', 'Color del Borde del Avatar')}</span>
-                      </label>
-                      <div className="flex flex-wrap items-center gap-2">
-                        {[
-                          { name: 'Coral', value: '#ED4245' },
-                          { name: 'Blanco', value: '#FFFFFF' },
-                          { name: 'Fucsia', value: '#EB459E' },
-                          { name: 'Dorado', value: '#FEE75C' },
-                          { name: 'Blurple', value: '#5865F2' },
-                          { name: 'Pizarra', value: '#475569' },
-                        ].map((swatch) => (
-                          <button
-                            key={swatch.value}
-                            type="button"
-                            onClick={() => updateLeaveCardField('borderColor', swatch.value)}
-                            className={`w-7 h-7 rounded-lg border-2 transition-transform ${
-                              (leaveCard.borderColor || '#ED4245').toUpperCase() === swatch.value.toUpperCase()
-                                ? 'scale-110 border-white ring-2 ring-rose-500/50'
-                                : 'border-transparent hover:scale-105'
-                            }`}
-                            style={{ backgroundColor: swatch.value }}
-                            title={swatch.name}
-                          />
-                        ))}
-                        <input
-                          type="color"
-                          value={leaveCard.borderColor || '#ED4245'}
-                          onChange={(e) => updateLeaveCardField('borderColor', e.target.value)}
-                          className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Title & Subtitle */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                          {t('welcome.cardTitleLabel', 'Título Superior (Pancarta)')}
-                        </label>
-                        <input
-                          type="text"
-                          maxLength={100}
-                          placeholder="¡HASTA LUEGO!"
-                          value={leaveCard.title ?? '¡HASTA LUEGO!'}
-                          onChange={(e) => updateLeaveCardField('title', e.target.value)}
-                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-rose-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                          {t('welcome.cardSubtitleLabel', 'Subtítulo / Mensaje Inferior')}
-                        </label>
-                        <input
-                          type="text"
-                          maxLength={150}
-                          placeholder="{username} ha salido del servidor"
-                          value={leaveCard.subtitle ?? '{username} ha salido del servidor'}
-                          onChange={(e) => updateLeaveCardField('subtitle', e.target.value)}
-                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-rose-500"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Variables Pills for Card */}
-                    <div className="pt-2 border-t border-slate-800">
-                      <span className="text-[11px] text-slate-400 block mb-1.5 font-medium">
-                        {t('welcome.variablesTitle', 'Variables dinámicas (haz clic para insertar en subtítulo):')}
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {['{username}', '{server}', '{memberCount}'].map((token) => (
-                          <button
-                            key={token}
-                            type="button"
-                            onClick={() => handleInsertPlaceholder(token, 'subtitle', 'leaveCard')}
-                            className="px-2 py-0.5 bg-slate-800 hover:bg-rose-500/20 hover:text-rose-400 text-[11px] font-mono text-slate-300 rounded border border-slate-700/60 transition-colors"
-                          >
-                            {token}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                      <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500"></div>
+                    </label>
                   </div>
-                )}
-              </div>
+
+                  {leaveCard.enabled ? (
+                    <div className="space-y-4 pt-1">
+                      {/* Background Wallpaper URL */}
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                          {t('welcome.cardBackground', 'Fondo de la Tarjeta (URL de Imagen)')}
+                        </label>
+                        <input
+                          type="url"
+                          placeholder={t('welcome.cardBackgroundPlaceholder', 'https://ejemplo.com/fondo.jpg (Opcional - dejar vacío para degradado)')}
+                          value={leaveCard.background || ''}
+                          onChange={(e) => updateLeaveCardField('background', e.target.value)}
+                          className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-rose-500 transition-colors"
+                        />
+                      </div>
+
+                      {/* Avatar Ring Border Color */}
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                          <Palette className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{t('welcome.cardBorderColor', 'Color del Borde del Avatar')}</span>
+                        </label>
+                        <div className="flex flex-wrap items-center gap-2">
+                          {[
+                            { name: 'Coral', value: '#ED4245' },
+                            { name: 'Blanco', value: '#FFFFFF' },
+                            { name: 'Fucsia', value: '#EB459E' },
+                            { name: 'Dorado', value: '#FEE75C' },
+                            { name: 'Blurple', value: '#5865F2' },
+                            { name: 'Pizarra', value: '#475569' },
+                          ].map((swatch) => (
+                            <button
+                              key={swatch.value}
+                              type="button"
+                              onClick={() => updateLeaveCardField('borderColor', swatch.value)}
+                              className={`w-7 h-7 rounded-lg border-2 transition-transform ${
+                                (leaveCard.borderColor || '#ED4245').toUpperCase() === swatch.value.toUpperCase()
+                                  ? 'scale-110 border-white ring-2 ring-rose-500/50'
+                                  : 'border-transparent hover:scale-105'
+                              }`}
+                              style={{ backgroundColor: swatch.value }}
+                              title={swatch.name}
+                            />
+                          ))}
+                          <input
+                            type="color"
+                            value={leaveCard.borderColor || '#ED4245'}
+                            onChange={(e) => updateLeaveCardField('borderColor', e.target.value)}
+                            className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Title & Subtitle */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            {t('welcome.cardTitleLabel', 'Título Superior (Pancarta)')}
+                          </label>
+                          <input
+                            type="text"
+                            maxLength={100}
+                            placeholder="¡HASTA LUEGO!"
+                            value={leaveCard.title ?? '¡HASTA LUEGO!'}
+                            onChange={(e) => updateLeaveCardField('title', e.target.value)}
+                            className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-rose-500"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            {t('welcome.cardSubtitleLabel', 'Subtítulo / Mensaje Inferior')}
+                          </label>
+                          <input
+                            type="text"
+                            maxLength={150}
+                            placeholder="{username} ha salido del servidor"
+                            value={leaveCard.subtitle ?? '{username} ha salido del servidor'}
+                            onChange={(e) => updateLeaveCardField('subtitle', e.target.value)}
+                            className="w-full px-3 py-2 bg-discord-dark border border-slate-700/60 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-rose-500"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Variables Pills for Card */}
+                      <div className="pt-2 border-t border-slate-800">
+                        <span className="text-[11px] text-slate-400 block mb-1.5 font-medium">
+                          {t('welcome.variablesTitle', 'Variables dinámicas (haz clic para insertar en subtítulo):')}
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {['{username}', '{server}', '{memberCount}'].map((token) => (
+                            <button
+                              key={token}
+                              type="button"
+                              onClick={() => handleInsertPlaceholder(token, 'subtitle', 'leaveCard')}
+                              className="px-2 py-0.5 bg-slate-800 hover:bg-rose-500/20 hover:text-rose-400 text-[11px] font-mono text-slate-300 rounded border border-slate-700/60 transition-colors"
+                            >
+                              {token}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="py-6 text-center text-slate-400 text-xs space-y-2">
+                      <p>La tarjeta gráfica de despedida está desactivada.</p>
+                      <p className="text-slate-500 text-[11px]">
+                        Actívala arriba para generar una imagen personalizada con avatar, despedida y nombre cada vez que alguien salga.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Section 3: AI & Settings */}
+              {goodbyeSection === 'ai' && (
+                <div className="bg-discord-darker/80 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6 animate-in fade-in duration-150">
+                  {/* AI Auto-Translation Toggle */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
+                        <Languages className="w-5 h-5 text-purple-400" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-sm font-semibold text-slate-100">
+                            {t('welcome.translateTitle', 'Traducción Inteligente con IA (Gemini)')}
+                          </h3>
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                            GEMINI AI
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {t('welcome.translateHelp', 'Detecta automáticamente el idioma y traduce el mensaje en tiempo real sin alterar menciones ni variables.')}
+                        </p>
+                      </div>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(draftConfig.goodbyeTranslate)}
+                        onChange={(e) => updateDraft('goodbyeTranslate', e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                    </label>
+                  </div>
+
+                  {/* Goodbye Ping Toggle */}
+                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                    <div>
+                      <span className="text-sm font-medium text-slate-200 block">
+                        {t('welcome.pingUser', 'Mencionar al usuario fuera del embed')}
+                      </span>
+                      <span className="text-xs text-slate-400">
+                        {t('welcome.pingUserHelp', 'Si está activo, enviará una mención directa para notificar al usuario.')}
+                      </span>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(draftConfig.goodbyePing)}
+                        onChange={(e) => updateDraft('goodbyePing', e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-500"></div>
+                    </label>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -1136,7 +1329,7 @@ export function WelcomeTab() {
         </div>
 
         {/* Live Preview Right Column */}
-        <div className="lg:col-span-5 sticky top-24 space-y-4">
+        <div className="lg:col-span-5 lg:sticky lg:top-4 self-start space-y-4">
           {/* Test in Discord Simulator Card */}
           <div className="flex items-center justify-between bg-discord-darker/90 border border-slate-800 rounded-xl p-3.5 shadow-md">
             <div className="flex items-center gap-2.5 min-w-0">

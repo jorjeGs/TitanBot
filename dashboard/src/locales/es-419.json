@@ -133,6 +133,9 @@
     "tabWelcome": "Bienvenidas",
     "tabGoodbye": "Despedidas",
     "tabAutoRoles": "Roles Automáticos",
+    "sectionMessage": "Mensaje & Formato",
+    "sectionCard": "Tarjeta Gráfica (Banner)",
+    "sectionAi": "IA & Ajustes",
     "formatType": "Formato del Mensaje",
     "formatText": "Texto Plano",
     "formatEmbed": "Embed Elegante",
@@ -184,7 +187,8 @@
     "cardTitleLabel": "Título Superior (Pancarta)",
     "cardTitlePlaceholder": "¡BIENVENIDO!",
     "cardSubtitleLabel": "Subtítulo / Mensaje Inferior",
-    "cardSubtitlePlaceholder": "Eres el miembro #{memberCount}"
+    "cardSubtitlePlaceholder": "Eres el miembro #{memberCount}",
+    "cardBannerNotice": "Nota: La Tarjeta Gráfica está activada y se enviará como el banner principal de este mensaje."
   },
   "logging": {
     "title": "Logs y Auditoría",

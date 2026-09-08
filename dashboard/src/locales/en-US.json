@@ -130,9 +130,12 @@
     "previewTime": "Today at 12:00 PM",
     "previewUser": "@NewMember",
     "placeholdersNote": "Variables {user}, {server}, and {memberCount} will be dynamically rendered when a user joins.",
-    "tabWelcome": "Welcome",
-    "tabGoodbye": "Farewell",
+    "tabWelcome": "Welcomes",
+    "tabGoodbye": "Farewells",
     "tabAutoRoles": "Auto Roles",
+    "sectionMessage": "Message & Format",
+    "sectionCard": "Graphic Banner Card",
+    "sectionAi": "AI & Settings",
     "formatType": "Message Format",
     "formatText": "Plain Text",
     "formatEmbed": "Rich Embed",
@@ -184,7 +187,8 @@
     "cardTitleLabel": "Top Header Title",
     "cardTitlePlaceholder": "WELCOME!",
     "cardSubtitleLabel": "Subtitle / Bottom Caption",
-    "cardSubtitlePlaceholder": "You are member #{memberCount}"
+    "cardSubtitlePlaceholder": "You are member #{memberCount}",
+    "cardBannerNotice": "Note: Graphic Card is enabled and will be attached as the primary banner for this message."
   },
   "logging": {
     "title": "Logs & Audit",

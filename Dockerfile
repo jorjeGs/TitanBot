@@ -1,5 +1,8 @@
 FROM node:20-alpine
 
+# Install system fonts and fontconfig for Canvas graphics rendering
+RUN apk add --no-cache fontconfig font-dejavu font-noto
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./

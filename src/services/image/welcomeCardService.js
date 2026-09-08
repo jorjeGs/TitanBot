@@ -1,6 +1,40 @@
-import { createCanvas, loadImage } from '@napi-rs/canvas';
+import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas';
 import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { logger } from '../../utils/logger.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Explicitly register bundled Noto Sans fonts
+const fontsDir = path.resolve(__dirname, '../../assets/fonts');
+const boldFont = path.join(fontsDir, 'NotoSans-Bold.ttf');
+const regFont = path.join(fontsDir, 'NotoSans-Regular.ttf');
+
+if (fs.existsSync(boldFont)) {
+  try {
+    GlobalFonts.registerFromPath(boldFont, 'NotoSansBold');
+  } catch (err) {
+    logger.debug('Failed to register NotoSansBold:', err?.message);
+  }
+}
+
+if (fs.existsSync(regFont)) {
+  try {
+    GlobalFonts.registerFromPath(regFont, 'NotoSans');
+  } catch (err) {
+    logger.debug('Failed to register NotoSans:', err?.message);
+  }
+}
+
+// Also load system fonts if available (e.g. DejaVu on Linux)
+try {
+  if (typeof GlobalFonts.loadSystemFonts === 'function') {
+    GlobalFonts.loadSystemFonts();
+  }
+} catch {}
 
 const CARD_WIDTH = 800;
 const CARD_HEIGHT = 350;
@@ -136,7 +170,7 @@ export async function generateWelcomeCard({
   // 4. Optional Top Title (e.g. "¡BIENVENIDO!" or "¡HASTA LUEGO!")
   if (title) {
     ctx.save();
-    ctx.font = 'bold 15px sans-serif';
+    ctx.font = 'bold 15px "NotoSansBold", "DejaVu Sans", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.letterSpacing = '3px';
@@ -212,7 +246,7 @@ export async function generateWelcomeCard({
 
   // 6. Username Text
   ctx.save();
-  ctx.font = 'bold 32px sans-serif';
+  ctx.font = 'bold 32px "NotoSansBold", "DejaVu Sans", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#FFFFFF';
@@ -226,7 +260,7 @@ export async function generateWelcomeCard({
 
   // 7. Subtitle Text (Welcome message / Member count)
   ctx.save();
-  ctx.font = '600 20px sans-serif';
+  ctx.font = '600 20px "NotoSans", "DejaVu Sans", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#E2E8F0';

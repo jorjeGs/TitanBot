@@ -13,7 +13,7 @@ function WelcomeCardMock({ card, username = 'NuevoMiembro', isGoodbye = false, r
 
   return (
     <div
-      className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl flex flex-col items-center justify-center p-4 text-center select-none w-full"
+      className="relative rounded-xl overflow-hidden border border-white/10 shadow-2xl flex flex-col items-center justify-between p-3 text-center select-none w-full min-h-[155px]"
       style={{
         aspectRatio: '800 / 350',
         backgroundImage: card.background ? `url(${card.background})` : 'linear-gradient(135deg, #1e1f2f 0%, #2b2d42 50%, #11121a 100%)',
@@ -31,38 +31,43 @@ function WelcomeCardMock({ card, username = 'NuevoMiembro', isGoodbye = false, r
 
       {/* Decorative center radial glow if no custom background */}
       {!card.background && (
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(88,101,242,0.18)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(88,101,242,0.2)_0%,transparent_70%)]" />
       )}
 
-      <div className="relative z-10 flex flex-col items-center justify-center w-full space-y-1.5">
-        {/* Top Header Title */}
-        {title && (
-          <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] text-white/90 uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+      {/* Top Header Title */}
+      <div className="relative z-10 w-full pt-0.5">
+        {title ? (
+          <span className="text-[10px] sm:text-[11px] font-extrabold tracking-[0.22em] text-white/95 uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
             {title}
           </span>
+        ) : (
+          <div className="h-1" />
         )}
+      </div>
 
-        {/* Circular Avatar with Custom Border */}
+      {/* Circular Avatar with Custom Border */}
+      <div className="relative z-10 my-0.5">
         <div
-          className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-discord-blurple shadow-2xl relative transition-transform"
+          className="w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center bg-discord-blurple shadow-2xl relative transition-transform"
           style={{
-            border: `3.5px solid ${borderColor}`,
-            boxShadow: `0 0 16px ${borderColor}40, 0 6px 12px rgba(0,0,0,0.6)`,
+            border: `3px solid ${borderColor}`,
+            boxShadow: `0 0 14px ${borderColor}50, 0 4px 10px rgba(0,0,0,0.6)`,
           }}
         >
-          <User className="w-8 h-8 sm:w-9 sm:h-9 text-white" />
+          <User className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
         </div>
+      </div>
 
-        {/* Username */}
-        <div className="max-w-[92%] truncate">
-          <h3 className="text-base sm:text-lg font-extrabold text-white tracking-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+      {/* Bottom: Username and Subtitle */}
+      <div className="relative z-10 w-full space-y-0.5 pb-0.5">
+        <div className="max-w-[92%] mx-auto truncate">
+          <h3 className="text-sm sm:text-base font-extrabold text-white tracking-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
             {username}
           </h3>
         </div>
 
-        {/* Subtitle / Member counter */}
         {subtitle && (
-          <p className="text-[11px] sm:text-xs font-semibold text-slate-200/95 max-w-[92%] truncate drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-200/95 max-w-[92%] mx-auto truncate drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">
             {subtitle}
           </p>
         )}
@@ -229,27 +234,6 @@ export function WelcomePreview({
                     <User className="w-7 h-7 text-slate-400" />
                   </div>
                 )}
-              </div>
-
-              {/* Dynamic Info Fields */}
-              <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-700/40 text-xs">
-                <div className="bg-[#1e1f22] p-2 rounded border border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">
-                    {t('applications.roleColon', 'Usuario')}
-                  </span>
-                  <span className="font-semibold text-slate-200 truncate block mt-0.5">
-                    {previewUser}
-                  </span>
-                </div>
-
-                <div className="bg-[#1e1f22] p-2 rounded border border-slate-800">
-                  <span className="text-[10px] text-slate-400 uppercase font-semibold block">
-                    {t('welcome.tabWelcome', 'Miembro')}
-                  </span>
-                  <span className="font-semibold text-slate-200 block mt-0.5">
-                    #42
-                  </span>
-                </div>
               </div>
 
               {/* Graphic Banner Card or Image */}
