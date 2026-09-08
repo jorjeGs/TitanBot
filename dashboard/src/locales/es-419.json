@@ -924,7 +924,20 @@
     "btnAction": "Acción",
     "btnRole": "Rol a Asignar",
     "btnUrl": "URL de Destino",
-    "btnCustomMessage": "Respuesta Privada"
+    "btnCustomMessage": "Respuesta Privada",
+    "sectionContent": "Contenido",
+    "sectionAuthorFooter": "Autor & Pie",
+    "sectionMedia": "Imágenes",
+    "sectionFields": "Campos",
+    "sectionButtons": "Botones",
+    "tabPresets": "Plantillas Rápidas",
+    "tabSavedTemplates": "Mis Plantillas",
+    "usePreset": "Cargar Plantilla",
+    "presetAnnouncementDesc": "Comunicado oficial con título, fecha, campos dinámicos y mención.",
+    "presetRulesDesc": "Estructura de normas básicas de convivencia para tu servidor.",
+    "presetChangelogDesc": "Registro de notas de versión, mejoras y correcciones del bot/servidor.",
+    "presetEventDesc": "Anuncio de torneos o dinámicas con premios, fecha y banner.",
+    "presetsModalDesc": "Selecciona un diseño predeterminado listo para personalizar y publicar en tu servidor."
   },
   "music": {
     "title": "Reproductor de Música en Vivo",

@@ -924,7 +924,20 @@
     "btnAction": "Action",
     "btnRole": "Role to Assign",
     "btnUrl": "Target URL",
-    "btnCustomMessage": "Private Response"
+    "btnCustomMessage": "Private Response",
+    "sectionContent": "Content",
+    "sectionAuthorFooter": "Author & Footer",
+    "sectionMedia": "Media",
+    "sectionFields": "Fields",
+    "sectionButtons": "Buttons",
+    "tabPresets": "Quick Presets",
+    "tabSavedTemplates": "My Templates",
+    "usePreset": "Use Template",
+    "presetAnnouncementDesc": "Official announcement with title, date, dynamic fields, and mention.",
+    "presetRulesDesc": "Server rules framework with conduct standards.",
+    "presetChangelogDesc": "Release notes, enhancements, and bug fixes update log.",
+    "presetEventDesc": "Tournament or community event announcement with prize details and banner.",
+    "presetsModalDesc": "Select a ready-to-use template designed for your community and customize it in the editor."
   },
   "music": {
     "title": "Live Music Player",

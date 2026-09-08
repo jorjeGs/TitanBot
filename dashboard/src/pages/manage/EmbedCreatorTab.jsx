@@ -28,6 +28,10 @@ import {
   Loader2,
   Bookmark,
   MousePointerClick,
+  ChevronDown,
+  User,
+  Image as ImageIcon,
+  ListPlus,
 } from 'lucide-react';
 
 const COLOR_SWATCHES = [
@@ -45,6 +49,11 @@ export function EmbedCreatorTab() {
   const { t } = useTranslation();
   const { guildId } = useParams();
   const { channels, currentGuild, roles } = useGuild();
+
+  // Navigation Subsections: 'content' | 'author_footer' | 'media' | 'fields' | 'buttons'
+  const [activeSection, setActiveSection] = useState('content');
+  const [showPresetsMenu, setShowPresetsMenu] = useState(false);
+  const [templatesModalTab, setTemplatesModalTab] = useState('presets'); // 'presets' | 'saved'
 
   // Channel & Sending
   const [targetChannelId, setTargetChannelId] = useState('');
@@ -271,6 +280,17 @@ export function EmbedCreatorTab() {
         { name: '📝 Requisitos', value: 'Nivel 5 en el servidor o verificación completada.', inline: false },
       ]);
     }
+
+    const presetNames = {
+      announcement: t('embeds.presetAnnouncement', 'Anuncio Oficial'),
+      rules: t('embeds.presetRules', 'Reglamento del Servidor'),
+      changelog: t('embeds.presetChangelog', 'Novedades / Update'),
+      event: t('embeds.presetEvent', 'Evento de Comunidad'),
+    };
+    setNotification({
+      type: 'success',
+      message: t('embeds.templateLoaded', `Plantilla "${presetNames[presetKey] || presetKey}" cargada.`),
+    });
   };
 
   // Export JSON
@@ -551,52 +571,116 @@ export function EmbedCreatorTab() {
 
         {/* Action Buttons Toolbar */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Presets dropdown */}
-          <div className="relative group">
+          {/* Presets click dropdown */}
+          <div className="relative">
             <button
               type="button"
-              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition border border-slate-700 shadow-sm"
+              onClick={() => setShowPresetsMenu(!showPresetsMenu)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition border shadow-sm cursor-pointer ${
+                showPresetsMenu
+                  ? 'bg-slate-700 text-white border-discord-blurple'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
+              }`}
             >
               <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
               <span>{t('embeds.presets', 'Plantillas Rápidas')}</span>
+              <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${showPresetsMenu ? 'rotate-180 text-white' : ''}`} />
             </button>
-            <div className="absolute right-0 top-full mt-1 w-48 bg-discord-dark border border-slate-700 rounded-lg shadow-xl py-1 z-30 hidden group-hover:block">
-              <button
-                type="button"
-                onClick={() => applyPreset('announcement')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-discord-blurple hover:text-white transition"
-              >
-                📢 {t('embeds.presetAnnouncement', 'Anuncio Oficial')}
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset('rules')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-discord-blurple hover:text-white transition"
-              >
-                📜 {t('embeds.presetRules', 'Reglamento del Servidor')}
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset('changelog')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-discord-blurple hover:text-white transition"
-              >
-                🚀 {t('embeds.presetChangelog', 'Novedades / Update')}
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset('event')}
-                className="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-discord-blurple hover:text-white transition"
-              >
-                🏆 {t('embeds.presetEvent', 'Evento de Comunidad')}
-              </button>
-            </div>
+
+            {showPresetsMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-20 cursor-default"
+                  onClick={() => setShowPresetsMenu(false)}
+                />
+                <div className="absolute right-0 top-full mt-1.5 w-60 bg-discord-dark border border-slate-700 rounded-xl shadow-2xl py-1.5 z-30 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800 mb-1">
+                    {t('embeds.tabPresets', 'Plantillas Rápidas')}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      applyPreset('announcement');
+                      setShowPresetsMenu(false);
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs text-slate-200 hover:bg-discord-blurple hover:text-white transition flex items-center gap-2 cursor-pointer"
+                  >
+                    <span className="text-base">📢</span>
+                    <div className="min-w-0">
+                      <span className="font-semibold block truncate">{t('embeds.presetAnnouncement', 'Anuncio Oficial')}</span>
+                      <span className="text-[10px] text-slate-400 block truncate">Comunicado con fecha y mención</span>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      applyPreset('rules');
+                      setShowPresetsMenu(false);
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs text-slate-200 hover:bg-discord-blurple hover:text-white transition flex items-center gap-2 cursor-pointer"
+                  >
+                    <span className="text-base">📜</span>
+                    <div className="min-w-0">
+                      <span className="font-semibold block truncate">{t('embeds.presetRules', 'Reglamento del Servidor')}</span>
+                      <span className="text-[10px] text-slate-400 block truncate">Normas de convivencia</span>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      applyPreset('changelog');
+                      setShowPresetsMenu(false);
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs text-slate-200 hover:bg-discord-blurple hover:text-white transition flex items-center gap-2 cursor-pointer"
+                  >
+                    <span className="text-base">🚀</span>
+                    <div className="min-w-0">
+                      <span className="font-semibold block truncate">{t('embeds.presetChangelog', 'Novedades / Update')}</span>
+                      <span className="text-[10px] text-slate-400 block truncate">Registro de cambios</span>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      applyPreset('event');
+                      setShowPresetsMenu(false);
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs text-slate-200 hover:bg-discord-blurple hover:text-white transition flex items-center gap-2 cursor-pointer"
+                  >
+                    <span className="text-base">🏆</span>
+                    <div className="min-w-0">
+                      <span className="font-semibold block truncate">{t('embeds.presetEvent', 'Evento de Comunidad')}</span>
+                      <span className="text-[10px] text-slate-400 block truncate">Torneo y premios</span>
+                    </div>
+                  </button>
+
+                  <div className="border-t border-slate-800 mt-1 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTemplatesModalTab('presets');
+                        setShowTemplatesModal(true);
+                        setShowPresetsMenu(false);
+                      }}
+                      className="w-full text-left px-3 py-1.5 text-[11px] text-discord-blurple hover:underline font-semibold flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <FolderOpen className="w-3 h-3" />
+                      <span>Ver explorador de plantillas...</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Saved Templates Drawer Modal Trigger */}
           <button
             type="button"
-            onClick={() => setShowTemplatesModal(true)}
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition border border-slate-700 shadow-sm"
+            onClick={() => {
+              setTemplatesModalTab('saved');
+              setShowTemplatesModal(true);
+            }}
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition border border-slate-700 shadow-sm cursor-pointer"
           >
             <FolderOpen className="w-3.5 h-3.5 text-indigo-400" />
             <span>{t('embeds.savedTemplates', 'Mis Plantillas')} ({savedTemplates.length})</span>
@@ -712,556 +796,647 @@ export function EmbedCreatorTab() {
             </div>
           </div>
 
+          {/* Segmented Subsections Switcher Tabs */}
+          <div className="flex bg-discord-dark/80 p-1 rounded-xl border border-slate-800 gap-1 shadow-sm overflow-x-auto">
+            <button
+              type="button"
+              onClick={() => setActiveSection('content')}
+              className={`flex-1 min-w-[90px] flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeSection === 'content'
+                  ? 'bg-discord-blurple text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+              }`}
+            >
+              <Palette className="w-3.5 h-3.5" />
+              <span>{t('embeds.sectionContent', 'Contenido')}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveSection('author_footer')}
+              className={`flex-1 min-w-[95px] flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeSection === 'author_footer'
+                  ? 'bg-discord-blurple text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+              }`}
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>{t('embeds.sectionAuthorFooter', 'Autor & Pie')}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveSection('media')}
+              className={`flex-1 min-w-[90px] flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeSection === 'media'
+                  ? 'bg-discord-blurple text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+              }`}
+            >
+              <ImageIcon className="w-3.5 h-3.5" />
+              <span>{t('embeds.sectionMedia', 'Imágenes')}</span>
+              {(thumbnail || image) && (
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveSection('fields')}
+              className={`flex-1 min-w-[90px] flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeSection === 'fields'
+                  ? 'bg-discord-blurple text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+              }`}
+            >
+              <ListPlus className="w-3.5 h-3.5" />
+              <span>{t('embeds.sectionFields', 'Campos')}</span>
+              {fields.length > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-800 text-slate-300 font-mono">
+                  {fields.length}
+                </span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveSection('buttons')}
+              className={`flex-1 min-w-[90px] flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeSection === 'buttons'
+                  ? 'bg-discord-blurple text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+              }`}
+            >
+              <MousePointerClick className="w-3.5 h-3.5" />
+              <span>{t('embeds.sectionButtons', 'Botones')}</span>
+              {buttons.length > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-800 text-slate-300 font-mono">
+                  {buttons.length}
+                </span>
+              )}
+            </button>
+          </div>
+
           {/* Section 1: Basic Information & Color */}
-          <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <Palette className="w-4 h-4 text-discord-blurple" />
-              <span>{t('embeds.basicSectionTitle', 'Contenido Principal')}</span>
-            </h2>
+          {activeSection === 'content' && (
+            <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4 animate-in fade-in duration-150">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                <Palette className="w-4 h-4 text-discord-blurple" />
+                <span>{t('embeds.basicSectionTitle', 'Contenido Principal')}</span>
+              </h2>
 
-            {/* Title */}
-            <div className="space-y-1">
-              <div className="flex justify-between items-center text-xs">
-                <label className="font-semibold text-slate-300">
-                  {t('embeds.fieldTitle', 'Título del Embed')}
-                </label>
-                <span className={`text-[11px] ${title.length > 256 ? 'text-red-400 font-bold' : 'text-slate-500'}`}>
-                  {title.length}/256
-                </span>
+              {/* Title */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-xs">
+                  <label className="font-semibold text-slate-300">
+                    {t('embeds.fieldTitle', 'Título del Embed')}
+                  </label>
+                  <span className={`text-[11px] ${title.length > 256 ? 'text-red-400 font-bold' : 'text-slate-500'}`}>
+                    {title.length}/256
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  maxLength={256}
+                  placeholder={t('embeds.titlePlaceholder', 'Ej. 📢 Novedades de la Semana')}
+                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple transition"
+                />
               </div>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                maxLength={256}
-                placeholder={t('embeds.titlePlaceholder', 'Ej. 📢 Novedades de la Semana')}
-                className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple transition"
-              />
-            </div>
 
-            {/* Description */}
-            <div className="space-y-1">
-              <div className="flex justify-between items-center text-xs">
-                <label className="font-semibold text-slate-300">
-                  {t('embeds.fieldDescription', 'Descripción (Soporta Markdown)')}
-                </label>
-                <span className={`text-[11px] ${description.length > 4096 ? 'text-red-400 font-bold' : 'text-slate-500'}`}>
-                  {description.length}/4096
-                </span>
+              {/* Description */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-xs">
+                  <label className="font-semibold text-slate-300">
+                    {t('embeds.fieldDescription', 'Descripción (Soporta Markdown)')}
+                  </label>
+                  <span className={`text-[11px] ${description.length > 4096 ? 'text-red-400 font-bold' : 'text-slate-500'}`}>
+                    {description.length}/4096
+                  </span>
+                </div>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  maxLength={4096}
+                  rows={4}
+                  placeholder={t('embeds.descriptionPlaceholder', 'Escribe el cuerpo del anuncio. Puedes usar **negrita**, *cursiva*, `código`, o listas...')}
+                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple transition resize-y font-sans leading-relaxed"
+                />
               </div>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                maxLength={4096}
-                rows={4}
-                placeholder={t('embeds.descriptionPlaceholder', 'Escribe el cuerpo del anuncio. Puedes usar **negrita**, *cursiva*, `código`, o listas...')}
-                className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple transition resize-y font-sans leading-relaxed"
-              />
+
+              {/* Color Picker & Swatches */}
+              <div className="space-y-2 pt-1">
+                <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
+                  <span>{t('embeds.colorLabel', 'Color de la Barra Lateral')}</span>
+                  <span className="font-mono text-[11px] text-slate-400">{color}</span>
+                </label>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* Custom Color Input */}
+                  <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1">
+                    <input
+                      type="color"
+                      value={color.startsWith('#') && color.length === 7 ? color : '#5865F2'}
+                      onChange={(e) => setColor(e.target.value)}
+                      className="w-6 h-6 rounded cursor-pointer bg-transparent border-0"
+                    />
+                    <input
+                      type="text"
+                      value={color}
+                      onChange={(e) => setColor(e.target.value)}
+                      maxLength={7}
+                      placeholder="#5865F2"
+                      className="w-20 bg-transparent text-xs text-white font-mono focus:outline-none uppercase"
+                    />
+                  </div>
+
+                  {/* Preset Swatches */}
+                  {COLOR_SWATCHES.map((swatch) => (
+                    <button
+                      key={swatch.value}
+                      type="button"
+                      onClick={() => setColor(swatch.value)}
+                      className={`w-7 h-7 rounded-lg border transition transform hover:scale-110 shadow-sm ${
+                        color.toLowerCase() === swatch.value.toLowerCase()
+                          ? 'border-white ring-2 ring-discord-blurple/50'
+                          : 'border-slate-700/80'
+                      }`}
+                      style={{ backgroundColor: swatch.value }}
+                      title={swatch.name}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
+          )}
 
-            {/* Color Picker & Swatches */}
-            <div className="space-y-2 pt-1">
-              <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
-                <span>{t('embeds.colorLabel', 'Color de la Barra Lateral')}</span>
-                <span className="font-mono text-[11px] text-slate-400">{color}</span>
-              </label>
+          {/* Section 2: Author & Footer */}
+          {activeSection === 'author_footer' && (
+            <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4 animate-in fade-in duration-150">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
+                {t('embeds.authorFooterTitle', 'Autor, Pie de Página y Fecha')}
+              </h2>
 
-              <div className="flex flex-wrap items-center gap-2">
-                {/* Custom Color Input */}
-                <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1">
-                  <input
-                    type="color"
-                    value={color.startsWith('#') && color.length === 7 ? color : '#5865F2'}
-                    onChange={(e) => setColor(e.target.value)}
-                    className="w-6 h-6 rounded cursor-pointer bg-transparent border-0"
-                  />
+              {/* Author */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-slate-300 block mb-1">
+                    {t('embeds.authorName', 'Nombre del Autor')}
+                  </label>
                   <input
                     type="text"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                    maxLength={7}
-                    placeholder="#5865F2"
-                    className="w-20 bg-transparent text-xs text-white font-mono focus:outline-none uppercase"
+                    value={authorName}
+                    onChange={(e) => setAuthorName(e.target.value)}
+                    maxLength={256}
+                    placeholder={currentGuild?.name || 'Autor'}
+                    className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
                   />
                 </div>
 
-                {/* Preset Swatches */}
-                {COLOR_SWATCHES.map((swatch) => (
-                  <button
-                    key={swatch.value}
-                    type="button"
-                    onClick={() => setColor(swatch.value)}
-                    className={`w-7 h-7 rounded-lg border transition transform hover:scale-110 shadow-sm ${
-                      color.toLowerCase() === swatch.value.toLowerCase()
-                        ? 'border-white ring-2 ring-discord-blurple/50'
-                        : 'border-slate-700/80'
-                    }`}
-                    style={{ backgroundColor: swatch.value }}
-                    title={swatch.name}
+                <div>
+                  <label className="text-xs font-semibold text-slate-300 block mb-1">
+                    {t('embeds.authorIcon', 'Icono del Autor (URL)')}
+                  </label>
+                  <input
+                    type="url"
+                    value={authorIconUrl}
+                    onChange={(e) => setAuthorIconUrl(e.target.value)}
+                    placeholder="https://ejemplo.com/icono.png"
+                    className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
                   />
-                ))}
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-slate-300 block mb-1">
+                    {t('embeds.authorUrl', 'Enlace del Autor (URL)')}
+                  </label>
+                  <input
+                    type="url"
+                    value={authorUrl}
+                    onChange={(e) => setAuthorUrl(e.target.value)}
+                    placeholder="https://discord.gg/..."
+                    className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
+                  />
+                </div>
+              </div>
+
+              {/* Footer and Timestamp */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <div>
+                  <label className="text-xs font-semibold text-slate-300 block mb-1">
+                    {t('embeds.footerText', 'Texto de Pie de Página')}
+                  </label>
+                  <input
+                    type="text"
+                    value={footerText}
+                    onChange={(e) => setFooterText(e.target.value)}
+                    maxLength={2048}
+                    placeholder={t('embeds.footerPlaceholder', 'Ej. Servidor Oficial • Soporte 24/7')}
+                    className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-slate-300 block mb-1">
+                    {t('embeds.footerIcon', 'Icono de Pie de Página (URL)')}
+                  </label>
+                  <input
+                    type="url"
+                    value={footerIconUrl}
+                    onChange={(e) => setFooterIconUrl(e.target.value)}
+                    placeholder="https://ejemplo.com/footer.png"
+                    className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
+                  />
+                </div>
+              </div>
+
+              {/* Timestamp Toggle */}
+              <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                <div>
+                  <span className="text-xs font-semibold text-slate-200">
+                    {t('embeds.timestampLabel', 'Incluir Marca de Tiempo Actual (Timestamp)')}
+                  </span>
+                  <p className="text-[11px] text-slate-500">
+                    {t('embeds.timestampDesc', 'Muestra la fecha y hora de emisión al final del embed')}
+                  </p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={timestamp}
+                    onChange={(e) => setTimestamp(e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-10 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-discord-blurple"></div>
+                </label>
               </div>
             </div>
-          </div>
-
-          {/* Section 2: Author & Footer */}
-          <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
-              {t('embeds.authorFooterTitle', 'Autor, Pie de Página y Fecha')}
-            </h2>
-
-            {/* Author */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
-                  {t('embeds.authorName', 'Nombre del Autor')}
-                </label>
-                <input
-                  type="text"
-                  value={authorName}
-                  onChange={(e) => setAuthorName(e.target.value)}
-                  maxLength={256}
-                  placeholder={currentGuild?.name || 'Autor'}
-                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
-                  {t('embeds.authorIcon', 'Icono del Autor (URL)')}
-                </label>
-                <input
-                  type="url"
-                  value={authorIconUrl}
-                  onChange={(e) => setAuthorIconUrl(e.target.value)}
-                  placeholder="https://ejemplo.com/icono.png"
-                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
-                  {t('embeds.authorUrl', 'Enlace del Autor (URL)')}
-                </label>
-                <input
-                  type="url"
-                  value={authorUrl}
-                  onChange={(e) => setAuthorUrl(e.target.value)}
-                  placeholder="https://discord.gg/..."
-                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                />
-              </div>
-            </div>
-
-            {/* Footer and Timestamp */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
-                  {t('embeds.footerText', 'Texto de Pie de Página')}
-                </label>
-                <input
-                  type="text"
-                  value={footerText}
-                  onChange={(e) => setFooterText(e.target.value)}
-                  maxLength={2048}
-                  placeholder={t('embeds.footerPlaceholder', 'Ej. Servidor Oficial • Soporte 24/7')}
-                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
-                  {t('embeds.footerIcon', 'Icono de Pie de Página (URL)')}
-                </label>
-                <input
-                  type="url"
-                  value={footerIconUrl}
-                  onChange={(e) => setFooterIconUrl(e.target.value)}
-                  placeholder="https://ejemplo.com/footer.png"
-                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                />
-              </div>
-            </div>
-
-            {/* Timestamp Toggle */}
-            <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-              <div>
-                <span className="text-xs font-semibold text-slate-200">
-                  {t('embeds.timestampLabel', 'Incluir Marca de Tiempo Actual (Timestamp)')}
-                </span>
-                <p className="text-[11px] text-slate-500">
-                  {t('embeds.timestampDesc', 'Muestra la fecha y hora de emisión al final del embed')}
-                </p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={timestamp}
-                  onChange={(e) => setTimestamp(e.target.checked)}
-                  className="sr-only peer"
-                />
-                <div className="w-10 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-discord-blurple"></div>
-              </label>
-            </div>
-          </div>
+          )}
 
           {/* Section 3: Media (Images) */}
-          <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
-              {t('embeds.mediaTitle', 'Imágenes y Miniaturas')}
-            </h2>
+          {activeSection === 'media' && (
+            <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4 animate-in fade-in duration-150">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
+                {t('embeds.mediaTitle', 'Imágenes y Miniaturas')}
+              </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-300">
-                  {t('embeds.thumbnailLabel', 'Miniatura / Thumbnail (URL)')}
-                </label>
-                <input
-                  type="url"
-                  value={thumbnail}
-                  onChange={(e) => setThumbnail(e.target.value)}
-                  placeholder="https://ejemplo.com/logo.png"
-                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                />
-                <p className="text-[11px] text-slate-500">
-                  {t('embeds.thumbnailDesc', 'Se muestra en la esquina superior derecha del embed.')}
-                </p>
-              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300">
+                    {t('embeds.thumbnailLabel', 'Miniatura / Thumbnail (URL)')}
+                  </label>
+                  <input
+                    type="url"
+                    value={thumbnail}
+                    onChange={(e) => setThumbnail(e.target.value)}
+                    placeholder="https://ejemplo.com/logo.png"
+                    className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
+                  />
+                  <p className="text-[11px] text-slate-500">
+                    {t('embeds.thumbnailDesc', 'Se muestra en la esquina superior derecha del embed.')}
+                  </p>
+                </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-300">
-                  {t('embeds.imageLabel', 'Imagen Grande / Banner (URL)')}
-                </label>
-                <input
-                  type="url"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  placeholder="https://ejemplo.com/banner.png"
-                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                />
-                <p className="text-[11px] text-slate-500">
-                  {t('embeds.imageDesc', 'Se muestra en tamaño completo en la parte inferior.')}
-                </p>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-300">
+                    {t('embeds.imageLabel', 'Imagen Grande / Banner (URL)')}
+                  </label>
+                  <input
+                    type="url"
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
+                    placeholder="https://ejemplo.com/banner.png"
+                    className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
+                  />
+                  <p className="text-[11px] text-slate-500">
+                    {t('embeds.imageDesc', 'Se muestra en tamaño completo en la parte inferior.')}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Section 4: Dynamic Fields Builder */}
-          <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
-                  {t('embeds.fieldsTitle', 'Campos Dinámicos')} ({fields.length}/25)
-                </h2>
-                <p className="text-[11px] text-slate-500">
-                  {t('embeds.fieldsSubtitle', 'Agrupa información en bloques o columnas paralelas')}
-                </p>
+          {activeSection === 'fields' && (
+            <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4 animate-in fade-in duration-150">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
+                    {t('embeds.fieldsTitle', 'Campos Dinámicos')} ({fields.length}/25)
+                  </h2>
+                  <p className="text-[11px] text-slate-500">
+                    {t('embeds.fieldsSubtitle', 'Agrupa información en bloques o columnas paralelas')}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleAddField}
+                  disabled={fields.length >= 25}
+                  className="px-3 py-1.5 rounded-lg bg-discord-blurple/20 text-discord-blurple hover:bg-discord-blurple hover:text-white disabled:opacity-40 disabled:cursor-not-allowed font-semibold text-xs flex items-center gap-1.5 transition cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>{t('embeds.addFieldBtn', 'Añadir Campo')}</span>
+                </button>
               </div>
 
-              <button
-                type="button"
-                onClick={handleAddField}
-                disabled={fields.length >= 25}
-                className="px-3 py-1.5 rounded-lg bg-discord-blurple/20 text-discord-blurple hover:bg-discord-blurple hover:text-white disabled:opacity-40 disabled:cursor-not-allowed font-semibold text-xs flex items-center gap-1.5 transition"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>{t('embeds.addFieldBtn', 'Añadir Campo')}</span>
-              </button>
-            </div>
+              {fields.length === 0 ? (
+                <div className="py-6 border-2 border-dashed border-slate-800 rounded-xl text-center text-slate-500 text-xs">
+                  {t('embeds.noFieldsMsg', 'No hay campos añadidos. Haz clic en "Añadir Campo" para estructurar tu mensaje.')}
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {fields.map((field, index) => (
+                    <div
+                      key={index}
+                      className="p-3.5 bg-slate-900/80 border border-slate-700/70 rounded-xl space-y-3 relative group"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-slate-400">#{index + 1}</span>
+                          <label className="inline-flex items-center gap-1.5 cursor-pointer text-xs text-slate-300">
+                            <input
+                              type="checkbox"
+                              checked={field.inline}
+                              onChange={(e) => handleUpdateField(index, 'inline', e.target.checked)}
+                              className="rounded border-slate-700 bg-slate-800 text-discord-blurple focus:ring-0 w-3.5 h-3.5"
+                            />
+                            <span>{t('embeds.inlineCheckbox', 'En línea (Inline)')}</span>
+                          </label>
+                        </div>
 
-            {fields.length === 0 ? (
-              <div className="py-6 border-2 border-dashed border-slate-800 rounded-xl text-center text-slate-500 text-xs">
-                {t('embeds.noFieldsMsg', 'No hay campos añadidos. Haz clic en "Añadir Campo" para estructurar tu mensaje.')}
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {fields.map((field, index) => (
-                  <div
-                    key={index}
-                    className="p-3.5 bg-slate-900/80 border border-slate-700/70 rounded-xl space-y-3 relative group"
-                  >
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-400">#{index + 1}</span>
-                        <label className="inline-flex items-center gap-1.5 cursor-pointer text-xs text-slate-300">
-                          <input
-                            type="checkbox"
-                            checked={field.inline}
-                            onChange={(e) => handleUpdateField(index, 'inline', e.target.checked)}
-                            className="rounded border-slate-700 bg-slate-800 text-discord-blurple focus:ring-0 w-3.5 h-3.5"
-                          />
-                          <span>{t('embeds.inlineCheckbox', 'En línea (Inline)')}</span>
-                        </label>
+                        {/* Field Reorder & Delete Controls */}
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleMoveField(index, -1)}
+                            disabled={index === 0}
+                            className="p-1 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+                            title={t('common.moveUp', 'Subir')}
+                          >
+                            <ArrowUp className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleMoveField(index, 1)}
+                            disabled={index === fields.length - 1}
+                            className="p-1 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+                            title={t('common.moveDown', 'Bajar')}
+                          >
+                            <ArrowDown className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveField(index)}
+                            className="p-1 text-slate-400 hover:text-red-400 ml-1 transition"
+                            title={t('common.delete', 'Eliminar campo')}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
-                      {/* Field Reorder & Delete Controls */}
-                      <div className="flex items-center gap-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                        <div className="sm:col-span-5">
+                          <input
+                            type="text"
+                            value={field.name}
+                            onChange={(e) => handleUpdateField(index, 'name', e.target.value)}
+                            maxLength={256}
+                            placeholder={t('embeds.fieldNamePlaceholder', 'Nombre del campo')}
+                            className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
+                          />
+                        </div>
+                        <div className="sm:col-span-7">
+                          <input
+                            type="text"
+                            value={field.value}
+                            onChange={(e) => handleUpdateField(index, 'value', e.target.value)}
+                            maxLength={1024}
+                            placeholder={t('embeds.fieldValPlaceholder', 'Valor / Contenido')}
+                            className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Interactive Components & Buttons Section */}
+          {activeSection === 'buttons' && (
+            <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4 animate-in fade-in duration-150">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div className="flex items-center gap-2">
+                  <MousePointerClick className="w-4 h-4 text-discord-blurple" />
+                  <h3 className="font-semibold text-white text-sm">
+                    {t('embeds.interactiveButtonsTitle', 'Botones Interactivos (Message Components)')}
+                  </h3>
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-discord-blurple/20 text-discord-blurple border border-discord-blurple/30">
+                    {buttons.length} / 25
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleAddButton}
+                  disabled={buttons.length >= 25}
+                  className="px-3 py-1 rounded-lg bg-discord-blurple hover:bg-discord-blurple/80 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold flex items-center gap-1 shadow transition cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>{t('embeds.addButton', 'Añadir Botón')}</span>
+                </button>
+              </div>
+
+              <p className="text-xs text-slate-400">
+                {t(
+                  'embeds.interactiveButtonsDesc',
+                  'Añade botones interactivos que permiten a los miembros asignarse roles, abrir tickets o visitar enlaces al hacer clic.'
+                )}
+              </p>
+
+              {buttons.length === 0 ? (
+                <div className="text-center py-6 border border-dashed border-slate-800 rounded-xl">
+                  <MousePointerClick className="w-8 h-8 text-slate-600 mx-auto mb-2" />
+                  <p className="text-xs text-slate-500">
+                    {t('embeds.noButtons', 'No has añadido botones interactivos aún.')}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleAddButton}
+                    className="mt-2 text-xs text-discord-blurple hover:underline font-semibold cursor-pointer"
+                  >
+                    + {t('embeds.addFirstButton', 'Añadir primer botón')}
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {buttons.map((btn, index) => (
+                    <div
+                      key={btn.id}
+                      className="p-3.5 bg-slate-900/70 border border-slate-800 rounded-xl space-y-3"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-mono font-bold text-slate-400">
+                            #{index + 1}
+                          </span>
+                          <span className="text-xs font-bold text-white truncate max-w-[140px]">
+                            {btn.label || 'Botón sin texto'}
+                          </span>
+                        </div>
+
                         <button
                           type="button"
-                          onClick={() => handleMoveField(index, -1)}
-                          disabled={index === 0}
-                          className="p-1 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
-                          title={t('common.moveUp', 'Subir')}
-                        >
-                          <ArrowUp className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleMoveField(index, 1)}
-                          disabled={index === fields.length - 1}
-                          className="p-1 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
-                          title={t('common.moveDown', 'Bajar')}
-                        >
-                          <ArrowDown className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveField(index)}
-                          className="p-1 text-slate-400 hover:text-red-400 ml-1 transition"
-                          title={t('common.delete', 'Eliminar campo')}
+                          onClick={() => handleRemoveButton(btn.id)}
+                          className="p-1 text-slate-400 hover:text-red-400 transition cursor-pointer"
+                          title={t('common.delete', 'Eliminar botón')}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                      <div className="sm:col-span-5">
-                        <input
-                          type="text"
-                          value={field.name}
-                          onChange={(e) => handleUpdateField(index, 'name', e.target.value)}
-                          maxLength={256}
-                          placeholder={t('embeds.fieldNamePlaceholder', 'Nombre del campo')}
-                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                        />
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        {/* Label */}
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                            {t('embeds.btnLabel', 'Texto')}
+                          </label>
+                          <input
+                            type="text"
+                            value={btn.label}
+                            onChange={(e) => handleUpdateButton(btn.id, 'label', e.target.value)}
+                            maxLength={80}
+                            placeholder="Verificar / Unirse"
+                            className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                          />
+                        </div>
+
+                        {/* Style */}
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                            {t('embeds.btnStyle', 'Estilo')}
+                          </label>
+                          <select
+                            value={btn.style}
+                            onChange={(e) => handleUpdateButton(btn.id, 'style', e.target.value)}
+                            className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                          >
+                            <option value="primary">Blurple (Primario)</option>
+                            <option value="secondary">Gris (Secundario)</option>
+                            <option value="success">Verde (Éxito)</option>
+                            <option value="danger">Rojo (Peligro)</option>
+                            <option value="link">Enlace (URL)</option>
+                          </select>
+                        </div>
+
+                        {/* Emoji */}
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                            {t('embeds.btnEmoji', 'Emoji (Opcional)')}
+                          </label>
+                          <input
+                            type="text"
+                            value={btn.emoji || ''}
+                            onChange={(e) => handleUpdateButton(btn.id, 'emoji', e.target.value)}
+                            maxLength={10}
+                            placeholder="🎮, 🎟️, 🔔"
+                            className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                          />
+                        </div>
                       </div>
-                      <div className="sm:col-span-7">
-                        <input
-                          type="text"
-                          value={field.value}
-                          onChange={(e) => handleUpdateField(index, 'value', e.target.value)}
-                          maxLength={1024}
-                          placeholder={t('embeds.fieldValPlaceholder', 'Valor / Contenido')}
-                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                        />
+
+                      {/* Action Selector & Param */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 border-t border-slate-800/60">
+                        <div>
+                          <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                            {t('embeds.btnAction', 'Acción')}
+                          </label>
+                          <select
+                            value={btn.actionType}
+                            onChange={(e) => handleUpdateButton(btn.id, 'actionType', e.target.value)}
+                            className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                          >
+                            <option value="toggle_role">Asignar / Quitar Rol</option>
+                            <option value="open_ticket">Abrir Ticket de Soporte</option>
+                            <option value="link">Abrir Enlace Web</option>
+                            <option value="ephemeral_message">Mensaje Privado (Ephemeral)</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          {btn.actionType === 'toggle_role' && (
+                            <div>
+                              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                                {t('embeds.btnRole', 'Rol a Asignar')}
+                              </label>
+                              <select
+                                value={btn.roleId || ''}
+                                onChange={(e) => handleUpdateButton(btn.id, 'roleId', e.target.value)}
+                                className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                              >
+                                <option value="">Selecciona un rol...</option>
+                                {roles &&
+                                  roles.map((r) => (
+                                    <option key={r.id} value={r.id}>
+                                      @{r.name}
+                                    </option>
+                                  ))}
+                              </select>
+                            </div>
+                          )}
+
+                          {btn.actionType === 'link' && (
+                            <div>
+                              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                                {t('embeds.btnUrl', 'URL de Destino')}
+                              </label>
+                              <input
+                                type="url"
+                                value={btn.url || ''}
+                                onChange={(e) => handleUpdateButton(btn.id, 'url', e.target.value)}
+                                placeholder="https://..."
+                                className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                              />
+                            </div>
+                          )}
+
+                          {btn.actionType === 'ephemeral_message' && (
+                            <div>
+                              <label className="block text-[11px] font-semibold text-slate-400 mb-1">
+                                {t('embeds.btnCustomMessage', 'Respuesta Privada')}
+                              </label>
+                              <input
+                                type="text"
+                                value={btn.customMessage || ''}
+                                onChange={(e) => handleUpdateButton(btn.id, 'customMessage', e.target.value)}
+                                placeholder="¡Gracias por interactuar!"
+                                maxLength={500}
+                                className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
+                              />
+                            </div>
+                          )}
+
+                          {btn.actionType === 'open_ticket' && (
+                            <div className="text-[11px] text-slate-400 pt-5">
+                              ✨ Creará automáticamente un canal de ticket privado para el usuario.
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Interactive Components & Buttons Section */}
-          <div className="bg-discord-dark/90 p-5 rounded-2xl border border-slate-800 shadow-lg space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div className="flex items-center gap-2">
-                <MousePointerClick className="w-4 h-4 text-discord-blurple" />
-                <h3 className="font-semibold text-white text-sm">
-                  {t('embeds.interactiveButtonsTitle', 'Botones Interactivos (Message Components)')}
-                </h3>
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-discord-blurple/20 text-discord-blurple border border-discord-blurple/30">
-                  {buttons.length} / 25
-                </span>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleAddButton}
-                disabled={buttons.length >= 25}
-                className="px-3 py-1 rounded-lg bg-discord-blurple hover:bg-discord-blurple/80 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold flex items-center gap-1 shadow transition"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>{t('embeds.addButton', 'Añadir Botón')}</span>
-              </button>
-            </div>
-
-            <p className="text-xs text-slate-400">
-              {t(
-                'embeds.interactiveButtonsDesc',
-                'Añade botones interactivos que permiten a los miembros asignarse roles, abrir tickets o visitar enlaces al hacer clic.'
+                  ))}
+                </div>
               )}
-            </p>
-
-            {buttons.length === 0 ? (
-              <div className="text-center py-6 border border-dashed border-slate-800 rounded-xl">
-                <MousePointerClick className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-                <p className="text-xs text-slate-500">
-                  {t('embeds.noButtons', 'No has añadido botones interactivos aún.')}
-                </p>
-                <button
-                  type="button"
-                  onClick={handleAddButton}
-                  className="mt-2 text-xs text-discord-blurple hover:underline font-semibold"
-                >
-                  + {t('embeds.addFirstButton', 'Añadir primer botón')}
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {buttons.map((btn, index) => (
-                  <div
-                    key={btn.id}
-                    className="p-3.5 bg-slate-900/70 border border-slate-800 rounded-xl space-y-3"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono font-bold text-slate-400">
-                          #{index + 1}
-                        </span>
-                        <span className="text-xs font-bold text-white truncate max-w-[140px]">
-                          {btn.label || 'Botón sin texto'}
-                        </span>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveButton(btn.id)}
-                        className="p-1 text-slate-400 hover:text-red-400 transition"
-                        title={t('common.delete', 'Eliminar botón')}
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                      {/* Label */}
-                      <div>
-                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                          {t('embeds.btnLabel', 'Texto')}
-                        </label>
-                        <input
-                          type="text"
-                          value={btn.label}
-                          onChange={(e) => handleUpdateButton(btn.id, 'label', e.target.value)}
-                          maxLength={80}
-                          placeholder="Verificar / Unirse"
-                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
-                        />
-                      </div>
-
-                      {/* Style */}
-                      <div>
-                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                          {t('embeds.btnStyle', 'Estilo')}
-                        </label>
-                        <select
-                          value={btn.style}
-                          onChange={(e) => handleUpdateButton(btn.id, 'style', e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
-                        >
-                          <option value="primary">Blurple (Primario)</option>
-                          <option value="secondary">Gris (Secundario)</option>
-                          <option value="success">Verde (Éxito)</option>
-                          <option value="danger">Rojo (Peligro)</option>
-                          <option value="link">Enlace (URL)</option>
-                        </select>
-                      </div>
-
-                      {/* Emoji */}
-                      <div>
-                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                          {t('embeds.btnEmoji', 'Emoji (Opcional)')}
-                        </label>
-                        <input
-                          type="text"
-                          value={btn.emoji || ''}
-                          onChange={(e) => handleUpdateButton(btn.id, 'emoji', e.target.value)}
-                          maxLength={10}
-                          placeholder="🎮, 🎟️, 🔔"
-                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Action Selector & Param */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 border-t border-slate-800/60">
-                      <div>
-                        <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                          {t('embeds.btnAction', 'Acción')}
-                        </label>
-                        <select
-                          value={btn.actionType}
-                          onChange={(e) => handleUpdateButton(btn.id, 'actionType', e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
-                        >
-                          <option value="toggle_role">Asignar / Quitar Rol</option>
-                          <option value="open_ticket">Abrir Ticket de Soporte</option>
-                          <option value="link">Abrir Enlace Web</option>
-                          <option value="ephemeral_message">Mensaje Privado (Ephemeral)</option>
-                        </select>
-                      </div>
-
-                      <div>
-                        {btn.actionType === 'toggle_role' && (
-                          <div>
-                            <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                              {t('embeds.btnRole', 'Rol a Asignar')}
-                            </label>
-                            <select
-                              value={btn.roleId || ''}
-                              onChange={(e) => handleUpdateButton(btn.id, 'roleId', e.target.value)}
-                              className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
-                            >
-                              <option value="">Selecciona un rol...</option>
-                              {roles &&
-                                roles.map((r) => (
-                                  <option key={r.id} value={r.id}>
-                                    @{r.name}
-                                  </option>
-                                ))}
-                            </select>
-                          </div>
-                        )}
-
-                        {btn.actionType === 'link' && (
-                          <div>
-                            <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                              {t('embeds.btnUrl', 'URL de Destino')}
-                            </label>
-                            <input
-                              type="url"
-                              value={btn.url || ''}
-                              onChange={(e) => handleUpdateButton(btn.id, 'url', e.target.value)}
-                              placeholder="https://..."
-                              className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
-                            />
-                          </div>
-                        )}
-
-                        {btn.actionType === 'ephemeral_message' && (
-                          <div>
-                            <label className="block text-[11px] font-semibold text-slate-400 mb-1">
-                              {t('embeds.btnCustomMessage', 'Respuesta Privada')}
-                            </label>
-                            <input
-                              type="text"
-                              value={btn.customMessage || ''}
-                              onChange={(e) => handleUpdateButton(btn.id, 'customMessage', e.target.value)}
-                              placeholder="¡Gracias por interactuar!"
-                              maxLength={500}
-                              className="w-full bg-slate-950 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-discord-blurple"
-                            />
-                          </div>
-                        )}
-
-                        {btn.actionType === 'open_ticket' && (
-                          <div className="text-[11px] text-slate-400 pt-5">
-                            ✨ Creará automáticamente un canal de ticket privado para el usuario.
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Right Column: Live Discord Mockup & Character Stats */}
-        <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-6">
+        <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-4 self-start">
           {/* Character Budget Counter */}
           <div className="bg-discord-dark/90 p-4 rounded-2xl border border-slate-800 shadow-lg space-y-2">
             <div className="flex items-center justify-between text-xs">
@@ -1374,14 +1549,14 @@ export function EmbedCreatorTab() {
         </div>
       )}
 
-      {/* Saved Custom Templates Modal */}
+      {/* Templates Modal (Presets & Saved) */}
       {showTemplatesModal && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-discord-dark border border-slate-700 w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="bg-discord-dark border border-slate-700 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <div className="p-4 border-b border-slate-800 flex items-center justify-between">
               <h3 className="font-bold text-white text-base flex items-center gap-2">
                 <Bookmark className="w-5 h-5 text-indigo-400" />
-                <span>{t('embeds.templatesModalTitle', 'Plantillas Guardadas del Servidor')}</span>
+                <span>{t('embeds.templatesModalTitle', 'Explorador de Plantillas')}</span>
               </h3>
               <button
                 type="button"
@@ -1392,82 +1567,237 @@ export function EmbedCreatorTab() {
               </button>
             </div>
 
+            {/* Modal Tabs Switcher */}
+            <div className="flex border-b border-slate-800 bg-slate-900/50 px-5 pt-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setTemplatesModalTab('presets')}
+                className={`pb-2.5 px-2 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition ${
+                  templatesModalTab === 'presets'
+                    ? 'border-discord-blurple text-discord-blurple'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{t('embeds.tabPresets', 'Plantillas Rápidas')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setTemplatesModalTab('saved')}
+                className={`pb-2.5 px-2 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition ${
+                  templatesModalTab === 'saved'
+                    ? 'border-discord-blurple text-discord-blurple'
+                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Bookmark className="w-3.5 h-3.5" />
+                <span>{t('embeds.tabSavedTemplates', 'Mis Plantillas')} ({savedTemplates.length})</span>
+              </button>
+            </div>
+
             <div className="p-5 space-y-5 overflow-y-auto flex-1">
-              {/* Save current form as template */}
-              <form onSubmit={handleSaveTemplate} className="space-y-2 p-3.5 bg-slate-900/70 border border-slate-800 rounded-xl">
-                <label className="text-xs font-semibold text-slate-200 block">
-                  {t('embeds.saveAsTemplateLabel', 'Guardar diseño actual como nueva plantilla')}
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newTemplateName}
-                    onChange={(e) => setNewTemplateName(e.target.value)}
-                    maxLength={100}
-                    placeholder={t('embeds.templateNamePlaceholder', 'Nombre de la plantilla (ej. Anuncio de Torneo)')}
-                    className="flex-1 bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
-                  />
-                  <button
-                    type="submit"
-                    disabled={savingTemplate || !newTemplateName.trim() || !hasContent}
-                    className="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold flex items-center gap-1.5 transition shadow"
-                  >
-                    {savingTemplate ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-                    <span>{t('common.save', 'Guardar')}</span>
-                  </button>
-                </div>
-              </form>
-
-              {/* List of templates */}
-              <div className="space-y-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  {t('embeds.existingTemplates', 'Plantillas Disponibles')} ({savedTemplates.length})
-                </h4>
-
-                {templatesLoading ? (
-                  <div className="py-8 text-center text-slate-500 text-xs flex items-center justify-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>{t('common.loading', 'Cargando plantillas...')}</span>
-                  </div>
-                ) : savedTemplates.length === 0 ? (
-                  <div className="py-8 border-2 border-dashed border-slate-800 rounded-xl text-center text-slate-500 text-xs">
-                    {t('embeds.noTemplates', 'No tienes plantillas guardadas aún. Guarda tu diseño actual arriba.')}
-                  </div>
-                ) : (
-                  <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                    {savedTemplates.map((template) => (
-                      <div
-                        key={template.id}
-                        className="p-3 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between gap-3 hover:border-slate-700 transition"
-                      >
-                        <div className="min-w-0">
-                          <h5 className="font-semibold text-sm text-white truncate">{template.name}</h5>
-                          <p className="text-[11px] text-slate-400 truncate">
-                            {template.embed?.title || template.embed?.description || 'Sin título'}
-                          </p>
+              {templatesModalTab === 'presets' ? (
+                <div className="space-y-4">
+                  <p className="text-xs text-slate-400">
+                    {t('embeds.presetsModalDesc', 'Selecciona un diseño predeterminado listo para personalizar y publicar en tu servidor.')}
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* Announcement */}
+                    <div className="p-4 bg-slate-900/80 border border-slate-800 hover:border-discord-blurple/50 rounded-xl flex flex-col justify-between gap-3 transition">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl">📢</span>
+                          <div>
+                            <h4 className="font-semibold text-white text-sm">
+                              {t('embeds.presetAnnouncement', 'Anuncio Oficial')}
+                            </h4>
+                            <span className="inline-block px-1.5 py-0.5 rounded text-[10px] bg-discord-blurple/20 text-discord-blurple font-mono">#5865F2</span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <button
-                            type="button"
-                            onClick={() => handleApplySavedTemplate(template)}
-                            className="px-3 py-1.5 rounded-lg bg-discord-blurple/20 text-discord-blurple hover:bg-discord-blurple hover:text-white text-xs font-semibold transition"
-                          >
-                            {t('embeds.loadBtn', 'Cargar')}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteTemplate(template.id)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition"
-                            title={t('common.delete', 'Eliminar plantilla')}
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
+                        <p className="text-xs text-slate-400 leading-relaxed">
+                          {t('embeds.presetAnnouncementDesc', 'Comunicado oficial con título, fecha, campos dinámicos y mención.')}
+                        </p>
                       </div>
-                    ))}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          applyPreset('announcement');
+                          setShowTemplatesModal(false);
+                        }}
+                        className="w-full py-2 rounded-lg bg-discord-blurple text-white hover:bg-discord-blurple/90 text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>{t('embeds.usePreset', 'Cargar Plantilla')}</span>
+                      </button>
+                    </div>
+
+                    {/* Rules */}
+                    <div className="p-4 bg-slate-900/80 border border-slate-800 hover:border-red-500/50 rounded-xl flex flex-col justify-between gap-3 transition">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl">📜</span>
+                          <div>
+                            <h4 className="font-semibold text-white text-sm">
+                              {t('embeds.presetRules', 'Reglamento del Servidor')}
+                            </h4>
+                            <span className="inline-block px-1.5 py-0.5 rounded text-[10px] bg-red-500/20 text-red-400 font-mono">#ED4245</span>
+                          </div>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-relaxed">
+                          {t('embeds.presetRulesDesc', 'Estructura de normas básicas de convivencia para tu servidor.')}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          applyPreset('rules');
+                          setShowTemplatesModal(false);
+                        }}
+                        className="w-full py-2 rounded-lg bg-red-600 text-white hover:bg-red-500 text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>{t('embeds.usePreset', 'Cargar Plantilla')}</span>
+                      </button>
+                    </div>
+
+                    {/* Changelog */}
+                    <div className="p-4 bg-slate-900/80 border border-slate-800 hover:border-emerald-500/50 rounded-xl flex flex-col justify-between gap-3 transition">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl">🚀</span>
+                          <div>
+                            <h4 className="font-semibold text-white text-sm">
+                              {t('embeds.presetChangelog', 'Novedades / Update')}
+                            </h4>
+                            <span className="inline-block px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-400 font-mono">#57F287</span>
+                          </div>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-relaxed">
+                          {t('embeds.presetChangelogDesc', 'Registro de notas de versión, mejoras y correcciones del bot/servidor.')}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          applyPreset('changelog');
+                          setShowTemplatesModal(false);
+                        }}
+                        className="w-full py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>{t('embeds.usePreset', 'Cargar Plantilla')}</span>
+                      </button>
+                    </div>
+
+                    {/* Event */}
+                    <div className="p-4 bg-slate-900/80 border border-slate-800 hover:border-amber-500/50 rounded-xl flex flex-col justify-between gap-3 transition">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-2xl">🏆</span>
+                          <div>
+                            <h4 className="font-semibold text-white text-sm">
+                              {t('embeds.presetEvent', 'Evento de Comunidad')}
+                            </h4>
+                            <span className="inline-block px-1.5 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-400 font-mono">#FEE75C</span>
+                          </div>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-relaxed">
+                          {t('embeds.presetEventDesc', 'Anuncio de torneos o dinámicas con premios, fecha y banner.')}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          applyPreset('event');
+                          setShowTemplatesModal(false);
+                        }}
+                        className="w-full py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-500 text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>{t('embeds.usePreset', 'Cargar Plantilla')}</span>
+                      </button>
+                    </div>
                   </div>
-                )}
-              </div>
+                </div>
+              ) : (
+                <div className="space-y-5">
+                  {/* Save current form as template */}
+                  <form onSubmit={handleSaveTemplate} className="space-y-2 p-3.5 bg-slate-900/70 border border-slate-800 rounded-xl">
+                    <label className="text-xs font-semibold text-slate-200 block">
+                      {t('embeds.saveAsTemplateLabel', 'Guardar diseño actual como nueva plantilla')}
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newTemplateName}
+                        onChange={(e) => setNewTemplateName(e.target.value)}
+                        maxLength={100}
+                        placeholder={t('embeds.templateNamePlaceholder', 'Nombre de la plantilla (ej. Anuncio de Torneo)')}
+                        className="flex-1 bg-slate-950 border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-discord-blurple"
+                      />
+                      <button
+                        type="submit"
+                        disabled={savingTemplate || !newTemplateName.trim() || !hasContent}
+                        className="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold flex items-center gap-1.5 transition shadow"
+                      >
+                        {savingTemplate ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                        <span>{t('common.save', 'Guardar')}</span>
+                      </button>
+                    </div>
+                  </form>
+
+                  {/* List of templates */}
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                      {t('embeds.existingTemplates', 'Plantillas Disponibles')} ({savedTemplates.length})
+                    </h4>
+
+                    {templatesLoading ? (
+                      <div className="py-8 text-center text-slate-500 text-xs flex items-center justify-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>{t('common.loading', 'Cargando plantillas...')}</span>
+                      </div>
+                    ) : savedTemplates.length === 0 ? (
+                      <div className="py-8 border-2 border-dashed border-slate-800 rounded-xl text-center text-slate-500 text-xs">
+                        {t('embeds.noTemplates', 'No tienes plantillas guardadas aún. Guarda tu diseño actual arriba.')}
+                      </div>
+                    ) : (
+                      <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                        {savedTemplates.map((template) => (
+                          <div
+                            key={template.id}
+                            className="p-3 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between gap-3 hover:border-slate-700 transition"
+                          >
+                            <div className="min-w-0">
+                              <h5 className="font-semibold text-sm text-white truncate">{template.name}</h5>
+                              <p className="text-[11px] text-slate-400 truncate">
+                                {template.embed?.title || template.embed?.description || 'Sin título'}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <button
+                                type="button"
+                                onClick={() => handleApplySavedTemplate(template)}
+                                className="px-3 py-1.5 rounded-lg bg-discord-blurple/20 text-discord-blurple hover:bg-discord-blurple hover:text-white text-xs font-semibold transition"
+                              >
+                                {t('embeds.loadBtn', 'Cargar')}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteTemplate(template.id)}
+                                className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition"
+                                title={t('common.delete', 'Eliminar plantilla')}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-end">
