@@ -83,12 +83,31 @@
   },
   "servers": {
     "title": "Selecciona un Servidor para Administrar",
-    "subtitle": "Puedes configurar cualquier servidor donde tengas permisos de Administrador o Gestionar Servidor.",
+    "subtitle": "Solo se muestran los servidores donde eres propietario o tienes permisos de Administrador / Gestionar Servidor.",
     "botActive": "Bot Activo",
-    "botNotInvited": "No está en el Servidor",
-    "search": "Buscar servidores...",
-    "noServers": "No se encontraron servidores",
-    "noServersHelp": "Debes ser propietario o tener permisos de Administrador / Gestionar Servidor para administrar un servidor aquí."
+    "botNotInvited": "Por Invitar",
+    "search": "Buscar por nombre de servidor...",
+    "noServers": "No se encontraron servidores administrables",
+    "noServersHelp": "Debes ser propietario o tener permisos de Administrador / Gestionar Servidor en Discord para administrar un servidor aquí.",
+    "tabs": {
+      "all": "Todos los Servidores",
+      "active": "Con TitanBot Activo",
+      "pending": "Por Invitar"
+    },
+    "kpi": {
+      "total": "Servidores Administrados",
+      "active": "TitanBot Conectado",
+      "pending": "Listos para Invitar"
+    },
+    "badges": {
+      "owner": "Propietario",
+      "admin": "Administrador",
+      "manager": "Gestionar Servidor"
+    },
+    "clearSearch": "Limpiar búsqueda",
+    "noMatchSearch": "No se encontraron servidores que coincidan con la búsqueda.",
+    "manageCta": "Administrar Servidor",
+    "inviteCta": "Invitar Bot al Servidor"
   },
   "general": {
     "title": "Ajustes Generales",

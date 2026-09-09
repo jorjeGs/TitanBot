@@ -14,6 +14,57 @@ const ADMIN_PERMISSION = 0x8n;
 const MANAGE_GUILD_PERMISSION = 0x20n;
 
 /**
+ * Filters a raw list of Discord guilds to only those the user owns or can manage,
+ * enriching them with bot presence and invite URLs.
+ */
+export function filterManageableGuilds(discordGuilds, client = null, clientId = null) {
+  const manageableGuilds = (Array.isArray(discordGuilds) ? discordGuilds : []).filter((g) => {
+    if (g.owner === true) return true;
+    if (!g.permissions) return false;
+    try {
+      const perms = BigInt(g.permissions);
+      return (
+        (perms & ADMIN_PERMISSION) === ADMIN_PERMISSION ||
+        (perms & MANAGE_GUILD_PERMISSION) === MANAGE_GUILD_PERMISSION
+      );
+    } catch {
+      return false;
+    }
+  });
+
+  return manageableGuilds.map((g) => {
+    const botGuild = client?.guilds?.cache?.get ? client.guilds.cache.get(g.id) : null;
+    const botInGuild = Boolean(botGuild);
+    const inviteUrl = botInGuild || !clientId
+      ? null
+      : `https://discord.com/oauth2/authorize?client_id=${clientId}&scope=bot%20applications.commands&permissions=8&guild_id=${g.id}&disable_guild_select=true`;
+
+    let hasAdmin = false;
+    let hasManageGuild = false;
+    try {
+      if (g.permissions) {
+        const perms = BigInt(g.permissions);
+        hasAdmin = (perms & ADMIN_PERMISSION) === ADMIN_PERMISSION;
+        hasManageGuild = (perms & MANAGE_GUILD_PERMISSION) === MANAGE_GUILD_PERMISSION;
+      }
+    } catch {
+      // ignore
+    }
+
+    return {
+      id: g.id,
+      name: g.name,
+      icon: g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png` : null,
+      owner: Boolean(g.owner),
+      hasAdmin,
+      hasManageGuild,
+      botInGuild,
+      inviteUrl,
+    };
+  });
+}
+
+/**
  * Returns all guilds the authenticated user can manage.
  */
 export async function getUserGuilds(req, res) {
@@ -30,35 +81,8 @@ export async function getUserGuilds(req, res) {
     const discordGuilds = await fetchDiscordUserGuilds(accessToken);
     const client = req.client;
     const clientId = config.bot?.clientId || process.env.CLIENT_ID;
-    const isOwner = isBotOwner(req.user.id);
 
-    const manageableGuilds = discordGuilds.filter((g) => {
-      if (isOwner) return true;
-      if (g.owner) return true;
-      try {
-        const perms = BigInt(g.permissions);
-        return (perms & ADMIN_PERMISSION) === ADMIN_PERMISSION || (perms & MANAGE_GUILD_PERMISSION) === MANAGE_GUILD_PERMISSION;
-      } catch {
-        return false;
-      }
-    });
-
-    const results = manageableGuilds.map((g) => {
-      const botGuild = client?.guilds?.cache?.get(g.id);
-      const botInGuild = Boolean(botGuild);
-      const inviteUrl = botInGuild
-        ? null
-        : `https://discord.com/oauth2/authorize?client_id=${clientId}&scope=bot%20applications.commands&permissions=8&guild_id=${g.id}&disable_guild_select=true`;
-
-      return {
-        id: g.id,
-        name: g.name,
-        icon: g.icon ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png` : null,
-        owner: g.owner,
-        botInGuild,
-        inviteUrl,
-      };
-    });
+    const results = filterManageableGuilds(discordGuilds, client, clientId);
 
     return res.json({
       success: true,

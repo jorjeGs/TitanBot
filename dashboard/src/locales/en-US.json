@@ -83,12 +83,31 @@
   },
   "servers": {
     "title": "Select a Server to Manage",
-    "subtitle": "You can configure any server where you have Administrator or Manage Server permissions.",
+    "subtitle": "Only servers where you are the owner or have Administrator / Manage Server permissions are displayed.",
     "botActive": "Bot Active",
-    "botNotInvited": "Not in Server",
-    "search": "Search servers...",
-    "noServers": "No servers found",
-    "noServersHelp": "You need to be the owner or have Administrator / Manage Server permissions on a server to manage it here."
+    "botNotInvited": "Pending Invite",
+    "search": "Search by server name...",
+    "noServers": "No manageable servers found",
+    "noServersHelp": "You must be the server owner or have Administrator / Manage Server permissions in Discord to manage a server here.",
+    "tabs": {
+      "all": "All Servers",
+      "active": "With Active TitanBot",
+      "pending": "Pending Invite"
+    },
+    "kpi": {
+      "total": "Manageable Servers",
+      "active": "TitanBot Connected",
+      "pending": "Ready to Invite"
+    },
+    "badges": {
+      "owner": "Owner",
+      "admin": "Administrator",
+      "manager": "Manage Server"
+    },
+    "clearSearch": "Clear search",
+    "noMatchSearch": "No servers found matching your search.",
+    "manageCta": "Manage Server",
+    "inviteCta": "Invite Bot to Server"
   },
   "general": {
     "title": "General Settings",
