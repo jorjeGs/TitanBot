@@ -8,17 +8,18 @@ import {
 } from 'discord.js';
 import { patchGuildConfig, getGuildConfig } from '../../services/config/guildConfig.js';
 import { getTicketPanelStatus } from '../../utils/panelStatus.js';
+import { getGuildTicketStats } from '../../utils/database/tickets.js';
 import { getColor } from '../../config/bot.js';
 import { logger } from '../../utils/logger.js';
 
 /**
- * Returns ticket settings and active panel status for the guild.
+ * Returns ticket settings, stats and active panel status for the guild.
  */
 export async function getTicketSettings(req, res) {
   try {
     const guild = req.guild;
     if (!guild) {
-      return res.status(404).json({ success: false, error: 'NotFound', message: 'Guild not found.' });
+      return res.status(404).json({ success: false, error: 'NotFound', message: 'Servidor no encontrado.' });
     }
 
     const config = await getGuildConfig(req.client, guild.id);
@@ -38,6 +39,14 @@ export async function getTicketSettings(req, res) {
       }
     }
 
+    const stats = await getGuildTicketStats(guild.id).catch(() => ({
+      openCount: 0,
+      closedCount: 0,
+      avgCloseTimeMs: null,
+      feedbackCount: 0,
+      avgRating: null,
+    }));
+
     return res.json({
       success: true,
       tickets: {
@@ -51,6 +60,7 @@ export async function getTicketSettings(req, res) {
         maxTicketsPerUser: config.maxTicketsPerUser || 3,
         dmOnClose: config.dmOnClose !== false,
         panelStatus,
+        stats,
       },
     });
   } catch (error) {
@@ -58,7 +68,7 @@ export async function getTicketSettings(req, res) {
     return res.status(500).json({
       success: false,
       error: 'InternalError',
-      message: error.message || 'Failed to fetch ticket settings.',
+      message: error.message || 'Error al obtener la configuración de tickets.',
     });
   }
 }
@@ -71,7 +81,7 @@ export async function publishTicketPanel(req, res) {
   try {
     const guild = req.guild;
     if (!guild) {
-      return res.status(404).json({ success: false, error: 'NotFound', message: 'Guild not found.' });
+      return res.status(404).json({ success: false, error: 'NotFound', message: 'Servidor no encontrado.' });
     }
 
     const {
@@ -86,12 +96,12 @@ export async function publishTicketPanel(req, res) {
     } = req.body;
 
     if (!panelChannelId || typeof panelChannelId !== 'string') {
-      return res.status(400).json({ success: false, error: 'Validation', message: 'Panel channel is required.' });
+      return res.status(400).json({ success: false, error: 'Validation', message: 'El canal para el panel es obligatorio.' });
     }
 
     const channel = guild.channels?.cache?.get(panelChannelId);
     if (!channel) {
-      return res.status(404).json({ success: false, error: 'NotFound', message: 'Selected channel not found in this server.' });
+      return res.status(404).json({ success: false, error: 'NotFound', message: 'El canal seleccionado no existe en este servidor.' });
     }
 
     const botMember = guild.members?.me || (req.client?.user?.id ? guild.members?.cache?.get(req.client.user.id) : null);
@@ -108,7 +118,7 @@ export async function publishTicketPanel(req, res) {
         return res.status(403).json({
           success: false,
           error: 'MissingChannelPermissions',
-          message: 'Bot lacks View Channel, Send Messages, or Embed Links permissions in the selected channel.',
+          message: 'TitanBot no tiene permisos suficientes (Ver Canal, Enviar Mensajes o Insertar Enlaces) en el canal seleccionado.',
         });
       }
     }
@@ -118,14 +128,14 @@ export async function publishTicketPanel(req, res) {
     if (staffRoleId) {
       staffRole = guild.roles?.cache?.get(staffRoleId);
       if (!staffRole) {
-        return res.status(404).json({ success: false, error: 'NotFound', message: 'Staff role not found in this server.' });
+        return res.status(404).json({ success: false, error: 'NotFound', message: 'El rol de staff especificado no existe en este servidor.' });
       }
 
       if (botMember && staffRole.position >= botHighestPosition) {
         return res.status(422).json({
           success: false,
           error: 'HierarchyError',
-          message: `Role "${staffRole.name}" is equal to or higher than TitanBot's highest role.`,
+          message: `El rol "${staffRole.name}" está por encima o al mismo nivel que el rol de TitanBot en la jerarquía.`,
         });
       }
     }
@@ -134,20 +144,20 @@ export async function publishTicketPanel(req, res) {
     if (categoryId) {
       const cat = guild.channels?.cache?.get(categoryId);
       if (!cat) {
-        return res.status(404).json({ success: false, error: 'NotFound', message: 'Ticket opening category not found in this server.' });
+        return res.status(404).json({ success: false, error: 'NotFound', message: 'La categoría para tickets abiertos no existe en este servidor.' });
       }
       if (cat.type !== 4 && cat.type !== ChannelType.GuildCategory) {
-        return res.status(400).json({ success: false, error: 'Validation', message: 'Opening target must be a category channel.' });
+        return res.status(400).json({ success: false, error: 'Validation', message: 'El destino para tickets abiertos debe ser un canal de categoría.' });
       }
     }
 
     if (closedCategoryId) {
       const closedCat = guild.channels?.cache?.get(closedCategoryId);
       if (!closedCat) {
-        return res.status(404).json({ success: false, error: 'NotFound', message: 'Ticket closed category not found in this server.' });
+        return res.status(404).json({ success: false, error: 'NotFound', message: 'La categoría para tickets cerrados no existe en este servidor.' });
       }
       if (closedCat.type !== 4 && closedCat.type !== ChannelType.GuildCategory) {
-        return res.status(400).json({ success: false, error: 'Validation', message: 'Closed target must be a category channel.' });
+        return res.status(400).json({ success: false, error: 'Validation', message: 'El destino para tickets cerrados debe ser un canal de categoría.' });
       }
     }
 
@@ -203,9 +213,24 @@ export async function publishTicketPanel(req, res) {
 
     logger.info(`Published ticket panel in guild ${guild.id}, channel ${channel.id}, message ${sentMessage.id}`);
 
+    // Record in staff audit log
+    import('../../services/audit/auditLogService.js')
+      .then(({ logAuditEvent }) =>
+        logAuditEvent({
+          guildId: guild.id,
+          user: req.user,
+          action: 'TICKET_PANEL_PUBLISH',
+          category: 'tickets',
+          details: `Publicó panel de tickets en #${channel.name}`,
+          metadata: { channelId: channel.id, channelName: channel.name, messageId: sentMessage.id },
+          ip: req.ip,
+        })
+      )
+      .catch(() => {});
+
     return res.json({
       success: true,
-      message: 'Ticket panel published successfully.',
+      message: '¡Panel de tickets publicado exitosamente en Discord!',
       panel: {
         messageId: sentMessage.id,
         channelId: channel.id,
@@ -217,7 +242,7 @@ export async function publishTicketPanel(req, res) {
     return res.status(500).json({
       success: false,
       error: 'InternalError',
-      message: error.message || 'Failed to publish ticket panel to Discord.',
+      message: error.message || 'Error al publicar el panel de tickets en Discord.',
     });
   }
 }
@@ -229,7 +254,7 @@ export async function deleteTicketPanel(req, res) {
   try {
     const guild = req.guild;
     if (!guild) {
-      return res.status(404).json({ success: false, error: 'NotFound', message: 'Guild not found.' });
+      return res.status(404).json({ success: false, error: 'NotFound', message: 'Servidor no encontrado.' });
     }
 
     const currentConfig = await getGuildConfig(req.client, guild.id);
@@ -257,16 +282,31 @@ export async function deleteTicketPanel(req, res) {
 
     logger.info(`Deleted ticket panel for guild ${guild.id}`);
 
+    // Record in staff audit log
+    import('../../services/audit/auditLogService.js')
+      .then(({ logAuditEvent }) =>
+        logAuditEvent({
+          guildId: guild.id,
+          user: req.user,
+          action: 'TICKET_PANEL_DELETE',
+          category: 'tickets',
+          details: 'Eliminó el panel de tickets activo',
+          metadata: { channelId: currentConfig.ticketPanelChannelId, messageId: currentConfig.ticketPanelMessageId },
+          ip: req.ip,
+        })
+      )
+      .catch(() => {});
+
     return res.json({
       success: true,
-      message: 'Ticket panel deleted successfully.',
+      message: '¡Panel de tickets despublicado y eliminado correctamente!',
     });
   } catch (error) {
     logger.error('Error deleting ticket panel:', error);
     return res.status(500).json({
       success: false,
       error: 'InternalError',
-      message: error.message || 'Failed to delete ticket panel.',
+      message: error.message || 'Error al eliminar el panel de tickets.',
     });
   }
 }
