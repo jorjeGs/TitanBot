@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useGuild } from '../../contexts/GuildContext';
 import { apiFetch } from '../../api/client';
+import { safeFormatDateTime } from '../../utils/formatters';
 import {
   Archive,
   Plus,
@@ -33,24 +34,6 @@ import {
   Radio,
   Clock,
 } from 'lucide-react';
-
-function formatDateTime(isoString, fallback = 'Ninguno') {
-  if (!isoString) return fallback;
-  try {
-    const d = new Date(isoString);
-    if (isNaN(d.getTime())) return fallback;
-    return d.toLocaleString(undefined, {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    });
-  } catch {
-    try {
-      return new Date(isoString).toLocaleString();
-    } catch {
-      return fallback;
-    }
-  }
-}
 
 export function SnapshotsTab() {
   const { t } = useTranslation();
@@ -330,7 +313,7 @@ export function SnapshotsTab() {
   const latestChannels = latestSnapshot
     ? (latestSnapshot.counts?.channels ?? latestSnapshot.channelsCount ?? 0)
     : 0;
-  const lastDateFormatted = formatDateTime(latestSnapshot?.createdAt, 'Ninguno');
+  const lastDateFormatted = safeFormatDateTime(latestSnapshot?.createdAt, 'Ninguno');
 
   // Filtered snapshots
   const filteredSnapshots = useMemo(() => {
@@ -593,7 +576,7 @@ export function SnapshotsTab() {
               (typeof s.author === 'string' ? s.author : null) ||
               'Sistema';
 
-            const formattedDate = formatDateTime(s.createdAt, 'Fecha desconocida');
+            const formattedDate = safeFormatDateTime(s.createdAt, 'Fecha desconocida');
 
             return (
               <div
