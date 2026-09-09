@@ -32,8 +32,25 @@ import {
   Volume2,
   Radio,
   Clock,
-  Sparkles,
 } from 'lucide-react';
+
+function formatDateTime(isoString, fallback = 'Ninguno') {
+  if (!isoString) return fallback;
+  try {
+    const d = new Date(isoString);
+    if (isNaN(d.getTime())) return fallback;
+    return d.toLocaleString(undefined, {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+  } catch {
+    try {
+      return new Date(isoString).toLocaleString();
+    } catch {
+      return fallback;
+    }
+  }
+}
 
 export function SnapshotsTab() {
   const { t } = useTranslation();
@@ -313,12 +330,7 @@ export function SnapshotsTab() {
   const latestChannels = latestSnapshot
     ? (latestSnapshot.counts?.channels ?? latestSnapshot.channelsCount ?? 0)
     : 0;
-  const lastDateFormatted = latestSnapshot?.createdAt
-    ? new Date(latestSnapshot.createdAt).toLocaleDateString(undefined, {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-      })
-    : 'Ninguno';
+  const lastDateFormatted = formatDateTime(latestSnapshot?.createdAt, 'Ninguno');
 
   // Filtered snapshots
   const filteredSnapshots = useMemo(() => {
@@ -581,12 +593,7 @@ export function SnapshotsTab() {
               (typeof s.author === 'string' ? s.author : null) ||
               'Sistema';
 
-            const formattedDate = s.createdAt
-              ? new Date(s.createdAt).toLocaleString(undefined, {
-                  dateStyle: 'medium',
-                  timeStyle: 'short',
-                })
-              : 'Fecha desconocida';
+            const formattedDate = formatDateTime(s.createdAt, 'Fecha desconocida');
 
             return (
               <div
