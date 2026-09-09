@@ -2,10 +2,11 @@ import { getGuildConfig, updateGuildConfig } from '../../services/config/guildCo
 import { getEconomyPrefix } from '../../utils/database.js';
 import { logger } from '../../utils/logger.js';
 import { EconomyConfigSchema } from '../../utils/schemas.js';
+import { shopItems } from '../../config/shop/items.js';
 
 /**
  * GET /api/guilds/:guildId/economy
- * Returns guild economy configuration and top 10 richest users.
+ * Returns guild economy configuration, top 10 richest users, and shop items catalog.
  */
 export async function getEconomySettings(req, res) {
   try {
@@ -87,10 +88,11 @@ export async function getEconomySettings(req, res) {
       success: true,
       economy: economyConfig,
       leaderboard,
+      shopItems: shopItems || [],
     });
   } catch (error) {
     logger.error('Error fetching economy settings:', error);
-    return res.status(500).json({ error: 'InternalError', message: 'Failed to fetch economy settings' });
+    return res.status(500).json({ error: 'InternalError', message: 'Error al obtener la configuración de economía.' });
   }
 }
 
@@ -109,21 +111,21 @@ export async function updateEconomySettings(req, res) {
     if (workMin > workMax) {
       return res.status(400).json({
         error: 'ValidationError',
-        message: 'Minimum work payout cannot exceed maximum work payout',
+        message: 'El pago mínimo de trabajo no puede superar el pago máximo.',
       });
     }
 
     if (body.startingBalance !== undefined && body.startingBalance < 0) {
       return res.status(400).json({
         error: 'ValidationError',
-        message: 'Starting balance cannot be negative',
+        message: 'El balance inicial no puede ser negativo.',
       });
     }
 
     if (body.dailyAmount !== undefined && body.dailyAmount <= 0) {
       return res.status(400).json({
         error: 'ValidationError',
-        message: 'Daily reward amount must be greater than 0',
+        message: 'La recompensa diaria debe ser mayor a 0.',
       });
     }
 
@@ -134,7 +136,7 @@ export async function updateEconomySettings(req, res) {
       if (!role) {
         return res.status(404).json({
           error: 'RoleNotFound',
-          message: `Premium role ${roleId} not found in this guild`,
+          message: `El rol configurado ${roleId} no existe en este servidor.`,
         });
       }
 
@@ -142,7 +144,7 @@ export async function updateEconomySettings(req, res) {
       if (botMember && role.position >= botMember.roles?.highest?.position) {
         return res.status(422).json({
           error: 'HierarchyError',
-          message: `Role "${role.name}" is higher than or equal to TitanBot in the role hierarchy. Move the bot role above this role in Discord.`,
+          message: `El rol "${role.name}" está por encima o al mismo nivel que TitanBot en la jerarquía de roles. Mueve el rol de TitanBot por encima de este rol en Discord.`,
         });
       }
     }
@@ -162,7 +164,7 @@ export async function updateEconomySettings(req, res) {
     if (!parsed.success) {
       return res.status(400).json({
         error: 'ValidationError',
-        message: parsed.error.issues[0]?.message || 'Invalid economy configuration',
+        message: parsed.error.issues[0]?.message || 'Configuración de economía no válida.',
       });
     }
 
@@ -176,11 +178,11 @@ export async function updateEconomySettings(req, res) {
 
     return res.json({
       success: true,
-      message: 'Economy settings updated successfully',
+      message: 'Configuración de economía actualizada exitosamente.',
       economy: parsed.data,
     });
   } catch (error) {
     logger.error('Error updating economy settings:', error);
-    return res.status(500).json({ error: 'InternalError', message: 'Failed to update economy settings' });
+    return res.status(500).json({ error: 'InternalError', message: 'Error al actualizar la configuración de economía.' });
   }
 }
