@@ -1472,5 +1472,97 @@
       "roleHierarchy": "Selected role is higher than or equal to TitanBot in the role hierarchy.",
       "saveFailed": "Failed to save economy settings."
     }
+  },
+  "serverstats": {
+    "title": "Server Statistics",
+    "subtitle": "Analyze growth, chat engagement, and set up live voice channel member counters.",
+    "subtabs": {
+      "counters": "Counter Channels",
+      "insights": "Analytics & Growth",
+      "guide": "Guide & Permissions"
+    },
+    "totalMembers": "Total Members",
+    "humans": "Human Users",
+    "bots": "Bots",
+    "channelConfig": "Counter Channel Configuration",
+    "channelConfigHelp": "Choose which counters to create in your Discord server and in which category to organize them.",
+    "selectCounters": "Select counters to activate:",
+    "typeMembers": "Total Members",
+    "typeHumans": "Humans Only",
+    "typeBots": "Bots Only",
+    "categoryLabel": "Container Category (Optional)",
+    "categoryAuto": "✨ Automatically create \"📊 Server Stats\" category",
+    "categoryHelp": "If omitted, TitanBot will create a locked category at the top of the channel list.",
+    "activeChannels": "Discord Channels:",
+    "noCountersActive": "No server stat counter channels configured yet for this server.",
+    "deleteCounters": "Delete Counters",
+    "applyCounters": "Create or Update Channels",
+    "confirmDelete": "Are you sure you want to delete all server stats counter channels?",
+    "setupSuccess": "Server stats counter channels created successfully in Discord!",
+    "deleteSuccess": "Server stats counter channels removed successfully.",
+    "previewTitle": "Live Preview",
+    "previewModes": {
+      "tree": "Discord Channels",
+      "serverinfo": "/serverinfo Card",
+      "distribution": "Distribution"
+    },
+    "previewTestMembers": "Test Member Count Simulator:",
+    "presetsTitle": "Channel Name Presets (1 Click)",
+    "presets": {
+      "classic": "Classic",
+      "modern": "Modern",
+      "minimal": "Minimal",
+      "gamer": "Gamer"
+    },
+    "guideTitle": "Permissions & Setup Guide",
+    "guideSubtitle": "Learn how TitanBot provisions and keeps counter channels synchronized.",
+    "permissionsTitle": "Required Discord Permissions",
+    "permManageChannels": "Manage Channels: To create, rename, and position stat counter channels.",
+    "permViewChannels": "View Channels: So members can see the live counters in the sidebar.",
+    "permConnectDenied": "Connect Denied: Disables voice connection so members do not accidentally join.",
+    "howItWorksTitle": "How are counters updated?",
+    "howItWorksText": "TitanBot monitors member joins and leaves in real time. To respect Discord API rate limits (2 channel renames per 10 minutes), updates are debounced and processed automatically.",
+    "errors": {
+      "noTypeSelected": "Please select at least one counter type.",
+      "setupFailed": "Failed to create counters.",
+      "deleteFailed": "Failed to delete counters."
+    }
+  },
+  "insights": {
+    "rangeLabel": "Timeframe:",
+    "daysUnit": "days",
+    "joins": "Joins",
+    "leaves": "Leaves",
+    "total": "Total",
+    "messages": "messages",
+    "lessActive": "Less active",
+    "moreActive": "More active",
+    "hoverHeatmapHint": "Hover over a cell to inspect activity",
+    "growthChartTitle": "Member Trends (Joins vs Leaves)",
+    "growthChartSubtitle": "Track daily influx and churn across your community.",
+    "heatmapTitle": "Weekly Activity Heatmap (7 Days × 24 Hours)",
+    "heatmapSubtitle": "Identify peak activity windows and engagement patterns.",
+    "topChannelsTitle": "Most Active Channels",
+    "topChannelsSubtitle": "Percentage breakdown of messages across text channels.",
+    "noChannelsData": "Not enough message history recorded yet.",
+    "kpi": {
+      "totalMembers": "Total Members",
+      "growthHint": "Net growth over the last {{days}} days",
+      "netGrowth": "Net Growth",
+      "netGrowthHint": "New joins minus leaves recorded",
+      "messages": "Chat Messages",
+      "messagesToday": "Today",
+      "peakActivity": "Peak Engagement",
+      "peakActivityHint": "Busiest weekday and UTC hour"
+    },
+    "days": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    }
   }
 }

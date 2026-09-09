@@ -43,7 +43,7 @@ export async function getServerstatsSettings(req, res) {
     });
   } catch (error) {
     logger.error('Error fetching serverstats settings:', error);
-    return res.status(500).json({ error: 'InternalError', message: 'Failed to fetch server stats' });
+    return res.status(500).json({ error: 'InternalError', message: 'Error al obtener las estadísticas del servidor.' });
   }
 }
 
@@ -60,7 +60,7 @@ export async function setupCounters(req, res) {
     if (botMember && !botMember.permissions.has(PermissionFlagsBits.ManageChannels)) {
       return res.status(403).json({
         error: 'MissingBotPermissions',
-        message: 'TitanBot requires the "Manage Channels" permission in this server to create stat counters.',
+        message: 'TitanBot requiere el permiso "Gestionar Canales" en este servidor para crear los canales contadores.',
       });
     }
 
@@ -146,12 +146,12 @@ export async function setupCounters(req, res) {
 
     return res.json({
       success: true,
-      message: 'Server stats counters created successfully',
+      message: 'Canales contadores creados o actualizados exitosamente en Discord.',
       counters: updatedCounters,
     });
   } catch (error) {
     logger.error('Error provisioning server stats:', error);
-    return res.status(500).json({ error: 'InternalError', message: 'Failed to create server stats counters' });
+    return res.status(500).json({ error: 'InternalError', message: 'Error al crear los canales contadores de estadísticas.' });
   }
 }
 
@@ -180,10 +180,10 @@ export async function deleteCounters(req, res) {
 
     return res.json({
       success: true,
-      message: 'Server stats counters cleared successfully',
+      message: 'Canales contadores eliminados correctamente.',
     });
   } catch (error) {
     logger.error('Error deleting server stats:', error);
-    return res.status(500).json({ error: 'InternalError', message: 'Failed to delete server stats counters' });
+    return res.status(500).json({ error: 'InternalError', message: 'Error al eliminar los canales contadores de estadísticas.' });
   }
 }

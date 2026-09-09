@@ -34,9 +34,9 @@ import {
 export function ServerStatsTab() {
   const { t } = useTranslation();
   const { guildId } = useParams();
-  const { channels } = useGuild();
+  const { channels, currentGuild } = useGuild();
 
-  const [activeSubTab, setActiveSubTab] = useState('insights'); // 'insights' | 'counters'
+  const [activeSubTab, setActiveSubTab] = useState('counters'); // 'counters' | 'insights' | 'guide'
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [notification, setNotification] = useState(null);
@@ -46,6 +46,7 @@ export function ServerStatsTab() {
   const [stats, setStats] = useState({ totalCount: 0, humanCount: 0, botCount: 0 });
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedTypes, setSelectedTypes] = useState(['members', 'members_only', 'bots']);
+  const [channelStyle, setChannelStyle] = useState('classic'); // 'classic' | 'modern' | 'minimal' | 'gamer'
 
   // Insights Analytics state
   const [rangeDays, setRangeDays] = useState(30);
@@ -255,6 +256,18 @@ export function ServerStatsTab() {
           <div className="flex items-center bg-discord-dark p-1 rounded-xl border border-slate-700/60 shadow-inner">
             <button
               type="button"
+              onClick={() => setActiveSubTab('counters')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeSubTab === 'counters'
+                  ? 'bg-discord-blurple text-white shadow-md'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Volume2 className="w-3.5 h-3.5" />
+              <span>{t('serverstats.subtabs.counters') || 'Canales Contadores'}</span>
+            </button>
+            <button
+              type="button"
               onClick={() => setActiveSubTab('insights')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeSubTab === 'insights'
@@ -267,15 +280,15 @@ export function ServerStatsTab() {
             </button>
             <button
               type="button"
-              onClick={() => setActiveSubTab('counters')}
+              onClick={() => setActiveSubTab('guide')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                activeSubTab === 'counters'
-                  ? 'bg-discord-blurple text-white shadow-md'
+                activeSubTab === 'guide'
+                  ? 'bg-indigo-500 text-white shadow-md'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <Volume2 className="w-3.5 h-3.5" />
-              <span>{t('serverstats.subtabs.counters') || 'Canales Contadores'}</span>
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>{t('serverstats.subtabs.guide') || 'Guía y Permisos'}</span>
             </button>
           </div>
         </div>
@@ -683,6 +696,40 @@ export function ServerStatsTab() {
                 </p>
               </div>
 
+              {/* Channel Style Presets Selector */}
+              <div className="space-y-3">
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  {t('serverstats.presetsTitle') || 'Estilos de Nombre de Canal (1 Clic):'}
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {[
+                    { id: 'classic', label: t('serverstats.presets.classic') || 'Clásico', preview: '📊・Miembros: 150' },
+                    { id: 'modern', label: t('serverstats.presets.modern') || 'Moderno', preview: '👥 Miembros ➔ 150' },
+                    { id: 'minimal', label: t('serverstats.presets.minimal') || 'Minimalista', preview: 'miembros: 150' },
+                    { id: 'gamer', label: t('serverstats.presets.gamer') || 'Gamer', preview: '⚡ [ 150 ] Miembros' },
+                  ].map((style) => (
+                    <button
+                      key={style.id}
+                      type="button"
+                      onClick={() => setChannelStyle(style.id)}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                        channelStyle === style.id
+                          ? 'bg-emerald-500/15 border-emerald-500/50 text-white ring-1 ring-emerald-500/40 shadow-sm'
+                          : 'bg-discord-dark border-slate-700/60 text-slate-400 hover:border-slate-600'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-semibold text-xs text-slate-200">{style.label}</span>
+                        {channelStyle === style.id && (
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        )}
+                      </div>
+                      <span className="font-mono text-[10px] text-slate-400 block truncate">{style.preview}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Counter Types Selector */}
               <div className="space-y-3">
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
@@ -806,9 +853,87 @@ export function ServerStatsTab() {
             <div className="lg:col-span-5 sticky top-6 space-y-4">
               <ServerStatsPreview
                 counters={selectedTypes}
+                enabledTypes={selectedTypes}
                 stats={stats}
                 categoryName={categories.find((c) => c.id === selectedCategory)?.name || '📊 Estadísticas'}
+                serverName={currentGuild?.name}
+                channelStyle={channelStyle}
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* VIEW 3: GUIDE & DISCORD PERMISSIONS */}
+      {activeSubTab === 'guide' && (
+        <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-200">
+          <div className="bg-discord-darker/70 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+            <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center">
+                <ShieldAlert className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-white">
+                  {t('serverstats.guideTitle') || 'Guía de Permisos y Funcionamiento'}
+                </h2>
+                <p className="text-xs text-slate-400">
+                  {t('serverstats.guideSubtitle') || 'Aprende cómo TitanBot gestiona y mantiene sincronizados los contadores.'}
+                </p>
+              </div>
+            </div>
+
+            {/* Discord Permissions Card */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-emerald-400" />
+                <span>{t('serverstats.permissionsTitle') || 'Permisos Requeridos en Discord'}</span>
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="p-4 rounded-xl bg-discord-dark border border-slate-700/60 space-y-2">
+                  <div className="flex items-center gap-2 text-emerald-400 font-semibold text-xs">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>Gestionar Canales</span>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {t('serverstats.permManageChannels') ||
+                      'Permite al bot crear la categoría de estadísticas y renombrar los canales automáticamente cuando cambian los contadores.'}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-discord-dark border border-slate-700/60 space-y-2">
+                  <div className="flex items-center gap-2 text-emerald-400 font-semibold text-xs">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>Ver Canales</span>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {t('serverstats.permViewChannels') ||
+                      'Permiso asignado al rol @everyone para que todos los usuarios puedan observar los contadores en la barra de canales.'}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-discord-dark border border-slate-700/60 space-y-2">
+                  <div className="flex items-center gap-2 text-amber-400 font-semibold text-xs">
+                    <ShieldAlert className="w-4 h-4 shrink-0" />
+                    <span>Conectar Denegado</span>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {t('serverstats.permConnectDenied') ||
+                      'Los canales son de voz pero con el permiso Conectar denegado, impidiendo que los usuarios se conecten a hablar.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* How it works section */}
+            <div className="p-5 rounded-xl bg-gradient-to-r from-indigo-950/40 via-slate-900/60 to-discord-dark border border-indigo-500/20 space-y-2.5">
+              <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+                <Activity className="w-4 h-4 text-indigo-400" />
+                <span>{t('serverstats.howItWorksTitle') || '¿Cómo se actualizan los contadores?'}</span>
+              </h4>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                {t('serverstats.howItWorksText') ||
+                  'TitanBot detecta en tiempo real cuando un miembro o bot se une o abandona el servidor. Para respetar los límites de velocidad de la API de Discord (rate limits de 2 cambios de nombre de canal cada 10 minutos), las actualizaciones se sincronizan automáticamente con un retraso inteligente.'}
+              </p>
             </div>
           </div>
         </div>

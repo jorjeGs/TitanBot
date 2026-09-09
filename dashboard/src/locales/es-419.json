@@ -1472,5 +1472,97 @@
       "roleHierarchy": "El rol seleccionado para la tienda está por encima de TitanBot en la jerarquía.",
       "saveFailed": "Error al guardar economía."
     }
+  },
+  "serverstats": {
+    "title": "Estadísticas del Servidor",
+    "subtitle": "Analiza el crecimiento, la actividad del chat y configura contadores en canales de voz en tiempo real.",
+    "subtabs": {
+      "counters": "Canales Contadores",
+      "insights": "Analíticas y Crecimiento",
+      "guide": "Guía y Permisos"
+    },
+    "totalMembers": "Miembros Totales",
+    "humans": "Usuarios Humanos",
+    "bots": "Bots",
+    "channelConfig": "Configuración de Canales Contadores",
+    "channelConfigHelp": "Elige qué contadores deseas crear en tu servidor de Discord y en qué categoría organizarlos.",
+    "selectCounters": "Selecciona los contadores a activar:",
+    "typeMembers": "Miembros Totales",
+    "typeHumans": "Solo Humanos",
+    "typeBots": "Solo Bots",
+    "categoryLabel": "Categoría Contenedora (Opcional)",
+    "categoryAuto": "✨ Crear categoría \"📊 Estadísticas\" automáticamente",
+    "categoryHelp": "Si no seleccionas una, TitanBot creará una categoría bloqueada en la parte superior.",
+    "activeChannels": "Canales en Discord:",
+    "noCountersActive": "Aún no se han configurado canales de estadísticas para este servidor.",
+    "deleteCounters": "Eliminar Contadores",
+    "applyCounters": "Crear o Actualizar Canales",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar todos los canales de estadísticas del servidor?",
+    "setupSuccess": "¡Canales de estadísticas creados exitosamente en Discord!",
+    "deleteSuccess": "Canales de estadísticas eliminados correctamente.",
+    "previewTitle": "Vista Previa en Tiempo Real",
+    "previewModes": {
+      "tree": "Canales Discord",
+      "serverinfo": "Ficha /serverinfo",
+      "distribution": "Distribución"
+    },
+    "previewTestMembers": "Simular Miembros de Prueba:",
+    "presetsTitle": "Estilos de Nombre de Canal (1 Clic)",
+    "presets": {
+      "classic": "Clásico",
+      "modern": "Moderno",
+      "minimal": "Minimalista",
+      "gamer": "Gamer"
+    },
+    "guideTitle": "Guía de Permisos y Funcionamiento",
+    "guideSubtitle": "Aprende cómo TitanBot gestiona y mantiene sincronizados los contadores.",
+    "permissionsTitle": "Permisos Requeridos en Discord",
+    "permManageChannels": "Gestionar Canales: Para crear, renombrar y ordenar los canales de estadísticas.",
+    "permViewChannels": "Ver Canales: Para que los miembros puedan visualizar las cifras en la barra lateral.",
+    "permConnectDenied": "Conectar Denegado: Desactiva la entrada de voz para que los miembros no entren por error.",
+    "howItWorksTitle": "¿Cómo se actualizan los contadores?",
+    "howItWorksText": "TitanBot detecta en tiempo real cuando un miembro o bot se une o abandona el servidor. Para respetar los límites de velocidad de la API de Discord (rate limits de 2 cambios de nombre de canal cada 10 minutos), las actualizaciones se sincronizan automáticamente con un retraso inteligente.",
+    "errors": {
+      "noTypeSelected": "Por favor selecciona al menos un tipo de contador.",
+      "setupFailed": "Error al crear contadores.",
+      "deleteFailed": "Error al eliminar contadores."
+    }
+  },
+  "insights": {
+    "rangeLabel": "Período:",
+    "daysUnit": "días",
+    "joins": "Uniones",
+    "leaves": "Salidas",
+    "total": "Total",
+    "messages": "mensajes",
+    "lessActive": "Poco activo",
+    "moreActive": "Muy activo",
+    "hoverHeatmapHint": "Pasa el cursor sobre una celda para ver detalles",
+    "growthChartTitle": "Tendencia de Miembros (Uniones vs Salidas)",
+    "growthChartSubtitle": "Visualiza el flujo diario de personas que ingresan y abandonan el servidor.",
+    "heatmapTitle": "Mapa de Calor de Actividad Semanal (7 Días × 24 Horas)",
+    "heatmapSubtitle": "Identifica las franjas horarias y días de mayor dinamismo y participación comunitaria.",
+    "topChannelsTitle": "Canales Más Activos de la Comunidad",
+    "topChannelsSubtitle": "Distribución porcentual del volumen de mensajes enviados en cada canal de texto.",
+    "noChannelsData": "No se han registrado mensajes suficientes en canales de texto todavía.",
+    "kpi": {
+      "totalMembers": "Miembros Totales",
+      "growthHint": "Crecimiento neto en los últimos {{days}} días",
+      "netGrowth": "Balance Neto",
+      "netGrowthHint": "Nuevas uniones menos salidas registradas",
+      "messages": "Mensajes de Chat",
+      "messagesToday": "Hoy",
+      "peakActivity": "Momento Más Activo",
+      "peakActivityHint": "Hora y día de mayor concurrencia en chat"
+    },
+    "days": {
+      "sun": "Dom",
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mié",
+      "thu": "Jue",
+      "fri": "Vie",
+      "sat": "Sáb"
+    }
   }
 }
