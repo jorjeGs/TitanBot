@@ -103,6 +103,7 @@ import {
 } from '../controllers/antiRaidController.js';
 import {
   getSnapshots,
+  getSnapshotDetailHandler,
   createSnapshotHandler,
   exportSnapshotJson,
   importSnapshotHandler,
@@ -226,6 +227,7 @@ router.post('/:guildId/antiraid/lockdown/toggle', verifyAuth, checkGuildPermissi
 // Server snapshots & backups subroutes
 router.get('/:guildId/snapshots', verifyAuth, checkGuildPermissions, getSnapshots);
 router.post('/:guildId/snapshots', verifyAuth, checkGuildPermissions, createSnapshotHandler);
+router.get('/:guildId/snapshots/:id', verifyAuth, checkGuildPermissions, getSnapshotDetailHandler);
 router.get('/:guildId/snapshots/:id/export', verifyAuth, checkGuildPermissions, exportSnapshotJson);
 router.post('/:guildId/snapshots/import', verifyAuth, checkGuildPermissions, importSnapshotHandler);
 router.post('/:guildId/snapshots/:id/restore', verifyAuth, checkGuildPermissions, restoreSnapshotHandler);

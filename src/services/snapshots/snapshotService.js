@@ -19,9 +19,18 @@ export async function createSnapshot(guild, author = null, customName = null) {
 
   // 1. Snapshot Roles (excluding @everyone and managed bot roles)
   const roles = [];
-  const rawRoles = guild.roles?.cache?.values
-    ? Array.from(guild.roles.cache.values())
-    : [];
+  let rawRoles = [];
+  if (typeof guild.roles?.fetch === 'function') {
+    try {
+      const fetched = await guild.roles.fetch();
+      rawRoles = fetched?.values ? Array.from(fetched.values()) : (guild.roles?.cache?.values ? Array.from(guild.roles.cache.values()) : []);
+    } catch (err) {
+      logger.warn(`Could not fetch guild roles for snapshot: ${err.message}`);
+      rawRoles = guild.roles?.cache?.values ? Array.from(guild.roles.cache.values()) : [];
+    }
+  } else if (guild.roles?.cache?.values) {
+    rawRoles = Array.from(guild.roles.cache.values());
+  }
 
   for (const role of rawRoles) {
     if (role.id === guild.id) continue; // Skip @everyone
@@ -40,9 +49,18 @@ export async function createSnapshot(guild, author = null, customName = null) {
 
   // 2. Snapshot Channels & Categories
   const channels = [];
-  const rawChannels = guild.channels?.cache?.values
-    ? Array.from(guild.channels.cache.values())
-    : [];
+  let rawChannels = [];
+  if (typeof guild.channels?.fetch === 'function') {
+    try {
+      const fetched = await guild.channels.fetch();
+      rawChannels = fetched?.values ? Array.from(fetched.values()).filter(Boolean) : (guild.channels?.cache?.values ? Array.from(guild.channels.cache.values()) : []);
+    } catch (err) {
+      logger.warn(`Could not fetch guild channels for snapshot: ${err.message}`);
+      rawChannels = guild.channels?.cache?.values ? Array.from(guild.channels.cache.values()) : [];
+    }
+  } else if (guild.channels?.cache?.values) {
+    rawChannels = Array.from(guild.channels.cache.values());
+  }
 
   let categoriesCount = 0;
   let channelsCount = 0;
@@ -265,9 +283,17 @@ export async function restoreSnapshot(guild, snapshotId, options = {}) {
   let channelsRestored = 0;
 
   // 1. Restore Roles
-  const existingRoles = guild.roles?.cache?.values
-    ? Array.from(guild.roles.cache.values())
-    : [];
+  let existingRoles = [];
+  if (typeof guild.roles?.fetch === 'function') {
+    try {
+      const fetched = await guild.roles.fetch();
+      existingRoles = fetched?.values ? Array.from(fetched.values()) : (guild.roles?.cache?.values ? Array.from(guild.roles.cache.values()) : []);
+    } catch {
+      existingRoles = guild.roles?.cache?.values ? Array.from(guild.roles.cache.values()) : [];
+    }
+  } else if (guild.roles?.cache?.values) {
+    existingRoles = Array.from(guild.roles.cache.values());
+  }
 
   const everyoneRole = guild.roles?.everyone || guild.roles?.cache?.get(guildId);
   if (everyoneRole) {
@@ -300,9 +326,17 @@ export async function restoreSnapshot(guild, snapshotId, options = {}) {
   }
 
   // 2. Restore Categories (type 4)
-  const existingChannels = guild.channels?.cache?.values
-    ? Array.from(guild.channels.cache.values())
-    : [];
+  let existingChannels = [];
+  if (typeof guild.channels?.fetch === 'function') {
+    try {
+      const fetched = await guild.channels.fetch();
+      existingChannels = fetched?.values ? Array.from(fetched.values()).filter(Boolean) : (guild.channels?.cache?.values ? Array.from(guild.channels.cache.values()) : []);
+    } catch {
+      existingChannels = guild.channels?.cache?.values ? Array.from(guild.channels.cache.values()) : [];
+    }
+  } else if (guild.channels?.cache?.values) {
+    existingChannels = Array.from(guild.channels.cache.values());
+  }
 
   const categories = (snapshot.channels || []).filter((c) => c.type === ChannelType.GuildCategory || c.type === 4);
   const nonCategories = (snapshot.channels || []).filter((c) => c.type !== ChannelType.GuildCategory && c.type !== 4);
