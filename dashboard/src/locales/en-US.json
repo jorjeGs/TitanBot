@@ -1653,5 +1653,131 @@
       "noTriggerChannel": "Please select at least one trigger voice channel.",
       "invalidTemplate": "Channel name template contains syntax errors."
     }
+  },
+  "logging": {
+    "title": "Discord Channel Logging",
+    "subtitle": "Monitor real-time moderation events, message updates, roles, members, and server activity.",
+    "systemTitle": "Logging System Status",
+    "enableLogging": "Enable Discord Event Logging",
+    "enableLoggingHelp": "Automatically send embed messages to designated channels whenever relevant events occur.",
+    "subtabs": {
+      "channels": "Destination Channels",
+      "events": "Event Matrix",
+      "exclusions": "Ignored Channels",
+      "guide": "Guide & Permissions"
+    },
+    "channelsTitle": "Destination Channels",
+    "channelsHelp": "Assign text channels where TitanBot will post each category of event logs.",
+    "auditChannel": "General Audit Channel",
+    "auditChannelHelp": "Moderation events, message edits/deletions, roles, members, and leveling updates.",
+    "reportsChannel": "Reports & Giveaways Channel",
+    "reportsChannelHelp": "User reports, security alerts, and giveaway winners.",
+    "applicationsChannel": "Applications Channel",
+    "applicationsChannelHelp": "Staff applications and member submissions.",
+    "channelStatus": {
+      "configured": "Channel Assigned",
+      "notConfigured": "No Channel Assigned",
+      "ready": "Ready to Log"
+    },
+    "testButton": "Send Test Log",
+    "testModalTitle": "Send Test Log to Discord",
+    "testModalDesc": "Select a category and channel to verify TitanBot has text sending and embed permissions in Discord.",
+    "testCategoryLabel": "Test Category",
+    "testChannelLabel": "Destination Channel",
+    "testDispatch": "Send Now",
+    "testSending": "Sending test log...",
+    "testSuccess": "Test log sent successfully!",
+    "testFailed": "Failed to send test log.",
+    "eventsMatrixTitle": "Logged Events Matrix",
+    "eventsMatrixHelp": "Select which types of events you want TitanBot to record and post to your channels.",
+    "bulkActions": {
+      "enableAll": "Enable All",
+      "disableAll": "Disable All",
+      "recommended": "Recommended Settings"
+    },
+    "categories": {
+      "moderation": "Moderation",
+      "moderationDesc": "Bans, kicks, mutes, warnings, purges, and channel lockdowns.",
+      "message": "Messages",
+      "messageDesc": "Message edits, single deletions, and bulk message purges.",
+      "role": "Roles & Permissions",
+      "roleDesc": "Role creation, permission changes, assignments, and deletions.",
+      "member": "Members",
+      "memberDesc": "Server joins, leaves, and nickname or profile changes.",
+      "leveling": "Leveling & XP",
+      "levelingDesc": "Level advancements reached and unlocked reward roles.",
+      "giveaway": "Giveaways",
+      "giveawayDesc": "Giveaway launches, winners drawn, and rerolls."
+    },
+    "ignoredChannelsTitle": "Ignored Text Channels",
+    "ignoredChannelsHelp": "Messages edited or deleted in these channels will not generate audit entries to prevent clutter.",
+    "addIgnoredChannel": "Add Channel to Exclusions",
+    "addIgnoredChannelHelp": "Select a channel to exclude from logging.",
+    "currentlyIgnored": "Excluded Channels",
+    "noIgnoredChannels": "No channels ignored. All channels generate audit records.",
+    "removeExclusion": "Remove exclusion",
+    "clearAllExclusions": "Clear All Exclusions",
+    "previewTitle": "Log Event Preview",
+    "previewSubtitle": "Check how the embed message will look before it posts to Discord.",
+    "previewModes": {
+      "embed": "Discord Embed",
+      "timeline": "Timeline Stream",
+      "permissions": "Bot Permissions"
+    },
+    "permissionsGuide": {
+      "title": "Required Discord Permissions",
+      "desc": "For TitanBot to publish logs properly, make sure its role has the following channel permissions:",
+      "viewChannel": "View Channel",
+      "viewChannelDesc": "Required to detect the channel and read permissions.",
+      "sendMessages": "Send Messages",
+      "sendMessagesDesc": "Allows the bot to publish log entries to the channel.",
+      "embedLinks": "Embed Links",
+      "embedLinksDesc": "Mandatory to render rich cards with colors and fields.",
+      "viewAuditLog": "View Audit Log",
+      "viewAuditLogDesc": "Allows TitanBot to identify which moderator executed Discord bans or kicks."
+    }
+  },
+  "auditLogs": {
+    "title": "Dashboard Staff Audit Logs",
+    "subtitle": "Immutable audit log of all administrative actions performed within the web dashboard.",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing...",
+    "kpis": {
+      "totalLogs": "Total Records",
+      "actionsToday": "Actions in 24h",
+      "topStaff": "Top Staff Member",
+      "topCategory": "Top Category"
+    },
+    "searchPlaceholder": "Search by user, action, or details...",
+    "emptyTitle": "No audit records found",
+    "emptySubtitle": "Actions performed by staff on the Dashboard (configuration updates, giveaways, snapshots) will appear here automatically.",
+    "actions": {
+      "exportJson": "Export JSON",
+      "exportCsv": "Export CSV",
+      "clearLogs": "Clear Audit Logs",
+      "clearConfirmTitle": "Are you sure you want to clear audit logs?",
+      "clearConfirmDesc": "This action will permanently delete all recorded staff activity on this server. This cannot be undone.",
+      "clearing": "Clearing records...",
+      "clearSuccess": "Audit logs cleared successfully!",
+      "clearFailed": "Failed to clear audit logs."
+    },
+    "categories": {
+      "all": "All Categories",
+      "general": "General & Config",
+      "automations": "Automations",
+      "snapshots": "Snapshots & Backups",
+      "security": "Security & Moderation",
+      "social": "Social & Feeds",
+      "ai": "AI Assistant",
+      "embeds": "Embed Creator",
+      "moderation": "Cases & Sanctions",
+      "tickets": "Tickets & Transcripts"
+    },
+    "viewDetails": "View action details",
+    "modalTitle": "Audit Log Details",
+    "metadataHeader": "Additional Metadata",
+    "copyJson": "Copy JSON",
+    "copied": "Copied!",
+    "totalCount": "{{count}} records logged"
   }
 }

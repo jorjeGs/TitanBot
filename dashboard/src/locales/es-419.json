@@ -1653,5 +1653,131 @@
       "noTriggerChannel": "Debes seleccionar al menos un canal de voz disparador.",
       "invalidTemplate": "La plantilla de nombre contiene errores."
     }
+  },
+  "logging": {
+    "title": "Registros de Canales de Discord",
+    "subtitle": "Supervisa en tiempo real eventos de moderación, mensajes, roles, miembros y actividad del servidor.",
+    "systemTitle": "Estado del Sistema de Registros",
+    "enableLogging": "Activar Registro de Eventos en Discord",
+    "enableLoggingHelp": "Envía automáticamente mensajes embed a tus canales designados cada vez que ocurra un evento relevante.",
+    "subtabs": {
+      "channels": "Canales de Destino",
+      "events": "Matriz de Eventos",
+      "exclusions": "Canales Ignorados",
+      "guide": "Guía y Permisos"
+    },
+    "channelsTitle": "Canales de Destino",
+    "channelsHelp": "Asigna los canales de texto donde TitanBot publicará cada categoría de registros.",
+    "auditChannel": "Canal de Auditoría General",
+    "auditChannelHelp": "Eventos de moderación, mensajes editados/borrados, roles, miembros y subidas de nivel.",
+    "reportsChannel": "Canal de Reportes y Sorteos",
+    "reportsChannelHelp": "Reportes enviados por usuarios, alertas de seguridad y ganadores de sorteos.",
+    "applicationsChannel": "Canal de Solicitudes",
+    "applicationsChannelHelp": "Postulaciones de staff y solicitudes enviadas por la comunidad.",
+    "channelStatus": {
+      "configured": "Canal Asignado",
+      "notConfigured": "Sin Canal Asignado",
+      "ready": "Listo para Registrar"
+    },
+    "testButton": "Enviar Registro de Prueba",
+    "testModalTitle": "Enviar Registro de Prueba a Discord",
+    "testModalDesc": "Selecciona la categoría y canal para verificar que TitanBot tiene permisos de escritura e inserción de enlaces en Discord.",
+    "testCategoryLabel": "Categoría de Prueba",
+    "testChannelLabel": "Canal de Destino",
+    "testDispatch": "Enviar Ahora",
+    "testSending": "Enviando registro de prueba...",
+    "testSuccess": "¡Registro de prueba enviado exitosamente!",
+    "testFailed": "No se pudo enviar el registro de prueba.",
+    "eventsMatrixTitle": "Matriz de Eventos Registrados",
+    "eventsMatrixHelp": "Elige qué tipo de eventos deseas que TitanBot registre y envíe a tus canales.",
+    "bulkActions": {
+      "enableAll": "Activar Todos",
+      "disableAll": "Desactivar Todos",
+      "recommended": "Ajustes Recomendados"
+    },
+    "categories": {
+      "moderation": "Moderación",
+      "moderationDesc": "Baneos, expulsiones, silencios, advertencias, purgas y bloqueos de canales.",
+      "message": "Mensajes",
+      "messageDesc": "Edición de mensajes, eliminaciones individuales y borrado masivo.",
+      "role": "Roles y Permisos",
+      "roleDesc": "Creación, actualización de permisos, asignaciones y eliminación de roles.",
+      "member": "Miembros",
+      "memberDesc": "Entradas al servidor, salidas voluntarias y cambios de apodo o perfil.",
+      "leveling": "Niveles y XP",
+      "levelingDesc": "Ascensos de nivel alcanzados y roles de recompensa desbloqueados.",
+      "giveaway": "Sorteos",
+      "giveawayDesc": "Lanzamiento de sorteos, ganadores seleccionados y relanzamientos."
+    },
+    "ignoredChannelsTitle": "Canales de Texto Ignorados",
+    "ignoredChannelsHelp": "Los mensajes editados o borrados en estos canales no se registrarán en la auditoría para evitar saturación innecesaria.",
+    "addIgnoredChannel": "Agregar Canal a Exclusiones",
+    "addIgnoredChannelHelp": "Selecciona un canal para evitar registrar sus mensajes.",
+    "currentlyIgnored": "Canales Excluidos",
+    "noIgnoredChannels": "Ningún canal ignorado. Todos los canales generan registros de auditoría.",
+    "removeExclusion": "Quitar exclusión",
+    "clearAllExclusions": "Limpiar Todas las Exclusiones",
+    "previewTitle": "Vista Previa del Registro",
+    "previewSubtitle": "Comprueba el formato visual del mensaje embed antes de que se publique en Discord.",
+    "previewModes": {
+      "embed": "Embed Discord",
+      "timeline": "Línea de Tiempo",
+      "permissions": "Permisos del Bot"
+    },
+    "permissionsGuide": {
+      "title": "Permisos de Discord Requeridos",
+      "desc": "Para que TitanBot pueda publicar registros correctamente, asegúrate de que su rol posea los siguientes permisos en los canales de destino:",
+      "viewChannel": "Ver Canal",
+      "viewChannelDesc": "Necesario para detectar el canal de texto y enviar mensajes.",
+      "sendMessages": "Enviar Mensajes",
+      "sendMessagesDesc": "Permite al bot publicar los registros en el canal.",
+      "embedLinks": "Insertar Enlaces (Embeds)",
+      "embedLinksDesc": "Requerido obligatoriamente para renderizar los recuadros estilizados con colores y campos.",
+      "viewAuditLog": "Ver Registro de Auditoría",
+      "viewAuditLogDesc": "Permite a TitanBot identificar qué moderador expulsó o baneó a un usuario en Discord."
+    }
+  },
+  "auditLogs": {
+    "title": "Auditoría del Staff del Dashboard",
+    "subtitle": "Historial inmutable de todas las acciones y modificaciones administrativas efectuadas en el panel web.",
+    "refresh": "Actualizar",
+    "refreshing": "Actualizando...",
+    "kpis": {
+      "totalLogs": "Total de Registros",
+      "actionsToday": "Acciones en 24h",
+      "topStaff": "Staff Más Activo",
+      "topCategory": "Categoría Principal"
+    },
+    "searchPlaceholder": "Buscar por usuario, acción o detalles...",
+    "emptyTitle": "No se encontraron registros de auditoría",
+    "emptySubtitle": "Las acciones que realice el staff en el Dashboard (cambios de configuración, sorteos, respaldos) aparecerán aquí registradas automáticamente.",
+    "actions": {
+      "exportJson": "Exportar JSON",
+      "exportCsv": "Exportar CSV",
+      "clearLogs": "Vaciar Auditoría",
+      "clearConfirmTitle": "¿Estás seguro de que deseas vaciar el historial de auditoría?",
+      "clearConfirmDesc": "Esta acción eliminará todos los registros históricos del staff en este servidor. No se puede deshacer.",
+      "clearing": "Vaciando registros...",
+      "clearSuccess": "¡Historial de auditoría vaciado correctamente!",
+      "clearFailed": "Error al vaciar los registros de auditoría."
+    },
+    "categories": {
+      "all": "Todas las Categorías",
+      "general": "General y Configuración",
+      "automations": "Automatizaciones",
+      "snapshots": "Respaldos y Copias",
+      "security": "Seguridad y Moderación",
+      "social": "Redes y Feeds",
+      "ai": "Asistente IA",
+      "embeds": "Creador de Embeds",
+      "moderation": "Sanciones y Casos",
+      "tickets": "Tickets y Transcripciones"
+    },
+    "viewDetails": "Ver detalles de la acción",
+    "modalTitle": "Detalles del Registro de Auditoría",
+    "metadataHeader": "Metadatos Adicionales",
+    "copyJson": "Copiar JSON",
+    "copied": "¡Copiado!",
+    "totalCount": "{{count}} registros registrados"
   }
 }

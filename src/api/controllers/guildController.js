@@ -853,3 +853,159 @@ export async function testWelcomeMessageHandler(req, res) {
     });
   }
 }
+
+/**
+ * POST /api/guilds/:guildId/logging/test
+ * Dispatches a simulated event log embed into a configured logging channel to verify permissions & connectivity.
+ */
+export async function testLoggingHandler(req, res) {
+  try {
+    const { guildId } = req.params;
+    const guild = req.guild || req.client?.guilds?.cache?.get(guildId);
+
+    if (!guild) {
+      return res.status(404).json({
+        success: false,
+        error: 'GuildNotFound',
+        message: 'Servidor no encontrado o TitanBot no está presente.',
+      });
+    }
+
+    const { destination = 'audit', category = 'moderation', channelId: explicitChannelId } = req.body || {};
+
+    const guildConfig = await getGuildConfig(req.client, guildId).catch(() => ({}));
+    const loggingConfig = guildConfig.logging || {};
+    const loggingChannels = loggingConfig.channels || {};
+
+    const targetChannelId = explicitChannelId || loggingChannels[destination] || loggingChannels.audit;
+
+    if (!targetChannelId) {
+      return res.status(400).json({
+        success: false,
+        error: 'ChannelNotConfigured',
+        message: `No hay ningún canal configurado para "${destination}". Por favor selecciona un canal de texto.`,
+      });
+    }
+
+    const channel = guild.channels.cache.get(targetChannelId) || (await guild.channels.fetch(targetChannelId).catch(() => null));
+    if (!channel || !channel.isTextBased?.()) {
+      return res.status(404).json({
+        success: false,
+        error: 'ChannelNotFound',
+        message: 'El canal de destino especificado no existe o no es un canal de texto en este servidor.',
+      });
+    }
+
+    const me = guild.members?.me || {
+      id: req.client?.user?.id || 'bot',
+      user: req.client?.user || { id: 'bot', username: 'TitanBot' },
+    };
+    const permissions = typeof channel.permissionsFor === 'function'
+      ? channel.permissionsFor(me)
+      : { has: () => true };
+
+    const requiredPerms = [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks];
+    if (permissions && typeof permissions.has === 'function' && !permissions.has(requiredPerms)) {
+      return res.status(403).json({
+        success: false,
+        error: 'MissingPermissions',
+        message: `TitanBot no tiene permisos suficientes (Ver Canal, Enviar Mensajes, Insertar Enlaces) en #${channel.name}.`,
+      });
+    }
+
+    const colorMap = {
+      moderation: 0xED4245,
+      message: 0xFEE75C,
+      role: 0x5865F2,
+      member: 0x57F287,
+      leveling: 0x9B59B6,
+      giveaway: 0xF1C40F,
+    };
+
+    const titleMap = {
+      moderation: '🔨 [PRUEBA] Usuario Sancionado | Ban',
+      message: `✏️ [PRUEBA] Mensaje Editado | #${channel.name}`,
+      role: '➕ [PRUEBA] Rol Creado | @Moderador',
+      member: '👋 [PRUEBA] Miembro Unido al Servidor',
+      leveling: '📈 [PRUEBA] Subida de Nivel | Nivel 10',
+      giveaway: '🎉 [PRUEBA] Ganador de Sorteo Seleccionado',
+    };
+
+    const fieldsMap = {
+      moderation: [
+        { name: 'Usuario', value: `${req.user?.username || 'Usuario'} (ID: ${req.user?.id || '123456789012345678'})`, inline: true },
+        { name: 'Moderador', value: 'TitanBot Dashboard Test', inline: true },
+        { name: 'Razón', value: 'Envío de prueba de verificación de canal de auditoría desde el panel web.', inline: false },
+      ],
+      message: [
+        { name: 'Autor', value: `${req.user?.username || 'Usuario'} (ID: ${req.user?.id || '123456789012345678'})`, inline: true },
+        { name: 'Canal', value: `<#${channel.id}>`, inline: true },
+        { name: 'Contenido previo', value: 'Mensaje de ejemplo antes de la edición', inline: false },
+        { name: 'Contenido nuevo', value: 'Mensaje de ejemplo actualizado y verificado', inline: false },
+      ],
+      role: [
+        { name: 'Rol', value: '@Moderador (ID: 998877665544332211)', inline: true },
+        { name: 'Creado por', value: `${req.user?.username || 'Staff'}`, inline: true },
+        { name: 'Permisos asignados', value: '+ Gestionar Mensajes, + Silenciar Miembros', inline: false },
+      ],
+      member: [
+        { name: 'Usuario', value: `${req.user?.username || 'NuevoMiembro'}`, inline: true },
+        { name: 'Cuenta Creada', value: 'Hace 3 meses', inline: true },
+        { name: 'Total Miembros', value: `${guild.memberCount || 1} miembros`, inline: true },
+      ],
+      leveling: [
+        { name: 'Usuario', value: `${req.user?.username || 'Usuario'}`, inline: true },
+        { name: 'Nuevo Nivel', value: 'Nivel 10 (5,000 XP)', inline: true },
+        { name: 'Rol Desbloqueado', value: '@Habitual del Chat', inline: true },
+      ],
+      giveaway: [
+        { name: 'Premio', value: 'Discord Nitro (1 Mes)', inline: true },
+        { name: 'Ganador', value: `@${req.user?.username || 'Ganador'}`, inline: true },
+        { name: 'Participantes', value: '42 miembros', inline: true },
+      ],
+    };
+
+    const testEmbed = new EmbedBuilder()
+      .setColor(colorMap[category] || 0x5865F2)
+      .setTitle(titleMap[category] || '🧪 [PRUEBA] Registro de Evento TitanBot')
+      .setDescription('Este es un registro de prueba enviado desde el **Dashboard de TitanBot** para confirmar la conectividad y permisos del canal.')
+      .addFields(fieldsMap[category] || [
+        { name: 'Estado', value: 'Canal verificado correctamente ✅', inline: true },
+        { name: 'Destino', value: destination, inline: true },
+      ])
+      .setFooter({ text: `TitanBot Logging System • Solicitado por ${req.user?.username || 'Staff'}` })
+      .setTimestamp();
+
+    await channel.send({ embeds: [testEmbed] });
+
+    // Record in staff audit logs
+    import('../../services/audit/auditLogService.js')
+      .then(({ logAuditEvent }) =>
+        logAuditEvent({
+          guildId,
+          user: req.user,
+          action: 'LOGGING_TEST_SENT',
+          category: 'general',
+          details: `Envío de registro de prueba (${category}) al canal #${channel.name}`,
+          metadata: { destination, category, channelId: channel.id, channelName: channel.name },
+          ip: req.ip,
+        })
+      )
+      .catch(() => {});
+
+    return res.json({
+      success: true,
+      message: `¡Registro de prueba enviado exitosamente al canal #${channel.name}!`,
+      channelId: channel.id,
+      channelName: channel.name,
+    });
+  } catch (error) {
+    logger.error('Error sending test log:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'TestLogFailed',
+      message: error?.message || 'Error al enviar el registro de prueba a Discord.',
+    });
+  }
+}
+
