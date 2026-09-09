@@ -1902,5 +1902,87 @@
     "confirmDelete": "Are you sure you want to permanently delete this transcript record?",
     "deleteSuccess": "Transcript deleted successfully.",
     "noMessages": "No messages recorded in this ticket."
+  },
+  "socialFeeds": {
+    "title": "External Notifications & Social Feeds",
+    "subtitle": "Monitor YouTube channels, Twitch livestreams, RSS feeds, and incoming Webhook endpoints to publish automated announcements with rich embeds.",
+    "addFeed": "New Alert",
+    "refresh": "Refresh",
+    "kpi": {
+      "active": "Active Feeds",
+      "youtube": "YouTube Videos",
+      "twitch": "Twitch Streams",
+      "social": "TikTok & Instagram",
+      "webhooks": "RSS & Webhooks"
+    },
+    "subtabs": {
+      "feeds": "Feeds & Alerts",
+      "webhooks": "Inbound Webhooks",
+      "templates": "Templates & Variables"
+    },
+    "searchPlaceholder": "Search by name, channel, or creator...",
+    "filters": {
+      "allPlatforms": "All Platforms",
+      "allStatuses": "All Statuses",
+      "activeOnly": "Active",
+      "pausedOnly": "Paused"
+    },
+    "empty": {
+      "title": "No social alerts configured yet",
+      "desc": "Create an alert so TitanBot automatically posts new videos, streams, or updates to your server.",
+      "cta": "Configure first alert"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "live": "LIVE"
+    },
+    "actions": {
+      "test": "Test",
+      "testing": "Sending...",
+      "edit": "Edit",
+      "delete": "Delete",
+      "copyUrl": "Copy URL",
+      "copied": "Copied!"
+    },
+    "modal": {
+      "createTitle": "Configure New Social Alert",
+      "editTitle": "Edit Social Alert",
+      "platform": "Platform",
+      "feedName": "Feed Name",
+      "feedNamePlaceholder": "e.g. Official YouTube Channel",
+      "channel": "Destination Discord Channel",
+      "role": "Mention Role (Optional)",
+      "noRole": "No mention",
+      "customMessage": "Custom Message",
+      "messagePlaceholder": "{author} published new content: {title}\n{url}",
+      "availableVars": "Dynamic Variables:",
+      "presetsLabel": "Quick Presets:",
+      "cancel": "Cancel",
+      "save": "Save Alert",
+      "saving": "Saving..."
+    },
+    "webhooksStudio": {
+      "title": "Inbound Webhooks Studio",
+      "subtitle": "Receive custom events and alerts via HTTP POST requests from external services like GitHub, Zapier, Make, or your own backend.",
+      "endpointLabel": "Webhook Endpoint:",
+      "secretNotice": "Keep this secret token secure. Any service with this URL can post embeds to the designated channel.",
+      "quickTest": "Send Test Payload",
+      "payloadTitle": "Supported JSON Payload Structure",
+      "integrationGuides": "Integration Guides & Code Snippets"
+    },
+    "templatesStudio": {
+      "title": "Recommended Variables & Templates",
+      "subtitle": "Use dynamic variables in your messages to enrich automated notifications.",
+      "clickToCopy": "Click a variable to copy:"
+    },
+    "alerts": {
+      "saveSuccess": "Social alert saved successfully!",
+      "deleteSuccess": "Social alert deleted from server.",
+      "testSuccess": "Test announcement successfully dispatched to Discord!",
+      "statusUpdated": "Alert status updated.",
+      "deleteConfirm": "Are you sure you want to delete this social alert?",
+      "copiedToClipboard": "Link copied to clipboard!"
+    }
   }
 }

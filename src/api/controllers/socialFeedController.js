@@ -9,6 +9,7 @@ import {
   fetchTwitchStatus,
   fetchRssLatest,
 } from '../../services/social/socialFeedService.js';
+import { logAuditEvent } from '../../services/audit/auditLogService.js';
 import { logger } from '../../utils/logger.js';
 
 function generateId(prefix = 'feed') {
@@ -83,6 +84,22 @@ export async function saveSocialFeed(req, res) {
       socialFeeds: updatedConfig,
     });
 
+    const isUpdate = index >= 0;
+    await logAuditEvent({
+      guildId,
+      user: req.user,
+      action: isUpdate ? 'SOCIAL_FEED_UPDATE' : 'SOCIAL_FEED_CREATE',
+      category: 'social',
+      details: `${isUpdate ? 'Actualizó' : 'Creó'} la alerta de ${parsed.data.type.toUpperCase()}: "${parsed.data.name}"`,
+      metadata: {
+        feedId: parsed.data.id,
+        feedType: parsed.data.type,
+        feedName: parsed.data.name,
+        targetChannelId: parsed.data.targetChannelId,
+      },
+      ip: req.ip,
+    }).catch((err) => logger.warn('Failed to write audit log for social feed save:', err));
+
     return res.json({
       success: true,
       data: parsed.data,
@@ -104,6 +121,7 @@ export async function deleteSocialFeed(req, res) {
     const currentSocial = guildConfig?.socialFeeds || { enabled: true, checkIntervalMinutes: 5, feeds: [] };
 
     const initialLength = currentSocial.feeds?.length || 0;
+    const targetFeed = (currentSocial.feeds || []).find((f) => f.id === id);
     const filteredFeeds = (currentSocial.feeds || []).filter((f) => f.id !== id);
 
     if (filteredFeeds.length === initialLength) {
@@ -116,6 +134,20 @@ export async function deleteSocialFeed(req, res) {
         feeds: filteredFeeds,
       },
     });
+
+    await logAuditEvent({
+      guildId,
+      user: req.user,
+      action: 'SOCIAL_FEED_DELETE',
+      category: 'social',
+      details: `Eliminó la alerta de ${targetFeed?.type?.toUpperCase() || 'RED SOCIAL'}: "${targetFeed?.name || id}"`,
+      metadata: {
+        feedId: id,
+        feedType: targetFeed?.type,
+        feedName: targetFeed?.name,
+      },
+      ip: req.ip,
+    }).catch((err) => logger.warn('Failed to write audit log for social feed delete:', err));
 
     return res.json({ success: true, message: 'Social feed deleted successfully' });
   } catch (error) {
@@ -229,6 +261,21 @@ export async function testSocialFeed(req, res) {
         error: 'Could not send test message to Discord channel. Verify bot permissions and target channel.',
       });
     }
+
+    await logAuditEvent({
+      guildId,
+      user: req.user,
+      action: 'SOCIAL_FEED_TEST',
+      category: 'social',
+      details: `Envió una notificación de prueba de ${feed.type.toUpperCase()} ("${feed.name}") al canal <#${feed.targetChannelId}>`,
+      metadata: {
+        feedId: feed.id,
+        feedType: feed.type,
+        feedName: feed.name,
+        targetChannelId: feed.targetChannelId,
+      },
+      ip: req.ip,
+    }).catch((err) => logger.warn('Failed to write audit log for social feed test:', err));
 
     return res.json({ success: true, message: 'Test announcement sent to channel' });
   } catch (error) {

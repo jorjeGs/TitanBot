@@ -1902,5 +1902,87 @@
     "confirmDelete": "¿Estás seguro de que deseas eliminar este registro de transcripción permanentemente?",
     "deleteSuccess": "Transcripción eliminada correctamente.",
     "noMessages": "No se registraron mensajes en este ticket."
+  },
+  "socialFeeds": {
+    "title": "Notificaciones Externas & Redes Sociales",
+    "subtitle": "Monitorea canales de YouTube, streams de Twitch, feeds RSS y endpoints Webhook para publicar alertas automáticas con embeds enriquecidos en tu comunidad.",
+    "addFeed": "Nueva Alerta",
+    "refresh": "Actualizar",
+    "kpi": {
+      "active": "Feeds Activos",
+      "youtube": "YouTube Videos",
+      "twitch": "Twitch Streams",
+      "social": "TikTok & Instagram",
+      "webhooks": "RSS & Webhooks"
+    },
+    "subtabs": {
+      "feeds": "Feeds & Redes",
+      "webhooks": "Webhooks Entrantes",
+      "templates": "Plantillas & Variables"
+    },
+    "searchPlaceholder": "Buscar por nombre, canal o creador...",
+    "filters": {
+      "allPlatforms": "Todas las Redes",
+      "allStatuses": "Todos los Estados",
+      "activeOnly": "Activos",
+      "pausedOnly": "Pausados"
+    },
+    "empty": {
+      "title": "No se encontraron alertas sociales",
+      "desc": "Crea una alerta para que TitanBot notifique automáticamente nuevos videos, streams o publicaciones en tu servidor.",
+      "cta": "Configurar primera alerta"
+    },
+    "status": {
+      "active": "Activo",
+      "paused": "Pausado",
+      "live": "EN VIVO"
+    },
+    "actions": {
+      "test": "Probar",
+      "testing": "Enviando...",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "copyUrl": "Copiar URL",
+      "copied": "¡Copiado!"
+    },
+    "modal": {
+      "createTitle": "Configurar Nueva Alerta Social",
+      "editTitle": "Editar Alerta Social",
+      "platform": "Plataforma",
+      "feedName": "Nombre de la Fuente",
+      "feedNamePlaceholder": "ej. Canal de YouTube Oficial",
+      "channel": "Canal de Discord de Destino",
+      "role": "Mención de Rol (Opcional)",
+      "noRole": "Sin mención",
+      "customMessage": "Mensaje Personalizado",
+      "messagePlaceholder": "{author} ha publicado nuevo contenido: {title}\n{url}",
+      "availableVars": "Variables Dinámicas:",
+      "presetsLabel": "Plantillas Rápidas:",
+      "cancel": "Cancelar",
+      "save": "Guardar Alerta",
+      "saving": "Guardando..."
+    },
+    "webhooksStudio": {
+      "title": "Estudio de Webhooks Entrantes",
+      "subtitle": "Recibe eventos y alertas personalizadas mediante peticiones HTTP POST desde servicios externos como GitHub, Zapier, Make o tus propios servidores.",
+      "endpointLabel": "Endpoint del Webhook:",
+      "secretNotice": "Mantén seguro este token. Cualquier servicio con esta URL puede publicar embeds en el canal configurado.",
+      "quickTest": "Enviar Payload de Prueba",
+      "payloadTitle": "Estructura del Payload JSON Soportado",
+      "integrationGuides": "Ejemplos de Integración"
+    },
+    "templatesStudio": {
+      "title": "Variables y Plantillas Recomendadas",
+      "subtitle": "Utiliza estas variables dinámicas en tus mensajes para enriquecer las notificaciones automáticas.",
+      "clickToCopy": "Haz clic en una variable para copiarla:"
+    },
+    "alerts": {
+      "saveSuccess": "¡Alerta social guardada exitosamente!",
+      "deleteSuccess": "Alerta social eliminada del servidor.",
+      "testSuccess": "¡Mensaje de prueba enviado exitosamente a Discord!",
+      "statusUpdated": "Estado de alerta actualizado.",
+      "deleteConfirm": "¿Estás seguro de que deseas eliminar esta alerta social?",
+      "copiedToClipboard": "¡Enlace copiado al portapapeles!"
+    }
   }
 }
