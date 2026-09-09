@@ -36,6 +36,7 @@ import {
 import {
   getJoinToCreateSettings,
   updateJoinToCreateSettings,
+  deleteActiveRoom,
 } from '../controllers/jointocreateController.js';
 import {
   getGuildCases,
@@ -160,6 +161,7 @@ router.post('/:guildId/serverstats/setup', verifyAuth, checkGuildPermissions, se
 router.delete('/:guildId/serverstats', verifyAuth, checkGuildPermissions, deleteCounters);
 router.get('/:guildId/jointocreate', verifyAuth, checkGuildPermissions, getJoinToCreateSettings);
 router.patch('/:guildId/jointocreate', verifyAuth, checkGuildPermissions, updateJoinToCreateSettings);
+router.delete('/:guildId/jointocreate/rooms/:channelId', verifyAuth, checkGuildPermissions, deleteActiveRoom);
 
 // Moderation subroutes protected by checkModerationAccess
 router.get('/:guildId/moderation/cases', verifyAuth, checkModerationAccess, getGuildCases);

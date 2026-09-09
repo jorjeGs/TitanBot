@@ -1564,5 +1564,94 @@
       "fri": "Vie",
       "sat": "Sáb"
     }
+  },
+  "jointocreate": {
+    "title": "Salas de Voz Temporales (Join-to-Create)",
+    "subtitle": "Permite a los usuarios crear automáticamente sus propios canales de voz privados al entrar a un canal disparador.",
+    "systemStatus": "Estado del Sistema Join-to-Create",
+    "enableJtc": "Activar Creación Dinámica de Salas",
+    "enableJtcHelp": "Crea automáticamente salas privadas temporales cuando los miembros entran al canal disparador.",
+    "activeRoomsCount": "{{count}} sala activa",
+    "activeRoomsCount_plural": "{{count}} salas activas",
+    "subtabs": {
+      "settings": "Configuración de Salas",
+      "activeRooms": "Salas Activas en Vivo",
+      "guide": "Guía y Permisos"
+    },
+    "channelsTitle": "Canales y Ubicación",
+    "triggerChannel": "Canal de Voz Disparador *",
+    "triggerChannelHelp": "El canal de voz al que los usuarios deben unirse para crear su propia sala.",
+    "category": "Categoría Contenedora (Opcional)",
+    "categoryHelp": "Categoría de Discord donde se ubicarán las salas temporales creadas. Si se deja vacía, se usará la misma categoría del canal disparador.",
+    "roomSettingsTitle": "Personalización de Salas Creadas",
+    "template": "Plantilla de Nombre del Canal",
+    "templateHelp": "Haz clic en una variable para insertarla en la plantilla.",
+    "variables": {
+      "username": "Nombre de usuario",
+      "displayName": "Apodo en el servidor",
+      "channelName": "Nombre del canal disparador",
+      "guildName": "Nombre del servidor"
+    },
+    "presetsTitle": "Estilos de Nombre Rápidos (1 Clic):",
+    "presets": {
+      "gamer": "Gamer Lounge",
+      "classic": "Clásico",
+      "minimal": "Minimalista",
+      "chill": "Charla / Chill",
+      "vip": "Zona VIP"
+    },
+    "userLimit": "Límite de Usuarios por Sala",
+    "userLimitHelp": "0 significa sin límite de miembros. Puedes usar los accesos rápidos a continuación.",
+    "userLimitUnlimited": "Ilimitado",
+    "bitrate": "Calidad de Audio (Bitrate)",
+    "bitrateHelp": "Un bitrate más alto mejora la nitidez de la voz pero requiere mejor conexión.",
+    "bitrates": {
+      "standard": "64 kbps (Estándar Discord)",
+      "highFidelity": "96 kbps (Alta fidelidad HQ)",
+      "musicQuality": "128 kbps (Calidad música)",
+      "studio": "256 kbps (Estudio - Nivel 2 Boost)",
+      "maxDiscord": "384 kbps (Máximo - Nivel 3 Boost)"
+    },
+    "activeRoomsTitle": "Monitoreo de Salas Temporales en Vivo",
+    "activeRoomsSubtitle": "Salas de voz creadas dinámicamente que están activas en este momento en tu servidor.",
+    "noActiveRooms": "No hay salas temporales activas en este momento.",
+    "noActiveRoomsHelp": "Cuando un miembro entre al canal disparador, su sala privada aparecerá aquí en tiempo real.",
+    "roomChannel": "Canal",
+    "roomOwner": "Propietario",
+    "roomMembers": "Miembros Conectados",
+    "roomLimit": "Límite",
+    "roomActions": "Acciones",
+    "closeRoom": "Cerrar Sala",
+    "confirmCloseRoom": "¿Estás seguro de que deseas cerrar y eliminar esta sala de voz temporal?",
+    "roomClosedSuccess": "Sala temporal cerrada y eliminada de Discord.",
+    "guideTitle": "Guía de Permisos y Ciclo de Vida",
+    "guideSubtitle": "Aprende cómo TitanBot gestiona y mantiene las salas de voz efímeras sin dejar basura en tu servidor.",
+    "permissionsTitle": "Permisos Requeridos en Discord",
+    "permManageChannels": "Gestionar Canales: Para crear la sala temporal y eliminarla automáticamente cuando quede vacía.",
+    "permMoveMembers": "Mover Miembros: Para transferir al usuario instantáneamente del canal disparador a su nueva sala.",
+    "permConnect": "Conectar: Para que TitanBot pueda monitorear la entrada y salida de participantes.",
+    "lifecycleTitle": "Ciclo de Vida Automático de una Sala",
+    "lifecycle1Title": "1. Entrada al Disparador",
+    "lifecycle1Text": "El miembro entra al canal disparador configurado (por ejemplo, '➕ Crear Sala').",
+    "lifecycle2Title": "2. Creación Inmediata",
+    "lifecycle2Text": "TitanBot crea un nuevo canal de voz privado con la plantilla y bitrate elegidos y mueve al usuario en menos de 1 segundo.",
+    "lifecycle3Title": "3. Control y Propiedad",
+    "lifecycle3Text": "El creador es el dueño de la sala. Si el dueño se desconecta, TitanBot transfiere la propiedad automáticamente al siguiente miembro.",
+    "lifecycle4Title": "4. Autolimpieza",
+    "lifecycle4Text": "Cuando todos los miembros salen de la sala, TitanBot la elimina inmediatamente para mantener el servidor limpio.",
+    "saveButton": "Guardar Ajustes de Join-to-Create",
+    "saveSuccess": "¡Configuración de Join-to-Create guardada exitosamente!",
+    "previewTitle": "Vista Previa en Tiempo Real",
+    "previewModes": {
+      "channels": "Canales Discord",
+      "voiceUi": "Interfaz de Voz",
+      "flow": "Flujo Paso a Paso"
+    },
+    "previewSimulateUser": "Probar con usuario:",
+    "errors": {
+      "saveFailed": "Error al guardar la configuración de salas temporales.",
+      "noTriggerChannel": "Debes seleccionar al menos un canal de voz disparador.",
+      "invalidTemplate": "La plantilla de nombre contiene errores."
+    }
   }
 }

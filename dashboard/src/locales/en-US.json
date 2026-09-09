@@ -1563,6 +1563,95 @@
       "thu": "Thu",
       "fri": "Fri",
       "sat": "Sat"
+     }
+  },
+  "jointocreate": {
+    "title": "Temporary Voice Rooms (Join-to-Create)",
+    "subtitle": "Allow members to automatically spawn their own private voice channels upon joining a designated trigger channel.",
+    "systemStatus": "Join-to-Create System Status",
+    "enableJtc": "Enable Dynamic Voice Room Creation",
+    "enableJtcHelp": "Automatically provisions temporary voice rooms when members connect to the trigger channel.",
+    "activeRoomsCount": "{{count}} active room",
+    "activeRoomsCount_plural": "{{count}} active rooms",
+    "subtabs": {
+      "settings": "Room Settings",
+      "activeRooms": "Live Active Rooms",
+      "guide": "Guide & Permissions"
+    },
+    "channelsTitle": "Channels & Placement",
+    "triggerChannel": "Trigger Voice Channel *",
+    "triggerChannelHelp": "The voice channel users join to trigger their private room creation.",
+    "category": "Parent Category (Optional)",
+    "categoryHelp": "Discord category where temporary rooms will be organized. If left blank, the trigger channel's category is used.",
+    "roomSettingsTitle": "Room Customization",
+    "template": "Channel Name Template",
+    "templateHelp": "Click any variable chip below to insert it into the template.",
+    "variables": {
+      "username": "Username",
+      "displayName": "Server display name",
+      "channelName": "Trigger channel name",
+      "guildName": "Server name"
+    },
+    "presetsTitle": "Quick Name Presets (1 Click):",
+    "presets": {
+      "gamer": "Gamer Lounge",
+      "classic": "Classic",
+      "minimal": "Minimalist",
+      "chill": "Chill Lounge",
+      "vip": "VIP Room"
+    },
+    "userLimit": "User Limit Per Room",
+    "userLimitHelp": "0 means unlimited members. You can also pick from the quick badges below.",
+    "userLimitUnlimited": "Unlimited",
+    "bitrate": "Audio Quality (Bitrate)",
+    "bitrateHelp": "Higher bitrates provide crisper audio but require faster connection bandwidth.",
+    "bitrates": {
+      "standard": "64 kbps (Discord Default)",
+      "highFidelity": "96 kbps (High Fidelity HQ)",
+      "musicQuality": "128 kbps (Music Quality)",
+      "studio": "256 kbps (Studio - Boost Tier 2)",
+      "maxDiscord": "384 kbps (Maximum - Boost Tier 3)"
+    },
+    "activeRoomsTitle": "Live Temporary Rooms Monitor",
+    "activeRoomsSubtitle": "Voice channels currently spawned and active in your Discord server.",
+    "noActiveRooms": "No active temporary rooms right now.",
+    "noActiveRoomsHelp": "When a member joins the trigger channel, their spawned room will appear here in real time.",
+    "roomChannel": "Channel",
+    "roomOwner": "Owner",
+    "roomMembers": "Connected Members",
+    "roomLimit": "Limit",
+    "roomActions": "Actions",
+    "closeRoom": "Close Room",
+    "confirmCloseRoom": "Are you sure you want to forcibly close and delete this temporary voice room?",
+    "roomClosedSuccess": "Temporary room successfully closed and deleted from Discord.",
+    "guideTitle": "Permissions & Lifecycle Guide",
+    "guideSubtitle": "Learn how TitanBot provisions, transfers, and cleans up temporary voice rooms without clutter.",
+    "permissionsTitle": "Required Discord Permissions",
+    "permManageChannels": "Manage Channels: To provision the temporary room and auto-delete it when empty.",
+    "permMoveMembers": "Move Members: To instantly transfer the user from the trigger channel into their new room.",
+    "permConnect": "Connect: For TitanBot to monitor member join/leave voice transitions.",
+    "lifecycleTitle": "Automatic Room Lifecycle",
+    "lifecycle1Title": "1. Trigger Entry",
+    "lifecycle1Text": "A member joins the configured trigger channel (e.g. '➕ Create Room').",
+    "lifecycle2Title": "2. Instant Provisioning",
+    "lifecycle2Text": "TitanBot provisions a private voice channel with your template and bitrate, moving the user in under 1 second.",
+    "lifecycle3Title": "3. Room Ownership",
+    "lifecycle3Text": "The creator is granted room owner privileges. If they leave, ownership is automatically transferred to the next member.",
+    "lifecycle4Title": "4. Auto Cleanup",
+    "lifecycle4Text": "Once all members disconnect, TitanBot deletes the channel immediately to prevent clutter.",
+    "saveButton": "Save Join-to-Create Settings",
+    "saveSuccess": "Join-to-Create settings saved successfully!",
+    "previewTitle": "Real-Time Preview",
+    "previewModes": {
+      "channels": "Discord Channels",
+      "voiceUi": "Voice Interface",
+      "flow": "Step-by-Step Flow"
+    },
+    "previewSimulateUser": "Test with user:",
+    "errors": {
+      "saveFailed": "Failed to save temporary voice room settings.",
+      "noTriggerChannel": "Please select at least one trigger voice channel.",
+      "invalidTemplate": "Channel name template contains syntax errors."
     }
   }
 }

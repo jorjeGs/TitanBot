@@ -196,11 +196,12 @@ if (now - lastCreation < VOICE_CREATE_COOLDOWN_MS) {
                     return;
                 }
 
+                const targetParentId = channelOptions.categoryId || config.categoryId || triggerChannel.parentId;
                 const tempChannel = await guild.channels.create({
                     name: channelName,
-type: ChannelType.GuildVoice,
-                    parent: triggerChannel.parentId,
-userLimit: userLimit === 0 ? undefined : userLimit,
+                    type: ChannelType.GuildVoice,
+                    parent: targetParentId,
+                    userLimit: userLimit === 0 ? undefined : userLimit,
                     bitrate: bitrate,
                     permissionOverwrites: [
                         {

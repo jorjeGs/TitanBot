@@ -18,8 +18,28 @@ import { JoinToCreateConfigSchema } from '../../utils/schemas.js';
  */
 export async function getJoinToCreateSettings(req, res) {
   try {
-    const { guildId } = req;
+    const { guild, guildId } = req;
     const config = await getJoinToCreateConfig(req.client, guildId);
+
+    const rawTempChannels = config.temporaryChannels || {};
+    const activeRooms = [];
+
+    for (const [channelId, tempInfo] of Object.entries(rawTempChannels)) {
+      const ch = guild?.channels?.cache?.get(channelId);
+      if (ch) {
+        const ownerMember = guild?.members?.cache?.get(tempInfo?.ownerId);
+        activeRooms.push({
+          channelId,
+          channelName: ch.name,
+          ownerId: tempInfo?.ownerId,
+          ownerName: ownerMember?.displayName || ownerMember?.user?.username || 'Usuario',
+          membersCount: ch.members?.size || 0,
+          userLimit: ch.userLimit || 0,
+          bitrate: ch.bitrate || 64000,
+          createdAt: tempInfo?.createdAt || null,
+        });
+      }
+    }
 
     return res.json({
       success: true,
@@ -31,11 +51,12 @@ export async function getJoinToCreateSettings(req, res) {
         userLimit: typeof config.userLimit === 'number' ? config.userLimit : 0,
         bitrate: typeof config.bitrate === 'number' ? config.bitrate : 64000,
         temporaryChannels: config.temporaryChannels || {},
+        activeRooms,
       },
     });
   } catch (error) {
     logger.error('Error fetching Join-to-Create settings:', error);
-    return res.status(500).json({ error: 'InternalError', message: 'Failed to fetch Join-to-Create settings' });
+    return res.status(500).json({ error: 'InternalError', message: 'Error al obtener la configuración de Join to Create.' });
   }
 }
 
@@ -54,7 +75,7 @@ export async function updateJoinToCreateSettings(req, res) {
     } catch (tmplErr) {
       return res.status(400).json({
         error: 'ValidationError',
-        message: tmplErr.message || 'Invalid channel name template',
+        message: 'La plantilla de nombre contiene caracteres no válidos o variables desconocidas. Usa variables válidas como {username}, {displayName}, etc.',
       });
     }
 
@@ -62,7 +83,7 @@ export async function updateJoinToCreateSettings(req, res) {
     if (isNaN(userLimit) || userLimit < 0 || userLimit > 99) {
       return res.status(400).json({
         error: 'ValidationError',
-        message: 'User limit must be between 0 (no limit) and 99',
+        message: 'El límite de usuarios debe ser un número entero entre 0 (sin límite) y 99 miembros.',
       });
     }
 
@@ -70,7 +91,7 @@ export async function updateJoinToCreateSettings(req, res) {
     if (isNaN(bitrate) || bitrate < 8000 || bitrate > 384000) {
       return res.status(400).json({
         error: 'ValidationError',
-        message: 'Bitrate must be between 8,000 and 384,000 bps (8-384 kbps)',
+        message: 'La calidad de audio (bitrate) debe estar entre 8,000 y 384,000 bps (8-384 kbps).',
       });
     }
 
@@ -80,7 +101,7 @@ export async function updateJoinToCreateSettings(req, res) {
       if (!cat || (cat.type !== ChannelType.GuildCategory && cat.type !== 4)) {
         return res.status(400).json({
           error: 'ValidationError',
-          message: 'The selected category is invalid or not a category channel',
+          message: 'La categoría seleccionada no existe o no es una categoría válida en tu servidor de Discord.',
         });
       }
     }
@@ -98,7 +119,7 @@ export async function updateJoinToCreateSettings(req, res) {
     if (!parsed.success) {
       return res.status(400).json({
         error: 'ValidationError',
-        message: parsed.error.issues[0]?.message || 'Invalid Join to Create configuration',
+        message: parsed.error.issues[0]?.message || 'La configuración de Join to Create contiene valores no válidos.',
       });
     }
 
@@ -110,11 +131,43 @@ export async function updateJoinToCreateSettings(req, res) {
 
     return res.json({
       success: true,
-      message: 'Join to Create settings saved successfully',
+      message: '¡Configuración de salas de voz temporales guardada exitosamente!',
       joinToCreate: parsed.data,
     });
   } catch (error) {
     logger.error('Error updating Join-to-Create settings:', error);
-    return res.status(500).json({ error: 'InternalError', message: 'Failed to update Join to Create settings' });
+    return res.status(500).json({ error: 'InternalError', message: 'Error al actualizar la configuración de salas temporales.' });
+  }
+}
+
+/**
+ * DELETE /api/guilds/:guildId/jointocreate/rooms/:channelId
+ * Deletes an active temporary voice channel and removes it from tracking.
+ */
+export async function deleteActiveRoom(req, res) {
+  try {
+    const { guild, guildId } = req;
+    const { channelId } = req.params;
+    const config = await getJoinToCreateConfig(req.client, guildId);
+
+    const ch = guild?.channels?.cache?.get(channelId);
+    if (ch) {
+      await ch.delete('Sala temporal cerrada manualmente desde el panel de TitanBot').catch((delErr) => {
+        logger.warn('Could not delete Discord channel directly:', delErr.message);
+      });
+    }
+
+    if (config.temporaryChannels && config.temporaryChannels[channelId]) {
+      delete config.temporaryChannels[channelId];
+      await saveJoinToCreateConfig(req.client, guildId, config);
+    }
+
+    return res.json({
+      success: true,
+      message: 'Sala de voz temporal eliminada correctamente.',
+    });
+  } catch (error) {
+    logger.error('Error deleting active room:', error);
+    return res.status(500).json({ error: 'InternalError', message: 'Error al eliminar la sala temporal.' });
   }
 }
